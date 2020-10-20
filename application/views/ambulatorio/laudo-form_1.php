@@ -11,7 +11,7 @@
     $teste = $diff->format('%Ya %mm %dd');
     ?>
 
-    <div >
+    <div class="container">
         <form name="form_laudo" id="form_laudo" action="<?= base_url() ?>ambulatorio/laudo/gravarlaudo/<?= $ambulatorio_laudo_id ?>/<?= $exame_id ?>/<?= $paciente_id ?>/<?= $procedimento_tuss_id ?>/<?= @$obj->_sala_id ?>" method="post">
             <div >
                 <fieldset>
@@ -22,6 +22,7 @@
                             <td width="400px;">Paciente:<?= @$obj->_nome ?></td>
                             <td width="400px;">Exame: <?= @$obj->_procedimento ?></td>
                             <td>Solicitante: <?= @$obj->_solicitante ?></td>
+                            <td>&nbsp</td>
                             <td rowspan="3"><img src="<?= base_url() ?>upload/webcam/pacientes/<?= $paciente_id ?>.jpg"  height="120" width="100" /></td>
                         </tr>
                         <tr><td>Idade: <?= $teste ?></td>
@@ -31,11 +32,11 @@
                         <tr>
 
 
-                            <td width="40px;"><div class="bt_link_new">
+                            <!-- <td width="40px;"><div class="bt_link_new">
                                     <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/chamarpaciente/<?= $ambulatorio_laudo_id ?>');" >
-                                        chamar</a></div>
+                                        chamar</a></div> -->
                                 <!--                                        impressaolaudo -->
-                            </td>
+                            <!-- </td> -->
 
                         </tr>
                     </table>
@@ -351,9 +352,33 @@
                                                                 <!--<input name="textarea" id="textarea"></input>
                                                         <!-- <input name="textarea" id="textarea" ></input>-->
 
-                                        <hr/>
-
-                                        <button class="btn btn-success btn-sm" type="submit" name="btnEnviar">Salvar</button>
+                                        <br>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <label>Situa&ccedil;&atilde;o</label>
+                                                <select name="situacao" id="situacao" class="size2" onChange="muda(this)">
+                                                    <option value='DIGITANDO'<?
+                                                    if (@$obj->_status == 'DIGITANDO'):echo 'selected';
+                                                    endif;
+                                                    ?> >DIGITANDO</option>
+                                                    <option value='REVISAR' <?
+                                                    if (@$obj->_status == 'REVISAR'):echo 'selected';
+                                                    endif;
+                                                    ?> >REVISAR</option>
+                                                    <option value='FINALIZADO' <?
+                                                    if (@$obj->_status == 'FINALIZADO'):echo 'selected';
+                                                    endif;
+                                                    ?> >FINALIZADO</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                            <button class="btn btn-success btn-sm" type="submit" name="btnEnviar">Salvar</button>
+                                            </td>
+                                        </tr>        
+                                    </table>   
                                    
                                 </fieldset>
                                 <table border="1">
