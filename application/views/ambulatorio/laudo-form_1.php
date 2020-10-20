@@ -258,7 +258,7 @@
                                         ?>
 
 
-                                        <label>situa&ccedil;&atilde;o</label>
+                                        <!-- <label>situa&ccedil;&atilde;o</label>
                                         <select name="situacao" id="situacao" class="size2" onChange="muda(this)">
                                             <option value='DIGITANDO'<?
                                             if (@$obj->_status == 'DIGITANDO'):echo 'selected';
@@ -272,7 +272,7 @@
                                             if (@$obj->_status == 'FINALIZADO'):echo 'selected';
                                             endif;
                                             ?> >FINALIZADO</option>
-                                        </select>
+                                        </select> -->
                                     </div>
                                     <div>
                                         <label id="titulosenha">Senha</label>
