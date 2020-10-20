@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@fullcalendar/interaction": "^5.3.1"
+    "@fullcalendar/interaction": "^5.3.1",
+    "pivottable": "^2.23.0"
   }
 }

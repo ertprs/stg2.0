@@ -138,6 +138,7 @@
                         <table class="table ">
                             <thead>
                                 <tr>
+                                    <th>Ordenador</th>
                                     <th>Situação</th>
                                     <th>Horário</th>
                                     <th>Paciente</th>
@@ -195,10 +196,21 @@
                                         $situacao = "Aguardando";
                                         $verifica = 3;
                                     }
+                                
+                                    if ($item->ordenador == '1') {
+                                        $classificacao = "<b class='normal'>Normal</b>";
+                                    } else if ($item->ordenador == '2') {
+                                        $classificacao = "<b class='prioridade'>Prioridade</b>";
+                                    } elseif ($item->ordenador == '3') {
+                                        $classificacao = "<b class='urgencia'>Urgência</b>";
+                                    } else {
+                                        $classificacao = "Normal";
+                                    } 
                                     ?>
                                    
                                     <? if ($verifica == 1) { ?>
                                         <tr class="success2">
+                                            <td><?= $classificacao ?></td>
                                             <td><?= $situacao ?></td>
                                             <td><?= $item->inicio ?></td>
                                             <td><?= $item->paciente ?></td>
@@ -257,6 +269,7 @@
                                         </tr>  
                                             <? } elseif ($verifica == 2) { ?>
                                         <tr class="alert alert-aguardando">
+                                            <td><?= $classificacao ?></td>
                                             <td><?= $situacao ?></td>
                                             <td><?= $item->inicio ?></td>
                                             <td><?= $item->paciente ?></td>
@@ -290,6 +303,7 @@
 
             <? } elseif ($verifica == 3) { ?>
                                         <tr class="alert alert-aguardando">
+                                            <td><?= $classificacao ?></td>
                                             <td><?= $situacao ?></td>
                                             <td><?= $item->inicio ?></td>
                                             <td><?= $item->paciente ?></td>
@@ -323,6 +337,7 @@
                                         </tr>
                                             <? } elseif ($verifica == 4) { ?>
                                         <tr class="finalizado">
+                                            <td><?= $classificacao ?></td>
                                             <td><?= $situacao ?></td>
                                             <td><?= $item->inicio ?></td>
                                             <td><?= $item->paciente ?></td>
@@ -336,8 +351,8 @@
                                                         <a class="btn  btn-primary btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/carregaranaminese/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?>');" >
                                                             Atender <i class="fa fa-stethoscope" aria-hidden="true"></i></a>
                                                     <? } else { ?>
-                                                        <button class="btn btn-primary btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/carregarlaudo/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?>/<?= $item->grupo?>');">
-                                                            Laudo <i class="fa fa-stethoscope" aria-hidden="true"></i>
+                                                        <button class="btn btn-primary btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/carregarlaudo/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?>/<?= $item->tipo?>');">
+                                                            Laudo &nbsp&nbsp&nbsp <i class="fa fa-stethoscope" aria-hidden="true"></i>
                                                         </button>
                 <? } ?>
                                                     <a class="btn btn-success btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/anexarimagem/<?= $item->ambulatorio_laudo_id ?>');">

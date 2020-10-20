@@ -91,6 +91,7 @@ function debug($object) {
     <!-- <script src="<?= base_url() ?>node_modules/moment/moment.js"></script> -->
     <script src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
     <!-- <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@5.3.1/main.js'></script> -->
+    <script src="<?= base_url() ?>node_modules/pivottable/dist/pivot.pt.min.js"></script>
 
 
 
@@ -152,7 +153,7 @@ function debug($object) {
                         <a class="title"><i class="fa fa-edit fa-fw"></i> Rotinas <span class="fa arrow"></span></a>
                             <ul>
                                 <a class="dropdown-item drop-head" href="<?= base_url() ?>ambulatorio/exame/listarmultifuncaomedicoconsulta">Atendimento Médico</a>
-                                <a hidden class="dropdown-item drop-head" href="<?= base_url() ?>ambulatorio/exame/relatorioteste">Relatório Teste</a>
+                                <a class="dropdown-item drop-head" href="<?= base_url() ?>ambulatorio/exame/relatorioteste">Relatório Teste</a>
                             </ul>
                     </div>
                 </li>

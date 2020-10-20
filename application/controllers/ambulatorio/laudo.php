@@ -172,6 +172,10 @@ class Laudo extends BaseController {
         $agenda_exames_id = $obj_laudo->_agenda_exames_id;
         $arquivo_pasta = directory_map("./cr/$agenda_exames_id/");
         $origem = "./cr/$agenda_exames_id";
+        $situacaolaudo = @$obj_laudo->_situacaolaudo;
+        if ($situacaolaudo != 'FINALIZADO') {
+            $this->exame->atenderpacienteconsulta($exame_id);
+        }
 
 //        if (count($arquivo_pasta) > 0) {
 //

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <div >
 
     <?
@@ -48,9 +49,9 @@
                 endif
                 ?>
                 <fieldset>
-                    <legend>Imagens : <font size="2"><b> <?= $i ?></b><? if ($i > 0) { ?>  <div class="bt_link_new">
+                    <legend>Imagens :<b> <?= $i ?></b><? if ($i > 0) { ?> 
                                 <a onclick="javascript:window.open('<?= base_url() . "ambulatorio/laudo/limparnomes/" . $exame_id; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=400,height=200');">
-                                    <font size="-1">Limpar Nomes</font>
+                                    Limpar Nomes
                                 </a>
                             </div><? } ?></legend>
                     <?
@@ -68,29 +69,29 @@
                 <table>
                     <tr>
                         <td>
-                            <div class="bt_link_new">
-                                <button class="btn btn-primary btn-sm" onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/galeria/" . $exame_id ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650');">
+                            <div>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/galeria/" . $exame_id ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650');">
                                     vizualizar imagem
                                 </button>
                             </div>
-                        <!-- </td>
-                        <td> -->
-                            <div class="bt_link_new">
-                                <button onclick="javascript:window.open('<?= base_url() . "ambulatorio/exame/anexarimagemmedico/" . $exame_id . "/" . @$obj->_sala_id; ?> ', '_blank', 'toolbar=no,Location=no,menubar=yes,width=1200,height=400');">
+                        </td>
+                        <td>
+                            <div>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('<?= base_url() . "ambulatorio/exame/anexarimagemmedico/" . $exame_id . "/" . @$obj->_sala_id; ?> ', '_blank', 'toolbar=no,Location=no,menubar=yes,width=1200,height=400');">
                                     adicionar/excluir
                                 </buttona>
                             </div>
                         </td>
                         <td>
-                            <div class="bt_link_new">
-                                <button onclick="javascript:window.open('<?= base_url() . "ambulatorio/laudo/carregarlaudoanterior/" . $paciente_id . "/" . $ambulatorio_laudo_id; ?> ');">
+                            <div>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('<?= base_url() . "ambulatorio/laudo/carregarlaudoanterior/" . $paciente_id . "/" . $ambulatorio_laudo_id; ?> ');">
                                    Laudo anterior
                                 </button>
                             </div>
-                        <!-- </td>
-                        <td> -->
-                            <div class="bt_link_new">
-                                <button onclick="javascript:window.open('<?= base_url() . "ambulatorio/modelolaudo"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650 ');">
+                        </td>
+                        <td>
+                            <div>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('<?= base_url() . "ambulatorio/modelolaudo"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650 ');">
                                     Laudo Modelo
                                 </button>
                             </div>
@@ -142,15 +143,16 @@
                             </div>
                         </td> -->
                             <td>
-                                <div class="bt_link_new">
-                                    <button onclick="javascript:window.open('<?= base_url() . "ambulatorio/modelolinha"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650');">
+                                <div>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('<?= base_url() . "ambulatorio/modelolinha"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650');">
                                         Linha Modelo
                                     </button>
                                 </div>
-                            <!-- </td>
-                            <td width="60px;"><center> -->
-                                <div class="bt_link_new">
-                                    <button onclick="javascript:window.open('<?= base_url() . "ambulatorio/laudo/calculadora"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=400,height=450');">
+                            </td> 
+                            &nbsp
+                            <td >
+                                <div>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('<?= base_url() . "ambulatorio/laudo/calculadora"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=400,height=450');">
                                         Calculadora
                                     </button>
                                 </div>
@@ -192,8 +194,9 @@
                                         </select>-->
 
                                         <div class="bt_link">
-                                            <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaolaudo/<?= $ambulatorio_laudo_id ?>/<?= $exame_id ?>');">
-                                                <font size="-1"> Imprimir</font></a></div>
+                                            <a class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaolaudo/<?= $ambulatorio_laudo_id ?>/<?= $exame_id ?>');">
+                                                Imprimir</a>
+                                        </div>
                                     </div>
                                     <div>
                                         <textarea id="laudo" name="laudo" rows="30" cols="80" style="width: 80%"><?= @$obj->_texto; ?></textarea>
@@ -282,20 +285,20 @@
                                         <table>
                                             <tr>
                                                 <td >
-                                                    <div class="bt_link_new">
-                                                        <button id="Imprimir" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaolaudo/<?= $ambulatorio_laudo_id ?>/<?= $exame_id ?>');">
+                                                    <div>
+                                                        <button class='btn btn-outline-default btn-sm' id="Imprimir" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaolaudo/<?= $ambulatorio_laudo_id ?>/<?= $exame_id ?>');">
                                                             Imprimir
                                                         </button>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="bt_link_new">
-                                                        <button onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaoimagem/<?= $ambulatorio_laudo_id ?>/<?= $exame_id ?>');">
+                                                   
+                                                        <button class='btn btn-outline-default btn-sm' onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaoimagem/<?= $ambulatorio_laudo_id ?>/<?= $exame_id ?>');">
                                                         Fotos
                                                         </button>
-                                                    </div>
+                                                  
                                                 </td>
-                                                <td>
+                                                <!-- <td>
                                                     <div class="bt_link_new">
                                                         <button onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/pesquisarlaudoantigo');">
                                                             L. Antigo
@@ -315,9 +318,9 @@
                                                             OIT
                                                         </button>
                                                     </div>
-                                                </td>
+                                                </td> -->
                                             </tr>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td >
                                                     <div class="bt_link_new">
                                                         <button onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaooit/<?= $ambulatorio_laudo_id ?>');" >
@@ -338,20 +341,20 @@
                                                     <div class="bt_link_new">
                                                         <button onclick="javascript:window.open('<?= base_url() . "ambulatorio/laudo/carregaruploadcliente/" ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650');" >
                                                             Upload de Imagens</button></div></td>
-                                            </tr>
+                                            </tr> -->
                                         </table>
                                     </div>
 
-                                    <div>
+                                
 
 
-                        <!--<input name="textarea" id="textarea"></input>
-                   <!-- <input name="textarea" id="textarea" ></input>-->
+                                                                <!--<input name="textarea" id="textarea"></input>
+                                                        <!-- <input name="textarea" id="textarea" ></input>-->
 
                                         <hr/>
 
-                                        <button type="submit" name="btnEnviar">Salvar</button>
-                                    </div>
+                                        <button class="btn btn-success btn-sm" type="submit" name="btnEnviar">Salvar</button>
+                                   
                                 </fieldset>
                                 <table border="1">
                                     <tr>
@@ -389,8 +392,19 @@
                             <script type="text/javascript" src="<?= base_url() ?>js/jquery-1.4.2.min.js" ></script>
                             <script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>
                             <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
-                            <script type="text/javascript" src="<?= base_url() ?>js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+                            <script type="text/javascript" src="<?= base_url() ?>js/tinymce5/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
                             <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
+                            <script  src="<?= base_url() ?>bootstrap/vendor/bootstrap/js/bootstrap.min.js"></script>
+                            <link href="<?= base_url() ?>bootstrap/vendor/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+                            <link href="<?= base_url() ?>bootstrap/assets/css/argon-design-system.css?v=1.2.0" rel="stylesheet"/>
+                        
+                            <link href="<?= base_url() ?>css/laudo-form-1.css" rel="stylesheet"/>
+                            <link href="<?= base_url() ?>js/jquery-ui.css" rel="stylesheet"/>
+                            <link href="<?= base_url() ?>js/jquery-ui.structure.css" rel="stylesheet"/>
+                            <link href="<?= base_url() ?>js/jquery-ui.theme.css" rel="stylesheet"/>
+                            <link href="<?= base_url() ?>bootstrap/assets/css/font-awesome.css" rel="stylesheet" />
+                            <link href="<?= base_url() ?>bootstrap/assets/css/nucleo-svg.css" rel="stylesheet" />
+                            <link href="<?= base_url() ?>css/form.css" rel="stylesheet" type="text/css" />
                             <script type="text/javascript">
 
                                                             document.getElementById('titulosenha').style.display = "none";
@@ -447,43 +461,88 @@
 
 
 
-                                                            tinyMCE.init({
-                                                                // General options
-                                                                mode: "textareas",
-                                                                theme: "advanced",
-                                                                plugins: "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave,visualblocks",
-                                                                // Theme options
-                                                                theme_advanced_buttons1: "save,newdocument,|,bold,italic,underline,pagebreak,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
-                                                                theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor,|,fullscreen",
-                                                                theme_advanced_toolbar_location: "top",
-                                                                theme_advanced_toolbar_align: "left",
-                                                                theme_advanced_statusbar_location: "bottom",
-                                                                theme_advanced_resizing: true,
-                                                                // Example content CSS (should be your site CSS)
-                                                                //                                    content_css : "css/content.css",
-                                                                content_css: "js/tinymce/jscripts/tiny_mce/themes/advanced/skins/default/img/content.css",
-                                                                // Drop lists for link/image/media/template dialogs
-                                                                template_external_list_url: "lists/template_list.js",
-                                                                external_link_list_url: "lists/link_list.js",
-                                                                external_image_list_url: "lists/image_list.js",
-                                                                media_external_list_url: "lists/media_list.js",
-                                                                // Style formats
-                                                                style_formats: [
-                                                                    {title: 'Bold text', inline: 'b'},
-                                                                    {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
-                                                                    {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
-                                                                    {title: 'Example 1', inline: 'span', classes: 'example1'},
-                                                                    {title: 'Example 2', inline: 'span', classes: 'example2'},
-                                                                    {title: 'Table styles'},
-                                                                    {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
-                                                                ],
-                                                                // Replace values for the template plugin
-                                                                template_replace_values: {
-                                                                    username: "Some User",
-                                                                    staffid: "991234"
-                                                                }
-
-                                                            });
+                                                            tinymce.init({
+                                                                    selector: "#laudo",
+                                                                            setup : function(ed)
+                                                                            {
+                                                                            ed.on('init', function()
+                                                                            {
+                                                                            this.getDoc().body.style.fontSize = '12pt';
+                                                                            this.getDoc().body.style.fontFamily = 'Arial';
+                                                                            });
+                                                                            ed.on('SetContent', function (e) {
+                                                                            this.getDoc().body.style.fontSize = '12pt';
+                                                                            this.getDoc().body.style.fontFamily = 'Arial';
+                                                                            });
+                                                                            },
+                                                                            language: 'pt_BR',
+                                                                            // readonly : true,
+                                                                            // lists_indent_on_tab : false,
+                                                                            // forced_root_block : '',
+<? if (@$empresa[0]->impressao_laudo == 33) { ?>
+                                                                        forced_root_block : '',
+<? } ?>
+                                                                    //                                                            browser_spellcheck : true,
+                                                                    //                                                            external_plugins: {"nanospell": "<?= base_url() ?>js/tinymce2/nanospell/plugin.js"},
+                                                                    //                                                            nanospell_server: "php",
+                                                                    //  
+                                                                    width: 800,                                                          nanospell_dictionary: "pt_br" ,
+                                                                    height: 450, // Pra tirar a lista automatica é só retirar o textpattern
+                                                                            plugins: [
+                                                                                    "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak",
+                                                                                    "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking help",
+                                                                                    "table directionality emoticons template textcolor paste fullpage colorpicker spellchecker"
+                                                                            ],
+                                                                            toolbar: "fontselect | fontsizeselect | bold italic underline strikethrough | link unlink anchor image | alignleft aligncenter alignright alignjustify | newdocument fullpage | styleselect formatselect | cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | media code | insertdatetime preview | forecolor backcolor | table |hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | visualchars visualblocks nonbreaking template pagebreak restoredraft help",
+                                                                            // toolbar1: "newdocument fullpage | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
+                                                                            // toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code | insertdatetime preview | forecolor backcolor | table | removeformat",
+                                                                            // toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | visualchars visualblocks nonbreaking template pagebreak restoredraft help",
+                                                                            menubar: false,
+                                                                            toolbar_items_size: 'small',
+                                                                            style_formats: [{
+                                                                            title: 'Bold text',
+                                                                                    inline: 'b'
+                                                                            }, {
+                                                                            title: 'Red text',
+                                                                                    inline: 'span',
+                                                                                    styles: {
+                                                                                    color: '#ff0000'
+                                                                                    }
+                                                                            }, {
+                                                                            title: 'Red header',
+                                                                                    block: 'h1',
+                                                                                    styles: {
+                                                                                    color: '#ff0000'
+                                                                                    }
+                                                                            }, {
+                                                                            title: 'Example 1',
+                                                                                    inline: 'span',
+                                                                                    classes: 'example1'
+                                                                            }, {
+                                                                            title: 'Example 2',
+                                                                                    inline: 'span',
+                                                                                    classes: 'example2'
+                                                                            }, {
+                                                                            title: 'Table styles'
+                                                                            }, {
+                                                                            title: 'Table row 1',
+                                                                                    selector: 'tr',
+                                                                                    classes: 'tablerow1'
+                                                                            }],
+                                                                            fontsize_formats: 'xx-small x-small 8pt 10pt 12pt 14pt 18pt 24pt 36pt 48pt',
+                                                                            templates: [{
+                                                                            title: 'Test template 1',
+                                                                                    content: 'Test 1'
+                                                                            }, {
+                                                                            title: 'Test template 2',
+                                                                                    content: 'Test 2'
+                                                                            }],
+                                                                            init_instance_callback: function () {
+                                                                            window.setTimeout(function () {
+                                                                            $("#div").show();
+                                                                            }, 1000);
+                                                                            },
+                                                                    });
 
                                                             $(function () {
                                                                 $('#exame').change(function () {
@@ -575,7 +634,7 @@
                                                                     }
                                                                 });
                                                             });
-                                                            //bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
+                                                            bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
                                                             $('.jqte-test').jqte();
 
 

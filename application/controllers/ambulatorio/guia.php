@@ -882,6 +882,9 @@ class Guia extends BaseController {
     }
 
     function gravarprocedimentosconsulta() {
+        // echo'<pre>';
+        // print_r($_POST);
+        // die;
         $procedimentopercentual = $_POST['procedimento1'];
         $medicopercentual = $_POST['medicoagenda'];
         $tipo = $this->guia->procedimentotipo($procedimentopercentual);

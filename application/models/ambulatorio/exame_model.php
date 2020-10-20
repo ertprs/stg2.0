@@ -5214,7 +5214,8 @@ class exame_model extends Model {
 //        $this->db->where("( (ag.tipo = 'CONSULTA') OR (ae.tipo = 'CONSULTA' AND ae.procedimento_tuss_id IS NULL) )");
         $this->db->where('ae.tipo !=', 'CIRURGICO');
         $this->db->where('ae.tipo !=', 'MAT/MED');
-        $this->db->orderby('ae.ordenador');
+        $this->db->orderby('ae.ordenador', 'desc');
+        $this->db->orderby('ae.inicio', 'asc');
 
         if ($teste == true) {
             $this->db->where('ae.data', $dataAtual);

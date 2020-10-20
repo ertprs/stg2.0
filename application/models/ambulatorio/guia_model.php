@@ -7811,6 +7811,7 @@ ORDER BY ae.agenda_exames_id)";
             $this->db->set('data_cadastro', $horario);
             $this->db->set('operador_cadastro', $operador_id);
             $this->db->set('operador_autorizacao', $operador_id);
+            $this->db->set('ordenador', $_POST['ordenador']);
             $this->db->insert('tb_agenda_exames');
             $erro = $this->db->_error_message();
             if (trim($erro) != "") { // erro de banco

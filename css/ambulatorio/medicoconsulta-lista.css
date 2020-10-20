@@ -28,6 +28,18 @@
     grid-area: calendar;
 }
 
+.urgencia{
+  color: red;
+  font-weight: normal;
+  }
+.prioridade {
+    color: orangered;
+    font-weight: normal;
+}
+.normal {
+    color: blue;
+    font-weight: normal;
+}
 @media (max-width: 612px) {
     .container { 
         margin-left: 2vh;

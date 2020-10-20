@@ -564,8 +564,10 @@ class exametemp_model extends Model {
         }
         $this->db->from('tb_agenda_exames ae');
         $this->db->join('tb_operador o', 'o.operador_id = ae.medico_agenda', 'left');
-        $this->db->where("(ae.situacao = 'LIVRE' OR ae.situacao = 'OK')");
-        $this->db->where("ae.tipo IN ('CONSULTA', 'ESPECIALIDADE', 'FISIOTERAPIA')");
+        // $this->db->where("(ae.situacao = 'LIVRE' OR ae.situacao = 'OK')");
+        // $this->db->where("ae.tipo IN ('CONSULTA', 'ESPECIALIDADE', 'FISIOTERAPIA')");
+        $this->db->where('ae.tipo !=', 'CIRURGICO');
+        $this->db->where('ae.tipo !=', 'MAT/MED');
 
         if ($medico != '') {
             $this->db->where("ae.medico_agenda", $medico);
