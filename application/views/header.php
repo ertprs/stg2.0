@@ -153,7 +153,7 @@ function debug($object) {
                         <a class="title"><i class="fa fa-edit fa-fw"></i> Rotinas <span class="fa arrow"></span></a>
                             <ul>
                                 <a class="dropdown-item drop-head" href="<?= base_url() ?>ambulatorio/exame/listarmultifuncaomedicoconsulta">Atendimento Médico</a>
-                                <a class="dropdown-item drop-head" href="<?= base_url() ?>ambulatorio/exame/relatorioteste">Relatório Teste</a>
+                                <a hidden class="dropdown-item drop-head" href="<?= base_url() ?>ambulatorio/exame/relatorioteste">Relatório Teste</a>
                             </ul>
                     </div>
                 </li>

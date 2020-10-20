@@ -21,8 +21,9 @@
   font-size: 0.75rem;
   line-height: 1;
 }
-
-
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+font-size: 1.2rem;
+}
 .tabela_footer {
     align-content: center;
 }

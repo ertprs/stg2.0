@@ -174,7 +174,7 @@
                                         }
                                         ?>
                                         <label>Nome do Laudo</label>
-                                        <input type="text" id="cabecalho" class="texto10" name="cabecalho" value="<?= $cabecalho ?>"/>
+                                        <input class="size4" name="cabecalho" value="<?= $cabecalho ?>"/>
                                     </div>
                                     <div>
                                         <label>Laudo</label>
@@ -408,7 +408,9 @@
                                 #sortable { list-style-type: none; margin: 0; padding: 0; width: 1300px; }
                                 #sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 90px; font-size: 4em; text-align: center; }
                             </style>
+
                             <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+                            <link href="<?= base_url() ?>css/form.css" rel="stylesheet" type="text/css" />
                             <!-- <link href="<?= base_url() ?>css/estilo.css" rel="stylesheet" type="text/css" /> -->
                             <link href="<?= base_url() ?>css/form.css" rel="stylesheet" type="text/css" />
                             <!-- <link href="<?= base_url() ?>css/style_p.css" rel="stylesheet" type="text/css" /> -->
@@ -429,7 +431,7 @@
                             <link href="<?= base_url() ?>js/jquery-ui.theme.css" rel="stylesheet"/>
                             <link href="<?= base_url() ?>bootstrap/assets/css/font-awesome.css" rel="stylesheet" />
                             <link href="<?= base_url() ?>bootstrap/assets/css/nucleo-svg.css" rel="stylesheet" />
-                            <link href="<?= base_url() ?>css/form.css" rel="stylesheet" type="text/css" />
+                            
                             <script type="text/javascript">
 
                                                             document.getElementById('titulosenha').style.display = "none";
