@@ -45,8 +45,12 @@
 }
 @media (max-width: 1366px) {
     .nav-item-user {
-        margin-left: 2vh;
+        margin-left: -3vh;
         float: right;
+    }
+    .navbar-brand{
+        margin-left: -1vh;
+        margin-right: -20vh;
     }
 }
 
