@@ -19,7 +19,7 @@
 
   
 .nav-item-user {
-    margin-left: 11vh;
+    margin-left: 4vh;
     float: right;
 }
 .navbar-expand-lg {
@@ -43,6 +43,12 @@
         margin-left: -1.2vw;
     }
 }
+@media (max-width: 1366px) {
+    .nav-item-user {
+        margin-left: 2vh;
+        float: right;
+    }
+}
 
 @media (max-width: 1279px) {
     .navbar-brand img {
@@ -54,7 +60,7 @@
         margin-right: -2vh;
     }
     .nav-item-user {
-        margin-left: 1vh;
+        margin-left: -1vh;
     }
     .nav-item .nav-link {
         font-size: 0.9rem;

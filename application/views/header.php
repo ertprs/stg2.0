@@ -78,20 +78,20 @@ function debug($object) {
     <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
     <!--  Google Maps Plugin    -->
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script> -->
-    <script src="/bootstrap/assets/js/argon-design-system.min.js" ></script>
+    <script src="<?= base_url() ?>/bootstrap/assets/js/argon-design-system.min.js" ></script>
     <!--Scripts necessários para o calendário-->
     
-    <script src="<?= base_url() ?>bootstrap/fullcalendar/main.js"></script>
-    <script src="<?= base_url() ?>bootstrap/fullcalendar/main.css"></script>
+    <!-- <script src="<?= base_url() ?>bootstrap/fullcalendar/main.js"></script> -->
+    <!-- <script src="<?= base_url() ?>bootstrap/fullcalendar/main.css"></script> -->
     <link href="<?= base_url() ?>bootstrap/fullcalendar-scheduler/main.css" rel='stylesheet'/>
     <script src="<?= base_url() ?>bootstrap/fullcalendar-scheduler/main.js"></script>
     <script src="<?= base_url() ?>bootstrap/fullcalendar/locales/pt-br.js"></script>
-    <script src="<?= base_url() ?>node_modules/@fullcalendar/daygrid/main.js"></script>
-    <link href="<?= base_url() ?>node_modules/@fullcalendar/daygrid/main.css" rel='stylesheet'/>
+    <!-- <script src="<?= base_url() ?>node_modules/@fullcalendar/daygrid/main.js"></script> -->
+    <!-- <link href="<?= base_url() ?>node_modules/@fullcalendar/daygrid/main.css" rel='stylesheet'/> -->
     <!-- <script src="<?= base_url() ?>node_modules/moment/moment.js"></script> -->
     <script src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
     <!-- <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@5.3.1/main.js'></script> -->
-    <script src="<?= base_url() ?>node_modules/pivottable/dist/pivot.pt.min.js"></script>
+    <!-- <script src="<?= base_url() ?>node_modules/pivottable/dist/pivot.pt.min.js"></script> -->
 
 
 
