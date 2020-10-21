@@ -15,7 +15,7 @@ if (!defined('BASEPATH'))
   |
  */
 
-$config['base_url']	= "http://localhost/stg2/";
+$config['base_url']	= "http://localhost/stg/";
 
 
 
