@@ -7,6 +7,9 @@
             <ul>
                 <?
                 $i = 0;
+                if (isset($arquivo_pasta) && $arquivo_pasta){
+                    // var_dump($arquivo_pasta);
+                    // die;
                 foreach ($arquivo_pasta as $value) {
                     ?>
                     <li><img width="750px" height="600px"
@@ -14,6 +17,7 @@
                         <?
                         $i++;
                     }
+                }
                     ?>
             </ul>
         </div>

@@ -365,7 +365,7 @@ class pacientes extends BaseController {
             $this->session->set_flashdata('message', $data['mensagem']);
             redirect(base_url() . "emergencia/filaacolhimento/novo/$paciente_id", $data);
         } elseif ($contador > 0 && $_POST['paciente_id'] != "") {
-//Atualiza cadastro
+            //Atualiza cadastro
             if ($paciente_id = $this->paciente->gravar()) {
                 $data['mensagem'] = array('Paciente gravado com sucesso', 'success');
             } else {

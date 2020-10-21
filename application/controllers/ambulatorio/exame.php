@@ -878,7 +878,8 @@ class Exame extends BaseController {
         $this->loadView('ambulatorio/importacao-imagem', $data);
     }
 
-    function anexarimagemmedico($exame_id, $sala_id) {
+
+    function anexarimagemmedico($exame_id, $sala_id = NULL) {
 
         $this->load->helper('directory');
         $data['arquivo_pasta'] = directory_map("./upload/$exame_id/");

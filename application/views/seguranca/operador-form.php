@@ -159,6 +159,12 @@
 
                                 <input type="text" id="bairro" class="form-control texto10" name="bairro" value="<?= @$obj->_bairro; ?>" />
                             </div>
+                            <div class="form-group">
+                                <label>Email*</label>
+                                <input type="text" id="email" class="form-control texto10" name="email" value="<?= @$obj->_email; ?>" required/>
+                            </div>
+
+
 
 
 
@@ -190,9 +196,6 @@
 
                                 <input type="text" id="txtComplemento" class="form-control texto08" name="complemento" value="<?= @$obj->_complemento; ?>" />
                             </div>
-
-
-
                         </div>
 
                     </div>
