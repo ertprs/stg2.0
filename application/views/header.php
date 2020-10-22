@@ -220,6 +220,9 @@ function debug($object) {
                         <ul>
                             <a class="dropdown-item drop-head" href="<?= base_url() ?>ambulatorio/guia/relatorioexame">Relatorio Conferencia</a>
                         </ul>
+                        <ul>
+                            <a class="dropdown-item drop-head" href="<?= base_url() ?>ambulatorio/guia/relatorioalteracaomedico">Relatorio Alteracao Medico</a>
+                        </ul>
                     </div>
                 </li>
                 

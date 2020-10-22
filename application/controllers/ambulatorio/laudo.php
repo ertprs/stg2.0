@@ -166,8 +166,9 @@ class Laudo extends BaseController {
     }
 
     function carregarlaudo($ambulatorio_laudo_id, $exame_id, $paciente_id, $procedimento_tuss_id, $messagem = null) {
+        $this->laudo->auditoriaLaudo($ambulatorio_laudo_id, 'Entrou no Laudo');
         $obj_laudo = new laudo_model($ambulatorio_laudo_id);
-//        $arquivo_pasta = directory_map( base_url() . "dicom/");
+        //$arquivo_pasta = directory_map( base_url() . "dicom/");
         $this->load->helper('directory');
         $agenda_exames_id = $obj_laudo->_agenda_exames_id;
         $arquivo_pasta = directory_map("./cr/$agenda_exames_id/");
@@ -2282,9 +2283,11 @@ class Laudo extends BaseController {
         if ($_POST['situacao'] == 'FINALIZADO') {
             $validar = $this->laudo->validar();
             //$validar = $this->laudo->validar();
-
+            
             if ($validar == '1') {
+                // die("morreu");
                 $gravar = $this->laudo->gravarlaudo($ambulatorio_laudo_id, $exame_id, $sala_id);
+                
                 if ($gravar == 0) {
                     $this->gerarxmlsalvar($ambulatorio_laudo_id, $exame_id, $sala_id);
                 }

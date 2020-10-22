@@ -29,7 +29,7 @@ if ($contador > 0) {
         <div class="col-lg-12">
             <!--<div class="panel panel-default">-->
             <div class="alert alert-success">
-            <a href="<?= base_url() ?>emergencia/filaacolhimento/novo/>" class="fa fa-arrow-left" aria-hidden="true"></a>Novo Atendimento
+            <a hidden href="<?= base_url() ?>emergencia/filaacolhimento/novo/>" class="fa fa-arrow-left" aria-hidden="true"></a>Novo Atendimento
             </div>
 
             <!--</div>-->

@@ -2038,6 +2038,12 @@ class Autocomplete extends Controller {
         echo json_encode($var);
     }
 
+    function saiuDoLaudo(){
+        $ambulatorio_laudo_id = $_GET['laudo_id'];
+        $this->laudo->auditoriaLaudo($ambulatorio_laudo_id, 'Saiu do Laudo');
+        echo 'true';
+    }
+
 }
 
 /* End of file welcome.php */

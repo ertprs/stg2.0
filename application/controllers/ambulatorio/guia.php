@@ -3053,6 +3053,17 @@ class Guia extends BaseController {
         $data['sexo'] = $exame[0]->sexo;
         $this->exame->gravardicom($data);
     }
+     function relatorioalteracaomedico(){
+        $data['grupo'] = $this->guia->listargrupo();
+        $data['grupoconvenio'] = $this->grupoconvenio->listargrupoconvenios();
+        $data['procedimentos'] = $this->guia->listarprocedimentos();
+        $data['convenio'] = $this->convenio->listardados();
+        $data['medicos'] = $this->operador_m->listarmedicos();
+        $data['classificacao'] = $this->guia->listarclassificacao();
+        $data['empresa'] = $this->guia->listarempresas();
+        $this->loadView('ambulatorio/relatorioalteracaomedico', $data);
+         
+     }
 
 }
 

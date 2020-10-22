@@ -1875,7 +1875,7 @@ class laudo_model extends Model {
             $this->db->set('situacao', 'FINALIZADO');
             $this->db->where('exames_id', $exame_id);
             $this->db->update('tb_exames');
-
+            die;
             $this->db->select('agenda_exames_id');
             $this->db->from('tb_exames');
             $this->db->where("exames_id", $exame_id);
@@ -1886,7 +1886,7 @@ class laudo_model extends Model {
             $this->db->set('medico_consulta_id', $_POST['medico']);
             $this->db->where('agenda_exames_id', $return[0]->agenda_exames_id);
             $this->db->update('tb_agenda_exames');
-
+            
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
             if (isset($_POST['revisor'])) {
@@ -1920,6 +1920,7 @@ class laudo_model extends Model {
             $this->db->set('operador_atualizacao', $operador_id);
             $this->db->where('ambulatorio_laudo_id', $ambulatorio_laudo_id);
             $this->db->update('tb_ambulatorio_laudo');
+            
             $erro = $this->db->_error_message();
             if (trim($erro) != "") // erro de banco
                 return -1;
@@ -2213,6 +2214,8 @@ class laudo_model extends Model {
             }
             if ($_POST['situacao'] != 'FINALIZADO') {
                 $this->db->set('situacao', $_POST['situacao']);
+                print_r($_POST['situacao']);
+                // die;
             } else {
                 $this->db->set('situacao', 'DIGITANDO');
             }
@@ -3145,6 +3148,25 @@ class laudo_model extends Model {
         } else {
             $this->_ambulatorio_laudo_id = null;
         }
+    }
+
+    function auditoriaLaudo($ambulatorio_laudo_id, $alteracao = 'Salvou'){
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+
+        $this->db->select('*');
+        $this->db->from('tb_ambulatorio_laudo');
+        $this->db->where('ambulatorio_laudo_id', $ambulatorio_laudo_id);
+        $laudo_backup = $this->db->get()->result();
+
+        $laudo_json = json_encode($laudo_backup);
+        $this->db->set('alteracao', $alteracao);
+        $this->db->set('laudo_json', $laudo_json);
+        $this->db->set('ambulatorio_laudo_id', $ambulatorio_laudo_id);
+        $this->db->set('data_cadastro', $horario);
+        $this->db->set('operador_cadastro', $operador_id);
+        $this->db->insert('tb_ambulatorio_laudo_backup');
+        
     }
 
 }

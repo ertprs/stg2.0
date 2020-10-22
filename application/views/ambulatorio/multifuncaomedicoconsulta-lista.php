@@ -172,7 +172,7 @@
                                     $date_time = new DateTime($dataAtual);
                                     $diff = $date_time->diff(new DateTime($dataFuturo));
                                     $teste = $diff->format('%H:%I:%S');
-
+                                    
                                     $verifica = 0;
                                     //echo $item->realizada;
                                     ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
@@ -181,6 +181,16 @@
                                         $verifica = 4;
                                         
                                     }
+                                    elseif ($item->realizada == 't' && $item->situacaolaudo == 'PENDENCIA'){
+                                        $situacao = "Pendente";
+                                        $verifica = 2;
+
+                                    }
+                                    elseif ($item->realizada == 't' && $item->situacaolaudo == 'RECONVOCACAO'){
+                                        $situacao = "Reconvocação";
+                                        $verifica = 2;
+
+                                    } 
 
                                     elseif ($item->realizada == 't' && $item->situacaoexame == 'FINALIZADO') {
                                         $situacao = "Atendendo";
@@ -189,7 +199,8 @@
                                     elseif ($item->realizada == 't' && $item->situacaolaudo != 'FINALIZADO') {
                                         $situacao = "Aguardando";
                                         $verifica = 2;
-                                    } elseif ($item->confirmado == 'f') {
+                                    } 
+                                    elseif ($item->confirmado == 'f') {
                                         $situacao = "Agenda";
                                         $verifica = 1;
                                     } else {

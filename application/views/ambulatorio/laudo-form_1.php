@@ -70,10 +70,45 @@
                 <table>
                     <tr>
                         <td>
-                            <div>
-                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/galeria/" . $exame_id ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650');">
+                            <div> 
+                            <?php if($paciente_id == 49599){ ?>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('http://labpacs.dyndns.org:5000/SharedLink/AblLMy_EWM1HMYbW17K3vBXqbgkKneO-5M9wT9tNFXO4AB7aPoJbfTqNJTVpcxK5Dsii8D7ZDvwxYKY=', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=800');">
                                     vizualizar imagem
                                 </button>
+                            <? } elseif ($paciente_id == 67386){ ?>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('http://labpacs.dyndns.org:5000/SharedLink/AblLMy_EWM1HMYbW17K3vBXqbgkKneO-5M9wT9tNFXO4AB7aP4tZcjqEITFsdRG5C8yq8D7ZDvwxYKY=', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=800');">
+                                    vizualizar imagem
+                                </button>
+                            <? } elseif ($paciente_id == 49155){ ?>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('http://labpacs.dyndns.org:5000/SharedLink/AblLMy_EWM1HMYbW17K3vBXqbgkKneO-5M9wTNxHGXO4AB7aPoJZcTuFJDRtdRS4CM-q8D7ZDvwxYKY=', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=800');">
+                                    vizualizar imagem
+                                </button>
+                            <? } elseif ($paciente_id == 25111){ ?>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('http://labpacs.dyndns.org:5000/SharedLink/AblLMy_EWM1HMYbW17K3vBXqbgkKneO-5M9wT9lBGXO4AB7aPoNbczqJJDZodhK9Dcym8D7ZDvwxYKY=', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=800');">
+                                    vizualizar imagem
+                                </button>
+                            <? } elseif ($paciente_id == 48900){ ?>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('http://labpacs.dyndns.org:5000/SharedLink/AblLMy_EWM1HMYbW17K3vBXqbgkKneO-5M9wT9lBGXO4AB7aPoNbczqJJDZodhK9Dcym8D7ZDvwxYKY=', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=800');">
+                                    vizualizar imagem
+                                </button>
+                            <? } elseif ($paciente_id == 47947){ ?>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('http://labpacs.dyndns.org:5000/SharedLink/AblLMy_EWM1HMYbW17K3vBXqbgkKneO-5M9wT9tFFXO4AB7aPo1ZcDqMJzFpdxm6D8ih8D7ZDvwxYKY=', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=800');">
+                                    vizualizar imagem
+                                </button>
+                            <? } elseif ($paciente_id == 67531){ ?>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('http://labpacs.dyndns.org:5000/SharedLink/AblLMy_EWM1HMYbW17K3vBXqbgkKneO-5M9wT9tAE3O4AB7aP4tYdjqIJjdtche6D8mm8D7ZDvwxYKY=', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=800');">
+                                    vizualizar imagem
+                                </button>
+                            <? } elseif ($paciente_id == 48033){ ?>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('http://labpacs.dyndns.org:5000/SharedLink/AblLMy_EWM1HMYbW17K3vBXqbgkKneO-5M9wTtZHFXO4AB7aPo1bcTuEJzdpdxe4Dc-h8D7ZDvwxYKY=', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=800');">
+                                    vizualizar imagem
+                                </button>
+                            <? } elseif ($paciente_id == 48082){ ?>
+                                <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('http://labpacs.dyndns.org:5000/SharedLink/AblLMy_EWM1HMYbW17K3vBXqbgkKneO-5M9wTtZHFXO4AB7aPo1bcDuFJDptdRO7C8ml8D7ZDvwxYKY=', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=800');">
+                                    vizualizar imagem
+                                </button>
+                            <? } ?>
+
                             </div>
                         </td>
                         <td>
@@ -366,6 +401,14 @@
                                                     if (@$obj->_status == 'REVISAR'):echo 'selected';
                                                     endif;
                                                     ?> >REVISAR</option>
+                                                    <option value='PENDENCIA' <?
+                                                    if (@$obj->_status == 'PENDENCIA'):echo 'selected';
+                                                    endif;
+                                                    ?> >PENDENCIA</option>
+                                                    <option value='RECONVOCACAO' <?
+                                                    if (@$obj->_status == 'RECONVOCACAO'):echo 'selected';
+                                                    endif;
+                                                    ?> >RECONVOCAÇÃO</option>
                                                     <option value='FINALIZADO' <?
                                                     if (@$obj->_status == 'FINALIZADO'):echo 'selected';
                                                     endif;
@@ -381,7 +424,7 @@
                                     </table>   
                                    
                                 </fieldset>
-                                <table border="1">
+                                <table>
                                     <tr>
                                         <th>Tecla</th>
                                         <th>Bot&atilde;o Fun&ccedil;&atilde;o</th>
@@ -433,6 +476,16 @@
                             <link href="<?= base_url() ?>bootstrap/assets/css/nucleo-svg.css" rel="stylesheet" />
                             
                             <script type="text/javascript">
+
+                                        window.onload = function() {
+                                        
+                                            window.addEventListener("beforeunload", function(e){
+                                            // Do something
+                                                $.getJSON('<?= base_url() ?>autocomplete/saiuDoLaudo', {laudo_id: <?=$ambulatorio_laudo_id?>, ajax: true}, function (j) {
+                                                
+                                                });
+                                            }, false);
+                                        }
 
                                                             document.getElementById('titulosenha').style.display = "none";
                                                             document.getElementById('senha').style.display = "none";
@@ -506,9 +559,9 @@
                                                                             // readonly : true,
                                                                             // lists_indent_on_tab : false,
                                                                             // forced_root_block : '',
-<? if (@$empresa[0]->impressao_laudo == 33) { ?>
+                                                                <? if (@$empresa[0]->impressao_laudo == 33) { ?>
                                                                         forced_root_block : '',
-<? } ?>
+                                                                <? } ?>
                                                                     //                                                            browser_spellcheck : true,
                                                                     //                                                            external_plugins: {"nanospell": "<?= base_url() ?>js/tinymce2/nanospell/plugin.js"},
                                                                     //                                                            nanospell_server: "php",
