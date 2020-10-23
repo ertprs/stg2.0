@@ -224,7 +224,7 @@
                                             <td><?= $classificacao ?></td>
                                             <td><?= $situacao ?></td>
                                             <td><?= $item->inicio ?></td>
-                                            <td><?= $item->paciente ?></td>
+                                            <td><?= $item->paciente. "-" .$item->situacaolaudo ?></td>
                                             <td><?= date("d/m/Y", strtotime($item->data)) ?></td>
                                             <td><?= $item->convenio. " - " .$item->procedimento; ?></td>
                                             <td><?= $item->observacoes; ?></td>
@@ -253,7 +253,7 @@
 
                                                                 </a>
 
-                    <? } ?>
+                                                <? } ?>
                                                             <button class="btn  btn-primary btn-sm" disabled="">
                                                                 Atender <i class="fa fa-stethoscope" aria-hidden="true"></i>
 
@@ -283,7 +283,7 @@
                                             <td><?= $classificacao ?></td>
                                             <td><?= $situacao ?></td>
                                             <td><?= $item->inicio ?></td>
-                                            <td><?= $item->paciente ?></td>
+                                            <td><?= $item->paciente. "-" .$item->situacaolaudo ?></td>
                                             <td><?= date("d/m/Y", strtotime($item->data)) ?></td>
                                             <td><?= $item->convenio. " - " .$item->procedimento; ?></td>
                                             <td><?= $item->observacoes; ?></td>
@@ -317,7 +317,7 @@
                                             <td><?= $classificacao ?></td>
                                             <td><?= $situacao ?></td>
                                             <td><?= $item->inicio ?></td>
-                                            <td><?= $item->paciente ?></td>
+                                            <td><?= $item->paciente. "-" .$item->situacaolaudo ?></td>
                                             <td><?= date("d/m/Y", strtotime($item->data)) ?></td>
                                             <td><?= $item->convenio. " - " .$item->procedimento; ?></td>
                                             <td><?= $item->observacoes; ?></td>
@@ -351,7 +351,7 @@
                                             <td><?= $classificacao ?></td>
                                             <td><?= $situacao ?></td>
                                             <td><?= $item->inicio ?></td>
-                                            <td><?= $item->paciente ?></td>
+                                            <td><?= $item->paciente. "-" .$item->situacaolaudo ?></td>
                                             <td><?= date("d/m/Y", strtotime($item->data)) ?></td>
                                             <td><?= $item->convenio. " - " .$item->procedimento; ?></td>
                                             <td><?= $item->observacoes; ?></td>

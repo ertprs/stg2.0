@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<div >
+<div>
 
     <?
     $valuecalculado = '';
@@ -109,7 +109,7 @@
                                 </button>
                             <? } ?>
 
-                            </div>
+                        </div>
                         </td>
                         <td>
                             <div>
@@ -135,8 +135,8 @@
                             <div>
                                 <h5>Imagens por pagina</h5>
                                 <?
-//                    var_dump(@$obj->_quantidade);
-//                    die;
+                                //var_dump(@$obj->_quantidade);
+                                //die;
 
                                 if (@$obj->_imagens == "1") {
                                     ?>
@@ -171,13 +171,13 @@
                                 <? } ?>
                             </div>
                             </td>
-                        <!-- <td>
-                            <div class="bt_link_new">
-                                <a onclick="javascript:window.open('<?= base_url() . "ambulatorio/modelolaudo"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650 ');">
-                                    <font size="-1">laudo Modelo</font>
-                                </a>
-                            </div>
-                        </td> -->
+                            <!-- <td>
+                                <div class="bt_link_new">
+                                    <a onclick="javascript:window.open('<?= base_url() . "ambulatorio/modelolaudo"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650 ');">
+                                        <font size="-1">laudo Modelo</font>
+                                    </a>
+                                </div>
+                            </td> -->
                             <td>
                                 <div>
                                     <button class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('<?= base_url() . "ambulatorio/modelolinha"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650');">
@@ -195,7 +195,7 @@
                             </td>
                             </table>
 
-                            </div>
+                            
                             <div>
 
                                 <fieldset>
@@ -334,58 +334,9 @@
                                                         </button>
                                                   
                                                 </td>
-                                                <!-- <td>
-                                                    <div class="bt_link_new">
-                                                        <button onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/pesquisarlaudoantigo');">
-                                                            L. Antigo
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="bt_link_new">
-                                                        <button onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/anexarimagem/<?= $ambulatorio_laudo_id ?>');" >
-                                                            Arquivos
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="bt_link_new">
-                                                        <button onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/oit/<?= $ambulatorio_laudo_id ?>');" >
-                                                            OIT
-                                                        </button>
-                                                    </div>
-                                                </td> -->
-                                            </tr>
-                                            <!-- <tr>
-                                                <td >
-                                                    <div class="bt_link_new">
-                                                        <button onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaooit/<?= $ambulatorio_laudo_id ?>');" >
-                                                            Imp. OIT</button></div></td>
-                                                <td >
-                                                    <div class="bt_link_new">
-                                                        <button onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/gravordevoz/" ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650');">
-                                                            Gravador</button></div></td>
-                                                <td >
-                                                    <div class="bt_link_new">
-                                                        <button onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/carregaratestado/<?= $ambulatorio_laudo_id ?>/<?= $paciente_id ?>/<?= $procedimento_tuss_id ?>');" >
-                                                            Atestado</button></div></td>
-                                                <td >
-                                                    <div class="bt_link_new">
-                                                        <button href="<?= base_url() ?>ambulatorio/laudo/vozemtexto/<?= $ambulatorio_laudo_id ?>/<?= $operador_id ?>">
-                                                            Voz em Texto</button></div></td>
-                                                <td >
-                                                    <div class="bt_link_new">
-                                                        <button onclick="javascript:window.open('<?= base_url() . "ambulatorio/laudo/carregaruploadcliente/" ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=900,height=650');" >
-                                                            Upload de Imagens</button></div></td>
-                                            </tr> -->
+
                                         </table>
                                     </div>
-
-                                
-
-
-                                                                <!--<input name="textarea" id="textarea"></input>
-                                                        <!-- <input name="textarea" id="textarea" ></input>-->
 
                                         <br>
                                     <table>
@@ -439,12 +390,12 @@
                                     </tr>
 
                                 </table>
-                                </form>
+                            </form>
 
                             </div> 
-                            </div> 
-                            </div> 
-                            </div> <!-- Final da DIV content -->
+                        </div>
+</div>
+ <!-- Final da DIV content -->
                             <style>
                                 .bt_link {width: 200pt;}
 
