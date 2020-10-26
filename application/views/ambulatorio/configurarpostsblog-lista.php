@@ -1,16 +1,14 @@
 
-<div id="page-wrapper"> <!-- Inicio da DIV content -->
-<div class="panel-body">
-
-
-        <a class="btn btn-outline btn-danger" href="<?php echo base_url() ?>ambulatorio/empresa/carregarpostsblog/0">
-                        <i class="fa fa-plus fa-w"></i> Novo Post
-            </a>
-
-            <div class="table-responsive" id="pesquisar">
+<div class="content"> <!-- Inicio da DIV content -->
+    <div class="bt_link_new">
+        <a href="<?php echo base_url() ?>ambulatorio/empresa/carregarpostsblog/0">
+            Novo Post
+        </a>
+    </div>
+    <div id="accordion">
         <h3 class="singular"><a href="#">Manter Informativos</a></h3>
         <div>
-            <table class="table table-striped table-bordered table-hover " id="dataTables-example">
+            <table>
                 <thead>
 <!--                    <tr>
                         <th colspan="5" class="tabela_title">
@@ -86,7 +84,7 @@
             </table>
         </div>
     </div>
-</div>
+
 </div> <!-- Final da DIV content -->
 <script type="text/javascript">
 

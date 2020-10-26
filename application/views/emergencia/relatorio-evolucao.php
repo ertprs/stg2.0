@@ -15,7 +15,7 @@ $html ="
                         <h3>CID primario</h3>
                     </dt>
                     <dd >
-                        <p>".$lista[0]->cid_pri ."-". utf8_decode($lista[0]->no_cid)."</p><br/>
+                        <p>".$lista[0]->cid_pri ."-". ($lista[0]->no_cid)."</p><br/>
                     </dd>
                     <dt>
                         <h3>CID secundario 1</h3>

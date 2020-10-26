@@ -15,8 +15,20 @@ class versao_model extends Model {
                             sistema,
                             banco_de_dados');
         $this->db->from('tb_versao');
-
+//        $this->db->orderby('versao_id');
         return $this->db;
     }
-    
+
+    function listardetalhesversao($versao) {
+
+        $this->db->select('versao,
+                            alteracao,
+                            chamado');
+        $this->db->from('tb_versao_alteracao');
+        $this->db->where("versao", $versao);
+//        $this->db->orderby('versao_id');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
 }

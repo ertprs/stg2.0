@@ -2,6 +2,7 @@
     <?
     $i = 0;
     ?>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <table>
         <thead>
 
@@ -39,7 +40,10 @@
                     border-bottom:none;mso-border-top-alt:none;border-left:
                     none;border-right:none;' colspan="5">&nbsp;</th>
             </tr>
-            <? if (count($relatorioexamesgrupoprocedimento) > 0) {
+            <?
+             $despesa = 0;
+             $receita  = 0;
+            if (count($relatorioexamesgrupoprocedimento) > 0) {
                 ?>
 
                 <tr>
@@ -66,6 +70,7 @@
                 $qtdetotal = 0;
                 $perc = 0;
                 $perctotal = 0;
+               
 
                 foreach ($relatorioexamesgrupoprocedimento as $itens) :
                     $valortotal = $valortotal + $itens->valor;
@@ -80,7 +85,7 @@
                             $y++;
                             ?>
                             <tr>
-                                <td colspan="4"><font ><b><?= utf8_decode($item->convenio); ?></b></td>
+                                <td colspan="4"><font ><b><?= ($item->convenio); ?></b></td>
                             </tr>
                         <? }
                         ?>
@@ -101,7 +106,7 @@
                         ?>  
                         <tr>
                             <td><font width="180px;"></td>
-                            <td ><font size="-1"><b>TOTAL <?= utf8_decode($convenio); ?></b></td>
+                            <td ><font size="-1"><b>TOTAL <?= ($convenio); ?></b></td>
                             <td ><font size="-1"><b><?= $qtde; ?></b></td>
                             <td ><font size="-1"><b><?= number_format($valor, 2, ',', '.'); ?></b></td>
                             <td ><font size="-1"><b><?= substr($perc, 0, 4); ?>%</b></td>
@@ -110,7 +115,7 @@
                         <tr><td></td></tr>
                         <tr><td></td></tr>
                         <tr>
-                            <td colspan="3"><font ><b><?= utf8_decode($item->convenio); ?></b></td>
+                            <td colspan="3"><font ><b><?= ($item->convenio); ?></b></td>
                         </tr>
                         <tr>
                             <td><font width="180px;"></td>
@@ -137,7 +142,7 @@
                 ?>
                 <tr>
                     <td><font width="180px;"></td>
-                    <td ><font size="-1"><b>TOTAL <?= utf8_decode($convenio); ?></b></td>
+                    <td ><font size="-1"><b>TOTAL <?= ($convenio); ?></b></td>
                     <td ><font size="-1"><b><?= $qtde; ?></b></td>
                     <td ><font size="-1"><b><?= number_format($valor, 2, ',', '.'); ?></b></td>
                     <td ><font size="-1"><b><?= substr($perc, 0, 4); ?>%</b></td>
@@ -165,7 +170,7 @@
                     $total = $total + $item->valor;
                     ?>
                     <tr>
-                        <td ><?= utf8_decode($item->tipo); ?></td>
+                        <td ><?= ($item->tipo); ?></td>
                         <td ><?= number_format($item->valor, 2, ",", "."); ?></td>
                     </tr>
                 <? endforeach; ?>
@@ -187,21 +192,33 @@
         <table border="1">
             <thead>
                 <tr>
-                    <th class="tabela_header">Recita</th>
+                    <th class="tabela_header">Receita</th>
                     <th class="tabela_header">Valor</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
+                $valoressemtipo = 0; 
                 $total = 0;
                 foreach ($relatorioentrada as $item) :
                     $total = $total + $item->valor;
+                    if($item->tipo == ""){
+                        $valoressemtipo += $item->valor;
+                        continue;
+                    }
                     ?>
                     <tr>
-                        <td ><?= utf8_decode($item->tipo); ?></td>
+                        <td ><?= ($item->tipo); ?></td>
                         <td ><?= number_format($item->valor, 2, ",", "."); ?></td>
                     </tr>
-                <? endforeach; ?>
+                <? endforeach; ?> 
+                    <?php if($valoressemtipo > 0){?>
+                       <tr>
+                         <td >CAIXAS (AMBULATÓRIO/INTERNAÇÃO/CIRÚRGICO)</td>
+                         <td ><?= number_format($valoressemtipo, 2, ",", "."); ?></td>
+                       </tr>
+                    <?php }?>
+                       
                 <tr>
             <td><b>TOTAL</b></td>
                     <td ><b><?= number_format($total, 2, ",", "."); ?></b></td>
@@ -223,12 +240,10 @@
         </table>
 </div> <!-- Final da DIV content -->
 <link href="<?= base_url() ?>css/form.css" rel="stylesheet" type="text/css" />
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+ 
 <link rel="stylesheet" href="<?php base_url() ?>css/jquery-ui-1.8.5.custom.css">
 <script type="text/javascript">
-
-
-
+ 
     $(function() {
         $("#accordion").accordion();
     });

@@ -1,21 +1,47 @@
-<meta charset="UTF-8">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <div class="content"> <!-- Inicio da DIV content -->
     <? if (count($empresa) > 0) { ?>
         <h4><?= $empresa[0]->razao_social; ?></h4>
     <? } else { ?>
         <h4>TODAS AS CLINICAS</h4>
     <? } ?>
+    <h4>Convênio: <?= (@$convenios > 0) ? $convenios[0]->nome : 'TODOS'; ?></h4>
     <h4>Relatório de Faltas</h4>
     <h4>PERIODO: <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_inicio))); ?> ate <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_fim))); ?></h4>
+    <? if (count(@$_POST['operador']) > 0 && !in_array('0', @$_POST['operador'])) { ?>
+        <h4>Operador: <?
+            @$cont_virgula = count($operador);
 
+            foreach ($operador as $value) {
+                echo $value->nome;
+                if (@$cont_virgula <= 1) {
+                    
+                } else {
+                    @$cont_v++;
+                    if (@$cont_v == @$cont_virgula) {
+                        
+                    } else {
+                        echo ",";
+                    }
+                }
+            }
+            ?></h4>
+    <? } ?>
 
+    <? if (count(@$_POST['operador']) == 0 || in_array('0', @$_POST['operador'])) { ?>
+        <h3>Operador: TODOS</h3>
+    <? } ?>
     <hr>
     <table border="1">
         <thead>
             <tr>
                 <th class="tabela_header" width="400px;">Nome</th>
-                <th class="tabela_header" width="150px;">Data</th>
-                <th class="tabela_header" width="250px;">Procedimento</th>
+                <? if (@$_POST['data_mostrar'] == 'SIM') { ?>
+                    <th class="tabela_header" width="150px;">Data</th>
+                <? } ?>
+                <? if (@$_POST['procedimento'] == 'SIM') { ?>
+                    <th class="tabela_header" width="70px;">Procedimento</th>
+                <? } ?>
                 <th class="tabela_header" width="250px;">Cidade</th>
                 <th class="tabela_header" width="290px;">Telefone</th>
             </tr>
@@ -68,29 +94,79 @@
                             $mes = 'DEZEMBRO';
                         }
                         echo "<tr>
-                    <td style='text-align: center' colspan='5' ><h4>" .$mes . "</h4></td>
+                    <td style='text-align: center' colspan='5' ><h4>" . $mes . "</h4></td>
                     
                               </tr> ";
                     }
                     ?>
-                <tr>
-                    <td  width="400px;"><?=$item->paciente ?></td>
-                    <td width="150px;"><?= str_replace("-", "/", date("d-m-Y", strtotime($item->data))); ?></td>
-                    <td width="250px;"><?= $item->procedimento ?></td>
-                    <td width="250px;"><?= $item->cidade ?></td>
-                    <td width="290px;"><?= $item->telefone ?>/ <?= $item->celular ?></td>
-                </tr>        
-                <?
-                $b = substr($item->data, 5, 2);
+                    <tr>
+                        <td  width="400px;"><?= $item->paciente ?></td>
+                        <? if (@$_POST['data_mostrar'] == 'SIM') { ?>
+                            <td width="150px;"><?= str_replace("-", "/", date("d-m-Y", strtotime($item->data))); ?></td>
+                        <? } ?>
+                        <? if (@$_POST['procedimento'] == 'SIM') { ?>
+                            <td><?= $item->procedimento; ?></td>    
+                        <? } ?>
+                        <td width="250px;"><?= $item->cidade ?></td>
+                        <td width="290px;"><?= $item->telefone ?>/ <?= $item->celular ?></td>
+                    </tr>        
+                    <?
+                    $b = substr($item->data, 5, 2);
+                    @$contaragenda{$item->operador_atualizacao} ++;
+                }
             }
-        }
-        ?>
-                </tbody>
+            ?>
+        </tbody>
     </table>
-    <h4>Toatl de exames marcados <?= $contador; ?></h4>
 
 </div> <!-- Final da DIV content -->
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+
+
+<?
+if (count($relatorio) > 0) {
+
+    if (count(@$_POST['operador']) == 0 || in_array('0', @$_POST['operador'])) {
+        ?>
+
+    <? } else { ?> 
+        <br>
+        <hr>
+        <br> 
+        <table border="2"   >
+            <tr class="background">
+                <th>Nome</th>
+                <th>Quantidade</th>
+            </tr>
+            <?php
+//                    
+//        echo "<pre>";
+//        print_r($relatorio);
+
+            foreach ($relatorio as $item) {
+                if (@$verificaat{$item->secretaria}{$item->operador_atualizacao} >= 1) {
+                    
+                } else {
+                    ?>
+                    <tr>
+                        <td><?= @$item->secretaria ?></td>
+                        <td><?= @$contaragenda{$item->operador_atualizacao}; ?></td>
+                    </tr> 
+                    <?
+                    @$verificaat{$item->secretaria}{$item->operador_atualizacao} ++;
+                }
+            }
+            ?>
+        </table>
+        <?
+    }
+}
+?>
+
+
+<br><br> 
+
+
 <link rel="stylesheet" href="<?php base_url() ?>css/jquery-ui-1.8.5.custom.css">
 <script type="text/javascript">
 

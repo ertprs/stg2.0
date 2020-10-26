@@ -27,18 +27,19 @@ function debug($object) {
 <!-- <meta http-equiv="Content-Style-Type" content="text/css" /> 
     <meta http-equiv="content-type" content="text/html;charset=utf-8" /> -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!-- <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet"> -->
     <!-- Font Awesome Icons -->
     <link href="<?= base_url() ?>bootstrap/assets/css/font-awesome.css" rel="stylesheet" />
     <link href="<?= base_url() ?>bootstrap/assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link href="<?= base_url() ?>bootstrap/vendor/bootstrap/css/bootstrap.css" rel="stylesheet"/>
-    <link href="<?= base_url() ?>bootstrap/assets/css/argon-design-system.css?v=1.2.0" rel="stylesheet"/>
+    <link href="<?= base_url() ?>bootstrap/assets/css/argon-design-system.css" rel="stylesheet"/>
  
-    <link href="<?= base_url() ?>css/header.css" rel="stylesheet"/>
+    <!-- <link href="<?= base_url() ?>css/header.css" rel="stylesheet"/> -->
     <link href="<?= base_url() ?>js/jquery-ui.css" rel="stylesheet"/>
     <link href="<?= base_url() ?>js/jquery-ui.structure.css" rel="stylesheet"/>
     <link href="<?= base_url() ?>js/jquery-ui.theme.css" rel="stylesheet"/>
+    <link href="<?= base_url() ?>css/header1.css" rel="stylesheet"/>
     
     <!--CSS DO Calendário-->
     <link href="<?= base_url() ?>bootstrap/fullcalendar/main.css" rel="stylesheet" />
@@ -102,7 +103,7 @@ function debug($object) {
     <!--NAV BAR -->
     <nav id="navbar-main" class="navbar navbar-expand-lg navbar-light ">
       
-          <a class="navbar-brand mr-lg-5" href="<?= base_url() ?>home">
+          <a class="navbar-brand" href="<?= base_url() ?>home">
                 <img src="<?= base_url() ?>img/logo.png"  alt="stg - logo">
             </a>
           
@@ -157,6 +158,11 @@ function debug($object) {
                             </ul>
                     </div>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbar-primary_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-edit fa-fw"></i>Geral </a>
+                    
+                </li>
                 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbar-primary_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -181,7 +187,7 @@ function debug($object) {
                 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbar-primary_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-cubes"></i>Estoque </a>
+                        <i class="fa fa-cubes"></i>Estoque </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar-primary_dropdown_1">
                         <a class="title"><i class="fa fa-edit fa-fw"></i> Rotinas <span class="fa arrow"></span></a>
                             <ul>
@@ -349,7 +355,7 @@ PRA ALTERAR A MENSAGEM PADRÃO QUE APARECE E O ICONE A QUE É ATRIBUIDO, É SÓ 
 DAI TEM LÁ UM ARRAY ONDE EU PASSO DUAS COISAS, UMA É A MENSAGEM QUE VAI APARECER E A OUTRA É SE É 'WARNING' 'ERROR' OU 'SUCCESS'-->
 <?php
 $this->load->library('utilitario');
-$mensagem = Utilitario::pmf_mensagem($this->session->flashdata('message'));
+@$mensagem = Utilitario::pmf_mensagem($this->session->flashdata('message'));
 ?>
 
 

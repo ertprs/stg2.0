@@ -28,7 +28,15 @@
                             <? endforeach; ?>
                         </select>
                     </dd>
-                    
+                    <dt>
+                        <label>Pesquisar Por</label>
+                    </dt>
+                    <dd>
+                        <select name="pesquisar_por" id="pesquisar_por" class="size2" >
+                            <option value='0' >Data de Faturamento</option>
+                            <option value='1' >Data de Emissão</option>
+                        </select>
+                    </dd>
 
                     <dt>
                         <label>Data inicio</label>

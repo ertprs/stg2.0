@@ -17,7 +17,7 @@
                         <label>Valor</label>
                         </dt>
                         <dd>
-                            <input type="text" name="valor1" id="valor1" class="texto01" onblur="history.go(0)"  />
+                            <input type="text" name="valor1" id="valor1" class="texto01" onblur="multiplica()"  />
                         </dd>
                         <dt>
                         <label>Diferen&ccedil;a</label>
@@ -26,6 +26,15 @@
                             <input type="text" name="valortotal" id="valortotal"  onkeyup="multiplica()"  class="texto01" readonly/>
                             <input type="hidden" name="valorcadastrado" id="valorcadastrado" value="<?= $exame[0]->total; ?>"/>
                             <input type="hidden" name="novovalortotal" id="novovalortotal">
+                        </dd>
+                        <dt>
+                        <label>Carater Atendimento</label>
+                        </dt>
+                        <dd>
+                            <select name="carater_xml" id="carater_xml" style="width: 100px">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>
                         </dd>
                     </dl>    
 
@@ -48,6 +57,20 @@
                                 //        });
                                 //    })(jQuery);
 
+                                function multiplica()
+                                    {
+                                        total = 0;
+                                        valor = parseFloat(document.form_faturar.valorcadastrado.value.replace(",", "."));
+                                        numer1 = parseFloat(document.form_faturar.valor1.value.replace(",", "."));
+                                        total += numer1;
+
+                                        resultado = total - valor;
+                                        y = resultado.toFixed(2);
+                                        $('#valortotal').val(y);
+                                        $('#novovalortotal').val(y);
+//            document.getElementById("valortotal").value = 10;
+                                        //        document.form_faturar.valortotal.value = 10;
+                                    }
 
                                 $(document).ready(function() {
 

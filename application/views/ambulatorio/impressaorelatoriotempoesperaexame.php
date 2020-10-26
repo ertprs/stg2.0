@@ -60,10 +60,10 @@
 
 
                         <td><font size="-2"><?= substr($item->data_cadastro, 8, 2) . "/" . substr($item->data_cadastro, 5, 2) . "/" . substr($item->data_cadastro, 0, 4); ?></td>
-                        <td><font size="-2"><?= utf8_decode($item->paciente); ?></td>
-                        <td><font size="-2"><?= utf8_decode($item->procedimento); ?></td>
+                        <td><font size="-2"><?= ($item->paciente); ?></td>
+                        <td><font size="-2"><?= ($item->procedimento); ?></td>
                         <td><font size="-2"><?= $teste; ?></td>
-                        <td><font size="-2"><?= utf8_decode($item->tecnico); ?></td>
+                        <td><font size="-2"><?= ($item->tecnico); ?></td>
                     </tr>
 
 

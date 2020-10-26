@@ -119,9 +119,16 @@ class Arquivo extends Controller {
         $capaarquivo = $this->gerarCapaArquivoBB();
         $capalote = $this->gerarCapaLoteBB();
         $fim = $this->gerarFimBB($total_regis);
+        
+        
+        
+        
+        
         if (!is_dir("/home/hamilton/Projetos/aph/arquivos/bb/$competencia")) {
             mkdir("/home/hamilton/Projetos/aph/arquivos/bb/$competencia");
         }
+        
+        
         $nome = "/home/hamilton/Projetos/aph/arquivos/bb/" . $competencia . "/BB" . $competencia . ".txt";
         $fp = fopen($nome, "w+");
         fwrite($fp, $capaarquivo . "\n");
@@ -131,6 +138,13 @@ class Arquivo extends Controller {
         }
         fwrite($fp, $fim . "\n");
         fclose($fp);
+        
+        
+        
+        
+        
+        
+        
     }
 
     /* Métodos privados */

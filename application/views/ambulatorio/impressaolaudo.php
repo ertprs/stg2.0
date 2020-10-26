@@ -19,8 +19,8 @@
         </thead>
 
         <tbody>
-            <tr><td ></td><td><b><?= utf8_decode($laudo['0']->cabecalho); ?></b></td><td></td></tr>
-            <tr><td ></td><td><?= utf8_decode($laudo['0']->texto); ?></td><td></td></tr>
+            <tr><td ></td><td><b><?= ($laudo['0']->cabecalho); ?></b></td><td></td></tr>
+            <tr><td ></td><td><?= ($laudo['0']->texto); ?></td><td></td></tr>
 
 
 

@@ -1,145 +1,99 @@
-<div id="page-wrapper">
-    <div class="row">
-        <div class="col-lg-12">
-            <!--<div class="panel panel-default">-->
-            <div class="alert alert-success">
-                Confirmar Contas a Pagar
-            </div>
+<div class="content"> <!-- Inicio da DIV content -->
+    <div class="bt_link_voltar">
 
-            <!--</div>-->
+        <?
+        $data = @$obj->_data;
+        $data = substr($data, 8, 2) . "/" . substr($data, 5, 2) . "/" . substr($data, 0, 4);
+        ?>
+
+    </div>
+    <div id="accordion">
+        <h3 class="singular"><a href="#">Saida</a></h3>
+        <div>
+            <form name="form_contaspagar" id="form_contaspagar" action="<?= base_url() ?>cadastros/contaspagar/confirmar/<?= @$obj->_financeiro_contaspagar_id; ?>" method="post">
+
+                <dl class="dl_desconto_lista">
+                    <dt>
+                        <label>Valor *</label>
+                    </dt>
+                    <dd>
+                        <input type="hidden" id="financeiro_contaspagar_id" class="texto_id" name="financeiro_contaspagar_id" value="<?= @$obj->_financeiro_contaspagar_id; ?>" />
+                        <input type="text" name="valor" alt="decimal" class="texto04" value="<?= @$obj->_valor; ?>"/>
+                    </dd>
+                    <dt>
+                        <label>Data*</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="inicio" id="inicio" class="texto04" value="<?= $data; ?>"/>
+                    </dd>
+                    <dt>
+                        <label>Data de Pagamento</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="data_pagamento" id="data_pagamento" class="texto04" alt="date" value="<?=(@$obj->_data_pagamento != '') ? substr(@$obj->_data_pagamento, 8, 2) . '/' . substr(@$obj->_data_pagamento, 5, 2) . '/' . substr(@$obj->_data_pagamento, 0, 4) : '';  ?>"/>
+                    </dd>
+                    <dt>
+                        <label>Pagar a:</label>
+                    </dt>
+                    <dd>
+                        <input type="hidden" id="credor" class="texto_id" name="credor" value="<?= @$obj->_credor; ?>" />
+                        <input type="text" id="credorlabel" class="texto09" name="credorlabel" value="<?= @$obj->_razao_social; ?>" readonly="true"/>
+                    </dd>
+                    <dt>
+                        <label>Tipo *</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="tipo" id="tipo"  class="texto04" value="<?= @$obj->_tipo; ?>" readonly="true"/>
+                    </dd>
+                    <dt>
+                        <label>Classe *</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="classe" id="classe"  class="texto04" value="<?= @$obj->_classe; ?>" readonly="true"/>
+                    </dd>
+                    <dt>
+                        <label>Tipo numero</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="tiponumero" id="tiponumero" class="texto04" value="<?= @$obj->_tipo_numero; ?>" readonly="true"/>
+                    </dd>
+                    <dt>
+                        <label>Conta *</label>
+                    </dt>
+                    <dd>
+                        <select name="conta_id" id="conta_id" class="size4" required="">
+                            <option value="">Selecione</option>
+                            <? foreach ($conta as $value) : ?>
+                                <option value="<?= $value->forma_entradas_saida_id; ?>"<?
+                                if (@$obj->_conta_id == $value->forma_entradas_saida_id):echo'selected';
+                                endif;
+                                ?>><?php echo $value->descricao; ?></option>
+                                    <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Repetir </label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="repitir" alt="integer" class="texto02" value="<?= @$obj->_numero_parcela; ?>" readonly="true"/> nos proximos meses
+                    </dd>
+                    <dt>
+                        <label>Observa&ccedil;&atilde;o</label>
+                    </dt>
+                    <dd class="dd_texto">
+                        <textarea cols="70" rows="3" name="Observacao" id="Observacao" ><?= @$obj->_observacao; ?></textarea><br/>
+                    </dd>
+                </dl>    
+
+                <hr/>
+                <button type="submit" name="btnEnviar">enviar</button>
+                <button type="reset" name="btnLimpar">Limpar</button>
+            </form>
         </div>
     </div>
-    <form name="form_contaspagar" id="form_contaspagar" action="<?= base_url() ?>cadastros/contaspagar/confirmar/<?= @$obj->_financeiro_contaspagar_id; ?>" method="post">
-        <div class="panel panel-default ">
-            <div class="alert alert-info">
-                Dados da Conta
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Valor *</label>
-                            <input type="text" name="valor"  id="valor" alt="decimal" class="form-control dinheiro" readonly="true" value="<?= number_format(@$obj->_valor, 2, ',', '.'); ?>"/>
-                            <input type="hidden" id="financeiro_contaspagar_id" class="texto_id" name="financeiro_contaspagar_id" value="<?= @$obj->_financeiro_contaspagar_id; ?>" />
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Data*</label>
-
-                            <input type="text" name="inicio" id="inicio" class="form-control data" alt="date" value="<?= substr(@$obj->_data, 8, 2) . '/' . substr(@$obj->_data, 5, 2) . '/' . substr(@$obj->_data, 0, 4); ?>" readonly="true"/>
-                        </div>
-
-
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Pagar a:</label>
-
-                            <input type="hidden" id="credor" class="texto_id" name="credor" value="<?= @$obj->_credor; ?>"/>
-                            <input type="text" id="credorlabel" class="form-control" name="credorlabel" value="<?= @$obj->_razao_social; ?>"  readonly="true"/>
-                        </div>
-
-
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Tipo Número</label>
-
-                             <input type="text" name="tiponumero" id="tiponumero" class="form-control" value="<?= @$obj->_tipo_numero; ?>" readonly="true"/>
-                        </div>
-
-
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Tipo</label>
-
-
-                            <input type="text" name="tipo" id="tipo"  class="form-control" value="<?= @$obj->_tipo; ?>" readonly="true"/>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Classe *</label>
-
-                            <input type="text" name="classe" id="classe"  class="form-control" value="<?= @$obj->_classe; ?>" readonly="true"/>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Forma*</label>
-
-                            <input type="text" name="conta" class="form-control" value="<?= @$obj->_conta; ?>" readonly="true"/>
-                            <input type="hidden" name="conta_id" class="form-control" value="<?= @$obj->_conta_id; ?>"/>
-                        </div>
-
-
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Repetir</label>
-
-                            <input type="text" name="repitir" alt="integer" class="form-control" value="<?= @$obj->_numero_parcela; ?>" readonly="true"/>
-                        </div>
-
-
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label>Observa&ccedil;&atilde;o</label>
-                            <textarea cols="70" rows="3" name="Observacao" class="form-control" readonly="" id="Observacao"><?= @$obj->_observacao; ?></textarea><br/>
-                        </div>
-
-
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-1">
-                        <button class="btn btn-outline btn-success btn-sm" type="submit" name="btnEnviar"><i class="fa fa-floppy-o" aria-hidden="true"></i>
-                            Enviar</button>
-                    </div>
-                    <div class="col-lg-1">
-                        <button class="btn btn-outline btn-danger btn-sm" type="reset" name="btnLimpar">Limpar</button>
-                    </div>
-                </div>
-
-            </div>
-
-        </div><!-- Inicio da DIV content -->
-    </form>
-
-</div>
- <!-- Final da DIV content -->
-
+</div> <!-- Final da DIV content -->
+<link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css">
+<script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
 <script type="text/javascript">
 
     $(function () {
@@ -147,21 +101,21 @@
     });
 
 
-//    $(function () {
-//        $("#credorlabel").autocomplete({
-//            source: "<?= base_url() ?>index.php?c=autocomplete&m=credordevedor",
-//            minLength: 1,
-//            focus: function (event, ui) {
-//                $("#credorlabel").val(ui.item.label);
-//                return false;
-//            },
-//            select: function (event, ui) {
-//                $("#credorlabel").val(ui.item.value);
-//                $("#credor").val(ui.item.id);
-//                return false;
-//            }
-//        });
-//    });
+    $(function () {
+        $("#credorlabel").autocomplete({
+            source: "<?= base_url() ?>index.php?c=autocomplete&m=credordevedor",
+            minLength: 1,
+            focus: function (event, ui) {
+                $("#credorlabel").val(ui.item.label);
+                return false;
+            },
+            select: function (event, ui) {
+                $("#credorlabel").val(ui.item.value);
+                $("#credor").val(ui.item.id);
+                return false;
+            }
+        });
+    });
 
 
     $(function () {

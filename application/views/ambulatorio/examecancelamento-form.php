@@ -3,7 +3,7 @@
     <div id="accordion">
         <h3 class="singular"><a href="#">Cancelar exame</a></h3>
         <div>
-            <form name="form_exameespera" id="form_exameespera" action="<?= base_url() ?>ambulatorio/exame/cancelarexame" method="post">
+            <form name="form_exameespera" id="form_exameespera" action="<?= base_url() ?>ambulatorio/exame/cancelarexame" method="post" >
 
                 <dl class="dl_desconto_lista">
                     <dt>
@@ -12,9 +12,11 @@
                     <dd>
                         <input type="hidden" name="txtexames_id" value="<?= $exames_id; ?>" />
                         <input type="hidden" name="txtprocedimento_tuss_id" value="<?= $procedimento_tuss_id; ?>" />
+                        <input type="hidden" name="txtmedico_id" value="<?= @$pegamedico[0]->medico_consulta_id; ?>" />
                         <input type="hidden" name="txtpaciente_id" value="<?= $paciente_id; ?>" />
                         <input type="hidden" name="txtsala_id" value="<?= $sala_id; ?>" />
                         <input type="hidden" name="txtagenda_exames_id" value="<?= $agenda_exames_id; ?>" />
+                         <input type="hidden" name="encaixe" value="<?= @$encaixe; ?>" />
                         <select name="txtmotivo" id="txtmotivo" class="size4" required="true">
                             <option value="">SELECIONE</option>
                             <? foreach ($motivos as $item) : ?>

@@ -27,7 +27,7 @@
                                                 <label>Dinheiro</label>
                                                 </dt>-->
                         <dd>
-                            <input type="hidden" name="dinheiro" id="dinheiro" value="0" onblur="history.go(0)"  class="texto01"/>
+                            <input type="hidden" name="dinheiro" id="dinheiro" value="0" onblur="multiplica()"  class="texto01"/>
                         </dd>
                         <!--                        <dt>
                                                 <label>Total a com cartao</label>
@@ -39,15 +39,15 @@
                             <label >Valor1 / Forma de pagamento1 /  Ajuste1(%) /  Valor Ajustado</label>
                         </dt>
                         <dd>
-                            <input type="text" name="valor1" id="valor1" size="2" value="<?= $valor; ?>" onblur="history.go(0)"/>
+                            <input type="text" name="valor1" id="valor1" size="2" value="<?= $valor; ?>" onblur="multiplica()"/>
                             <select  name="formapamento1" id="formapamento1" class="size1" >
                                 <option value="">Selecione</option>
                                 <? foreach ($forma_pagamento as $item) : ?>
                                     <option value="<?= $item->forma_pagamento_id; ?>"><?= $item->nome; ?></option>
                                 <? endforeach; ?>
                             </select>
-                            <input type="text" name="ajuste1" id="ajuste1" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>                                                                           
-                            <input type="text" name="valorajuste1" id="valorajuste1" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>
+                            <input type="text" name="ajuste1" id="ajuste1" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>                                                                           
+                            <input type="text" name="valorajuste1" id="valorajuste1" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>
                             <input style="width: 60px;" type="number" name="parcela1" id="parcela1"  value="1" min="1" />
                         </dd>
                         </br>
@@ -55,15 +55,15 @@
                             <label>Valor2/ Forma de pagamento2 / Ajuste2(%) / Valor Ajustado</label>
                         </dt>
                         <dd>
-                            <input type="text" name="valor2" id="valor2" size="2" value="<?= $valor; ?>" onblur="history.go(0)"/>
+                            <input type="text" name="valor2" id="valor2" size="2" value="<?= $valor; ?>" onblur="multiplica()"/>
                             <select  name="formapamento2" id="formapamento2" class="size1" >
                                 <option value="">Selecione</option>
                                 <? foreach ($forma_pagamento as $item) : ?>
                                     <option value="<?= $item->forma_pagamento_id; ?>"><?= $item->nome; ?></option>
                                 <? endforeach; ?>
                             </select>
-                            <input type="text" name="ajuste2" id="ajuste2" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>
-                            <input type="text" name="valorajuste2" id="valorajuste2" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>
+                            <input type="text" name="ajuste2" id="ajuste2" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>
+                            <input type="text" name="valorajuste2" id="valorajuste2" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>
                             <input style="width: 60px;" type="number" name="parcela2" id="parcela2"  value="1" min="1" />
 
                         </dd>
@@ -72,15 +72,15 @@
                             <label>Valor3/ Forma de pagamento3 / Ajuste3(%) / Valor Ajustado</label>
                         </dt>
                         <dd>
-                            <input type="text" name="valor3" id="valor3" size="2" value="<?= $valor; ?>" onblur="history.go(0)"/>
+                            <input type="text" name="valor3" id="valor3" size="2" value="<?= $valor; ?>" onblur="multiplica()"/>
                             <select  name="formapamento3" id="formapamento3" class="size1" >
                                 <option value="">Selecione</option>
                                 <? foreach ($forma_pagamento as $item) : ?>
                                     <option value="<?= $item->forma_pagamento_id; ?>"><?= $item->nome; ?></option>
                                 <? endforeach; ?>
                             </select>                                   
-                            <input type="text" name="ajuste3" id="ajuste3" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>  
-                            <input type="text" name="valorajuste3" id="valorajuste3" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>
+                            <input type="text" name="ajuste3" id="ajuste3" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>  
+                            <input type="text" name="valorajuste3" id="valorajuste3" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>
                             <input style="width: 60px;" type="number" name="parcela3" id="parcela3"  value="1" min="1" />
                         </dd>
                         </br>
@@ -88,15 +88,15 @@
                             <label>Valor4/ Forma de pagamento4 / Ajuste4(%) / Valor Ajustado</label>
                         </dt>
                         <dd>
-                            <input type="text" name="valor4" id="valor4" size="2" value="<?= $valor; ?>" onblur="history.go(0)"/>
+                            <input type="text" name="valor4" id="valor4" size="2" value="<?= $valor; ?>" onblur="multiplica()"/>
                             <select  name="formapamento4" id="formapamento4" class="size1" >
                                 <option value="">Selecione</option>
                                 <? foreach ($forma_pagamento as $item) : ?>
                                     <option value="<?= $item->forma_pagamento_id; ?>"><?= $item->nome; ?></option>
                                 <? endforeach; ?>
                             </select>              
-                            <input type="text" name="ajuste4" id="ajuste4" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>
-                            <input type="text" name="valorajuste4" id="valorajuste4" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>
+                            <input type="text" name="ajuste4" id="ajuste4" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>
+                            <input type="text" name="valorajuste4" id="valorajuste4" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>
                             <input style="width: 60px;" type="number" name="parcela4" id="parcela4"  value="1" min="1" />
                         </dd>
                         <dt>
@@ -128,6 +128,46 @@
                                 //            $('input:text').setMask();
                                 //        });
                                 //    })(jQuery);
+
+                                function multiplica()
+                                    {
+                                        total = 0;
+                                        valor = parseFloat(document.form_faturar.valorcadastrado.value.replace(",", "."));
+                                        dinheiro = parseFloat(document.form_faturar.dinheiro.value.replace(",", "."));
+                                        valordesconto = parseFloat(document.form_faturar.desconto.value.replace(",", "."));
+                                        desconto = (100 - valordesconto) / 100;
+                                        calculo = valor - dinheiro;
+                                        totalpagarcartao = (calculo * 1.05);
+                                        totalpagar = totalpagarcartao + dinheiro;
+                                        juros = totalpagarcartao - calculo;
+                                        numer1 = parseFloat(document.form_faturar.valor1.value.replace(",", "."));
+                                        numer2 = parseFloat(document.form_faturar.valor2.value.replace(",", "."));
+                                        numer3 = parseFloat(document.form_faturar.valor3.value.replace(",", "."));
+                                        numer4 = parseFloat(document.form_faturar.valor4.value.replace(",", "."));
+                                        total += numer1 + numer2 + numer3 + numer4;
+                                        $('#totalpagar').val(totalpagarcartao);
+
+                                        valordescontado = valor * desconto;
+                                        //resultado = total - valordescontado;
+                                        resultado = valor - (total + valordesconto);
+                                        y = resultado.toFixed(2);
+                                        resultado2 = total - totalpagar;
+                                        y2 = resultado2.toFixed(2);
+
+                                        if (dinheiro === 0) {
+
+                                            $('#valortotal').val(y);
+                                            $('#novovalortotal').val(valordescontado);
+                                        } else {
+                                            $('#valortotal').val(y2);
+                                            $('#novovalortotal').val(totalpagar);
+                                            $('#juros').val(juros);
+                                        }
+
+//            document.getElementById("valortotal").value = 10;
+                                        //        document.form_faturar.valortotal.value = 10;
+                                    }
+
 
                                 $(document).ready(function () {
 

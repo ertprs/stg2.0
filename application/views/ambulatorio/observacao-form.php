@@ -1,3 +1,8 @@
+<?
+//echo "<pre>";
+//print_r($obs);
+?>
+
 <body bgcolor="#C0C0C0">
 <div class="content"> <!-- Inicio da DIV content -->
         <h3 class="singular">Alterar Observacao</h3>
@@ -11,8 +16,8 @@
                     </dt>
                         <input type="hidden" name="agenda_exame_id" value="<?= $agenda_exame_id; ?>" />
                         <input type="hidden" name="txtNome" class="texto10" value="<?= $paciente; ?>" readonly/>
-                        <textarea type="text" name="txtobservacao" cols="55" class="texto12"></textarea>
-
+                        <textarea type="text" name="txtobservacao" value="" cols="55" class="texto12"><? echo @$obs[0]->observacoes; ?></textarea>
+ 
                      
                 </dl>    
 

@@ -1,6 +1,6 @@
 <div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
-        <h3 class="singular"><a href="#">Cadastro de Tipo consulta</a></h3>
+        <h3 class="singular"><a href="#">Cadastro de Tipo Agenda</a></h3>
         <div>
             <form name="form_sala" id="form_sala" action="<?= base_url() ?>ambulatorio/tipoconsulta/gravar" method="post">
 
@@ -11,6 +11,20 @@
                     <dd>
                         <input type="hidden" name="tipo_consulta_id" class="texto10" value="<?= @$obj->_ambulatorio_tipo_consulta_id; ?>" />
                         <input type="text" name="txtNome" class="texto10" value="<?= @$obj->_descricao; ?>" />
+                    </dd>
+                    <dt>
+                        <label>Grupo</label>
+                    </dt>
+                    <dd>
+                        <select name="grupo" id="grupo" class="size2" >
+                            <option value='' >Selecione</option>
+                            <? foreach ($grupos as $grupo) { ?>                                
+                                <option value='<?= $grupo->nome ?>' <?
+                                if (@$obj->_grupo == $grupo->nome):echo 'selected';
+                                endif;
+                                ?>><?= $grupo->nome ?></option>
+                                    <? } ?>
+                        </select>
                     </dd>
                 </dl>    
                 <hr/>

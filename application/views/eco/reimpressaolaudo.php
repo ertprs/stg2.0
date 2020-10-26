@@ -18,7 +18,7 @@
 <table border="1">
 
     <tbody>
-        <tr  bgcolor ="gray" class="linha1"><td width="50%">&ensp;</td><td align="center" width="20%">Pacienete</td><td align="center">Par&acirc;metros normais</td></tr>
+        <tr  bgcolor ="gray" class="linha1"><td width="50%">&ensp;</td><td align="center" width="20%">paciente</td><td align="center">Par&acirc;metros normais</td></tr>
 
         <tr class="linha1"><td width="50%">Di&acirc;m. Diast&oacute;lico do VE</td><td align="center" width="20%"><?= $laudo['0']->diam_diastolico_ve; ?>mm</td><td align="center">36-56 mm</td></tr>
         <tr class="linha1"><td width="50%">Di&acirc;m. Sist&oacute;lico Final do VE</td><td align="center" width="20%"><?= $laudo['0']->diam_sisto_final_ve; ?>mm</td><td align="center">25-40 mm</td></tr>
@@ -37,7 +37,7 @@ if ($ObservacoesGerais != null):
 ?>
     <h4><?= $i ?>.OBSERVA&Ccedil;&Otilde;ES GERAIS</h4>
 <? foreach ($ObservacoesGerais as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -47,7 +47,7 @@ if ($ObservacoesGerais != null):
 ?>
             <h4><?= $i ?>.VENTR&Iacute;CULO ESQUERDO - DIMENS&Otilde;ES E HIPERTROFIA</h4>
 <? foreach ($VentEsquerdoDimensoesHipertrofia as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -58,7 +58,7 @@ if ($ObservacoesGerais != null):
 ?>
                     <h4><?= $i ?>.VENTR&Iacute;CULO ESQUERDO - AN&Aacute;LISE SEGMENTAR</h4>
 <? foreach ($VentEsquerdoAnaliseSgmentar as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -68,7 +68,7 @@ if ($ObservacoesGerais != null):
 ?>
                             <h4><?= $i ?>.VENTR&Iacute;CULO ESQUERDO - FUN&Ccedil;&Otilde;ES</h4>
 <? foreach ($VentEsquerdoFuncoes as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -78,7 +78,7 @@ if ($ObservacoesGerais != null):
 ?>
                                     <h4><?= $i ?>.AORTA</h4>
 <? foreach ($Aorta as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -88,7 +88,7 @@ if ($ObservacoesGerais != null):
 ?>
                                             <h4><?= $i ?>.V&Aacute;LVULA A&Oacute;RTICA</h4>
 <? foreach ($ValvulaAortica as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -98,7 +98,7 @@ if ($ObservacoesGerais != null):
 ?>
                                                     <h4><?= $i ?>.&Aacute;TRIO ESQUERDO</h4>
 <? foreach ($AtrioEsquerdo as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -108,7 +108,7 @@ if ($ObservacoesGerais != null):
 ?>
                                                             <h4><?= $i ?>.V&Aacute;LVULA MITRAL</h4>
 <? foreach ($Valvulamitral as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -118,7 +118,7 @@ if ($ObservacoesGerais != null):
 ?>
                                                                     <h4><?= $i ?>.VENTR&Iacute;CULO DIREITO</h4>
 <? foreach ($Ventriculoireito as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -128,7 +128,7 @@ if ($ObservacoesGerais != null):
 ?>
                                                                             <h4><?= $i ?>.&Aacute;TRIO DIREITO</h4>
 <? foreach ($AtrioDireito as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -138,7 +138,7 @@ if ($ObservacoesGerais != null):
 ?>
                                                                                     <h4><?= $i ?>.V&Aacute;LVULA TRIC&Uacute;SPIDE</h4>
 <? foreach ($ValvulaTricuspide as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -148,7 +148,7 @@ if ($ObservacoesGerais != null):
 ?>
                                                                                             <h4><?= $i ?>.V&Aacute;LVULA PULMONAR</h4>
 <? foreach ($Valvulapulmonar as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -158,7 +158,7 @@ if ($ObservacoesGerais != null):
 ?>
                                                                                                     <h4><?= $i ?>.PERIC&Aacute;RDIO</h4>
 <? foreach ($Pericardio as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -168,7 +168,7 @@ if ($ObservacoesGerais != null):
 ?>
                                                                                                             <h4><?= $i ?>.ESTUDO PR&Oacute;TESES</h4>
 <? foreach ($EstudoProteses as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -178,7 +178,7 @@ if ($ObservacoesGerais != null):
 ?>
                                                                                                                     <h4><?= $i ?>.AN&Aacute;LISE DE FLUXO PELO DOPPLER</h4>
 <? foreach ($AnaliseFluxoDoppler as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
@@ -188,22 +188,22 @@ if ($ObservacoesGerais != null):
 ?>
                                                                                                                             <h4><?= $i ?>.AN&Aacute;LISE PELO MAPEAMENTO DE FLUXO DE CORES</h4>
 <? foreach ($AnaliseMapeamentoFluxoCores as $item) : ?>
-<?= utf8_decode($item->descricao); ?><br>
+<?= ($item->descricao); ?><br>
 <? endforeach; ?>
 <? endif; ?>
 
     <? if ($Conclusao != null): ?>
                                                                                                                                 <h3>&ensp;&ensp;&ensp;&ensp;&ensp;CONCLUS&Atilde;O</h3>
 <? foreach ($Conclusao as $item) : ?>
-                                                                                                                                    &ensp;&ensp;&ensp;&ensp;&ensp;<?= utf8_decode($item->descricao); ?><br>
+                                                                                                                                    &ensp;&ensp;&ensp;&ensp;&ensp;<?= ($item->descricao); ?><br>
     <? endforeach; ?>
 <? endif; ?>
                                                                                                                                     <br>
                                                                                                                                     <br>
                                                                                                                                     <br>
                                                                                                                                     <label><center>_________________________________________</center></label>
-                                                                                                                                    <label><center><?= utf8_decode($laudo['0']->medico); ?></center></label>
-                                                                                                                                    <label><center><?= utf8_decode($laudo['0']->crm_cpf); ?></center></label>
+                                                                                                                                    <label><center><?= ($laudo['0']->medico); ?></center></label>
+                                                                                                                                    <label><center><?= ($laudo['0']->crm_cpf); ?></center></label>
 
                                                                                                                                     <table>
 <? if ($arquivo_pasta != false):

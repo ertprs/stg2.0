@@ -1,3 +1,6 @@
+
+<meta charset="utf-8">
+
 <div class="content"> <!-- Inicio da DIV content -->
     <? if (count($empresa) > 0) { ?>
         <h4><?= $empresa[0]->razao_social; ?></h4>
@@ -6,23 +9,78 @@
     <? } ?>
     <h4>Agenda Consultas</h4>
     <h4>PERIODO: <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_inicio) ) ); ?> ate <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_fim) ) ); ?></h4>
-    <? if (count($medico) > 0) { ?>
-        <h4>Medico: <?= $medico[0]->operador; ?></h4>
-    <? } ?>
-    <? if (count($salas) > 0) { ?>
-        <h4>Sala: <?= $salas[0]->nome; ?></h4>
-    <? } ?>
+    
+    <h4>Medico: <?= (count(@$medico) > 0) ? $medico[0]->operador : 'Todos'; ?></h4>
+    <h4>Sala: <?= (count(@$salas) > 0) ? $salas[0]->nome : 'Todos'; ?></h4>
+
+    <?
+    @$empresa_id = $this->session->userdata('empresa_id');
+    @$data['retorno'] = $this->exame->permisoesempresa($empresa_id);
+    @$agenda_modificada = $data['retorno'][0]->agenda_modificada;
+    // var_dump($agenda_modificada); die;
+    ?>
     <hr>
     <table border="1">
         <thead>
             <tr>
-                <th class="tabela_header" >Status</th>
+             <?
+                if (@$agenda_modificada == 't') {
+                    ?>
+
+                    <th class="tabela_header" width="20px;">Nº</th>
+                    <?
+                } else {
+                    ?>
+                    <th class="tabela_header" width="70px;">Status</th>
+
+                    <?
+                }
+                ?>
                 <th class="tabela_header" width="250px;">Nome</th>
                 <th class="tabela_header" width="70px;">Resp.</th>
-                <th class="tabela_header" width="70px;">Procedimento</th>
+                
+             <?
+        if (@$data['retorno'][0]->agenda_modificada == 't') {
+            
+        } else {
+            ?>
+            <? if ($_POST['procedimento'] == 'SIM') { ?>
+                <th class="tabela_header" width="150px;">Procedimentos</th>
+                <? } ?>
+
+
+
+            <?
+        }
+        ?>
+                
+                
+                
                 <th class="tabela_header" width="70px;">Data</th>
-                <th class="tabela_header" width="50px;">Dia</th>
-                <th class="tabela_header" width="70px;">Agenda</th>
+             <?
+                if (@$agenda_modificada == 't') {
+                    
+                } else {
+                    ?>
+                    <th class="tabela_header" width="70px;">Dia</th>
+
+                    <?
+                }
+                ?>
+
+                   <?
+                if (@$data['retorno'][0]->agenda_modificada == 't') {
+                    ?>
+
+                    <th class="tabela_header" width="70px;">Horário</th>
+                    <?
+                } else {
+                    ?>
+                    <th class="tabela_header" width="70px;">Agenda</th>   
+
+                    <?
+                }
+                ?>
                 <th class="tabela_header" width="150px;">Medico</th>
                 <th class="tabela_header" width="150px;">Convenio</th>
                 <th class="tabela_header">Telefone</th>
@@ -94,9 +152,24 @@
                     }
                     ?>
                     <tr>
-                        <td ><b><?= $situacao; ?></b></td>
+                        <td ><b>   <?
+                                if (@$agenda_modificada == 't') {
+                                    echo @$numero = 1 + $numero;
+                                } else {
+                                    echo @$situacao;
+                                }
+                                ?>
+                            </b></td>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         <? if ($item->paciente != '') { ?>
-                        <td <b><?= utf8_decode($item->paciente); ?></b></td>
+                        <td <b><?= ($item->paciente); ?></b></td>
                         <? 
                         $contador++;
                         } else { ?>
@@ -107,15 +180,70 @@
                         <? } else { ?>
                             <td >&nbsp;</td>
                         <? } ?>
-                        
-                        <td><?= utf8_decode($item->procedimento); ?></td>    
-                        <td><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
+                        <?if($_POST['procedimento'] == 'SIM'){?>
+                              
+                        <?
+                        if (@$agenda_modificada == 't') {
+                            
+                        } else {
+                            ?>      
+                            <? if ($_POST['procedimento'] == 'SIM') {
+                                ?>
 
-                        <td ><?= substr($dia, 0, 3); ?></td>
+ 
+                                <td ><?=$item->procedimento; ?></td>  
+
+
+                                <?
+                            }
+                        }
+                        ?>
+                        
+                        
+                        
+                        <?}?>
+                        <td><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
+ <?
+                        if (@$agenda_modificada == 't') {
+                            
+                        } else {
+                            ?>
+
+
+                            <?
+                            echo "<td>";
+
+
+
+                            echo substr($dia, 0, 3);
+
+                            echo " </td>";
+                        }
+                        ?>  
+                        
+                        
+                        
+                        
+                        
+                        
                         <td ><?= $item->inicio; ?></td>
-                        <td  width="150px;"><?= $item->sala . " - " . utf8_decode(substr($item->medicoagenda, 0, 15)); ?></td>
+                        <td  width="150px;">
+                            <?
+                             if (@$agenda_modificada == 't') {
+                                
+                            } else {
+                                if ($_POST['sala'] == 'SIM') {
+                                    echo $item->sala . " - ";
+                                }
+                            }
+                            
+                            
+                            echo substr($item->medicoagenda, 0, 15);
+                            
+                            
+                            ?></td>
                         <? if ($item->convenio != '') { ?>
-                            <td ><?= utf8_decode($item->convenio); ?></td>
+                            <td ><?= ($item->convenio); ?></td>
                         <? } else { ?>
                             <td >&nbsp;</td>
                         <? } ?>
@@ -134,7 +262,7 @@
         ?>
 
     </table>
-     <h4>Toatl de exames marcados <?= $contador; ?></h4>
+     <h4>Total de exames marcados <?= $contador; ?></h4>
 
 </div> <!-- Final da DIV content -->
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />

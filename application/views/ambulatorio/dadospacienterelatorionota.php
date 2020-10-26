@@ -9,19 +9,21 @@
     <style>
         body{
             /*width: 750pt;*/
-            overflow-x: auto;
-            overflow-y: auto;
         }
         .content.ficha_ceatox fieldset{
             width: 95%;
             margin: 10pt;
         }
+        /*        #conteudo{
+                    overflow-x: auto;
+                    overflow-y: auto;
+                }*/
     </style>
 </head>
 <body>
     <div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
         <form name="form_paciente" id="form_paciente" action="<?= base_url() ?>cadastros/pacientes/gravar" method="post">
-
+            <!--<div id="conteudo">-->
             <fieldset>
                 <legend>Dados do Paciente</legend>
                 <div>
@@ -39,6 +41,10 @@
                         if ($paciente['0']->sexo == "F"):echo 'selected';
                         endif;
                         ?>>Feminino</option>
+                        <option value="O" <?
+                        if ($paciente['0']->sexo == "O"):echo 'selected';
+                        endif;
+                        ?>>Outro</option>
                     </select>
                 </div>
 
@@ -164,11 +170,12 @@
 
                     <input type  ="text" name="observacao" id="txtObservacao" class="texto10"  value ="<?= $paciente['0']->observacao; ?>" readonly/>
 
-                </div>
+                    <!--</div>-->
             </fieldset>
-        </form>
+    </div>
+</form>
 
-    </div> <!-- Final da DIV content -->
+</div> <!-- Final da DIV content -->
 </body>
 <!--<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.8.5.custom.min.js" ></script>

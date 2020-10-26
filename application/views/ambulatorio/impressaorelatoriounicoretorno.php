@@ -102,10 +102,12 @@
             $unico = 0;
             $idades = array();
             foreach ($relatorio as $item) :
-
+                $relatoriounico = $this->guia->relatoriounicoretornopaciente($item->paciente_id);
+                // var_dump($relatoriounico); die;
+                
                 $i++;
                 $qtdetotal++;
-                if ($item->conta > 1) {
+                if (count($relatoriounico) > 0) {
                     $status = "RETORNO";
                     $retorno++;
                 } else {
@@ -165,9 +167,12 @@
                         if ($item->sexo == "M") {
                             echo 'Masculino';
                             $masculino ++;
-                        } else {
+                        } elseif($item->sexo == "F") {
                             $feminino ++;
                             echo 'Feminino';
+                        }else{
+                            $sexo_outro ++;
+                            echo 'Outro';
                         }
                         ?></td>
                     <td style='text-align: center;'><?

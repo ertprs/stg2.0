@@ -22,6 +22,7 @@ class modeloreceitaespecial_model extends Model {
                             texto');
         $this->db->from('tb_ambulatorio_modelo_receita_especial aml');
         $this->db->join('tb_operador o', 'o.operador_id = aml.medico_id', 'left');
+        $this->db->where('aml.ativo', 't');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
             $this->db->where('aml.nome ilike', "%" . $args['nome'] . "%");
             $this->db->orwhere('o.nome ilike', "%" . $args['nome'] . "%");

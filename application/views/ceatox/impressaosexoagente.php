@@ -46,7 +46,7 @@ $head ="
                                        $per = ($subtotal/$i)*100;
                              $body = $body . "
                             <tr>
-                                <td>" . utf8_decode($item->descricao) . " </td>
+                                <td>" . ($item->descricao) . " </td>
                                 <td>" . $sexoF . " </td>
                                 <td>" . $sexoM . " </td>
                                 <td>" .  $subtotal . "</td>

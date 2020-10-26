@@ -36,9 +36,9 @@
             ?>
             <tr>
 
-                <td width="25%;"><?= utf8_decode($procedimento[$i]) ?></td>
+                <td width="25%;"><?= ($procedimento[$i]) ?></td>
                 <td width="25%;"><?= $convenio[$i] ?></td>
-                <td style="text-align: right"><?= utf8_decode($qtde[$i]) ?></td>
+                <td style="text-align: right"><?= ($qtde[$i]) ?></td>
                 <td width="25%;" style="text-align: right"><?= $valor[$i] ?></td>
                 <td width="25%;" style="text-align: right"><?= number_format($valor_total, 2, ',', '.') ?></td>
                 <td width="25%;" style="text-align: right"><?= $descricao[$i] ?></td>

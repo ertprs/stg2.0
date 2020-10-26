@@ -18,6 +18,7 @@ class Modelomedicamento extends BaseController {
         $this->load->model('ambulatorio/modelomedicamento_model', 'modelomedicamento');
         $this->load->model('seguranca/operador_model', 'operador_m');
         $this->load->model('ambulatorio/procedimento_model', 'procedimento');
+        $this->load->model('ambulatorio/guia_model', 'guia');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -30,6 +31,10 @@ class Modelomedicamento extends BaseController {
 
     function pesquisar($args = array()) {
         $this->loadView('ambulatorio/modelomedicamento-lista', $args);
+    }
+
+    function pesquisar2($args = array()) {
+        $this->load->View('ambulatorio/modelomedicamento-lista2', $args);
     }
 
     function pesquisarunidade($args = array()) {
@@ -74,19 +79,13 @@ class Modelomedicamento extends BaseController {
         redirect(base_url() . "ambulatorio/modelomedicamento/pesquisarunidade");
     }
 
-    function gravar() {
-        if($_POST['unidadeid'] != ''){
-            $verifica = $this->modelomedicamento->gravar();
-            if($verifica){
-                $mensagem = array('Sucesso ao gravar medicamento', 'success');
-            } 
-            else{
-                $mensagem = array('Erro ao gravar medicamento', 'error');
-            }
-        }
-        else{
-            $mensagem = 'Erro. Unidade escolhida não é valida.';
-        }
+    function gravar() { 
+        $verifica = $this->modelomedicamento->gravar();
+        if($verifica){
+            $mensagem = 'Sucesso ao gravar a Medicamento';
+        }else{
+            $mensagem = 'Erro ao gravar o Medicamento';
+        } 
         $this->session->set_flashdata('message', $mensagem);
         redirect(base_url() . "ambulatorio/modelomedicamento");
     }

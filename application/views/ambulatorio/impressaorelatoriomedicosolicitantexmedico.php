@@ -1,3 +1,4 @@
+<meta charset="UTF-8">
 <div class="content"> <!-- Inicio da DIV content -->
     <?if (count($empresa)>0){?>
     <h4><?= $empresa[0]->razao_social; ?></h4>
@@ -5,6 +6,7 @@
     <h4>TODAS AS CLINICAS</h4>
     <?}?>
     <h4>Medico Solicitante</h4>
+    <!-- <h4>Situação: <?$_POST['situacao'] ?></h4> -->
     <h4>PERIODO: <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_inicio) ) ); ?> ate <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_fim) ) ); ?></h4>
     <hr>
     <? if ($contador > 0) {
@@ -34,10 +36,10 @@
 
                         ?>
                         <tr>
-                            <td><font size="-2"><?= utf8_decode($item->medicosolicitante); ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->medico); ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->paciente); ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->procedimento); ?></td>
+                            <td><font size="-2"><?= $item->medicosolicitante; ?></td>
+                            <td><font size="-2"><?= $item->medico; ?></td>
+                            <td><font size="-2"><?= $item->paciente; ?></td>
+                            <td><font size="-2"><?= $item->procedimento; ?></td>
                             <td><font size="-2"><?= $item->situacao; ?></td>
                         </tr>
 

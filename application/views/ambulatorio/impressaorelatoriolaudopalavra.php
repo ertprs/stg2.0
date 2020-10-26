@@ -35,13 +35,13 @@
 
                         ?>
                         <tr>
-                            <td><font size="-2"><?= utf8_decode($item->paciente); ?></td>
+                            <td><font size="-2"><?= ($item->paciente); ?></td>
                             <td><font size="-2"><?= substr($item->nascimento, 8,2) . "/" . substr($item->nascimento, 5,2) . "/" . substr($item->nascimento, 0,4); ?></td>
                             <td><font size="-2"><?= "(" . substr($item->telefone,0,2) . ")" . substr($item->telefone,4,4) . "-" . substr($item->telefone,4,4); ?></td>
-                            <td><font size="-2"><?= $item->tipologradouro . " " . utf8_decode($item->logradouro) . " " . utf8_decode($item->numero) . " " . utf8_decode($item->bairro); ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->sexo); ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->medico); ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->procedimento); ?></td>
+                            <td><font size="-2"><?= $item->tipologradouro . " " . ($item->logradouro) . " " . ($item->numero) . " " . ($item->bairro); ?></td>
+                            <td><font size="-2"><?= ($item->sexo); ?></td>
+                            <td><font size="-2"><?= ($item->medico); ?></td>
+                            <td><font size="-2"><?= ($item->procedimento); ?></td>
                         </tr>
 
 

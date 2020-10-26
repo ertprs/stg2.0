@@ -20,7 +20,7 @@
                  <tr>
                     <td><?php echo $item->matricula; ?></td>
                     <td><?php echo $item->nome; ?></td>
-                    <td><?php echo utf8_decode($item->classificacao); ?></td>
+                    <td><?php echo ($item->classificacao); ?></td>
                     <td>R$ <?php echo  number_format($item->salario_base, 2, ",", "."); ?></td>
                     <td><?php echo $item->conta . "-" .  $item->conta_dv ; ?></td>
                     <td><?php echo $item->agencia . "-" .  $item->agencia_dv ; ?></td>

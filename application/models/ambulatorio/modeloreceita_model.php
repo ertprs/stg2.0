@@ -19,14 +19,45 @@ class modeloreceita_model extends Model {
                             aml.nome,
                             medico_id,
                             o.nome as medico,
-                            texto');
+                            texto,
+                            carregar_automaticamente');
         $this->db->from('tb_ambulatorio_modelo_receita aml');
         $this->db->join('tb_operador o', 'o.operador_id = aml.medico_id', 'left');
+        $this->db->where('aml.ativo', 't');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
             $this->db->where('aml.nome ilike', "%" . $args['nome'] . "%");
             $this->db->orwhere('o.nome ilike', "%" . $args['nome'] . "%");
         }
         return $this->db;
+    }
+
+    function desativarmodeloreceitaautomatico($modelo_receita_id) {
+        
+        $this->db->set('carregar_automaticamente', 'f');
+        $this->db->where('ambulatorio_modelo_receita_id', $modelo_receita_id);
+        $this->db->update('tb_ambulatorio_modelo_receita');
+        
+        $erro = $this->db->_error_message();
+        if (trim($erro) != "") // erro de banco
+            return false;
+        else
+            return true;
+    }
+
+    function ativarmodeloreceitaautomatico($modelo_receita_id) {
+
+        $this->db->set('carregar_automaticamente', 'f');
+        $this->db->update('tb_ambulatorio_modelo_receita');
+        
+        $this->db->set('carregar_automaticamente', 't');
+        $this->db->where('ambulatorio_modelo_receita_id', $modelo_receita_id);
+        $this->db->update('tb_ambulatorio_modelo_receita');
+        
+        $erro = $this->db->_error_message();
+        if (trim($erro) != "") // erro de banco
+            return false;
+        else
+            return true;
     }
 
     function excluir($ambulatorio_modelo_receita_id) {
@@ -71,6 +102,115 @@ class modeloreceita_model extends Model {
                 $this->db->where('ambulatorio_modelo_receita_id', $ambulatorio_modelo_receita_id);
                 $this->db->update('tb_ambulatorio_modelo_receita');
             }
+            return $ambulatorio_modelo_receita_id;
+        } catch (Exception $exc) {
+            return -1;
+        }
+    }
+
+
+    function gravarreceitaatendimento() {
+        try {
+            /* inicia o mapeamento no banco */
+            $this->db->set('nome', $_POST['txtNome']);
+            $this->db->set('medico_id', $_POST['medico']);
+            $this->db->set('texto', $_POST['receita']);
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+
+                if(isset($_POST['r_especial'])){
+                    $this->db->insert('tb_ambulatorio_modelo_receita_especial');
+                }else{
+                    $this->db->insert('tb_ambulatorio_modelo_receita');
+                }
+                $erro = $this->db->_error_message();
+                if (trim($erro) != "") // erro de banco
+                    return -1;
+                else
+                    $ambulatorio_modelo_receita_id = $this->db->insert_id();
+
+            return $ambulatorio_modelo_receita_id;
+        } catch (Exception $exc) {
+            return -1;
+        }
+    }
+
+
+    function gravarsexamesatendimento() {
+        try {
+            /* inicia o mapeamento no banco */
+            $this->db->set('nome', $_POST['txtNome']);
+            $this->db->set('medico_id', $_POST['medico']);
+            $this->db->set('texto', $_POST['receita']);
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+
+                $this->db->insert('tb_ambulatorio_modelo_solicitar_exames');
+
+                $erro = $this->db->_error_message();
+                if (trim($erro) != "") // erro de banco
+                    return -1;
+                else
+                    $ambulatorio_modelo_receita_id = $this->db->insert_id();
+
+            return $ambulatorio_modelo_receita_id;
+        } catch (Exception $exc) {
+            return -1;
+        }
+    }
+
+    function gravarterapeuticaatendimento() {
+        try {
+            /* inicia o mapeamento no banco */
+            $this->db->set('nome', $_POST['txtNome']);
+            // $this->db->set('medico_id', $_POST['medico']);
+            $this->db->set('texto', $_POST['receita']);
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+
+                $this->db->insert('tb_ambulatorio_modelo_terapeuticas_id');
+
+                $erro = $this->db->_error_message();
+                if (trim($erro) != "") // erro de banco
+                    return -1;
+                else
+                    $ambulatorio_modelo_receita_id = $this->db->insert_id();
+
+            return $ambulatorio_modelo_receita_id;
+        } catch (Exception $exc) {
+            return -1;
+        }
+    }
+
+    function gravarrelatorioatendimento() {
+        try {
+            /* inicia o mapeamento no banco */
+            $this->db->set('nome', $_POST['txtNome']);
+            // $this->db->set('medico_id', $_POST['medico']);
+            $this->db->set('texto', $_POST['receita']);
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+
+                $this->db->insert('tb_ambulatorio_modelo_relatorio');
+
+                $erro = $this->db->_error_message();
+                if (trim($erro) != "") // erro de banco
+                    return -1;
+                else
+                    $ambulatorio_modelo_receita_id = $this->db->insert_id();
+
             return $ambulatorio_modelo_receita_id;
         } catch (Exception $exc) {
             return -1;

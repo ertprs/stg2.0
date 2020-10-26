@@ -21,7 +21,7 @@
         <h4>TODAS OS DEVEDORES</h4>
     <? } ?>
     <h4>RELATORIO MOVIMENTA&Ccedil;&Atilde;O</h4>
-    <h4>PERIODO: <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_inicio) ) ); ?> ate <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_fim) ) ); ?></h4>
+    <h4>PERIODO: <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_inicio))); ?> ate <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_fim))); ?></h4>
     <hr>
     <h4>Saldo anterior: <?= number_format($saldoantigo[0]->total, 2, ",", "."); ?></h4>
     <?
@@ -32,11 +32,12 @@
                 <tr>
                     <th width="100px;" class="tabela_header">Conta</th>
                     <th class="tabela_header">Data</th>
-                    <th class="tabela_header">Nome</th>
+                    <th class="tabela_header">Credor/Devedor</th>
                     <th class="tabela_header">Tipo</th>
                     <th class="tabela_header">Classe</th>
                     <th class="tabela_header">Valor</th>
                     <th class="tabela_header">Observa&ccedil;&atilde;o</th>
+                    <th class="tabela_header">Empresa</th>
                     <th class="tabela_header">Saldo</th>
                 </tr>
             </thead>
@@ -45,32 +46,47 @@
                 $total = $saldoantigo[0]->total;
                 $data = 0;
                 $totalrelatorio = 0;
+                // echo '<pre>';
+                // print_r($relatorio);
+                // die;
                 foreach ($relatorio as $item) :
-                    $total = $total + $item->valor;
-                    $totalrelatorio = $totalrelatorio + $item->valor;
+//                    if ($item->tiposaida != 'TRANSFERENCIA' && $item->tipoentrada != 'TRANSFERENCIA') {
+                        $total = $total + $item->valor;
+                        $totalrelatorio = $totalrelatorio + $item->valor;
+//                    }
+
+//                    $totalrelatorio = $totalrelatorio + $item->valor;
                     $dataatual = substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4);
                     ?>
 
                     <tr>
-                        <td ><?= utf8_decode($item->contanome); ?></td>
+                        <td ><?= $item->contanome; ?></td>
                         <td ><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
-                        <td ><?= utf8_decode($item->razao_social); ?></td>
+                        <td ><?= $item->razao_social; ?></td>
                         <? if ($item->tiposaida != null) { ?>
-                            <td ><?= utf8_decode($item->tiposaida); ?></td>
-                            <td ><?= utf8_decode($item->classesaida); ?></td>
-                            <td ><font color="red"><?= number_format($item->valor, 2, ",", "."); ?></td>
+                            <td ><?= $item->tiposaida; ?></td>
+                            <td ><?= $item->classesaida; ?></td>
+                            <? if ($item->valor > 0) { ?>
+                                <td ><font color="blue"><?= number_format($item->valor, 2, ",", "."); ?></td>   
+
+                            <? } else { ?>
+                                <td ><font color="red"><?= number_format($item->valor, 2, ",", "."); ?></td>    
+
+                            <? } ?>
+
                         <? } else { ?>
-                            <td ><?= utf8_decode($item->tipoentrada); ?></td>
-                             <td ><?= utf8_decode($item->classeentrada); ?></td>                      
+                            <td ><?= ($item->tipoentrada); ?></td>
+                            <td ><?= ($item->classeentrada); ?></td>                      
                             <td ><font color="blue"><?= number_format($item->valor, 2, ",", "."); ?></td>
                         <? } ?>
 
 
                         <? if ($item->observacaosaida != null) { ?>
-                            <td ><?= utf8_decode($item->observacaosaida); ?></td>
+                            <td ><?= ($item->observacaosaida); ?></td>
                         <? } else { ?>
-                            <td ><?= utf8_decode($item->observacaoentrada); ?></td>
+                            <td ><?= ($item->observacaoentrada); ?></td>
                         <? } ?>
+                        <td ><?= ($item->empresa); ?></td>
                         <td colspan="2"><b><?= number_format($total, 2, ",", "."); ?></b></td>
                     </tr>
 
@@ -79,6 +95,7 @@
                 <tr>
                     <td colspan="5"><b>Saldo Final</b></td>
                     <td ><b><?= number_format($totalrelatorio, 2, ",", "."); ?></b></td>
+                    <td ><b></b></td>
                     <td ><b></b></td>
                     <td ><b><?= number_format($total, 2, ",", "."); ?></b></td>
                 </tr>

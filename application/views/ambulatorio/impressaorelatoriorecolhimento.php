@@ -34,7 +34,7 @@
                 </tr>
             <? } else { ?>
                 <tr>
-                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">PROCEDIMENTO: <?= utf8_decode($procedimentos[0]->nome); ?></th>
+                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">PROCEDIMENTO: <?= ($procedimentos[0]->nome); ?></th>
                 </tr>
             <? } ?>
             <? if ($medico == "0") { ?>
@@ -43,7 +43,7 @@
                 </tr>
             <? } else { ?>
                 <tr>
-                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">MEDICO: <?= utf8_decode($medico[0]->operador); ?></th>
+                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">MEDICO: <?= ($medico[0]->operador); ?></th>
                 </tr>
             <? } ?>
             <? if ($convenio == "0") { ?>
@@ -60,7 +60,7 @@
                 </tr>
             <? } else { ?>
                 <tr>
-                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">CONVENIO: <?= utf8_decode($convenios[0]->nome); ?></th>
+                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">CONVENIO: <?= ($convenios[0]->nome); ?></th>
                 </tr>
             <? } ?>
             <tr>

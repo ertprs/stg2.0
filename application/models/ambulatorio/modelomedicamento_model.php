@@ -28,6 +28,22 @@ class modelomedicamento_model extends Model {
         }
         return $this->db;
     }
+    
+    function listarMedicamentos() {
+//        DIE;
+        $this->db->select('arm.ambulatorio_receituario_medicamento_id as medicamento_id,
+                           arm.nome,
+                           arm.posologia,
+                           o.nome as medico,
+                           arm.texto');
+        $this->db->from('tb_ambulatorio_receituario_medicamento arm');
+        $this->db->join('tb_operador o', 'o.operador_id = arm.medico_id', 'left');
+        $this->db->where('arm.ativo', "t");
+        $this->db->orderby('arm.nome');
+        $query = $this->db->get();
+        $return = $query->result();
+        return $return;
+    }
 
     function listarunidade($args = array()) {
         $this->db->select('amu.ambulatorio_receituario_medicamento_unidade_id as unidade_id,
@@ -79,13 +95,41 @@ class modelomedicamento_model extends Model {
         
         $this->db->set('nome', $_POST['txtmedicamento']);
         $this->db->set('quantidade', $_POST['qtde']);
-        $this->db->set('unidade_id', $_POST['unidadeid']);
-        $this->db->set('posologia', $_POST['posologia']);
-        $this->db->set('texto', $_POST['txtmedicamento'] . ' ----- ' . $_POST['qtde'] . ' ----- ' . $_POST['unidade'] );
+        if ($_POST['unidade'] == "") {
+           $this->db->set('unidade_id', null);
+        }else{
+          $this->db->set('unidade_id', $_POST['unidadeid']);
+        }
+        $this->db->set('posologia', $_POST['posologia']); 
+        $texto  = $_POST['txtmedicamento']; 
+        if ($_POST['qtde'] != "") {
+            $texto .= " ----- ".$_POST['qtde'];
+        }
+        
+        if($_POST['unidade'] != ""){
+            $texto .=  " ----- ".$_POST['unidade'];
+        }
+        
+        if($_POST['r_especial'] == 'on'){
+            $this->db->set('r_especial', 't' );
+        }else{
+            $this->db->set('r_especial', 'f' );
+        }
+
+        $this->db->set('texto', $texto );
+          
         $this->db->set('medico_id', $operador_id);
-        $this->db->set('data_cadastro', $horario);
-        $this->db->set('operador_cadastro', $operador_id);
-        $this->db->insert('tb_ambulatorio_receituario_medicamento');
+        if($_POST['txtmedicamentoID'] > 0){
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->where('ambulatorio_receituario_medicamento_id', $_POST['txtmedicamentoID']);
+            $this->db->update('tb_ambulatorio_receituario_medicamento');
+        }else{
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->insert('tb_ambulatorio_receituario_medicamento');
+        }
+        
         $erro = $this->db->_error_message();
         if (trim($erro) != "") // erro de banco
             return false;
@@ -142,11 +186,17 @@ class modelomedicamento_model extends Model {
         if ($ambulatorio_modelo_medicamento_id != 0) {
             $this->db->select('ambulatorio_receituario_medicamento_id,
                             amr.nome,
+                            amr.posologia,
+                            amr.quantidade,
                             medico_id,
                             o.nome as medico,
-                            amr.texto');
+                            mu.descricao as unidade,
+                            amr.unidade_id,
+                            amr.texto,
+                            amr.r_especial');
             $this->db->from('tb_ambulatorio_receituario_medicamento amr');
             $this->db->join('tb_operador o', 'o.operador_id = amr.medico_id', 'left');
+            $this->db->join('tb_ambulatorio_receituario_medicamento_unidade mu', 'amr.unidade_id = mu.ambulatorio_receituario_medicamento_unidade_id', 'left');
             $this->db->where("ambulatorio_receituario_medicamento_id", $ambulatorio_modelo_medicamento_id);
             $query = $this->db->get();
             $return = $query->result();
@@ -155,6 +205,11 @@ class modelomedicamento_model extends Model {
             $this->_nome = $return[0]->nome;
             $this->_medico_id = $return[0]->medico_id;
             $this->_texto = $return[0]->texto;
+            $this->_quantidade = $return[0]->quantidade;
+            $this->_posologia = $return[0]->posologia;
+            $this->_unidade_id = $return[0]->unidade_id;
+            $this->_unidade = $return[0]->unidade;
+            $this->_r_especial = $return[0]->r_especial;
         } else {
             $this->_ambulatorio_modelo_medicamento_id = null;
         }

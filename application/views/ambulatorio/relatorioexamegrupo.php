@@ -44,6 +44,28 @@
                                     <? } ?>
                         </select>
                     </dd>
+
+                    <dt>
+                        <label>Status</label>
+                    </dt>
+                    <dd>
+                        <select name="faturado" id="grupo" class="size1" >
+                            <option value='0' >TODOS</option>
+                            <option value='1' >FATURADO</option>
+                            <option value='2' >NÃO FATURADO</option> 
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Situação</label>
+                    </dt>
+                    <dd>
+                        <select name="situacao" id="situacao" class="size2" >
+                            <option value=''>TODOS</option> 
+                            <option value='finalizado' >FINALIZADO</option>
+                            <option value='aberto' >ABERTO</option> 
+                            
+                        </select>
+                    </dd>
                     <dt>
                         <label>Empresa</label>
                     </dt>

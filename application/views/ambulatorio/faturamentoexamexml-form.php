@@ -26,18 +26,54 @@
                         <input type="text"  id="datafim" alt="date" name="datafim" class="size1"/>
                     </dd>
                     <dt>
+                        <label>Data De Pesquisa</label>
+                    </dt>
+                    <dd>
+                        <select name="data_atendimento" id="data_atendimento" class="size2" >
+                            <option value='1' >DATA DE ATENDIMENTO</option>
+                            <option value='0' >DATA DE FATURAMENTO</option>
+
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Paciente</label>
+                    </dt>
+                    <dd>
+                        <input type="text"  id="paciente" name="paciente" class="size3"/>
+                    </dd>
+                    <dt>
+                        <label>Faturamento</label>
+                    </dt>
+                    <dd>
+                        <select name="faturamento" id="faturamento" class="size2" >
+                            <option value='0' >TODOS</option>
+                            <option value='t' >Faturado</option>
+                            <option value='f' >Nao Faturado</option>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Layout Arq</label>
+                    </dt>
+                    <dd>
+                        <select name="layoutarq" id="layoutarq" class="size2" >                            
+                            <option value='sadt' >SADT</option>
+                            <option value='consulta' >CONSULTA</option>
+                            <option value='internacao' >INTERNAÇÃO</option>
+                        </select>
+                    </dd>
+                    <dt>
                         <label>Convenio</label>
                     </dt>
                     <dd>
-                        <select name="convenio" id="convenio" class="size2">
-                            <option value="" >TODOS</option>
+                        <select name="convenio" id="convenio" class="size2" required=true>
+                            <option value="">Selecione</option>
                             <? foreach ($convenios as $value) : ?>
                                 <option value="<?= $value->convenio_id; ?>" ><?php echo $value->nome; ?></option>
                             <? endforeach; ?>
                         </select>
                     </dd>
                     <dt>
-                        <label>Tipo</label>
+                        <label>Grupo</label>
                     </dt>
                     <dd>
                         <select name="tipo" id="tipo" class="size2">
@@ -85,6 +121,10 @@
                     </dt>
                     <dd>
                         <select name="xml" id="xml" class="size2">
+                            <option value='3.04.01' >3.04.01</option>
+                            <option value='3.04.00' >3.04.00</option>
+                            <option value='3.03.03' >3.03.03</option>
+                            <option value='3.03.02' >3.03.02</option>
                             <option value='3.03.01' >3.03.01</option>
                             <option value='3.02.00' >3.02.00</option>
                             <option value='3.02.01' >3.02.01</option>
@@ -95,16 +135,35 @@
                     </dt>
                     <dd>
                         <select name="modelo" id="modelo" class="size2">
-                            <option value='cpf' >cpf</option>
-                            <option value='cnpj'>cnpj</option>
+                            <option value='cnpj'>CNPJ</option>
+                            <option value='cpf' >CPF</option>
                         </select>
                     </dd>
-                    
+                    <dt>
+                        <label>Identificação do Prestador</label>
+                    </dt>
+                    <dd>
+                        <select name="identificacaoPrestador" id="identificacaoPrestador" class="size2">
+                            <option value='NAO'>Codigo do Prestador na Operadora</option>
+                            <option value='SIM' >CNPJ</option>
+                        </select>
+                    </dd>
+
                     <dt>
                         <label>Autorização</label>
                     </dt>
                     <dd>
                         <select name="autorizacao" id="autorizacao" class="size2">
+                            <option value='NAO'>NÃO</option>
+                            <option value='SIM' >SIM</option>
+                        </select>
+                    </dd>
+
+                    <dt>
+                        <label>Unir Exame e Consulta</label>
+                    </dt>
+                    <dd>
+                        <select name="unir_exame_consulta" id="unir_exame_consulta" class="size2">
                             <option value='NAO'>NÃO</option>
                             <option value='SIM' >SIM</option>
                         </select>
@@ -122,6 +181,24 @@
 
                         </select>
                     </dd>
+                    <dt>
+                        <label>Espelho de Conferência</label>
+                    </dt>
+                    <dd>
+                        <select name="espelho_conferencia" id="medico" class="size2"> 
+                             <option value="NAO">NÃO</option>
+                              <option value="SIM">SIM</option> 
+                        </select>
+                    </dd>
+                    <!--                    <dt>
+                                            <label>Situação</label>
+                                        </dt>
+                                        <dd>
+                                            <select name="situacao" id="situacao" class="size2">
+                                                <option value= 'internado' >INTERNADO</option>
+                                                <option value='naointernado' >NÃO INTERNADO</option>
+                                            </select>
+                                        </dd>-->
 
                     <dt>
                         <label>Empresa</label>
@@ -178,32 +255,32 @@
                         <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
                         <script type="text/javascript">
 
-                                                    $(function () {
-                                                        $("#datainicio").datepicker({
-                                                            autosize: true,
-                                                            changeYear: true,
-                                                            changeMonth: true,
-                                                            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                                                            dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-                                                            buttonImage: '<?= base_url() ?>img/form/date.png',
-                                                            dateFormat: 'dd/mm/yy'
-                                                        });
-                                                    });
+                                        $(function () {
+                                            $("#datainicio").datepicker({
+                                                autosize: true,
+                                                changeYear: true,
+                                                changeMonth: true,
+                                                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                                                dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                                                buttonImage: '<?= base_url() ?>img/form/date.png',
+                                                dateFormat: 'dd/mm/yy'
+                                            });
+                                        });
 
-                                                    $(function () {
-                                                        $("#datafim").datepicker({
-                                                            autosize: true,
-                                                            changeYear: true,
-                                                            changeMonth: true,
-                                                            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                                                            dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-                                                            buttonImage: '<?= base_url() ?>img/form/date.png',
-                                                            dateFormat: 'dd/mm/yy'
-                                                        });
-                                                    });
+                                        $(function () {
+                                            $("#datafim").datepicker({
+                                                autosize: true,
+                                                changeYear: true,
+                                                changeMonth: true,
+                                                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                                                dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                                                buttonImage: '<?= base_url() ?>img/form/date.png',
+                                                dateFormat: 'dd/mm/yy'
+                                            });
+                                        });
 
-                                                    $(function () {
-                                                        $("#accordion").accordion();
-                                                    });
+                                        $(function () {
+                                            $("#accordion").accordion();
+                                        });
 
                         </script>

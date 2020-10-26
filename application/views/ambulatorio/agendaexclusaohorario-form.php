@@ -1,24 +1,23 @@
-<div id="page-wrapper"> <!-- Inicio da DIV content -->
-    <div class="panel panel-default">
-        <div class="alert alert-info">Horário selecionado</div>
-        <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th class="tabela_header">Data</th>
-                            <th class="tabela_header">Entrada 1</th>
-                            <th class="tabela_header">Sa&iacute;da 1</th>
-                            <th class="tabela_header">Inicio intervalo</th>
-                            <th class="tabela_header">Fim do intervalo</th>
-                            <th class="tabela_header">Tempo consulta</th>
-                            <th class="tabela_header">Obs</th>
-                            <!--<th class="tabela_header" >Empresa</th>-->
-                            <!--<th class="text-center">Ações</th>-->
-                        </tr>
-                    </thead>
+<div class="content"> <!-- Inicio da DIV content -->
+    <div id="accordion">
+        <h3 class="singular"><a href="#">Excluir Horários</a></h3>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="tabela_header">Data</th>
+                        <th class="tabela_header">Entrada 1</th>
+                        <th class="tabela_header">Sa&iacute;da 1</th>
+                        <th class="tabela_header">Inicio intervalo</th>
+                        <th class="tabela_header">Fim do intervalo</th>
+                        <th class="tabela_header">Tempo consulta</th>
+                        <th class="tabela_header">Obs</th>
+                        <th class="tabela_header">Empresa</th>
+                        <th class="tabela_header">&nbsp;</th>
+                    </tr>
+                </thead>
 
-
+                <tbody>
                     <?php
                     $estilo_linha = "tabela_content01";
                     foreach ($lista as $item) {
@@ -32,109 +31,103 @@
                             <td class="<?php echo $estilo_linha; ?>"><?= $item->intervalofim; ?></td>
                             <td class="<?php echo $estilo_linha; ?>"><?= $item->tempoconsulta; ?></td>
                             <td class="<?php echo $estilo_linha; ?>"><?= $item->observacoes; ?></td>
-                            <!--<td class="<?php // echo $estilo_linha;   ?>"><?= $item->empresa; ?></td>-->
+                            <td class="<?php echo $estilo_linha; ?>"><?= $item->empresa; ?></td>
+
+
+
+                            <td class="<?php echo $estilo_linha; ?>" width="100px;">
+
+                            </td>
                         </tr>
 
+                    </tbody>
+                    <?php
+                }
+                ?>
 
-                        <?php
-                    }
-                    ?>
+            </table>
+            <!--        </div>
+               
+                    <h3 class="singular"><a href="#">Excluir Agenda</a></h3>
+                    <div>-->
+            <br>
+            <!--<br>-->
+            <!--<br>-->
+            <form name="form_exame" id="form_exame" action="<?= base_url() ?>ambulatorio/agenda/excluirhorarioagenda/<?=$horariovariavel_id.'/' .$horariotipo?>" method="post">
 
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="alert alert-danger">Excluir Agenda</div>
+                <dl class="dl_desconto_lista">
 
-        <div class="panel-body">
-            <form name="form_exame" id="form_exame" action="<?= base_url() ?>ambulatorio/agenda/excluirhorarioagenda/<?= $horariovariavel_id ?>/<?=$horariotipo?>" method="post">
-                <div class="row">
-                    <div class="col-lg-6 form-group">
-                        <label for="excluiragendamentos">Excluir horários no agendamento</label>
-                        <input type="checkbox"  id="excluiragendamentos" name="excluir" alt="date" class="checkbox" />
-                    </div>
-                </div>
+                    <!--                    <dt>
+                                            <label>Data inicial</label>
+                                        </dt>
+                                        <dd>
+                                            <input type="text"  id="txtdatainicial" name="txtdatainicial" alt="date" class="size2" />
+                                        </dd>
+                                        <dt>
+                                            <label>Data final</label>
+                                        </dt>
+                                        <dd>
+                                            <input type="text"  id="txtdatafinal" name="txtdatafinal" alt="date" class="size2" />
+                                        </dd>-->
+                    <dt>
+                        <label>Excluir Horários no Agendamento</label>
+                    </dt>
+                    <dd>
+                        <input type="checkbox"  id="checkbox" name="excluir"  class="" />
+                    </dd>
 
-                <!--<hr/>-->
+                    <dt>
+                        <label>Tipo *</label>
+                    </dt>
+                    <dd>
+                        <select name="txttipo" id="txttipo" class="size4" >
+                            <option value="">Selecione</option>
+                            <option value="TODOS">TODOS</option>
+                            <option value="EXAME">EXAME</option>
+                            <option value="CONSULTA">CONSULTA</option>
+                            <option value="ESPECIALIDADE">ESPECIALIDADE</option>
 
-                <!--<button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>-->
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Medico *</label>
+                    </dt>
+                    <dd>
+                        <select name="txtmedico" id="txtmedico" class="size4" >
+                            <option value="">Selecione</option>
+                            <option value="TODOS">TODOS</option>
+                            <? foreach ($medicos as $item) : ?>
+                                <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                </dl>    
+
+                <hr/>
+                <button type="submit" name="btnEnviar">Enviar</button>
+                <button type="reset" name="btnLimpar">Limpar</button>
+                <button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
             </form>
-            <div class="row">
-                <div class="col-lg-3">
-
-                    <p>
-                        <button class="btn btn-outline btn-success btn-sm" id="enviar" name=""><i class="fa fa-floppy-o fa-fw"></i> Enviar</button>
-                        <button class="btn btn-outline btn-danger btn-sm" type="reset" name="btnLimpar">Limpar</button>
-
-                    </p>
-                </div>
-            </div>
         </div>
     </div>
-</div>
-<!-- Final da DIV content -->
+</div> <!-- Final da DIV content -->
 
+<script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
 <script type="text/javascript">
 
-    $(function () {
-        $("#accordion").accordion();
-    });
 
-//    $('#excluiragendamentos').click(function () {
-//        alert('something');
-//    });
-//    $('#excluiragendamentos').change(function () {
-//        if ($(this).is(":checked")) {
-//
-//            $('#agendamentos').show();
-//            
-//            $("#txtdatainicial").prop('required', true);
-//            $("#txtdatafinal").prop('required', true);
-//            $("#txtmedico").prop('required', true);
-//        } else {
-//
-//            $('#agendamentos').hide();
-//            
-//            $("#txtdatainicial").prop('required', false);
-//            $("#txtdatafinal").prop('required', false);
-//            $("#txtmedico").prop('required', false);
-//
-//        }
-//    });
-
-    $('#enviar').click(function () {
-
-        if ($('#excluiragendamentos').is(":checked")) {
-
-            swal({
-                title: "Tem certeza?",
-                text: "Você selecionou que irá deletar os horários associados a essa agenda no agendamento! Obs: Isso não irá deletar os pacientes que já estão agendados.",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#337ab7",
-                confirmButtonText: "Sim, quero deletar!",
-                cancelButtonText: "Não, cancele!",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            },
-                    function (isConfirm) {
-                        if (isConfirm) {
-                            document.getElementById('form_exame').submit();
-                        } else {
-                            swal("Cancelado", "Você desistiu de excluir os horários associados a essa agenda no agendamento. Caso queira excluir apenas a agenda, desmarque a opção e tente novamente", "error");
-                        }
-                    });
-
+    $('#checkbox').change(function () {
+        if ($(this).is(":checked")) {
+            $("#txttipo").prop('required', true);
+            $("#txtmedico").prop('required', true);
+            
         } else {
-            document.getElementById('form_exame').submit();
+            $("#txttipo").prop('required', false);
+            $("#txtmedico").prop('required', false);
+           
         }
-
-
-
-
-
     });
 
 
@@ -162,12 +155,32 @@
         });
     });
 
+    $(function () {
+        $("#accordion").accordion();
+    });
+
+    $(function () {
+        $("#txtprocedimentolabel").autocomplete({
+            source: "<?= base_url() ?>index.php?c=autocomplete&m=paciente",
+            minLength: 3,
+            focus: function (event, ui) {
+                $("#txtpacientelabel").val(ui.item.label);
+                return false;
+            },
+            select: function (event, ui) {
+                $("#txtpacientelabel").val(ui.item.value);
+                $("#txtpacienteid").val(ui.item.id);
+                return false;
+            }
+        });
+    });
+
     $(document).ready(function () {
-        jQuery('#form_horariostipo').validate({
+        jQuery('#form_exame').validate({
             rules: {
                 txtNome: {
                     required: true,
-                    minlength: 3
+                    minlength: 2
                 },
                 txtTipo: {
                     required: true

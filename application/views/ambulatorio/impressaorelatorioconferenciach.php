@@ -89,21 +89,24 @@
                 $paciente = "";
                 $contadorpaciente = "";
                 $contadorpacientetotal = "";
+                // echo '<pre>';
+                // print_r($relatorio);
+                // die;
                 foreach ($relatorio as $item) :
-                    if ($item->grupo == 'MEDICAMENTO' || $item->grupo == 'MATERIAL') {
+                    if (@$item->grupo == 'MEDICAMENTO' || @$item->grupo == 'MATERIAL') {
                         $medicamento++;
                     }
                     $i++;
                     if ($i == 1 || $item->convenio == $convenio) {
-                        $valortotal = $valortotal + $item->valor_total;
-                        $valor = $valor + $item->valor_total;
+                        @$valortotal = $valortotal + $item->valor_total;
+                        @$valor = $valor + $item->valor_total;
                         $qtde++;
                         $qtdetotal++;
 
                         if ($i == 1) {
                             ?>
                             <tr>
-                                <td colspan="8"><font ><b>Convenio:&nbsp;<?= utf8_decode($item->convenio); ?></b></td>
+                                <td colspan="8"><font ><b>Convenio:&nbsp;<?= ($item->convenio); ?></b></td>
                             </tr>
             <? } ?>
                         <tr>
@@ -115,15 +118,15 @@
             <? } else { ?>
                                 <td><?= $item->guia_id; ?></td>
                                 <td><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
-                                <td><?= utf8_decode($item->paciente); ?></td>
+                                <td><?= ($item->paciente); ?></td>
                                 <?
                                 $contadorpaciente++;
                                 $contadorpacientetotal++;
                             }
                             ?>
-                            <td><?= utf8_decode(substr($item->medico, 0, 20)); ?></td>
+                            <td><?= (substr($item->medico, 0, 20)); ?></td>
                             <td><?= $item->autorizacao; ?></td>
-                            <td><?= utf8_decode($item->exame); ?></td>
+                            <td><?= ($item->procedimento); ?></td>
                             <td><?= $item->codigo; ?></td>
                             <td><?= $item->quantidade; ?></td>
                             <td><?= number_format($item->qtdech, 2, ',', '.') ?></td>
@@ -158,7 +161,7 @@
                         $qtdetotal++;
                         ?>
                         <tr>
-                            <td colspan="8"><font ><b>Convenio:&nbsp;<?= utf8_decode($item->convenio); ?></b></td>
+                            <td colspan="8"><font ><b>Convenio:&nbsp;<?= ($item->convenio); ?></b></td>
                         </tr>
                         <tr>
             <? if ($paciente == $item->paciente) { ?>
@@ -168,18 +171,18 @@
             <? } else { ?>
                                 <td><?= $item->guia_id; ?></td>
                                 <td><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
-                                <td><?= utf8_decode($item->paciente); ?></td>
+                                <td><?= ($item->paciente); ?></td>
                                 <?
                                 $contadorpaciente++;
                                 $contadorpacientetotal++;
                             }
                             ?>
-                            <td><?= utf8_decode(substr($item->medico, 0, 20)); ?></td>
+                            <td><?= (substr($item->medico, 0, 20)); ?></td>
                             <td><?= $item->autorizacao; ?></td>
-                            <td><?= utf8_decode($item->exame); ?></td>
+                            <td><?= (@$item->exame); ?></td>
                             <td><?= $item->codigo; ?></td>
-                            <td><?= $item->quantidade; ?></td>
-                            <td><?= number_format($item->valortotal, 2, ',', '.') ?></td>
+                            <td><?= @$item->quantidade; ?></td>
+                            <td><?= number_format(@$item->valortotal, 2, ',', '.') ?></td>
                             <td><?= number_format($item->valor_total, 2, ',', '.') ?></td>
                         </tr>
                         <?

@@ -1,5 +1,5 @@
 <div class="content"> <!-- Inicio da DIV content -->
-
+    <meta charset="utf8"/>
     <? if (count($empresa) > 0) { ?>
         <h3><?= $empresa[0]->razao_social; ?></h3>
     <? } ?>
@@ -10,23 +10,29 @@
     <? } else { ?>             
         <h3>GRUPO: <?= $grupo; ?></h3>
     <? } ?>
+    <? if (count($subgrupo_selec) > 0) { ?>
+        <h3>SUBGRUPO: TODOS</h3>
+    <? } else { ?>             
+        <h3>SUBGRUPO: <?= $subgrupos[0]->subgrupo; ?></h3>
+    <? } ?>
 
     <? if (count($relatorio) > 0) {
         ?>
-        <table border="1">
+        <table border="1" cellpadding="3" cellspacing="0">
             <thead>
                 <tr>
-                    <th class="tabela_teste" >Codigo</th>
-                    <th class="tabela_teste">Nome</th>
-                    <th class="tabela_teste" >Descricao</th>
+                    
+                    <th class="tabela_teste" >Nome</th>
                     <th class="tabela_teste" >Grupo</th>
+                    <th class="tabela_teste" >Subgrupo</th>
+                    <th class="tabela_teste" >Codigo</th>
+                    <th class="tabela_teste" >Descricao</th>
                     <th class="tabela_teste" >Perc. Medico</th>
+                    <th class="tabela_teste" >Perc. Revisor</th>
                     <th class="tabela_teste" >Qtde</th>
-                    <th class="tabela_teste" >Dencidade Calorica</th>
-                    <th class="tabela_teste" >Proteina</th>
-                    <th class="tabela_teste" >Carboidratos</th>
-                    <th class="tabela_teste" >Lipidios</th>
-                    <th class="tabela_teste" >Kcal</th>
+                    <th class="tabela_teste" >Valor TCD</th>
+                    <th class="tabela_teste" >Prazo Entrega</th>
+                    <th class="tabela_teste" >HOME CARE</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,18 +40,37 @@
                 foreach ($relatorio as $item) :
                     ?>
                     <tr>
-                        <td><?= $item->codigo; ?></td>
                         <td><?= $item->nome; ?></td>
-                        <td><?= utf8_decode($item->descricao); ?></td>
                         <td><?= $item->grupo; ?></td>
-                        <td><?= $item->perc_medico; ?></td>
-                        <td><?= $item->qtde; ?></td>
-                        <td><?= $item->dencidade_calorica; ?></td>
-                        <td><?= $item->proteinas; ?></td>
-                        <td><?= $item->carboidratos; ?></td>
-                        <td><?= $item->lipidios; ?></td>
-                        <td><?= $item->kcal; ?></td>
-
+                        <td><?= $item->subgrupo; ?></td>
+                        <td><?= $item->codigo; ?></td>
+                        <td><?= $item->descricao; ?></td>
+                        <td style="text-align: right"><? 
+                            if($item->perc_medico != ''){
+                                if($item->percentual == 't'){
+                                    echo $item->perc_medico . " %";
+                                }
+                                else{
+                                    echo "R$ ".$item->perc_medico;
+                                }
+                            }
+                        ?>
+                        </td>
+                        <td style="text-align: right"><? 
+                            if($item->valor_revisor != ''){
+                                if($item->percentual_revisor == 't'){
+                                    echo $item->valor_revisor . " %";
+                                }
+                                else{
+                                    echo "R$ ".$item->valor_revisor;
+                                }
+                            }
+                        ?>
+                        </td>
+                        <td style="text-align: right"><?= $item->qtde; ?></td>
+                        <td style="text-align: right"><?= number_format($item->valor_tcd,2,",","."); ?></td>
+                        <td style="text-align: right"><?= $item->entrega; ?> Dia(s)</td>
+                        <td style="text-align: right"><?= ($item->home_care == 't')? "SIM": "NÃO"; ?></td> 
                     </tr>
 
 

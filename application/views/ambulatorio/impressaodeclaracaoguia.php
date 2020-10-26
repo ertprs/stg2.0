@@ -4,6 +4,8 @@ if ($sexo == "M") {
     $sexopaciente = "Masculino";
 } elseif ($sexo == "F") {
     $sexopaciente = "Feminino";
+} else {
+    $sexopaciente = "Outro";
 }
 $dataFuturo = date("Y-m-d");
 $dataAtual = $paciente['0']->nascimento;
@@ -54,7 +56,7 @@ switch ($MES) {
 <p><center><font size = 4><b>DECLARA&Ccedil;&Atilde;O</b></font></center></p>
 <br>
 <br>
-<p><?= utf8_decode($exame[0]->declaracao); ?>
+<p><?= ($exame[0]->declaracao); ?>
     <br>
     <br>
     <br>

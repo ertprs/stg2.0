@@ -1,5 +1,5 @@
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
-    <h3 class="singular"><a href="#">Cadastro de Operador</a></h3>
+    <h3 class="singular"><a href="#">Cadastro de Medico Solicitante</a></h3>
     <div>
         <form name="form_operador" id="form_operador" action="<?= base_url() ?>seguranca/operador/gravarrecepcao" method="post">
             <fieldset>
@@ -25,16 +25,38 @@ endif;
                     </select>
                 </div>
 
-                <div>
-                    <label>Conselho</label>
-                    <input type="text" id="txtconselho" name="conselho"  class="texto04" value="<?= @$obj->_conselho; ?>" />
-                </div>
-                                <div>
-                    <label>Ocupa&ccedil;&atilde;o</label>
-                    <input type="hidden" id="txtcboID" class="texto_id" name="txtcboID" value="<?= @$obj->_cbo_ocupacao_id; ?>" readonly="true" />
-                    <input type="text" id="txtcbo" class="texto04" name="txtcbo" value="<?= @$obj->_cbo_nome; ?>" />
+               
 
-                </div>
+                <div>
+                        <label>Sigla do Conselho</label>  
+                        <select name="siglaconselho" id="siglaconselho" > 
+                            <option value="" >Escolha</option>
+                            <?
+                            foreach ($listarsigla as $item) {
+                                ?>
+                                <option value="<?= $item->sigla_id; ?>" 
+                                <?
+                                if (@$obj->_sigla_id == $item->sigla_id) {
+                                    echo "Selected";
+                                } else {
+                                    
+                                }
+                                ?>
+                                        title="<?= $item->nome ?>"><?= $item->nome ?></option>
+                                        <?
+                                    }
+                                    ?> 
+                        </select>
+                    </div> 
+                    <div>
+                        <label title="UF">UF</label> 
+                        <input type="text" name="uf_profissional" id="uf_profissional" value="<?= @$obj->_uf_profissional ?>" class="size1"  max>
+                    </div>
+
+                    <div>
+                        <label>Nº Conselho</label>
+                        <input type="text" id="txtconselho" name="conselho"  class="texto04" value="<?= @$obj->_conselho; ?>" />
+                    </div>
 
             </fieldset>
 <!--            <fieldset>

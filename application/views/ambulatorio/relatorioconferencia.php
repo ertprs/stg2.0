@@ -1,225 +1,337 @@
-<!-- Inicio da DIV content -->
-<div id="page-wrapper">
 
-    <div class="row">
-        <div class="col-lg-12"> 
-            <div class="alert alert-success ">
-                Gerar Relatório Conferência
-            </div>
-        </div>
-    </div>
-    <!--<h3><a href="#">Gerar relatorio Faturamento</a></h3>-->
-    <div class="panel panel-default">
-        <div class="alert alert-info ">
-            Dados da Pesquisa
-        </div>
-
-        <?
-        $empresa = $this->guia->listarempresas();
-        $medicos = $this->operador_m->listarmedicos();
-        $salas = $this->exame->listartodassalas();
-        $convenios = $this->convenio->listarconvenionaodinheiro();
-        $guia = "";
-        ?>
-        <div class="panel-body">
-
-            <form method="post" action="<?= base_url() ?>ambulatorio/guia/gerarelatorioexame" target="_blank">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Convenio</label>
-
-
-                            <select name="convenio" id="convenio" class="form-control">
-                                <option value='0' >TODOS</option>
-                                <option value="" >CONVENIOS</option>
-                                <option value="-1" >PARTICULARES</option>
-                                <? foreach ($convenio as $value) : ?>
-                                    <option value="<?= $value->convenio_id; ?>" ><?php echo $value->nome; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                        </div>    
-                    </div>    
-                </div>    
-
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Data inicio</label>
-
-
-                            <input type="text" name="txtdata_inicio" class="form-control" id="txtdata_inicio" alt="date"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
+<div class="content"> <!-- Inicio da DIV content -->
+    <div id="accordion">
+        <h3><a href="#">Gerar relatorio Conferencia</a></h3>
+        <div>
+            <form method="post" action="<?= base_url() ?>ambulatorio/guia/gerarelatorioexame">
+                <dl>
+                    <dt>
+                        <label>Convenio</label>
+                    </dt>
+                    <dd>
+                        <select name="convenio" id="convenio" class="size2">
+                            <option value='0' >TODOS</option>
+                            <option value="" >CONVENIOS</option>
+                            <option value="-1" >PARTICULARES</option>
+                            <? foreach ($convenio as $value) : ?>
+                                <option value="<?= $value->convenio_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Grupo Convenio</label>
+                    </dt>
+                    <dd>
+                        <select name="grupoconvenio" id="convenio" class="size2">
+                            <option value='0' >TODOS</option>
+                            <? foreach ($grupoconvenio as $value) : ?>
+                                <option value="<?= $value->convenio_grupo_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Data inicio</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="txtdata_inicio" id="txtdata_inicio" alt="date"/>
+                    </dd>
+                    <div>
+                        <dt>
                             <label>Data fim</label>
-
-
-                            <input type="text" name="txtdata_fim" class="form-control" id="txtdata_fim" alt="date"/>
-                        </div>
+                        </dt>
+                        <dd  style="margin-bottom: 5pt; position: relative">
+                            <input type="text" name="txtdata_fim" id="txtdata_fim" alt="date"/>
+                            <input type="checkbox" name="filtro_hora" id="filtro_hora"><label for="filtro_hora">Filtrar por horario?</label>
+                        </dd>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Especialidade</label>
 
-
-                            <select name="grupo" id="grupo" class="form-control" >
-                                <option value='0' >TODOS</option>
-                                <option value='1' >SEM RM</option>
-                                <? foreach ($grupos as $grupo) { ?>                                
-                                    <option value='<?= $grupo->nome ?>' <?
-                                    if (@$obj->_grupo == $grupo->nome):echo 'selected';
-                                    endif;
-                                    ?>><?= $grupo->nome ?></option>
-                                        <? } ?>
-                            </select>
-                        </div>
+                    <div id="div-filtro-hora">
+                        <dt>
+                            <label>Hora inicio</label>
+                        </dt>
+                        <dd>
+                            <input type="text" name="horario_inicio" id="horario_inicio" alt="29:99"/>
+                        </dd>
+                        <dt>
+                            <label>Hora fim</label>
+                        </dt>
+                        <dd>
+                            <input type="text" name="horario_fim" id="horario_fim" alt="29:99"/>
+                        </dd>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Situação</label>
 
+                    <dt>
+                        <label>Data De Pesquisa</label>
+                    </dt>
+                    <dd>
+                        <select name="data_atendimento" id="data_atendimento" class="size2" >
+                            <option value='1' >DATA DE ATENDIMENTO</option>
+                            <option value='0' >DATA DE FATURAMENTO</option>
 
-                            <select name="situacao_faturamento" id="grupo" class="form-control" >
-                                <option value='' >TODOS</option>
-                                <option value='GLOSADO' >GLOSADO</option>
-                                <option value='PAGO' >PAGO</option>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Especialidade</label>
+                    </dt>
+                    <dd>
+                        
+                        <select name="grupo[]" id="grupo" class="chosen-select" data-placeholder="Selecione as especialidades (Todos ou vázio trará todos)..." multiple>
+                        <!-- <select name="grupo" id="grupo" class="size1" > -->
+                            <option value='0' >TODOS</option>
+                            <option value='1' >SEM RM/TOMOGRAFIA</option>
+                            <? foreach ($grupo as $value) : ?>
+                                <option value="<?= $value->nome; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
 
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Procedimento</label>
+                        </select>
+                    </dd>
+                    <br>
+                    <br>
+                    <dt>
+                        <label>Situação</label>
+                    </dt>
+                    <dd>
+                        <select name="situacao_faturamento" id="grupo" class="size1" >
+                            <option value='' >TODOS</option>
+                            <option value='GLOSADO' >GLOSADO</option>
+                            <option value='PAGO' >PAGO</option>
+                            <option value='NAO PAGO' >NÃO PAGO</option>
 
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Procedimento</label>
+                    </dt>
+                    <dd style="margin-bottom: 5pt">
+<!--                        <select name="procedimentos" id="procedimentos" class="size1" >
+                            <option value='0' >TODOS</option>
+                        <? foreach ($procedimentos as $value) : ?>
+                                                <option value="<?= $value->procedimento_tuss_id; ?>" ><?php echo $value->nome; ?></option>
+                        <? endforeach; ?>
 
-                            <select name="procedimentos" id="procedimentos" class="form-control" >
-                                <option value='0' >TODOS</option>
-                                <? foreach ($procedimentos as $value) : ?>
-                                    <option value="<?= $value->procedimento_tuss_id; ?>" ><?php echo $value->nome; ?></option>
-                                <? endforeach; ?>
+                        </select>-->
+                        <select name="procedimentos" id="procedimentos" class="size4 chosen-select" data-placeholder="Selecione" tabindex="1" required="">
+                            <option value='0' >TODOS</option>
+                            <? foreach ($procedimentos as $value) : ?>
+                                <option value="<?= $value->procedimento_tuss_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
 
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Classificacao</label>
-
-
-                            <select name="classificacao" id="classificacao" class="form-control" >
-                                <option value='0' >Data</option>
-                                <option value='1' >Nome</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Faturamento</label>
-
-
-                            <select name="faturamento" id="faturamento" class="form-control" >
-                                <option value='0' >TODOS</option>
-                                <option value='t' >Faturado</option>
-                                <option value='f' >Nao Faturado</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Tipo</label>
-
-
-                            <select name="tipo" id="tipo" class="form-control">
-                                <option value='0' >TODOS</option>
-                                <option value="" >CONSULTA / RETORNO</option>
-                                <option value="-1" >CONSULTA / EXAMES</option>
-                                <? foreach ($classificacao as $value) : ?>
-                                    <option value="<?= $value->tuss_classificacao_id; ?>" ><?php echo $value->nome; ?></option>
+                    </dd>
+                    <? $subgrupo_procedimento = $this->session->userdata('subgrupo_procedimento'); ?>
+                    <? if ($subgrupo_procedimento == 't') { ?>
+                        <dt>
+                            <label>Subgrupo</label>
+                        </dt>
+                        <dd style="margin-bottom: 5pt">
+                            <select name="subgrupo_id" id="subgrupo_id" class="size2" data-placeholder="Selecione" tabindex="1">
+                                <option value=''>Selecione</option>
+                                <? foreach ($subgrupos as $value) : ?>
+                                    <option value="<?= $value->ambulatorio_subgrupo_id; ?>" ><?php echo $value->nome; ?></option>
                                 <? endforeach; ?>
                             </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Ra&ccedil;a / Cor</label>
+                        </dd>
+                    <? } ?>
+                    <dt>
+                        <label>Classificacao</label>
+                    </dt>
+                    <dd>
+                        <select name="classificacao" id="classificacao" class="size1" >
+                            <option value='0' >Data</option>
+                            <option value='1' >Nome</option>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Aparecer Valor</label>
+                    </dt>
+                    <dd>
+                        <select name="aparecervalor" id="aparecervalor" class="size1" >
+                            <option value='1' >SIM</option>
+                            <option value='0' >NÃO</option>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Faturamento</label>
+                    </dt>
+                    <dd>
+                        <select name="faturamento" id="faturamento" class="size1" >
+                            <option value='0' >TODOS</option>
+                            <option value='t' >Faturado</option>
+                            <option value='f' >Nao Faturado</option>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Grupo Tipo</label>
+                    </dt>
+                    <dd>
+                        <select name="grupotipo" id="grupotipo" class="size2">
+                            <option value='' >SELECIONE</option>
+                            <? foreach ($grupoclassificacao as $value) : ?>
+                                <option value="<?= $value->classificacao_grupo_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Tipo</label>
+                    </dt>
+                    <dd>
+                        <select name="tipo" id="tipo" class="size2">
+                            <option value='0' >TODOS</option>
+                            <option value="" >CONSULTA / RETORNO</option>
+                            <option value="-1" >CONSULTA / EXAMES</option>
+                            <? foreach ($classificacao as $value) : ?>
+                                <option value="<?= $value->tuss_classificacao_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Ra&ccedil;a / Cor</label>
+                    </dt>
+                    <dd>
+                        <select name="raca_cor" id="txtRacaCor" class="size2">
+                            <option value=0 >TODOS</option>
+                            <option value=-1 >Sem o Ind&iacute;gena</option>
+                            <option value=1 >Branca</option>
+                            <option value=2 >Amarela</option>
+                            <option value=3 >Preta</option>
+                            <option value=4 >Parda</option>
+                            <option value=5>Ind&iacute;gena</option>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Paciente</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="nome" class="texto06"/>
+                    </dd>
+                    <dt>
+                        <label>Medico</label>
+                    </dt>
+                    <!--                    <dd>
+                                            <select name="medico" id="medico" class="size2">
+                                                <option value="0">TODOS</option>
+                    <? foreach ($medicos as $value) : ?>
+                                                                    <option value="<?= $value->operador_id; ?>" ><?php echo $value->nome; ?></option>
+                    <? endforeach; ?>
+                    
+                                            </select>
+                                        </dd>-->
+                    <dd style="margin-bottom: 9px;">
+                        <select name="medico[]" id="medico" class="chosen-select" data-placeholder="Selecione os médicos (Todos ou vázio trará todos)..." multiple>
+                            <option value="0">TODOS</option>
+                            <? foreach ($medicos as $value) : ?>
+                                <option value="<?= $value->operador_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
 
+                        </select>
+                    </dd>
+                    <br>
+                    <br>
+                    <!--                    <div id="testandoobr">
+                    
+                                        </div>-->
+                    <!--<br>-->
+                    <dt>
+                        <label>Coluna Médico</label>
+                    </dt>
+                    <dd>
+                        <select name="mostrar_medico" id="mostrar_medico" class="size1" >
+                            <option value='NAO' >NÃO</option>
+                            <option value='SIM' >SIM</option>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Empresa</label>
+                    </dt>
+                    <dd>
+                        <select name="empresa" id="empresa" class="size2">
+                            <? foreach ($empresa as $value) : ?>
+                                <option value="<?= $value->empresa_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
 
-                            <select name="raca_cor" id="txtRacaCor" class="form-control">
-                                <option value=0 >TODOS</option>
-                                <option value=-1 >Sem o Ind&iacute;gena</option>
-                                <option value=1 >Branca</option>
-                                <option value=2 >Amarela</option>
-                                <option value=3 >Preta</option>
-                                <option value=4 >Parda</option>
-                                <option value=5>Ind&iacute;gena</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Medico</label>
+                            <option value="0">TODOS</option>
+                        </select>
+                    </dd>
 
-
-                            <select name="medico" id="medico" class="form-control">
-                                <option value="0">TODOS</option>
-                                <? foreach ($medicos as $value) : ?>
-                                    <option value="<?= $value->operador_id; ?>" ><?php echo $value->nome; ?></option>
-                                <? endforeach; ?>
-
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <!--<div class="row">-->
-                <!--<div class="col-lg-4">-->
-                <!--<div class="form-group">-->
-                <!--<label>Empresa</label>-->
-                <input type="hidden" name="empresa" value="0"/>
-
-
-
-                <!--</div>-->   
-                <!--</div>-->   
-                <!--</div>-->   
-                <div class="row">
-                    <div class="col-lg-4">
-                        <p>
-                            <button type="submit" class="btn btn-outline btn-success btn-sm" name="btnEnviar"><i class="fa fa-search" aria-hidden="true"></i> Pesquisar</button>
-
-
-                        </p>
-                    </div>
-                </div>  
-
-
-
+                    <dt>
+                        <label>Gerar Planilha</label>
+                    </dt>
+                    <dd>
+                        <select name="planilha" id="planilha" class="size2">
+                            <option value="NAO">NÃO</option>
+                            <option value="SIM">SIM</option>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Gerar PDF</label>
+                    </dt>
+                    <dd>
+                        <select name="gerarpdf" id="gerarpdf" class="size2">
+                            <option value="NAO">NÃO</option>
+                            <option value="SIM">SIM</option>
+                        </select>
+                    </dd>
+                </dl>
+                <button type="submit" >Pesquisar</button>
             </form>
+
         </div>
     </div>
-</div>
-<!-- Final da DIV content -->
-<script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
+
+
+</div> <!-- Final da DIV content -->
+<link rel="stylesheet" href="<?php base_url() ?>css/jquery-ui-1.8.5.custom.css">
+<link rel="stylesheet" href="<?= base_url() ?>js/chosen/chosen.css">
+<!--<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/style.css">-->
+<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/prism.css">
+<script type="text/javascript" src="<?= base_url() ?>js/chosen/chosen.jquery.js"></script>
+<!--<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/prism.js"></script>-->
+<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/init.js"></script>
+<style>
+    .chosen-container{ margin-top: 5pt;}
+    #procedimento1_chosen a { width: 130px; }
+    form { min-height: 550pt; }
+</style>
 <script type="text/javascript">
+// $(function () {
+//        $('#grupo').change(function () {
+//            if ($(this).val()) {
+//                alert($(this).val())
+//                $.getJSON('<?= base_url() ?>autocomplete/listarprocedimentogrupo', {grupo: $(this).val()}, function (j) {
+//                     console.log(j);
+//                    var options = '<option value=""></option>';
+//                    for (var c = 0; c < j.length; c++) {
+//                        options += '<option value="' + j[c].id + '">' + j[c].value + '</option>';
+//                    }
+////                    $('#procedimento1').html(options).show();
+//                    $('#procedimentos option').remove();
+//                    $('#procedimentos').append(options);
+//                    $("#procedimentos").trigger("chosen:updated");
+//                    $('.carregando').hide();
+//                });
+//            } else {
+//
+//            }
+//        });
+//    });
+
+    
+    $('#filtro_hora').change(function () {
+        if ($(this).is(":checked")) {
+            $("#div-filtro-hora").show();
+//            $("#horario_inicio").prop('required', true);
+//            $("#horario_fim").prop('required', true);
+        } else {
+            $("#div-filtro-hora").hide();
+//            $("#horario_inicio").prop('required', false);
+//            $("#horario_fim").prop('required', false);
+
+        }
+
+    });
+    $("#div-filtro-hora").hide();
+
+
     $(function () {
         $("#txtdata_inicio").datepicker({
             autosize: true,
@@ -248,5 +360,7 @@
     $(function () {
         $("#accordion").accordion();
     });
+    
 
+  
 </script>

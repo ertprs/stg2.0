@@ -2,12 +2,14 @@
     <div id="accordion">
         <h3><a href="#">Carregar imagem entrada </a></h3>
         <div >
-            <?= form_open_multipart(base_url() . 'cadastros/caixa/importarimagementrada'); ?>
+            <?// form_open_multipart(base_url() . 'cadastros/caixa/importarimagementrada'); ?>
+            <form  method="POST" action="<?=base_url() . 'cadastros/caixa/importarimagementrada'?>" enctype="multipart/form-data">
             <label>Informe o arquivo para importa&ccedil;&atilde;o</label><br>
-            <input type="file" name="userfile"/>
+            <input type="file" multiple="" name="arquivos[]"/>
             <button type="submit" name="btnEnviar">Enviar</button>
             <input type="hidden" name="paciente_id" value="<?= $entradas_id; ?>" />
-            <?= form_close(); ?>
+            </form>
+            <?// form_close(); ?>
 
         </div>
 
@@ -23,7 +25,7 @@
                         ?>
                 
                 <td width="10px"><img  width="50px" height="50px" onclick="javascript:window.open('<?= base_url() . "upload/entrada/" . $entradas_id . "/" . $value ?>','_blank','toolbar=no,Location=no,menubar=no,width=1200,height=600');" src="<?= base_url() . "upload/entrada/" . $entradas_id . "/" . $value ?>"><br><? echo substr($value, 0, 10)?>
-                    <br/><a onclick="javascript: return confirm('Deseja realmente excluir o arquivo <?= $value; ?>');" href="<?= base_url() ?>cadastros/caixa/ecluirimagemsaida/<?=$entradas_id?>/<?=$value?>">Excluir</a></td>
+                    <br/><a onclick="javascript: return confirm('Deseja realmente excluir o arquivo <?= $value; ?>');" href="<?= base_url() ?>cadastros/caixa/ecluirimagementrada/<?=$entradas_id?>/<?=$value?>">Excluir</a></td>
                     <?
                     if($i == 8){
                         ?>

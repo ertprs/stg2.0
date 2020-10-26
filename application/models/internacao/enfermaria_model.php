@@ -43,7 +43,6 @@ class enfermaria_model extends BaseModel {
             $this->_localizacao = $return[0]->localizacao;
             $this->_unidade_nome = $return[0]->unidade_nome;
             $this->_unidade = $return[0]->unidade;
-            
         }
     }
 
@@ -68,8 +67,7 @@ class enfermaria_model extends BaseModel {
                 $erro = $this->db->_error_message();
                 if (trim($erro) != "") { // erro de banco
                     return false;
-                }
-                else
+                } else
                     $internacao_enfermaria_id = $this->db->insert_id();
             }
             else { // update
@@ -94,14 +92,29 @@ class enfermaria_model extends BaseModel {
                             ie.tipo');
         $this->db->from('tb_internacao_enfermaria ie');
         $this->db->join('tb_internacao_unidade iu', 'iu.internacao_unidade_id = ie.unidade_id ');
-        $this->db->where('ie.ativo', 't');
         if ($args) {
             if (isset($args['nome']) && strlen($args['nome']) > 0) {
                 $this->db->where('ie.nome ilike', "%" . $args['nome'] . "%");
-                $this->db->orwhere('iu.nome ilike', "%" . $args['nome'] . "%");
+                // $this->db->orwhere('iu.nome ilike', "%" . $args['nome'] . "%");
+            }
+            if(isset($args['unidade']) && $args['unidade'] > 0){
+                $this->db->where('iu.internacao_unidade_id',$args['unidade']);
             }
         }
+        $this->db->where('ie.ativo', 't');
         return $this->db;
+    }
+
+    function listaenfermariarelatorio() {
+        $this->db->select('ie.internacao_enfermaria_id,
+                            ie.nome,
+                            iu.nome as unidade');
+        $this->db->from('tb_internacao_enfermaria ie');
+        $this->db->join('tb_internacao_unidade iu', 'iu.internacao_unidade_id = ie.unidade_id ');
+        $this->db->where('ie.ativo', 'true');
+
+        $return = $this->db->get();
+        return $return->result();
     }
 
     function listaenfermariaautocomplete($parametro = null) {
@@ -110,23 +123,51 @@ class enfermaria_model extends BaseModel {
                             iu.nome as unidade');
         $this->db->from('tb_internacao_enfermaria ie');
         $this->db->join('tb_internacao_unidade iu', 'iu.internacao_unidade_id = ie.unidade_id ');
-        $this->db->where('ie.ativo', 'true');
         if ($parametro != null) {
             $this->db->where('ie.nome ilike', "%" . $parametro . "%");
             $this->db->orwhere('iu.nome ilike', "%" . $parametro . "%");
         }
+        $this->db->where('ie.ativo', 'true');
         $return = $this->db->get();
         return $return->result();
     }
-    
+
+    function listaenfermariajson($parametro = null) {
+        $this->db->select('ie.internacao_enfermaria_id,
+                            ie.nome,
+                            iu.nome as unidade');
+        $this->db->from('tb_internacao_enfermaria ie');
+        $this->db->join('tb_internacao_unidade iu', 'iu.internacao_unidade_id = ie.unidade_id ');
+        $this->db->where('ie.ativo', 'true');
+        $this->db->where('ie.unidade_id ', $parametro);
+        $this->db->orderby('ie.internacao_enfermaria_id');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function listaleitojson($parametro = null) {
+        $this->db->select('il.internacao_leito_id,
+                            
+                            il.nome');
+
+        $this->db->from('tb_internacao_leito il');
+//        $this->db->join('tb_internacao_enfermaria ie', 'il.enfermaria_id = ie.internacao_enfermaria_id ');
+//        $this->db->join('tb_internacao_unidade iu', 'iu.internacao_unidade_id = ie.unidade_id ');
+        $this->db->where('il.excluido', 'f');
+        $this->db->where('il.enfermaria_id ', $parametro);
+        $this->db->orderby('il.internacao_leito_id ');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function excluirenfermaria($enfermaria_id) {
         $this->db->set('ativo', 'f');
         $this->db->where('internacao_enfermaria_id', $enfermaria_id);
         $this->db->update('tb_internacao_enfermaria');
         $erro = $this->db->_error_message();
-                if (trim($erro) != "") { // erro de banco
-                    return false;
-                }
+        if (trim($erro) != "") { // erro de banco
+            return false;
+        }
     }
 
 }

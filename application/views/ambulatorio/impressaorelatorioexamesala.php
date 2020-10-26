@@ -14,7 +14,7 @@
                 </tr>
             <? } else { ?>
                 <tr>
-                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">SALA: <?= utf8_decode($sala[0]->nome); ?></th>
+                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">SALA: <?= ($sala[0]->nome); ?></th>
                 </tr>
             <? } ?>
 

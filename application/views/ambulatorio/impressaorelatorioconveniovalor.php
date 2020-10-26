@@ -104,7 +104,7 @@
             ?>
             <tr>
                 <td><?= str_replace("-","/",date("d-m-Y", strtotime($itens->data))); ?></td>
-                <td><?= utf8_decode($itens->nome); ?></td>
+                <td><?= ($itens->nome); ?></td>
                 <td style='text-align: right;'><?= number_format($itens->valortotal, 2, ',', '.'); ?></td>
             </tr>
             <?
@@ -115,7 +115,7 @@
                 ?>
                 <tr>
                     <td><?= ($itens->data); ?></td>
-                    <td><?= utf8_decode($itens->nome); ?></td>
+                    <td><?= ($itens->nome); ?></td>
                     <td style='text-align: right;'><?= number_format($itens->valortotal, 2, ',', '.'); ?></td>
                 </tr>
                 <?
@@ -141,7 +141,7 @@
             ?>
             <tr>
                 <td><?= (str_replace("-","/",date("d-m-Y", strtotime($itens->data)))); ?></td>
-                <td><?= utf8_decode($itens->nome); ?></td>
+                <td><?= ($itens->nome); ?></td>
                 <td style='text-align: right;'><?= number_format($itens->valortotal, 2, ',', '.'); ?></td>
             </tr>
             <?
@@ -154,7 +154,7 @@
                 ?>
                 <tr>
                     <td><?= (str_replace("-","/",date("d-m-Y", strtotime($itens->data)))); ?></td>
-                    <td><?= utf8_decode($itens->nome); ?></td>
+                    <td><?= ($itens->nome); ?></td>
                     <td style='text-align: right;'><?= number_format($itens->valortotal, 2, ',', '.'); ?></td>
                 </tr>
                 <?
@@ -180,7 +180,7 @@
             ?>
             <tr>
                 <td><?= (str_replace("-","/",date("d-m-Y", strtotime($itens->data)))); ?></td>
-                <td><?= utf8_decode($itens->nome); ?></td>
+                <td><?= ($itens->nome); ?></td>
                 <td style='text-align: right;'><?= number_format($itens->valortotal, 2, ',', '.'); ?></td>
             </tr>
             <?
@@ -192,7 +192,7 @@
                 ?>
                 <tr>
                     <td><?= ($itens->data); ?></td>
-                    <td><?= utf8_decode($itens->nome); ?></td>
+                    <td><?= ($itens->nome); ?></td>
                     <td style='text-align: right;'><?= number_format($itens->valortotal, 2, ',', '.'); ?></td>
                 </tr>
                 <?
@@ -217,7 +217,7 @@
             ?>
             <tr>
                 <td><?= ($itens->data); ?></td>
-                <td><?= utf8_decode($itens->nome); ?></td>
+                <td><?= ($itens->nome); ?></td>
                 <td style='text-align: right;'><?= number_format($itens->valortotal, 2, ',', '.'); ?></td>
             </tr>
             <?
@@ -230,7 +230,7 @@
                 ?>
                 <tr>
                     <td><?= ($itens->data); ?></td>
-                    <td><?= utf8_decode($itens->nome); ?></td>
+                    <td><?= ($itens->nome); ?></td>
                     <td style='text-align: right;'><?= number_format($itens->valortotal, 2, ',', '.'); ?></td>
                 </tr>
                 <?

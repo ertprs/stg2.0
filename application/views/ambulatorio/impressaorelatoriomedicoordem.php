@@ -28,6 +28,7 @@
                 <th class="tabela_header" >Ordem</th>
                 <th class="tabela_header" >Status</th>
                 <th class="tabela_header" width="250px;">Nome</th>
+                <th class="tabela_header" width="250px;">Idade</th>
                 <th class="tabela_header" width="70px;">Data</th>
                 <th class="tabela_header" width="70px;">Hora</th>
                 <th class="tabela_header" width="150px;">Medico</th>
@@ -57,7 +58,7 @@
             if (count($relatorio) > 0) {
                 foreach ($relatorio as $item) {
                     $i++;
-
+                    $idade = date("Y-m-d") - $item->nascimento;
 
 
                     if ($item->procedimento == $procedimento || $verificador == 0) {
@@ -124,7 +125,7 @@
                                         <td  width="150px;"><?= $itens->inicio; ?></td>
                                         <td  width="150px;"><?= substr($itens->medicoagenda, 0, 15); ?></td>
                                         <td ><?= $itens->convenio; ?></td>
-                                        <td ><?= utf8_decode($itens->procedimento); ?></td>
+                                        <td ><?= ($itens->procedimento); ?></td>
                                         <td ><?= number_format($itens->valor_total, 2, ",", "."); ?></td>
                                         <td ><?= number_format($valormedicoordem, 2, ",", "."); ?></td>
                                         <td ><?= $item->forma_pagamento; ?></td>
@@ -202,12 +203,12 @@
                         <td  width="150px;"><?= $item->inicio; ?></td>
                         <td  width="150px;"><?= substr($item->medicoagenda, 0, 15); ?></td>
                         <td ><?= $item->convenio; ?></td>
-                        <td ><?= utf8_decode($item->procedimento); ?></td>
+                        <td ><?= ($item->procedimento); ?></td>
                         <td ><?= number_format($item->valor_total, 2, ",", "."); ?></td>
                         <td ><?= number_format($valorpercentualmedico, 2, ",", "."); ?></td>
                         <td ><?= $item->forma_pagamento; ?></td>
                         <td ><a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exame/alterarobservacao/<?= $item->agenda_exames_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,\n\
-                                                                                                                                                                                                                                                    width=500,height=230');">=><?= $item->observacoes; ?></td>
+                                                                                                                                                                                                                                                    width=500,height=400');">=><?= $item->observacoes; ?></td>
                     </tr>
 
                     </tbody>
@@ -216,6 +217,7 @@
                     if ($item->procedimento != $procedimento) {
                         $tabela = 0;
                     }
+                    $idade = date("Y-m-d") - $item->nascimento;
                     $procedimento = $item->procedimento;
                     if ($tabela == 0) {
                         $tabela = 1;
@@ -266,6 +268,7 @@
                                 <th class="tabela_header" >Ordem</th>
                                 <th class="tabela_header" >Status</th>
                                 <th class="tabela_header" width="250px;">Nome</th>
+                                <th class="tabela_header" width="250px;">Idade</th>
                                 <th class="tabela_header" width="70px;">Data</th>
                                 <th class="tabela_header" width="70px;">Hora</th>
                                 <th class="tabela_header" width="150px;">Medico</th>
@@ -288,9 +291,10 @@
                         }
                         $verificador++;
                         foreach ($relatorioprioridade as $itens) {
+                            $idade = date("Y-m-d") - $item->nascimento;
 //                        var_dump($i);
 //                        echo"----";
-
+                            $idade = date("Y-m-d") - $item->nascimento;
                             $ordenador = intval($itens->ordenador);
 //                                                var_dump($ordenador);
 //                        die;
@@ -359,11 +363,12 @@
                                         <td ><b><?= $i . " P"; ?></b></td>
                                         <td ><b><?= $situacao; ?></b></td>
                                         <td <b><?= $itens->paciente; ?></b></td>
+                                        <td <b><?= $idade; ?></b></td>
                                         <td><?= substr($itens->data, 8, 2) . "/" . substr($itens->data, 5, 2) . "/" . substr($itens->data, 0, 4); ?></td>
                                         <td  width="150px;"><?= $itens->inicio; ?></td>
                                         <td  width="150px;"><?= substr($itens->medicoagenda, 0, 15); ?></td>
                                         <td ><?= $itens->convenio; ?></td>
-                                        <td ><?= utf8_decode($itens->procedimento); ?></td>
+                                        <td ><?= ($itens->procedimento); ?></td>
                                         <td ><?= number_format($itens->valor_total, 2, ",", "."); ?></td>
                                         <td ><?= number_format($valorpercentualmedico, 2, ",", "."); ?></td>
                                         <td ><?= $item->forma_pagamento; ?></td>
@@ -441,16 +446,17 @@
                         <td ><b><?= $i; ?></b></td>
                         <td ><b><?= $situacao; ?></b></td>
                         <td <b><?= $item->paciente; ?></b></td>
+                        <td <b><?= $idade; ?></b></td>
                         <td><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
                         <td  width="150px;"><?= $item->inicio; ?></td>
                         <td  width="150px;"><?= substr($item->medicoagenda, 0, 15); ?></td>
                         <td ><?= $item->convenio; ?></td>
-                        <td ><?= utf8_decode($item->procedimento); ?></td>
+                        <td ><?= ($item->procedimento); ?></td>
                         <td ><?= number_format($item->valor_total, 2, ",", "."); ?></td>
                         <td ><?= number_format($valorpercentualmedico, 2, ",", "."); ?></td>
                         <td ><?= $item->forma_pagamento; ?></td>
                         <td ><a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exame/alterarobservacao/<?= $item->agenda_exames_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,\n\
-                                                                                                                                                                                                                                                    width=500,height=230');">=><?= $item->observacoes; ?></td>
+                                                                                                                                                                                                                                                    width=500,height=400');">=><?= $item->observacoes; ?></td>
                     </tr>
 
                     </tbody>
@@ -460,6 +466,7 @@
         } elseif (count($relatorioprioridade) > 0) {
             $i = 0;
             foreach ($relatorioprioridade as $item) {
+                $idade = date("Y-m-d") - $item->nascimento;
                 $i++;
                 $dataFuturo = date("Y-m-d H:i:s");
                 $dataAtual = $item->data_atualizacao;
@@ -522,16 +529,17 @@
                     <td ><b><?= $i; ?></b></td>
                     <td ><b><?= $situacao; ?></b></td>
                     <td <b><?= $item->paciente; ?></b></td>
+                    <td <b><?= $idade; ?></b></td>
                     <td><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
                     <td  width="150px;"><?= $item->inicio; ?></td>
                     <td  width="150px;"><?= substr($item->medicoagenda, 0, 15); ?></td>
                     <td ><?= $item->convenio; ?></td>
-                    <td ><?= utf8_decode($item->procedimento); ?></td>
+                    <td ><?= ($item->procedimento); ?></td>
                     <td ><?= number_format($item->valor_total, 2, ",", "."); ?></td>
                     <td ><?= number_format($valorpercentualmedico, 2, ",", "."); ?></td>
                     <td ><?= $item->forma_pagamento; ?></td>
                     <td ><a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exame/alterarobservacao/<?= $item->agenda_exames_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,\n\
-                                                                                                                                                                                width=500,height=230');">=><?= $item->observacoes; ?></td>
+                                                                                                                                                                                width=500,height=400');">=><?= $item->observacoes; ?></td>
                 </tr>
 
                 </tbody>
@@ -545,6 +553,7 @@
                     <th class="tabela_header" >Ordem</th>
                     <th class="tabela_header" >Status</th>
                     <th class="tabela_header" width="250px;">Nome</th>
+                    <th class="tabela_header" width="250px;">Idade</th>
                     <th class="tabela_header" width="70px;">Data</th>
                     <th class="tabela_header" width="70px;">Hora</th>
                     <th class="tabela_header" width="150px;">Medico</th>

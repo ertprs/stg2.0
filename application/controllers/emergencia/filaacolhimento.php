@@ -8,6 +8,8 @@ class filaacolhimento extends BaseController {
         parent::__construct();
         $this->load->model('emergencia/solicita_acolhimento_model', 'acolhimento');
         $this->load->model('cadastro/paciente_model', 'paciente');
+        $this->load->model('ambulatorio/guia_model', 'guia');
+        $this->load->model('ambulatorio/exame_model', 'exame');
         $this->load->library('utilitario');
     }
 
@@ -25,6 +27,13 @@ class filaacolhimento extends BaseController {
 
     function novo($paciente_id) {
         $data['paciente'] = $this->paciente->listardados($paciente_id);
+        $operador_id = $this->session->userdata('operador_id');
+        $senha = $this->exame->listarsenhatotenassociarpaciente($operador_id, $paciente_id);
+//        echo '<pre>';
+//        $data_deAlgumaForma = strtotime($senha[0]->data);
+//        var_dump($senha);
+//        var_dump($data_deAlgumaForma);
+//        die;
         $data['paciente_id'] = $paciente_id;
         $horario = date(" Y-m-d H:i:s");
 
@@ -33,6 +42,30 @@ class filaacolhimento extends BaseController {
         $seconds = substr($horario, 18, 4);
 
         $this->loadView('emergencia/solicitacoes-paciente', $data);
+    }
+
+    function log($paciente_id) {
+        $data['paciente'] = $this->paciente->pacientelog($paciente_id);
+        $this->load->View('ambulatorio/paciente-log', $data);
+    }
+
+    function novodesativado($paciente_id) {
+        $data['paciente'] = $this->paciente->listardados($paciente_id);
+        $operador_id = $this->session->userdata('operador_id');
+        // $senha = $this->exame->listarsenhatotenassociarpaciente($operador_id, $paciente_id);
+//        echo '<pre>';
+//        $data_deAlgumaForma = strtotime($senha[0]->data);
+//        var_dump($senha);
+//        var_dump($data_deAlgumaForma);
+//        die;
+        $data['paciente_id'] = $paciente_id;
+        $horario = date(" Y-m-d H:i:s");
+
+        $hour = substr($horario, 11, 3);
+        $minutes = substr($horario, 15, 2);
+        $seconds = substr($horario, 18, 4);
+
+        $this->loadView('emergencia/solicitacoes-pacientedesativado', $data);
     }
 
     function novosolicitacaoacolhimento($paciente_id) {
@@ -70,13 +103,13 @@ class filaacolhimento extends BaseController {
 
         $data['numero'] = $this->acolhimento->verificaacolhimento($paciente_id);
         if ($data['numero'] == 0) {
-            if ($this->acolhimento->gravarsolicitacao($paciente_id)) {
-                $data['mensagem'] = 'Fila acolhimento gravado com sucesso';
-            } else {
-                $data['mensagem'] = 'Erro ao gravar fila acolhimento';
-            }
-            $this->session->set_flashdata('message', $data['mensagem']);
-            redirect(base_url() . "cadastros/pacientes");
+        if ($this->acolhimento->gravarsolicitacao($paciente_id)) {
+            $data['mensagem'] = 'Fila acolhimento gravado com sucesso';
+        } else {
+            $data['mensagem'] = 'Erro ao gravar fila acolhimento';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "cadastros/pacientes");
         } else {
             $data['mensagem'] = 'Paciente ja esta na fila de acolhimento';
             $this->session->set_flashdata('message', $data['mensagem']);

@@ -89,7 +89,7 @@
                     }
                     ?>                      
                     <tr>
-                        <td ><font size="-2"><?= utf8_decode($item->procedimento); ?></td>
+                        <td ><font size="-2"><?= ($item->procedimento); ?></td>
                         <td style='text-align: center;' ><?= $item->quantidade; ?></td>
                         <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/graficovalormedio/$procedimento/$valor/$txtdatainicio/$txtdatafim"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no');">
                                 <font size="-2"><?= number_format($valor, 2, ',', '.'); ?></font>

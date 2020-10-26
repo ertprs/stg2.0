@@ -28,6 +28,7 @@
                 </tr>
                 </thead>
                 <?php
+                 $perfil_id = $this->session->userdata('perfil_id'); 
                 $url = $this->utilitario->build_query_params(current_url(), $_GET);
                 $consulta = $this->unidade_m->listaunidade($_GET);
                 $total = $consulta->count_all_results();
@@ -53,13 +54,17 @@
                                                  src="<?= base_url() ?>img/form/page_white_edit.png" />
                                         </center></a>
                                 </td>
+                                
                                 <td class="<?php echo $estilo_linha; ?>" width="30px;">
+                                    <?php if($this->session->userdata('perfil_id') != 25 && $perfil_id != 18 && $perfil_id != 20){?>
                                     <a onclick="javascript: return confirm('Deseja realmente excluir a Unidade?');"
                                        href="<?=base_url()?>internacao/internacao/excluirunidade/<?= $item->internacao_unidade_id ?>">
                                         <center><img border="0" title="Excluir" alt="Excluir"
                                                     src="<?=  base_url()?>img/form/page_white_delete.png" /></center>
                                     </a>
+                                     <?php }?>
                                 </td>
+                               
                             </tr>
                         </tbody>
                         <?php

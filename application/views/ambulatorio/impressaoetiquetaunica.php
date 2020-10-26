@@ -4,7 +4,7 @@
     <table>
         <tbody>
             <tr>
-                <td colspan="2" ><font size = -1><center><?= utf8_decode($empresa[0]->nome) ?></center></td>
+                <td colspan="2" ><font size = -1><center><?= ($empresa[0]->nome) ?></center></td>
         </tr>
         <tr>
             <td  ><font size = -2><b><?= substr($paciente['0']->nascimento, 8, 2) . "/" . substr($paciente['0']->nascimento, 5, 2) . "/" . substr($paciente['0']->nascimento, 0, 4); ?> - <?= $paciente['0']->nome; ?></b></td>

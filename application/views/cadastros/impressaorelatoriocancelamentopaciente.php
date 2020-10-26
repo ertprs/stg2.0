@@ -75,18 +75,18 @@
                         <? } else { ?>
                             <td><font size="-2"><?= $item->agenda_exames_id; ?></td>
                             <td><font size="-2"><?= substr($item->data_autorizacao, 8, 2) . "/" . substr($item->data_autorizacao, 5, 2) . "/" . substr($item->data_autorizacao, 0, 4); ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->paciente); ?></td>
+                            <td><font size="-2"><?= ($item->paciente); ?></td>
                             <?
                             $contadorpaciente++;
                             $contadorpacientetotal++;
                         }
                         ?>
-                        <td><font size="-2"><?= utf8_decode($item->exame); ?></td>
+                        <td><font size="-2"><?= ($item->exame); ?></td>
                         <td><font size="-2"><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
-                        <td><font size="-2"><?= utf8_decode($item->convenio); ?></td>
-                        <td><font size="-2"><?= utf8_decode($item->descricao); ?></td>
-                        <td><font size="-2"><?= utf8_decode($item->operador); ?></td>
-                        <td><font size="-2"><?= utf8_decode($item->observacao_cancelamento); ?></td>
+                        <td><font size="-2"><?= ($item->convenio); ?></td>
+                        <td><font size="-2"><?= ($item->descricao); ?></td>
+                        <td><font size="-2"><?= ($item->operador); ?></td>
+                        <td><font size="-2"><?= ($item->observacao_cancelamento); ?></td>
                     </tr>
 
 

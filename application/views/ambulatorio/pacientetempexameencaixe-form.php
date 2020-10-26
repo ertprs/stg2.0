@@ -1,5 +1,5 @@
 
-	<? $empresa_logada = $this->session->userdata('empresa_id'); ?>
+<? $empresa_logada = $this->session->userdata('empresa_id'); ?>
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
     <div class="clear"></div>
     <form name="form_exametemp" id="form_exametemp" action="<?= base_url() ?>ambulatorio/exametemp/gravarpacienteexameencaixe" method="post">
@@ -8,27 +8,43 @@
 
             <legend>Manter Exames</legend>
             <div>
-                <label>Data</label>
+                <label>Data *</label>
                 <input type="text"  id="data_ficha" name="data_ficha" class="size1" required/>
                 <input type="hidden" name="txtpaciente_id"  value="<?= @$obj->_ambulatorio_pacientetemp_id; ?>" />
             </div>
             <div>
-                <label>Sala</label>
+                <label>Sala *</label>
                 <select name="sala" id="sala" class="size4" required>
                     <option value="" >Selecione</option>
                     <? foreach ($salas as $item) : ?>
-                        <option value="<?= $item->exame_sala_id; ?>"><?= $item->nome; ?></option>
+                        <option value="<?= $item->exame_sala_id; ?>" <? if (count($salas) == 1) echo 'selected';?>>
+                            <?= $item->nome; ?>
+                        </option>
                     <? endforeach; ?>
                 </select>
             </div>
             <div>
-                <label>Medico</label>
-                <select name="medico" id="medico" class="size2" required>
-                    <option value="" >Selecione</option>
-                    <? foreach ($medico as $item) : ?>
-                        <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
-                    <? endforeach; ?>
-                </select>
+                <label>Médico *</label>
+                
+                <?php
+                if ($this->session->userdata('perfil_id') == 4 && $this->session->userdata('medico_agenda') == 't') {
+                    ?> 
+                    <select name="medico" id="medico" class="size2" required>
+                        <? foreach ($medico as $item) : ?>
+                            <?php if ($item->operador_id == $this->session->userdata('operador_id')) { ?>
+                                <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
+                            <?php } ?>
+                        <? endforeach; ?>
+                    </select>
+                <?php } else { ?>  
+                    <select name="medico" id="medico" class="size2" required>
+                        <option value="" >Selecione</option>
+                        <? foreach ($medico as $item) : ?>
+                            <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
+                        <? endforeach; ?>
+                    </select>
+                <?php } ?> 
+                
             </div>
             <div>
                 <label>Empresa</label>
@@ -46,11 +62,11 @@
 
             </div>
             <div>
-                <label>Horarios</label>
+                <label>Horários *</label>
                 <input type="text" id="horarios" name="horarios"  class="size1" required/>
             </div>
             <div>
-                <label>Convenio *</label>
+                <label>Convênio *</label>
                 <select name="convenio1" id="convenio1" class="size4"  required>
                     <option  value="-1">Selecione</option>
                     <? foreach ($convenio as $value) : ?>
@@ -59,7 +75,7 @@
                 </select>
             </div>
             <div>
-                <label>Procedimento</label>
+                <label>Procedimento *</label>
                 <select  name="procedimento1" id="procedimento1" class="size1" required>
                     <option value="">Selecione</option>
                 </select>
@@ -93,6 +109,10 @@
             <div>
                 <label>Celular</label>
                 <input type="text" id="txtCelular" class="texto02" name="txtCelular"/>
+            </div>
+            <div>
+                <label>Whatsapp</label>
+                <input type="text" id="whatsapp" class="texto02" name="whatsapp"/>
             </div>
 
             <div>
@@ -156,108 +176,150 @@
 
 </script>
 <script type="text/javascript">
-    mascaraTelefone(form_exametemp.telefone);
-    mascaraTelefone(form_exametemp.txtCelular);
+    jQuery("#telefone")
+            .mask("(99) 9999-9999?9")
+            .focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-999?9");
+                } else {
+                    element.mask("(99) 9999-9999?9");
+                }
+            });
+
+    jQuery("#txtCelular")
+            .mask("(99) 9999-9999?9")
+            .focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-999?9");
+                } else {
+                    element.mask("(99) 9999-9999?9");
+                }
+            });
+    jQuery("#whatsapp")
+            .mask("(99) 9999-9999?9")
+            .focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-999?9");
+                } else {
+                    element.mask("(99) 9999-9999?9");
+                }
+            });
 
 
-                    $(function () {
-                        $("#data_ficha").datepicker({
-                            autosize: true,
-                            changeYear: true,
-                            changeMonth: true,
-                            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                            dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-                            buttonImage: '<?= base_url() ?>img/form/date.png',
-                            dateFormat: 'dd/mm/yy'
-                        });
-                    });
+    $(function () {
+        $("#data_ficha").datepicker({
+            autosize: true,
+            changeYear: true,
+            changeMonth: true,
+            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+            buttonImage: '<?= base_url() ?>img/form/date.png',
+            dateFormat: 'dd/mm/yy'
+        });
+    });
 
-                    $(function () {
-                        $('#convenio1').change(function () {
-                            if ($(this).val()) {
-                                $('.carregando').show();
-                                $.getJSON('<?= base_url() ?>autocomplete/procedimentoconvenio', {convenio1: $(this).val(), ajax: true}, function (j) {
-                                    options = '<option value=""></option>';
-                                    for (var c = 0; c < j.length; c++) {
-                                        options += '<option value="' + j[c].procedimento_convenio_id + '">' + j[c].procedimento + '</option>';
-                                    }
-                                    $('#procedimento1').html(options).show();
-                                    $('.carregando').hide();
-                                });
-                            } else {
-                                $('#procedimento1').html('<option value="">Selecione</option>');
-                            }
-                        });
-                    });
+    $(function () {
+        $('#convenio1').change(function () {
+            if ($(this).val()) {
+                $('.carregando').show();
+                $.getJSON('<?= base_url() ?>autocomplete/procedimentoconvenio', {convenio1: $(this).val(), ajax: true}, function (j) {
+                    options = '<option value=""></option>';
+                    for (var c = 0; c < j.length; c++) {
+                        options += '<option value="' + j[c].procedimento_convenio_id + '">' + j[c].procedimento + '</option>';
+                    }
+                    $('#procedimento1').html(options).show();
+                    $('.carregando').hide();
+                });
+            } else {
+                $('#procedimento1').html('<option value="">Selecione</option>');
+            }
+        });
+    });
 
-                    $(function () {
-                        $("#txtNome").autocomplete({
-                            source: "<?= base_url() ?>index.php?c=autocomplete&m=paciente",
-                            minLength: 3,
-                            focus: function (event, ui) {
-                                $("#txtNome").val(ui.item.label);
-                                return false;
-                            },
-                            select: function (event, ui) {
-                                $("#txtNome").val(ui.item.value);
-                                $("#txtNomeid").val(ui.item.id);
-                                $("#telefone").val(ui.item.itens);
-                                $("#txtCelular").val(ui.item.celular);
-                                $("#nascimento").val(ui.item.valor);
-                                return false;
-                            }
-                        });
-                    });
-
-
-                    $(function () {
-                        $("#accordion").accordion();
-                    });
+    $(function () {
+        $("#txtNome").autocomplete({
+            source: "<?= base_url() ?>index.php?c=autocomplete&m=paciente",
+            minLength: 10, // Todas as telas de agendamento eu coloquei esse comentario. Quando for alterar esse valor, basta ir em "Localizar em Projetos" e pesquisar por ele.
+            focus: function (event, ui) {
+                $("#txtNome").val(ui.item.label);
+                return false;
+            },
+            select: function (event, ui) {
+                $("#txtNome").val(ui.item.value);
+                $("#txtNomeid").val(ui.item.id);
+                $("#telefone").val(ui.item.itens);
+                $("#txtCelular").val(ui.item.celular);
+                $("#whatsapp").val(ui.item.whatsapp);
+                $("#nascimento").val(ui.item.valor);
+                return false;
+            }
+        });
+    });
 
 
-                    $(document).ready(function () {
-                        jQuery('#form_exametemp').validate({
-                            rules: {
-                                data_ficha: {
-                                    required: true
-                                },
-                                sala: {
-                                    required: true
-                                },
-                                medico: {
-                                    required: true
-                                },
-                                txtNome: {
-                                    required: true
-                                },
-                                horarios: {
-                                    required: true,
-                                    minlength: 5
-                                }
-                            },
-                            messages: {
-                                data_ficha: {
-                                    required: "*"
-                                },
-                                sala: {
-                                    required: "*"
-                                },
-                                medico: {
-                                    required: "*"
-                                },
-                                txtNome: {
-                                    required: "*"
-                                },
-                                horarios: {
-                                    required: "*",
-                                    minlength: "!"
-                                }
-                            }
-                        });
-                    });
+    $(function () {
+        $("#accordion").accordion();
+    });
 
 
-                    jQuery("#nascimento").mask("99/99/9999");
-                    jQuery("#horarios").mask("99:99");
+    $(document).ready(function () {
+        jQuery('#form_exametemp').validate({
+            rules: {
+                data_ficha: {
+                    required: true
+                },
+                sala: {
+                    required: true
+                },
+                medico: {
+                    required: true
+                },
+                txtNome: {
+                    required: true
+                },
+                horarios: {
+                    required: true,
+                    minlength: 5
+                }
+            },
+            messages: {
+                data_ficha: {
+                    required: "*"
+                },
+                sala: {
+                    required: "*"
+                },
+                medico: {
+                    required: "*"
+                },
+                txtNome: {
+                    required: "*"
+                },
+                horarios: {
+                    required: "*",
+                    minlength: "!"
+                }
+            }
+        });
+    });
+
+
+    jQuery("#nascimento").mask("99/99/9999");
+    jQuery("#horarios").mask("99:99");
 
 </script>

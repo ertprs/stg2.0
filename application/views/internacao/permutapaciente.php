@@ -11,6 +11,7 @@
                 <div style="display: none;">                     
                     <input type="number" id="paciente_id_selecionado" name="paciente_id_selecionado"  class="texto02" value="<?= $paciente[0]->paciente_id; ?>" readonly/>
                     <input type="number" id="leito_id_selecionado" name="leito_id_selecionado"  class="texto02" value="<?= $paciente[0]->leito_id; ?>" readonly/>
+                    <input type="number" id="internacao_id" name="internacao_id"  class="texto02" value="<?= $paciente[0]->internacao_id; ?>" readonly/>
                 </div>
 
                 <div>
@@ -25,8 +26,8 @@
                 
                 <div>
                 <label>Unidade</label>
-                <select name="unidade" id="unidade">
-                    <option>Selecione</option>
+                <select name="unidade" id="unidade" required>
+                    <option value="">Selecione</option>
                     <? foreach($unidades as $item){?>
                     <option value="<?= $item->internacao_unidade_id?>"><? echo $item->unidade; ?></option>    
                     <?}?>                    
@@ -36,8 +37,8 @@
                 <div>
                 
                 <label>Paciente</label>
-                <select name="leito_troca" id="leito_troca">
-                    <option>Selecione</option> 
+                <select name="leito_troca" id="leito_troca" required>
+                    <option value="">Selecione</option> 
                 </select>
                 
                 </div> 
@@ -62,7 +63,7 @@
                         $.getJSON('<?= base_url() ?>autocomplete/unidadepaciente', {unidade: $(this).val(), ajax: true}, function(j) {
                             options = '<option value=""></option>';
                             for (var c = 0; c < j.length; c++) {
-                                options += '<option value="' + j[c].leito_id+ '">' + j[c].paciente + ' - ' + j[c].leito + ' - ' + j[c].enfermaria + '</option>';
+                                options += '<option value="' + j[c].leito_id+ '">' + j[c].paciente + ' - ' + j[c].enfermaria  + ' - ' + j[c].leito + '</option>';
                             }
                             $('#leito_troca').html(options).show();
                             $('.carregando').hide();

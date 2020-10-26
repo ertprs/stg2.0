@@ -1,126 +1,155 @@
-<div id="page-wrapper">
+<div class="content"> <!-- Inicio da DIV content -->
+    <div id="accordion">
+        <h3><a href="#">Gerar relatorio Caixa</a></h3>
+        <div>
+            <form method="post" action="<?= base_url() ?>ambulatorio/guia/gerarelatoriocaixa">
+                <dl>
+                    <dt>
+                        <label>Operador</label>
+                    </dt>
+                    <dd>
+                        <select name="operador[]" id="operador[]" class="chosen-select size3" multiple data-placeholder="Selecione">
+                            <option value="0">TODOS</option>
+                            <option value="1">Administrador</option>
+                            <? foreach ($operadores as $value) : ?>
+                                <option value="<?= $value->operador_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <br>
+                    <br>
+                    <!-- <br> -->
+                    <dt>
+                        <label>Médico</label>
+                    </dt>
+                    <dd>
+                        <select name="medico" id="medico" class="size2">
+                            <option value="0">TODOS</option>
+                            <? foreach ($medicos as $value) : ?>
+                                <option value="<?= $value->operador_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Grupo Médico</label>
+                    </dt>
+                    <dd>
+                        <select name="grupomedico" id="grupomedico" class="size2">
+                            <option value="0">TODOS</option>
+                            <? foreach ($grupomedico as $value) : ?>
+                                <option value="<?= $value->operador_grupo_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Convênio</label>
+                    </dt>
+                    <dd>
+                        <select name="MostrarConvenio" id="MostrarConvenio" class="size2">
+                            <option value="NAO">NÃO</option>
+                            <option value="SIM">SIM</option>
+                            
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Data inicio</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="txtdata_inicio" id="txtdata_inicio" alt="date"/>
+                    </dd>
+                    <dt>
+                        <label>Data fim</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="txtdata_fim" id="txtdata_fim" alt="date"/>
+                    </dd>
+                    <dt>
+                        <label>Especialidade</label>
+                    </dt>
+                    <dd>
+                        <select name="grupo" id="grupo" class="size2" >
+                            <option value='0' >TODOS</option>
+                            <option value='1' >SEM RM</option>
+                            <? foreach ($grupos as $grupo) { ?>                                
+                                <option value='<?= $grupo->nome ?>' <?
+                                if (@$obj->_grupo == $grupo->nome):echo 'selected';
+                                endif;
+                                ?>><?= $grupo->nome ?></option>
+                                    <? } ?>
+                        </select>
+                    </dd>
+                    <style>
+                        #grupo_chosen a{
+                            width: 180px;
+                        }
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="alert alert-success ">
-                Gerar relatorio faturamento
-            </div>
-        </div>
-    </div>
-    <!--<h3><a href="#">Gerar relatorio Faturamento</a></h3>-->
-    <div class="panel panel-default">
-        <div class="alert alert-info ">
-            Dados da Pesquisa
-        </div>
-
-        <?
-        $empresa = $this->guia->listarempresas();
-        $medicos = $this->operador_m->listarmedicos();
-        $salas = $this->exame->listartodassalas();
-        $convenios = $this->convenio->listarconvenionaodinheiro();
-        $guia = "";
-        ?>
-        <div class="panel-body">
-
-            <form method="post" action="<?= base_url() ?>ambulatorio/guia/gerarelatoriocaixa" target="_blank">
-                <!-- <div class="row"> -->
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Operador</label>
-
-
-                            <select name="operador" id="operador" class="form-control">
+                    </style>
+                    <dt>
+                        <label>Procedimentos</label>
+                    </dt>
+                    <dd>
+                        <select name="procedimentos" id="grupo" class="size4 chosen-select" tabindex="1">
+                            <option value='0' >TODOS</option>
+                            <!--<option value='1' >SEM RM</option>-->
+                            <? foreach ($procedimentos as $grupo) { ?>                                
+                                <option value='<?= $grupo->procedimento_tuss_id ?>' <?
+                                if (@$obj->_grupo == $grupo->procedimento_tuss_id):echo 'selected';
+                                endif;
+                                ?>><?= $grupo->codigo ?> - <?= $grupo->nome ?></option>
+                                    <? } ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Gerar PDF / Planilha</label>
+                    </dt>
+                    <dd>
+                        <select name="gerar" id="gerar" class="size2">
+                            <option value='0' >NÃO</option>
+                            <option value='pdf' >PDF</option>
+                            <option value='planilha' >PLANILHA</option>
+                        </select>
+                    </dd>
+                    <?
+                    $empresa_id = $this->session->userdata('empresa_id');
+                    $perfil_id = $this->session->userdata('perfil_id');
+//                    var_dump($perfil_id); die;
+                    ?>
+                    <dt>
+                        <label>Empresa</label>
+                    </dt>
+                    <dd>
+                        <select name="empresa" id="empresa" class="size2">
+                            <? foreach ($empresa as $value) : ?>
+                                <? if (($gerente_relatorio_financeiro == 't' && ($perfil_id == 18 || $perfil_id == 20) && $empresa_id == $value->empresa_id) || $perfil_id != 18) { ?>
+                                    <option value="<?= $value->empresa_id; ?>" <? if ($empresa_id == $value->empresa_id) { ?>selected<? } ?>><?php echo $value->nome; ?></option>
+                                <? } ?>
+                            <? endforeach; ?>
+                            <? if (($gerente_relatorio_financeiro == 't' && ($perfil_id == 18 || $perfil_id == 20) && $empresa_id == $value->empresa_id) || $perfil_id != 18) { ?>
                                 <option value="0">TODOS</option>
-                                <option value="1">Administrador</option>
-                                <? foreach ($operadores as $value) : ?>
-                                    <option value="<?= $value->operador_id; ?>" ><?php echo $value->nome; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                        </div>    
-                    </div>    
-                <!-- </div>     -->
-                
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Médico</label>
-
-                            <select name="medico" id="medico" class="form-control">
-                                <option value="0">TODOS</option>
-                                <? foreach ($medicos as $value) : ?>
-                                    <option value="<?= $value->operador_id; ?>" ><?php echo $value->nome; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-               
-                
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Data inicio</label>
-
-
-                            <input type="text" name="txtdata_inicio" id="txtdata_inicio" class="form-control" alt="date"/>
-                        </div>
-                    </div>
-               
-                
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Data fim</label>
-
-
-                            <input type="text" name="txtdata_fim" id="txtdata_fim" class="form-control" alt="date"/>
-                        </div>
-                    </div>
-               
-              
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Especialidade</label>
-
-
-                            <select name="grupo" id="grupo" class="form-control" >
-                                <option value='0' >TODOS</option>
-                                <option value='1' >SEM RM</option>
-                                <? foreach ($grupos as $grupo) { ?>                                
-                                    <option value='<?= $grupo->nome ?>' <?
-                                    if (@$obj->_grupo == $grupo->nome):echo 'selected';
-                                    endif;
-                                    ?>><?= $grupo->nome ?></option>
-                                        <? } ?>
-                            </select>
-                        </div>
-                    </div>
-                
-                
-                <!--<div class="row">-->
-                <!--<div class="col-lg-4">-->
-                <!--<div class="form-group">-->
-                <!--<label>Empresa</label>-->
-                <input type="hidden" name="empresa" value="0"/>
-
-
-
-                <!--</div>-->   
-                <!--</div>-->   
-                <!--</div>-->   
-                <!-- <div class="row"> -->
-                    <div class="col-lg-4">
-                        <p>
-                            <button type="submit" class="btn btn-outline-success btn-sm" name="btnEnviar"><i class="fa fa-search" aria-hidden="true"></i> Pesquisar</button>
-
-
-                        </p>
-                    </div>
-                <!-- </div>   -->
-
-
+                            <? } ?>
+                        </select>
+                    </dd>
+                    <dt>
+                </dl>
+                <button type="submit" >Pesquisar</button>
 
             </form>
+
         </div>
     </div>
-</div>
-<!-- Final da DIV content -->
+
+
+</div> <!-- Final da DIV content -->
+<link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css">
+<script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-verificaCPF.js"></script>
+<link rel="stylesheet" href="<?= base_url() ?>js/chosen/chosen.css">
+<!--<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/style.css">-->
+<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/prism.css">
+<script type="text/javascript" src="<?= base_url() ?>js/chosen/chosen.jquery.js"></script>
+<!--<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/prism.js"></script>-->
+<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/init.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
 <script type="text/javascript">
     $(function () {

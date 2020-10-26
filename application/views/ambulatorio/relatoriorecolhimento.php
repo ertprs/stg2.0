@@ -1,11 +1,11 @@
 <div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
-        <h3><a href="#">Gerar relatorio Conferencia</a></h3>
+        <h3><a href="#">Gerar relatorio Recolhimento</a></h3>
         <div>
             <form method="post" action="<?= base_url() ?>ambulatorio/guia/gerarelatoriorecolhimento">
                 <dl>
                     <dt>
-                    <label>Convenio</label>
+                        <label>Convenio</label>
                     </dt>
                     <dd>
                         <select name="convenio" id="convenio" class="size2">
@@ -18,7 +18,7 @@
                         </select>
                     </dd>
                     <dt>
-                    <label>Grupo Convenio</label>
+                        <label>Grupo Convenio</label>
                     </dt>
                     <dd>
                         <select name="grupoconvenio" id="convenio" class="size2">
@@ -29,19 +29,29 @@
                         </select>
                     </dd>
                     <dt>
-                    <label>Data inicio</label>
+                        <label>Data inicio</label>
                     </dt>
                     <dd>
-                        <input type="text" name="txtdata_inicio" id="txtdata_inicio" alt="date"/>
+                        <input type="text" name="txtdata_inicio" id="txtdata_inicio"required="true" alt="date"/>
                     </dd>
                     <dt>
-                    <label>Data fim</label>
+                        <label>Data fim</label>
                     </dt>
                     <dd>
-                        <input type="text" name="txtdata_fim" id="txtdata_fim" alt="date"/>
+                        <input type="text" name="txtdata_fim" id="txtdata_fim"required="true" alt="date"/>
+                    </dd>
+                     <dt>
+                    <label>Data De Pesquisa</label>
+                    </dt>
+                    <dd>
+                        <select name="data_atendimento" id="grupo" class="size2" >
+                            <option value='1' >DATA DE ATENDIMENTO</option>
+                            <option value='0' >DATA DE FATURAMENTO</option>
+     
+                        </select>
                     </dd>
                     <dt>
-                    <label>Especialidade</label>
+                        <label>Especialidade</label>
                     </dt>
                     <dd>
                         <select name="grupo" id="grupo" class="size1" >
@@ -54,15 +64,21 @@
                         </select>
                     </dd>
                     <dt>
-                    <label>Procedimento</label>
+                        <label>Procedimento</label>
                     </dt>
-                    <dd>
-                        <select name="procedimentos" id="procedimentos" class="size1" >
+                    <dd style="margin-bottom: 5pt">
+<!--                        <select name="procedimentos" id="procedimentos" class="size1" >
                             <option value='0' >TODOS</option>
                             <? foreach ($procedimentos as $value) : ?>
                                 <option value="<?= $value->procedimento_tuss_id; ?>" ><?php echo $value->nome; ?></option>
                             <? endforeach; ?>
 
+                        </select>-->
+                        <select name="procedimentos" id="procedimentos" class="size4 chosen-select" data-placeholder="Selecione" tabindex="1" required="">
+                            <option value='0' >TODOS</option>
+                            <? foreach ($procedimentos as $value) : ?>
+                                <option value="<?= $value->procedimento_tuss_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
                         </select>
                     </dd>
                     <dt>
@@ -85,7 +101,7 @@
                         </select>
                     </dd>
                     <dt>
-                    <label>Tipo</label>
+                        <label>Tipo</label>
                     </dt>
                     <dd>
                         <select name="tipo" id="tipo" class="size2">
@@ -98,7 +114,7 @@
                         </select>
                     </dd>
                     <dt>
-                    <label>Ra&ccedil;a / Cor</label>
+                        <label>Ra&ccedil;a / Cor</label>
                     </dt>
                     <dd>
                         <select name="raca_cor" id="txtRacaCor" class="size2">
@@ -113,7 +129,7 @@
                     </dd>
                     <dt>
                     <dt>
-                    <label>Medico</label>
+                        <label>Medico</label>
                     </dt>
                     <dd>
                         <select name="medico" id="medico" class="size2">
@@ -126,7 +142,7 @@
                     </dd>
 
                     <dt>
-                    <label>Empresa</label>
+                        <label>Empresa</label>
                     </dt>
                     <dd>
                         <select name="empresa" id="empresa" class="size2">
@@ -138,7 +154,7 @@
                         </select>
                     </dd>
                     <dt>
-                    <label>Gerar Planilha</label>
+                        <label>Gerar Planilha</label>
                     </dt>
                     <dd>
                         <select name="planilha" id="planilha" class="size2">
@@ -156,8 +172,18 @@
 
 </div> <!-- Final da DIV content -->
 <link rel="stylesheet" href="<?php base_url() ?>css/jquery-ui-1.8.5.custom.css">
+<link rel="stylesheet" href="<?= base_url() ?>js/chosen/chosen.css">
+<!--<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/style.css">-->
+<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/prism.css">
+<script type="text/javascript" src="<?= base_url() ?>js/chosen/chosen.jquery.js"></script>
+<!--<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/prism.js"></script>-->
+<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/init.js"></script>
+<style>
+    .chosen-container{ margin-top: 5pt;}
+    #procedimento1_chosen a { width: 130px; }
+</style>
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         $("#txtdata_inicio").datepicker({
             autosize: true,
             changeYear: true,
@@ -169,7 +195,7 @@
         });
     });
 
-    $(function() {
+    $(function () {
         $("#txtdata_fim").datepicker({
             autosize: true,
             changeYear: true,
@@ -182,7 +208,7 @@
     });
 
 
-    $(function() {
+    $(function () {
         $("#accordion").accordion();
     });
 

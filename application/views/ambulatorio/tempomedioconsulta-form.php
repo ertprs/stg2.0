@@ -8,10 +8,17 @@
 
                     <dl class="dl_desconto_lista">
                         <dt>
-                            <label title="Tempo médio de chegada até o Horário Marcado"> Tempo Chegada/Horário </label>
+                            <label title="Tempo médio de chegada até a autorização"> Tempo Autorização/Chegada </label>
                         </dt>
                         <dd>
-                            <input title="Tempo médio de chegada até o Horário Marcado" type="text" name="chegada" id="chegada" class="texto01" value="<?=@$tempo[0]->tempo_chegada;?>" />
+                            <input title="Tempo médio de chegada até a autorização" type="text" name="tempo_senha" id="tempo_senha" class="texto01" value="<?=@$tempo[0]->tempo_senha;?>" />
+
+                        </dd>
+                        <dt>
+                            <label title="Tempo médio de autorização até o Horário Marcado"> Tempo Autorização/Horário </label>
+                        </dt>
+                        <dd>
+                            <input title="Tempo médio de autorização até o Horário Marcado" type="text" name="chegada" id="chegada" class="texto01" value="<?=@$tempo[0]->tempo_chegada;?>" />
 
                         </dd>
                         <dt>

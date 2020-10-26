@@ -151,6 +151,10 @@ class classe_model extends Model {
             $financeiro_classe_id = $_POST['txtfinanceiroclasseid'];
             $this->db->set('descricao', $_POST['txtNome']);
             $this->db->set('tipo_id', $_POST['txttipo_id']);
+//            if(isset($_POST['txtnivel1_id'])){
+//            $this->db->set('nivel1_id', $_POST['txtnivel1_id']);
+//            $this->db->set('nivel2_id', $_POST['txtnivel2_id']);
+//            }
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
 

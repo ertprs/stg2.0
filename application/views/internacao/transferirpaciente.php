@@ -11,6 +11,7 @@
                 <div style="display: none;">                     
                     <input type="number" id="paciente_id" name="paciente_id"  class="texto02" value="<?= $paciente[0]->paciente_id; ?>" readonly/>
                     <input type="number" id="leito_id" name="leito_id"  class="texto02" value="<?= $paciente[0]->leito_id; ?>" readonly/>
+                    <input type="number" id="internacao_id" name="internacao_id"  class="texto02" value="<?= $paciente[0]->internacao_id; ?>" readonly/>
                 </div>
 
                 <div>
@@ -25,8 +26,8 @@
                 
                 <div>
                 <label>Unidade</label>
-                <select name="unidade" id="unidade">
-                    <option>Selecione</option>
+                <select name="unidade" id="unidade" required>
+                    <option value="">Selecione</option>
                     <? foreach($unidades as $item){?>
                     <option value="<?= $item->internacao_unidade_id?>"><? echo $item->unidade; ?></option>    
                     <?}?>                    
@@ -35,8 +36,8 @@
                 
                 <div>
                 <label >Leito</label>
-                <select name="novo_leito" id="novo_leito">
-                    <option>Selecione</option> 
+                <select name="novo_leito" id="novo_leito" required>
+                    <option value="">Selecione</option> 
                 </select>
                 </div> 
                 
@@ -60,13 +61,13 @@
                         $.getJSON('<?= base_url() ?>autocomplete/unidadeleito2', {unidade: $(this).val(), ajax: true}, function(j) {
                             options = '<option value=""></option>';
                             for (var c = 0; c < j.length; c++) {
-                                options += '<option value="' + j[c].internacao_leito_id+ '">' + j[c].leito + ' - ' + j[c].enfermaria + '</option>';
+                                options += '<option value="' + j[c].internacao_leito_id+ '">' + j[c].enfermaria + ' - ' + j[c].leito + '</option>';
                             }
                             $('#novo_leito').html(options).show();
                             $('.carregando').hide();
                         });
                     } else {
-                        $('#novo_leito').html('<option value="">uuu</option>');
+                        $('#novo_leito').html('<option value=""></option>');
                     }
                 });
             });

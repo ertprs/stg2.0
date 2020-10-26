@@ -1,32 +1,68 @@
 <div class="content"> <!-- Inicio da DIV content -->
-    <div class="bt_link_voltar">
+<!--    <div class="bt_link_voltar">
         <a href="<?= base_url() ?>ambulatorio/procedimentoplano">
             Voltar
         </a>
-    </div>
+    </div>-->
 
     <div id="accordion">
         <h3 class="singular"><a href="#">Cadastrar Pagamento</a></h3>
         <div>
-            <form name="form_procedimento" id="form_procedimento" action="<?= base_url() ?>ambulatorio/procedimentoplano/gravarformapagamentoprocedimento" method="post">
+            <form name="form_procedimento" id="form_procedimento" action="<?= base_url() ?>ambulatorio/procedimentoplano/gravarformapagamentoprocedimento" method="post">  
+                <input type="hidden" name="procedimento_convenio_id" id="procedimento_convenio_id" value="<?= $procedimento_convenio_id; ?>" />
 
-                <dl class="dl_cadastro_teto dt">
-                    <dt>
-                    <label>Grupo de Pagamento</label>
-                    </dt>
-                    <dd>
-                        <input type="hidden" name="procedimento_convenio_id" id="procedimento_convenio_id" value="<?= $procedimento_convenio_id; ?>" />
-<!--                        <input type="hidden" name="txtpagamentoid" id="txtpagamentoid" class="texto10" value="" />
-                        <input type="text" name="txtpagamento" id="txtpagamento" class="texto10" value="" />-->
-                        <select name="grupopagamento" id="grupopagamento" class="texto03">
-                            <option value="">SELECIONE</option>
-                            <? foreach ($formapagamento_grupo as $value) { ?>
-                            <option value="<?= $value->financeiro_grupo_id ?>" ><?= $value->nome ?></option>
-                            <? } ?> 
-                        </select>
-                    </dd>
-                </dl>    
-
+                <div>
+                    <? if(@$permissoes[0]->ajuste_pagamento_procedimento == 't'){ ?>
+                        <dl class="dl_cadastro_teto dt">
+                        <dt>
+                            <label>Ajuste Cartão R$:</label>
+                        </dt>
+                        <dd>
+                            <input type="text" alt="decimal" class="texto02" name="ajuste" id="ajuste" value="<?=@$formasAssociadas[0]->ajuste?>"/>
+                        </dd>
+                        <br>
+                    <? } ?>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <td colspan="2" class="tabela_header">Forma de Pagamento Exclusivo</td>
+                                <td colspan="1" class="tabela_header">Selecione</td>
+                            </tr>
+                        </thead>
+                        <?
+                        $ativos = array();
+                        $ajustes = array();
+                        foreach($formasAssociadas as $value){
+                            @$ativos[$value->forma_pagamento_id] = true;
+                            @$ajustes[$value->forma_pagamento_id] = $value->ajuste;
+                        }
+                        
+                        $estilo_linha = "tabela_content01";
+                        foreach ($forma_pagamento as $item) {
+                            if(isset($ativos[$item->forma_pagamento_id])){
+                                $ajuste = (float) $ajustes[$item->forma_pagamento_id];
+                                $checked = true;
+                            }
+                            else{
+                                $ajuste = 0;
+                                $checked = false;
+                            }
+                            $ajuste = number_format($ajuste, 2, ",", "");
+                            
+                            ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";?>
+                            <tr>
+                                <td colspan="2" class="<?php echo $estilo_linha; ?>"><?=$item->nome?></td>
+                                <td colspan="1" class="<?php echo $estilo_linha; ?>">
+                                    <input type="hidden" name="cartao[<?=$item->forma_pagamento_id?>]" id="cartao<?=$item->forma_pagamento_id?>" value="<?= $item->cartao;?>"/>
+                                    <input type="checkbox" name="ativar[<?=$item->forma_pagamento_id?>]" id="ativar<?=$item->forma_pagamento_id?>" <?if ($checked) echo "checked";?>/>
+                                </td>
+                            </tr>
+                            <?
+                        }
+                        ?>
+                    </table>
+                </div>
                 <hr/>
                 <button type="submit" name="btnEnviar">Enviar</button>
                 <button type="reset" name="btnLimpar">Limpar</button>

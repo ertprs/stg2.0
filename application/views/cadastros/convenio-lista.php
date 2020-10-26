@@ -1,40 +1,52 @@
-
-<div id="page-wrapper"> <!-- Inicio da DIV content -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-
-                <div class="table-responsive" id="pesquisar">
-                    <form method="get" action="<?= base_url() ?>cadastros/convenio/pesquisar">
-                        <table width="100%" class="table " id="dataTables-example">
-                            <tr class="info">
-                                <th>Convênio</th>
-
-                                <th style="text-align: center;">Ações</th>
-                            </tr> 
-                            <tr class="">
-                                <td><input type="text" name="nome" id="" class="form-control" alt="date" value="<?php echo @$_GET['nome']; ?>" /></td>
-                                <td style="text-align: center;"><button type="submit" class="btn btn-default btn-outline btn-danger" name="enviar"><i class="fa fa-search fa-1x"></i></button></td>
-                            </tr> 
-
-                        </table> 
-                    </form>
-                </div>
-                <div class="panel-body">
-                    <a class="btn btn-outline btn-danger" href="<?php echo base_url() ?>cadastros/convenio/carregar/0">
-                        <i class="fa fa-plus fa-w"></i> Novo Convênio
+<div class="content"> <!-- Inicio da DIV content -->
+    <table>
+        <tr>
+            <td>
+                <div class="bt_link_new">
+                    <a href="<?php echo base_url() ?>cadastros/convenio/carregar/0">
+                        Novo Convênio
                     </a>
-                    <div class="table-responsive" id="pesquisar">
-                        <table width="100%" class="table table-striped table-bordered table-hover " id="dataTables-example">
-                            <thead>
-                                <tr>
-                                    <th style="width: 70%;" >Nome</th>
-                                    
-                                    <th style="text-align: center;">Detalhes</th>
-
-                                </tr>
-                            </thead>
-                             <?php
+                </div>
+            </td>
+            <td>
+                <div class="bt_link_new">
+                    <a  href="<?php echo base_url() ?>cadastros/convenio/pesquisarlogs">
+                        Convênio Logs
+                    </a>
+                </div>
+            </td>
+<!--            <td>
+                <div class="bt_link_new">
+                    <a href="<?php echo base_url() ?>ambulatorio/procedimentoplano/carregarprocedimentoplanoexcluirgrupo">
+                        Excluir Proc. Grupo
+                    </a>
+                </div>
+            </td>-->
+        </tr>
+    </table>
+    <?
+    $empresa = $this->convenio->listarempresa();
+    
+    ?>
+    <div id="accordion">
+        <h3 class="singular"><a href="#">Manter Convênio</a></h3>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="7" class="tabela_title">
+                            <form method="get" action="<?= base_url() ?>cadastros/convenio/pesquisar">
+                                <input type="text" name="nome" class="texto10 bestupper" value="<?php echo @$_GET['nome']; ?>" />
+                                <button type="submit" id="enviar">Pesquisar</button>
+                            </form>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="tabela_header">Nome</th>
+                        <th colspan="10" class="tabela_header"><center>Detalhes</center></th>
+                    </tr>
+                </thead>
+                <?php
                 $url = $this->utilitario->build_query_params(current_url(), $_GET);
                 $consulta = $this->convenio->listar($_GET);
                 $total = $consulta->count_all_results();
@@ -43,7 +55,7 @@
 
                 if ($total > 0) {
                     ?>
-                    
+                    <tbody>
                         <?php
                         $lista = $this->convenio->listar($_GET)->limit($limit, $pagina)->orderby('nome')->get()->result();
                         $estilo_linha = "tabela_content01";
@@ -51,75 +63,111 @@
                             ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
                             ?>
                             <tr>
-                                <td><?= $item->nome; ?></td>
-                                <td class="tabela_acoes">
-                                        <a class="btn btn-outline btn-primary btn-sm" href="<?= base_url() ?>cadastros/convenio/carregar/<?= $item->convenio_id ?>">
+                                <td class="<?php echo $estilo_linha; ?>"><?= $item->nome; ?></td>
+                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
+                                        <a href="<?= base_url() ?>cadastros/convenio/carregar/<?= $item->convenio_id ?>">
                                             Editar
                                         </a>
-                                    
-                                        <a class="btn btn-outline btn-info btn-sm" href="<?= base_url() ?>cadastros/convenio/copiar/<?= $item->convenio_id ?>">
-                                            Copiar
+                                    </div>
+                                </td>
+                                <? if($item->convenio_id == @$empresa[0]->convenio_padrao_id){ ?>
+                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
+                                        <a href="<?= base_url() ?>cadastros/convenio/grupopadrao/<?= $item->convenio_id ?>">
+                                            Grupo Padrão
                                         </a>
-                                   
+                                    </div>
+                                </td>
+                                <? } ?>
+                                <? if($item->associado == "f"){ ?>
+                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
+                                            <a href="<?= base_url() ?>cadastros/convenio/copiar/<?= $item->convenio_id ?>">
+                                                Copiar
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link" style="width: 100px;">
+                                            <a href="<?= base_url() ?>cadastros/convenio/desconto/<?= $item->convenio_id ?>">
+                                                Ajuste (%)
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link" style="width: 100px;">
+                                            <a href="<?php echo base_url() ?>ambulatorio/procedimentoplano/carregarprocedimentoplanoexcluirgrupo/<?= $item->convenio_id ?>">
+                                                Excluir Proc.
+                                            </a>
+                                        </div>
+                                    </td>
+                                <? } else { ?>
+                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link" style="width: 100px;">
+                                            <a href="<?= base_url() ?>cadastros/convenio/ajustargrupoeditar/<?= $item->convenio_id ?>">
+                                                Ajuste Grupo
+                                            </a>
+                                        </div>
+                                    </td>                                    
+                                <? } ?>
                                 
-                                        <a class="btn btn-outline btn-success btn-sm" href="<?= base_url() ?>cadastros/convenio/desconto/<?= $item->convenio_id ?>">
-                                            Ajuste (%)
+                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link" style="width: 100px;">
+                                        <a target="_blank" href="<?php echo base_url() ?>ambulatorio/procedimentoplano/carregarprocedimentoplanoformapagamento/<?= $item->convenio_id ?>">
+                                            Pagamento
                                         </a>
-                                        <a class="btn btn-outline btn-danger btn-sm" onclick="confirmacaoconvenio(<?=$item->convenio_id?>);" href="#">
+                                    </div>
+                                </td>
+                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link" style="width: 70px;">
+                                        <a href="<?php echo base_url() ?>cadastros/convenio/anexararquivoconvenio/<?= $item->convenio_id ?>">
+                                            Logo
+                                        </a>
+                                    </div>
+                                </td>
+                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link" style="width: 70px;">
+                                        <a href="<?php echo base_url() ?>cadastros/convenio/empresaconvenio/<?= $item->convenio_id ?>">
+                                            Empresa
+                                        </a>
+                                    </div>
+                                </td>
+                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
+                                        <a onclick="javascript: return confirm('Deseja realmente excluir o convenio?\n\nObs: Irá excluir também os procedimentos associados ao convenio  ');" href="<?= base_url() ?>cadastros/convenio/excluir/<?= $item->convenio_id ?>">
                                             
                                             Excluir
                                         </a>
+                                    </div>
                                 </td>
+                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
+                                        <a href="<?= base_url() ?>cadastros/convenio/setores/<?= $item->convenio_id ?>">                                            
+                                            Setores 
+                                        </a>
+                                    </div>
+                                </td>
+
+                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link" style="">
+                                <a  onclick="javascript:window.open('<?= base_url() ?>cadastros/convenio/log/<?= @$item->convenio_id ?>', '', 'height=230, width=600, left='+(window.innerWidth-600)/2+', top='+(window.innerHeight-230)/2);" >LOG</a>
+                                </td>
+
+
+                                <td class="<?php echo $estilo_linha; ?>" colspan="10"></td>
                             </tr>
 
+                        </tbody>
                         <?php
                     }
                 }
                 ?>
-                            <tr>
-                                <th class="tabela_footer  btn-info" colspan="9">
-                                    <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
-
-                                </th>
-                            </tr>
-                            <tr>
-                                <th class="tabela_footer btn-info" colspan="9">
-
-                                    Total de registros: <?php echo $total; ?>
-                                </th>
-                            </tr>
-                        </table> 
-                    </div>
-
-                </div>
-            </div>
+                <tfoot>
+                    <tr>
+                        <th class="tabela_footer" colspan="12">
+                            <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
+                            Total de registros: <?php echo $total; ?>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
-    
 
 </div> <!-- Final da DIV content -->
 <script type="text/javascript">
 
-    function confirmacaoconvenio(idexcluir) {
-          swal({
-              title: "Tem certeza?",
-              text: "Você está prestes a deletar um convênio! Obs: Irá apagar os procedimentos associados",
-              type: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#337ab7",
-              confirmButtonText: "Sim, quero deletar!",
-              cancelButtonText: "Não, cancele!",
-              closeOnConfirm: false,
-              closeOnCancel: false
-          },
-                  function (isConfirm) {
-                      if (isConfirm) {
-                          window.open('<?= base_url() ?>cadastros/convenio/excluir/' + idexcluir,'_self');
-                      } else {
-                          swal("Cancelado", "Você desistiu de excluir o procedimento", "error");
-                      }
-                  });
-
-      }
+    $(function () {
+        $("#accordion").accordion();
+    });
 
 </script>

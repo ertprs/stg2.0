@@ -17,6 +17,7 @@ class grupoconvenio_model extends Model {
         $this->db->select('convenio_grupo_id,
                             nome');
         $this->db->from('tb_convenio_grupo');
+        $this->db->where('ativo', 't');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
             $this->db->where('nome ilike', $args['nome'] . "%");
         }
@@ -28,9 +29,12 @@ class grupoconvenio_model extends Model {
         $this->db->select('convenio_grupo_id,
                             nome');
         $this->db->from('tb_convenio_grupo');
+         $this->db->where('ativo', 't');
         $this->db->orderby('nome');
         $return = $this->db->get();
         return $return->result();
+        
+        
     }
 
     function listargrupoconvenio($convenio_grupo_id) {

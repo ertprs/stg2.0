@@ -29,6 +29,7 @@
 
 <fieldset>
     <?
+    $perfil_id = $this->session->userdata('perfil_id'); 
     $contador = count($empresas);
     if ($contador > 0) {
         ?>
@@ -48,11 +49,16 @@
                 <tbody>
                     <tr>
                         <td class="<?php echo $estilo_linha; ?>"><?= $item->nome; ?></td>
-                        <td class="<?php echo $estilo_linha; ?>" width="100px;"><div class="bt_link">
+                        
+                        <td class="<?php echo $estilo_linha; ?>" width="100px;">
+                            <?php if($perfil_id != 18 && $perfil_id != 20){?>
+                            <div class="bt_link">
                                 <a href="<?= base_url() ?>seguranca/operador/excluirassociarempresas/<?= $item->operador_empresa_id; ?>/<?= $item->operador_id; ?>">Excluir
-                                </a></div>
-
+                                </a>
+                            </div>
+                            <?php }?>
                         </td>
+                        
                     </tr>
 
                 </tbody>

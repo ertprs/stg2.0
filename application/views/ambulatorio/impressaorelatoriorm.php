@@ -49,7 +49,7 @@
                             <td><font size="-2"><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
                             <td><font size="-2"><?= $item->paciente; ?></td>
                             <td><font size="-2"><?= $item->convenio; ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->exame); ?></td>
+                            <td><font size="-2"><?= ($item->exame); ?></td>
                             <td><font size="-2"><?= $item->codigo; ?></td>
                             <td><font size="-2"><?= $item->quantidade; ?></td>
                             <td><font size="-2"><?= $item->forma_pagamento; ?></td>
@@ -106,7 +106,7 @@
                             <td><font size="-2"><?= $item->data; ?></td>
                             <td><font size="-2"><?= $item->paciente; ?></td>
                             <td><font size="-2"><?= $item->convenio; ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->exame); ?></td>
+                            <td><font size="-2"><?= ($item->exame); ?></td>
                             <td><font size="-2"><?= $item->codigo; ?></td>
                             <td><font size="-2"><?= $item->quantidade; ?></td>
                             <td><font size="-2"><?= $item->forma_pagamento; ?></td>

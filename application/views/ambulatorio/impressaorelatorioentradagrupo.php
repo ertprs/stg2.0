@@ -45,12 +45,12 @@
                         $totaltipo = $totaltipo + $item->valor;
                         ?>
                         <tr>
-                            <td ><?= utf8_decode($item->conta); ?></td>
-                            <td ><?= utf8_decode($item->razao_social); ?></td>
-                            <td ><?= utf8_decode($item->tipo); ?></td>
+                            <td ><?= ($item->conta); ?></td>
+                            <td ><?= ($item->razao_social); ?></td>
+                            <td ><?= ($item->tipo); ?></td>
                             <td ><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
                             <td ><?= number_format($item->valor, 2, ",", "."); ?></td>
-                            <td ><?= utf8_decode($item->observacao); ?></td>
+                            <td ><?= ($item->observacao); ?></td>
                         </tr>
         <? } else { ?>
                         <tr>
@@ -59,12 +59,12 @@
                             
                         </tr>
                         <tr>
-                            <td ><?= utf8_decode($item->conta); ?></td>
-                            <td ><?= utf8_decode($item->razao_social); ?></td>
-                            <td ><?= utf8_decode($item->tipo); ?></td>
+                            <td ><?= ($item->conta); ?></td>
+                            <td ><?= ($item->razao_social); ?></td>
+                            <td ><?= ($item->tipo); ?></td>
                             <td ><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
                             <td ><?= number_format($item->valor, 2, ",", "."); ?></td>
-                            <td ><?= utf8_decode($item->observacao); ?></td>
+                            <td ><?= ($item->observacao); ?></td>
                         </tr>
         <? 
         $s = $item->conta;

@@ -124,7 +124,7 @@
                         if ($i == 1) {
                             ?>
                             <tr>
-                                <td colspan="8"><font ><b>Tecnico:&nbsp;<?= utf8_decode($item->tecnico); ?></b></td>
+                                <td colspan="8"><font ><b>Tecnico:&nbsp;<?= ($item->tecnico); ?></b></td>
                             </tr>
             <? } ?>
                         <tr>
@@ -133,10 +133,10 @@
                             <? if ($paciente == $item->paciente) { ?>
                                 <td>&nbsp;</td>
                             <? } else { ?>
-                                <td><?= utf8_decode($item->paciente); ?></td>
+                                <td><?= ($item->paciente); ?></td>
             <? } ?>
                             <td style='text-align: center;'><font size="-2"><?= $item->quantidade; ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->procedimento); ?></td>
+                            <td><font size="-2"><?= ($item->procedimento); ?></td>
                         </tr>
 
 
@@ -157,7 +157,7 @@
                         $qtdetotal++;
                         ?>
                         <tr>
-                            <td colspan="8"><font ><b>Tecnico:&nbsp;<?= utf8_decode($item->tecnico); ?></b></td>
+                            <td colspan="8"><font ><b>Tecnico:&nbsp;<?= ($item->tecnico); ?></b></td>
                         </tr>
                         <tr>
                             <td><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
@@ -165,7 +165,7 @@
                             <? if ($paciente == $item->paciente) { ?>
                                 <td>&nbsp;</td>
                             <? } else { ?>
-                                <td><?= utf8_decode($item->paciente); ?></td>
+                                <td><?= ($item->paciente); ?></td>
             <? } ?>
                             <td style='text-align: center;'><font size="-2"><?= $item->quantidade; ?></td>
                             <td><font size="-2"><?= $item->procedimento; ?></td>

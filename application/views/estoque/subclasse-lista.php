@@ -47,7 +47,7 @@
                                     <a href="<?= base_url() ?>estoque/subclasse/carregarsubclasse/<?= $item->estoque_sub_classe_id ?>">Editar</a>
                             </td>
                                 <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
-                                    <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Sub-Classe?');" href="<?= base_url() ?>estoque/subclasse/excluir/<?= $item->estoque_sub_classe_id ?>">Excluir</a>
+                                    <a onclick="javascript: return confirm('Deseja realmente exlcuir essa Sub-Classe?');" href="<?= base_url() ?>estoque/subclasse/excluir/<?= $item->estoque_sub_classe_id ?>">Excluir</a>
                             </td>
                         </tr>
 

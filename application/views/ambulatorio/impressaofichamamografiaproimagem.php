@@ -1,4 +1,4 @@
-
+<meta charset="utf8">
 <div class="content ficha_ceatox">
     <?
     $exame_id = $exame[0]->agenda_exames_id;
@@ -19,16 +19,28 @@
     <table>
         <tbody>
         <td rowspan="3" width="70%;"><img align = 'left'  width='330px' height='100px' src=<?= base_url() . "img/logoclinicadez.png" ?>></td>
-        <td>( &nbsp; ) RAIOS X</td>
-        <td>( &nbsp; ) DENS.</td>
+        <tr>
+        <td>( &nbsp; ) RAIOS X 
+            <br>( &nbsp; ) DENS. 
+            <br>( &nbsp; ) MMG
+            <br>( &nbsp; ) RNM
+            <br>( &nbsp; ) USG SALA
+            <br>( &nbsp; ) TOMOGRAFIA
+        
+        </td>
+        <!--<td>( &nbsp; ) DENS.</td>-->
         </tr>
         <tr>
-            <td>( &nbsp; ) MMG</td>
-            <td>( &nbsp; ) RNM</td>
+        <!--<td>( &nbsp; ) RAIOS X</td>-->
+        <!--<td>( &nbsp; ) DENS.</td>-->
         </tr>
         <tr>
-            <td>( &nbsp; ) USG</td>
-            <td>( &nbsp; ) TOMOGRAFIA</td>
+            <!--<td>( &nbsp; ) MMG</td>-->
+            <!--<td>( &nbsp; ) RNM</td>-->
+        </tr>
+        <tr>
+            <!--<td>( &nbsp; ) USG</td>-->
+            <!--<td>( &nbsp; ) TOMOGRAFIA</td>-->
         </tr>
         <tr>
             <td ><font size = -1><?= substr($exame[0]->sala, 0, 10); ?></td>
@@ -45,7 +57,7 @@
 
             </tr>
             <tr>
-                <td colspan="2"><font size = -1>Conv&ecirc;nio:<?= utf8_decode($exame[0]->convenio) ?></td>
+                <td colspan="2"><font size = -1>Conv&ecirc;nio:<?= ($exame[0]->convenio) ?></td>
                 <td><font size = -1>Chegou:<?= substr($dataatualizacao, 10, 9); ?></td>
             </tr>
             <tr>
@@ -53,7 +65,7 @@
                 <td><font size = -1>D.U.M:</td>
             </tr>
             <tr>
-                <td colspan="2"><font size = -1>Paciente:<b><?= utf8_decode($paciente['0']->nome); ?></b></td>
+                <td colspan="2"><font size = -1>Paciente:<b><?= ($paciente['0']->nome); ?></b></td>
                 <td><font size = -1>Sexo: <?= $exame[0]->sexo; ?></td>
             </tr>
             <tr>
@@ -61,9 +73,9 @@
                 <td><font size = -1>Idade: <?= $teste; ?></td>
             </tr>
             <tr>
-                <td><font size = -1>Endere&ccedil;o: <?= utf8_decode($paciente['0']->logradouro) ?></td>
+                <td><font size = -1>Endere&ccedil;o: <?= ($paciente['0']->logradouro) ?></td>
                 <td><font size = -1>Num: <?= $paciente['0']->numero ?></td>
-                <td><font size = -1>Bairro:<?= utf8_decode($paciente['0']->bairro) ?></td>
+                <td><font size = -1>Bairro:<?= ($paciente['0']->bairro) ?></td>
             </tr>
             <tr>
                 <td colspan="2"><font size = -1>Cidade:<?= $paciente['0']->cidade_desc ?></td>
@@ -102,10 +114,10 @@
                 ?>
                 <tr>
                     <td ><font size = -1><?= $item->quantidade ?></td>
-                    <td ><font size = -1><? utf8_decode($item->codigo) ?></td>
-                    <td width="40%;"><font size = -1><?= utf8_decode($item->procedimento) ?></td>
+                    <td ><font size = -1><? ($item->codigo) ?></td>
+                    <td width="40%;"><font size = -1><?= ($item->procedimento) ?></td>
                     <td ><font size = -1><?= $item->convenio ?></td>
-                    <td width="25%;"><font size = -1>Dr(a). <?= utf8_decode($item->medicosolicitante) ?></td>
+                    <td width="25%;"><font size = -1>Dr(a). <?= ($item->medicosolicitante) ?></td>
                     <td ><img src="<?= base_url() . "upload/barcodeimg/$item->paciente_id/$item->agenda_exames_id.png"?>"</td>
                 </tr>
                 <?
@@ -205,7 +217,7 @@
                     <tr>
                         <td ><font size = -1>&nbsp;</td><? }
         ?>
-                    <td width="40%;"><font size = -1>1 - <?= utf8_decode($item->procedimento) ?></td>
+                    <td width="40%;"><font size = -1>1 - <?= ($item->procedimento) ?></td>
                     <td ><font size = -1><?= $DT_ENTREGA ?></td>
                 <?
             }

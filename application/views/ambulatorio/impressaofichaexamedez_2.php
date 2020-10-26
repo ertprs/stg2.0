@@ -26,7 +26,7 @@ $totalpagar =0;
     <td ><font size = -1>&nbsp;</font></td>
 </tr>
 <tr>
-    <td ><font size = -1><?= utf8_decode($paciente['0']->nome); ?></font></td>
+    <td ><font size = -1><?= ($paciente['0']->nome); ?></font></td>
 </tr>
 <tr>
     <td ><font size = -1>-------------------------------------------------------------</font></td>
@@ -34,7 +34,7 @@ $totalpagar =0;
 <td ><font size = -1><?
     foreach ($exames as $item) :
         $totalpagar = $totalpagar + $item->valor_total;
-        echo utf8_decode($item->procedimento);
+        echo ($item->procedimento);
         ?><br><? endforeach; ?></font>
 </td>
 <tr>

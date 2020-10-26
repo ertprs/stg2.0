@@ -1,131 +1,126 @@
-<div id="page-wrapper"> <!-- Inicio da DIV content -->
-    <div class="row">
-        <div class="col-lg-12">
-            <!--<div class="panel panel-default">-->
-            <div class="alert alert-success">
-                Cadastro de Procedimento
-            </div>
 
-            <!--</div>-->
-        </div>
-    </div>
-    <form name="form_procedimentoplano" id="form_procedimentoplano" action="<?= base_url() ?>ambulatorio/procedimentoplano/gravarpercentualpromotor" method="post">
-        <div class="panel panel-default ">
-            <div class="alert alert-info">
-                Dados do Procedimento
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Convênio*</label>
-                            <select name="covenio" id="covenio" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <? foreach ($convenio as $value) : ?>
-                                    <option  value="<?= $value->convenio_id; ?>"><?php echo $value->nome; ?></option>                            
-                                <? endforeach; ?>                                                                                             
-                            </select> 
-                        </div>
+<div class="content"> <!-- Inicio da DIV content -->
+    <div id="accordion">
+        <h3 class="singular"><a href="#">Cadastro de Honor&aacute;rios Promotor</a></h3>
+        <div>
+            <form name="form_procedimentohonorario" id="form_procedimentohonorario" action="<?= base_url() ?>ambulatorio/procedimentoplano/gravarpercentualpromotor" method="post">
 
-
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Grupo*</label>
-                            <select name="grupo" id="grupo" class="form-control" required="">
-                                <option value="">SELECIONE</option>
-                                <option>TODOS</option>                 
-                                <? foreach ($grupo as $value) : ?>
-                                    <option value="<?= $value->nome; ?>"><?php echo $value->nome; ?></option>
-                                <? endforeach; /* $value->ambulatorio_grupo_id; */ ?>
-
-                            </select>
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Procedimento</label>
-                            <select  name="procedimento" id="procedimento" class="form-control">
-                                <option value="">SELECIONE</option>
-                            </select>
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
+                <dl class="dl_desconto_lista">
+                    <? if(@$promotor_id != '') { ?>
+                        <dt>
                             <label>Promotor</label>
-                            <select name="promotor" id="medico" class="form-control" required>
+                        </dt>
+                        <dd>
+                            <? 
+                            foreach ($promotor as $value) {
+                                if ($value->paciente_indicacao_id == @$promotor_id) {
+                                    $medicoNome = $value->nome;
+                                }
+                            }
+                            ?>
+                            <input type="text" name="texto_medico" value="<?=@$medicoNome?>" readonly="">
+                            <input type="hidden" name="promotor" id="medico" value="<?=@$promotor_id?>">
+                        </dd>       
+                        
+                    <? } else { ?>                        
+                        <dt>
+                            <label>Promotor</label>
+                        </dt>
+                        <dd>                    
+                            <select name="promotor" id="medico" class="size4" required>
                                 <option value="">SELECIONE</option>
                                 <option>TODOS</option>
                                 <? foreach ($promotor as $value) : ?>
-                                    <option value="<?= $value->paciente_indicacao_id; ?>"><?php echo $value->nome; ?></option>
+                                    <option value="<?= $value->paciente_indicacao_id; ?>">
+                                        <?php echo $value->nome; ?>
+                                    </option>
                                 <? endforeach; ?>
                             </select>
-                        </div>
+                        </dd>
+                    <? } 
+                    if(@$convenio_id != '') { ?>
+                        <dt>
+                            <label>Convênio</label>
+                        </dt>
+                        <dd>
+                            <? 
+                            foreach ($convenio as $value) {
+                                if ($value->convenio_id == @$convenio_id) {
+                                    $convenioNome = $value->nome;
+                                }
+                            }
+                            ?>
+                            <input type="text" name="texto_convenio" value="<?=$convenioNome?>" readonly="">
+                            <input type="hidden" name="covenio" id="covenio" value="<?=@$convenio_id?>">
 
+                        </dd>       
+                    <? } else { ?>
+                        <dt>
+                            <label>Convênio</label>
+                        </dt>
+                        <dd>
+                            <select name="covenio" id="covenio" class="size4" required>
+                                <option value="">SELECIONE</option>
+                                <option value="TODOS">TODOS</option>
+                                <? foreach ($convenio as $value) : ?>
+                                    <option value="<?= $value->convenio_id; ?>">
+                                        <?php echo $value->nome; ?>
+                                    </option>                            
+                                <? endforeach; ?>                                                                                             
+                            </select>               
 
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Valor</label>
-                            <input type="text" name="valor" id="valor" class="form-control" required/>
-                        </div>
+                        </dd>   
+                    <? } ?>                                                         
+                    <dt>                         
+                        <label>Grupo</label>
+                    </dt>                    
+                    <dd>                       
+                        <select name="grupo" id="grupo" class="size4" required="">
+                            <option value="">SELECIONE</option>
+                            <option>TODOS</option>                 
+                            <? foreach ($grupo as $value) : ?>
+                                <option value="<?= $value->nome; ?>"><?php echo $value->nome; ?></option>
+                            <? endforeach; /* $value->ambulatorio_grupo_id; */ ?>
 
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Percentual</label>
-                            <select name="percentual"  id="percentual" class="form-control">  
-
-                                <option value="1"> SIM</option>
-                                <option value="0"> NÃO</option>                               
-                            </select>
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <br>
-                <div class="row">
-
-                    <div class="col-lg-5">
-                        <p>
-                            <button class="btn btn-outline btn-success btn-sm" type="submit" name="btnEnviar"><i class="fa fa-floppy-o" aria-hidden="true"></i>
-                                Enviar</button>
-                            <!--</div>-->
-                            <!--<div class="col-lg-1">-->
-                            <button class="btn btn-outline btn-danger btn-sm" type="reset" name="btnLimpar">Limpar</button>
-                        </p>
-                    </div>
-
-                </div>
-            </div>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Procedimento</label>
+                    </dt>
+                    <dd>
+                        <select  name="procedimento" id="procedimento" class="size4" required="">
+                            <option value="TODOS">TODOS</option>
+                        </select> 
+                    </dd>
+                    <dt>
+                        <label>Valor</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="valor" id="valor" class="texto01" required/>
+                    </dd>
+                    <dt>
+                        <label>Percentual</label>
+                    </dt>
+                    <dd>
+                        <select name="percentual"  id="percentual" class="size1">  
+                            
+                            <option value="1"> SIM</option>
+                            <option value="0"> NÃO</option>                               
+                        </select>
+                    </dd>
+                </dl>    
+                <hr/>
+                <button type="submit" name="btnEnviar">Enviar</button>
+                <button type="reset" name="btnLimpar">Limpar</button>
+                <button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
+            </form>
 
         </div>
-    </form>
-
-</div> 
- <!-- Final da DIV content -->
-
+    </div>
+</div> <!-- Final da DIV content -->
+<link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css">
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
 <script type="text/javascript">
     $('#btnVoltar').click(function () {
         $(location).attr('href', '<?= base_url(); ?>ponto/cargo');
@@ -138,20 +133,21 @@
     $(function () {
         $('#covenio').change(function () {
             if ($(this).val()) {
-                if ($('#grupo').val() == "TODOS") {
+                if ( $('#grupo').val() == "TODOS") {
                     $('.carregando').show();
                     $.getJSON('<?= base_url() ?>autocomplete/procedimentoporconvenio', {covenio: $(this).val(), ajax: true}, function (j) {
-                        options = '<option value="">TODOS</option>';
+                        options = '<option value="TODOS">TODOS</option>';
                         for (var c = 0; c < j.length; c++) {
                             options += '<option value="' + j[c].procedimento_convenio_id + '">' + j[c].procedimento + ' - ' + j[c].codigo + '</option>';
                         }
                         $('#procedimento').html(options).show();
                         $('.carregando').hide();
                     });
-                } else {
-                    if ($('#grupo').val() != "SELECIONE") {
+                }
+                else{
+                    if ( $('#grupo').val() != "SELECIONE") {
                         $.getJSON('<?= base_url() ?>autocomplete/procedimentoconveniogrupo', {grupo1: $('#grupo').val(), convenio1: $(this).val()}, function (j) {
-                            options = '<option value=""></option>';
+                            options = '<option value="TODOS">TODOS</option>';
                             for (var c = 0; c < j.length; c++) {
                                 options += '<option value="' + j[c].procedimento_convenio_id + '">' + j[c].procedimento + ' - ' + j[c].codigo + '</option>';
                             }
@@ -165,25 +161,27 @@
             }
         });
     });
-
-    $(function () {
+    
+        $(function () {
         $('#grupo').change(function () {
             if ($('#covenio').val() != 'SELECIONE' && $('#grupo').val() != 'TODOS') {
                 $('.carregando').show();
                 $.getJSON('<?= base_url() ?>autocomplete/procedimentoconveniogrupo', {grupo1: $(this).val(), convenio1: $('#covenio').val()}, function (j) {
-                    options = '<option value=""></option>';
+                    options = '<option value="TODOS">TODOS</option>';
                     for (var c = 0; c < j.length; c++) {
                         options += '<option value="' + j[c].procedimento_convenio_id + '">' + j[c].procedimento + ' - ' + j[c].codigo + '</option>';
                     }
                     $('#procedimento').html(options).show();
                     $('.carregando').hide();
                 });
-            } else {
-
-                if ($('#grupo').val() == 'TODOS') {
+            }
+            
+            else {
+                
+                if ( $('#grupo').val() == 'TODOS' ) {
                     $('.carregando').show();
                     $.getJSON('<?= base_url() ?>autocomplete/procedimentoporconvenio', {covenio: $('#covenio').val(), ajax: true}, function (j) {
-                        options = '<option value="">TODOS</option>';
+                        options = '<option value="TODOS">TODOS</option>';
                         for (var c = 0; c < j.length; c++) {
                             options += '<option value="' + j[c].procedimento_convenio_id + '">' + j[c].procedimento + ' - ' + j[c].codigo + '</option>';
                         }
@@ -191,7 +189,7 @@
                         $('.carregando').hide();
                     });
                 }
-
+                
             }
         });
     });

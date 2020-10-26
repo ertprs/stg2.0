@@ -11,6 +11,7 @@
         <thead>
 
            <tr>
+                <th>GUIA</th>
                 <th>PACIENTE</th>
                 <th>PRODUTO</th>
                 <th>UNIDADE</th>
@@ -19,6 +20,8 @@
                 <th>VALOR UNIT (R$)</th>
                 <th>VALOR TOTAL (R$)</th>
                 <th>DESCRIÇÃO</th>
+<!--                <th>teste</th>
+                <th>hora</th>-->
             </tr>
             
         </thead>
@@ -28,10 +31,22 @@
             ?>
             <?  foreach ($relatorio as $value) :?>
                 <tr>
+                    <td>
+                        <a  style="text-decoration: none; color: black;" title="Guia de Outras Despesas"
+                            href="<?= base_url() ?>ambulatorio/guia/guiaspsadtoutrasdespesas/<?=$value->ambulatorio_guia_id;?>"><?=$value->ambulatorio_guia_id;?></a>
+                    </td>
                     <td><?=$value->paciente;?></td>
-                    <td><?=$value->produto;?></td>
-                    <td><?=$value->unidade;?></td>
-                    <td><?=$value->procedimento;?></td>
+                    <?if($value->produto_farmacia != ''){?>
+                        <td><?=$value->produto_farmacia;?></td>
+                        <td><?=$value->unidade_farmacia;?></td>
+                        <td><?=$value->procedimento_farmacia;?></td>
+                    <?}else{?>
+                        <td><?=$value->produto;?></td>
+                        <td><?=$value->unidade;?></td>
+                        <td><?=$value->procedimento;?></td>
+                    <?}?>
+                    
+                    
                     <td><?=$value->quantidade;?></td>
                     <td>R$ <?=number_format($value->valor, 2, ',', ' ');?></td>
                     <td>R$ <?=number_format($value->quantidade * $value->valor, 2, ',', ' ');?></td>

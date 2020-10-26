@@ -56,7 +56,7 @@
                     ?>
 
                     <tr>
-                        <td width="35%;" ><font size = -1><?= utf8_decode($item->procedimento) ?></td>
+                        <td width="35%;" ><font size = -1><?= ($item->procedimento) ?></td>
                         <? if ($exame[0]->data_entrega != "") { ?>
                             <td width="25%;"><font size = -1><?= substr($exame[0]->data_entrega, 8, 2) . "/" . substr($exame[0]->data_entrega, 5, 2) . "/" . substr($exame[0]->data_entrega, 0, 4); ?></td>
                         <? } else { ?>
@@ -119,11 +119,11 @@
             if ($item->grupo == $exame[0]->grupo) {
                 ?>
                 <tr>
-                    <td ><?= utf8_decode($item->quantidade) ?></td>
-                    <td width="40%;"><?= utf8_decode($item->procedimento) . "-" . utf8_decode($item->sala) ?></td>
+                    <td ><?= ($item->quantidade) ?></td>
+                    <td width="40%;"><?= ($item->procedimento) . "-" . ($item->sala) ?></td>
                     <td ><?= $item->convenio ?></td>
                     <td ><?= $item->autorizacao ?></td>
-                    <td width="30%;">Dr(a). <?= utf8_decode($item->medicosolicitante) ?></td>
+                    <td width="30%;">Dr(a). <?= ($item->medicosolicitante) ?></td>
                 </tr>
                 <?
             }
@@ -138,10 +138,10 @@
             if ($item->grupo != $exame[0]->grupo) {
                 ?>
                 <tr>
-                    <td width="40%;"><?= utf8_decode($item->procedimento) . "-" . utf8_decode($item->sala) ?></td>
+                    <td width="40%;"><?= ($item->procedimento) . "-" . ($item->sala) ?></td>
                     <td ><?= $item->convenio ?></td>
                     <td ><?= $item->autorizacao ?></td>
-                    <td width="25%;"><?= utf8_decode($item->medicosolicitante) ?></td>
+                    <td width="25%;"><?= ($item->medicosolicitante) ?></td>
                 </tr>
                 <?
             }
@@ -280,7 +280,17 @@
             <td colspan="-1"><font size = -1><? echo $obs ?></font></td>
         </tr>
         <tr>
-            <td colspan="-1"><font size = -1><b>Declaro que as informações por mim fornecidas neste formulário são verdadeiras e que estou ciente dos riscos inerentes ao exame.</br> Autorizo a realização do(s) exame(s) solicitado(s) e de injeção de produto de contraste, necessário ao(s) mesmo(s).</b></font></td>
+            <td colspan="-1">
+                <font size = -1>
+                <b> 
+                    Declaro que as informações por mim fornecidas neste formulário são verdadeiras e que estou ciente dos riscos inerentes ao exame.<br/> 
+                    Autorizo a realização do(s) exame(s) solicitado(s) e de injeção de produto de contraste, necessário ao(s) mesmo(s).
+                    <? if($r21 == "SIM") { ?>
+                        <br/>Declaro tambem que estou ciente que devo trazer o canhoto para o recebimento dos exames.
+                    <? } ?>
+                </b>
+                </font>
+            </td>
         </tr>
         <tr>
             <td ><font size = -1><b>Fortaleza,<?= str_replace("-", "/", $emissao); ?></b></font></td>

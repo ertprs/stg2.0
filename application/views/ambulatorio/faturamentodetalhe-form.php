@@ -62,12 +62,12 @@
                             </select>
                         </dd>
                         <dt>
-                         
+
                             <label>Sala</label>
-                            
+
                         </dt>
                         <dd>
-                         
+
                             <select name="sala" id="sala" class="size2">
                                 <option value=""></option>
                                 <? foreach ($salas as $value) : ?>
@@ -83,40 +83,45 @@
                         </dt>
                         <dd>
                             <select name="medico" id="medico" class="size1">
-                                    <option value=""> </option>
-                                    <? foreach ($medico as $value) : ?>
-                                        <option value="<?= $value->operador_id; ?>"<?
-                                        if ($exame[0]->medico_agenda == $value->operador_id):echo 'selected';
-                                        endif;
-                                        ?>>
-                                                    <?php echo $value->nome; ?>
+                                <option value=""> </option>
+                                <? foreach ($medico as $value) : ?>
+                                    <option value="<?= $value->operador_id; ?>"<?
+                                    if ($exame[0]->medico_agenda == $value->operador_id):echo 'selected';
+                                    endif;
+                                    ?>>
+                                                <?php echo $value->nome; ?>
 
-                                        </option>
-                                    <? endforeach; ?>
+                                    </option>
+                                <? endforeach; ?>
 
-                                </select>
+                            </select>
                         </dd>
-                        
+
                         <dt>
                             <label>Medico Solicitante</label>
                         </dt>
                         <dd>
                             <select name="medico_solicitante" id="medico_solicitante" class="size1">
-                                    <option value=""> </option>
-                                    <? foreach ($medico as $value) : ?>
-                                        <option value="<?= $value->operador_id; ?>"<?
-                                        if ($exame[0]->medico_solicitante == $value->operador_id):echo 'selected';
-                                        endif;
-                                        ?>>
-                                                    <?php echo $value->nome; ?>
+                                <option value=""> </option>
+                                <? foreach ($medico as $value) : ?>
+                                    <option value="<?= $value->operador_id; ?>"<?
+                                    if ($exame[0]->medico_solicitante == $value->operador_id):echo 'selected';
+                                    endif;
+                                    ?>>
+                                                <?php echo $value->nome; ?>
 
-                                        </option>
-                                    <? endforeach; ?>
+                                    </option>
+                                <? endforeach; ?>
 
-                                </select>
+                            </select>
                         </dd>
-                        
-                        
+
+                        <dt>
+                            <label>Carteira</label>
+                        </dt> 
+                        <dd> 
+                            <input type="text" name="carteira" id="carteira" value="<?= @$exame[0]->convenionumero; ?>">
+                        </dd>  
                         <dt>
                             <label>Observacao</label>
                         </dt>

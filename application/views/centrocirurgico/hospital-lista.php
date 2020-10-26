@@ -24,6 +24,7 @@
                     </tr>
                 </thead>
                 <?php
+                    $perfil_id = $this->session->userdata('perfil_id');
                     $url      = $this->utilitario->build_query_params(current_url(), $_GET);
                     $consulta = $this->centrocirurgico_m->listarhospitais($_GET);
                     $total    = $consulta->count_all_results();
@@ -44,10 +45,11 @@
                                 <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
                                     <a href="<?= base_url() ?>centrocirurgico/centrocirurgico/carregarhospital/<?= $item->hospital_id ?>">Editar</a></div>
                                 </td>
-                                
+                              <?php if($this->session->userdata('perfil_id') != 25 && $perfil_id != 18 && $perfil_id != 20){?>
                                 <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
                                     <a href="<?= base_url() ?>centrocirurgico/centrocirurgico/excluirhospital/<?= $item->hospital_id ?>">Excluir</a></div>
                                 </td>
+                              <?php }?>
 
                         </tr>
 

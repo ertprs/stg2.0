@@ -1,3 +1,4 @@
+
 .navbar-brand{
     margin-left: 1vh;
 }
@@ -43,16 +44,7 @@
         margin-left: -1.2vw;
     }
 }
-@media (max-width: 1366px) {
-    .nav-item-user {
-        margin-left: -3vh;
-        float: right;
-    }
-    .navbar-brand{
-        margin-left: -1vh;
-        margin-right: -20vh;
-    }
-}
+
 
 @media (max-width: 1279px) {
     .navbar-brand img {
@@ -61,7 +53,7 @@
     }
     .navbar-brand{
         margin-left: -1.5vh;
-        margin-right: -2vh;
+        margin-right: 10vh;
     }
     .nav-item-user {
         margin-left: -1vh;
@@ -84,7 +76,7 @@
 @media (max-width: 1211px) {
     
     .navbar-brand{
-        margin-left: -1vh;
+        margin-left: 10vh;
     }
 
     .nav-item-user {
@@ -107,7 +99,7 @@
 @media (max-width: 991.8px) {
     
     .navbar-brand{
-        margin-left: -1vh;
+        margin-left: 10vh;
     }
 
     .nav-item-user {

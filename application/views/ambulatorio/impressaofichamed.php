@@ -21,6 +21,8 @@ if ($sexo == "M") {
     $sexopaciente = "Masculino";
 } elseif ($sexo == "F") {
     $sexopaciente = "Feminino";
+} else {
+    $sexopaciente = "Outro";
 }
 $dataFuturo = date("Y-m-d");
 $dataAtual = $paciente['0']->nascimento;
@@ -36,14 +38,14 @@ $agenda = $exame[0]->agenda;
 <table>
     <tbody>
         <tr>
-            <td colspan="2"  ><font size = -1><?= utf8_decode($paciente['0']->nome); ?> - <?= $paciente['0']->paciente_id; ?></font></td>
+            <td colspan="2"  ><font size = -1><?= ($paciente['0']->nome); ?> - <?= $paciente['0']->paciente_id; ?></font></td>
             <td ><font size = -1>Idade: <?= $teste; ?>&nbsp; </font></td>
             <td width="280px"><font size = -1><center></center></font></td>
 <td width="30px">&nbsp;</td>
 <td ><font size = -1><u>CLINICA RADIOLOGICA</u></font></td>
 </tr>
 <tr>
-    <td colspan="2" ><font size = -1><?= utf8_decode($exame[0]->convenio); ?>&nbsp;&nbsp; - &nbsp;&nbsp;<?= $exame[0]->guia_id ?></font></td>
+    <td colspan="2" ><font size = -1><?= ($exame[0]->convenio); ?>&nbsp;&nbsp; - &nbsp;&nbsp;<?= $exame[0]->guia_id ?></font></td>
     <td ><font size = -1>SEXO: <?= $sexopaciente ?></font></td>
     <td><font size = -2></font></td>
     <td >&nbsp;</td>
@@ -60,7 +62,7 @@ $agenda = $exame[0]->agenda;
     <td colspan="2" ><font size = -1>
         <?
         foreach ($exames as $item) :
-            echo utf8_decode($item->procedimento);
+            echo ($item->procedimento);
             ?><br><? endforeach; ?>
         </font></td>
     <td ><font size = -1>MEDICO:<?= substr($exame[0]->medicosolicitante, 0, 8); ?></font></td>
@@ -68,7 +70,7 @@ $agenda = $exame[0]->agenda;
     <td >&nbsp;</td> 
     <td ><font size = -1><?
         foreach ($exames as $item) :
-            echo utf8_decode($item->procedimento);
+            echo ($item->procedimento);
             ?><br><? endforeach; ?></font></td>
 </tr>
 <tr>
@@ -291,13 +293,13 @@ $agenda = $exame[0]->agenda;
             <td ><font size = -1>DATA: <?= substr($exame[0]->data, 8, 2) . "/" . substr($exame[0]->data, 5, 2) . "/" . substr($exame[0]->data, 0, 4); ?> HORA: <?= substr($dataatualizacao, 10, 6); ?></font></td>
         </tr>
         <tr>
-            <td ><font size = -1>Paciente: <?= utf8_decode($paciente['0']->nome); ?></font></td>
+            <td ><font size = -1>Paciente: <?= ($paciente['0']->nome); ?></font></td>
         </tr>
         <tr>
             <td ><font size = -1>Idade: <?= $idade; ?></font></td>
         </tr>
         <tr>
-            <td ><font size = -1>Convenio: <?= utf8_decode($exame[0]->convenio); ?></font></td>
+            <td ><font size = -1>Convenio: <?= ($exame[0]->convenio); ?></font></td>
         </tr>
         <tr>
             <td ><font size = -1>-------------------------------------------------------------</font></td>
@@ -321,7 +323,7 @@ $agenda = $exame[0]->agenda;
                 $teste4 = $item->formadepagamento4;
                 $formapagamento = $formapagamento . "/" . $item->formadepagamento4;
             }
-            echo utf8_decode($item->procedimento);
+            echo ($item->procedimento);
             ?><br><? endforeach; ?></font>
     </td>
     <tr>

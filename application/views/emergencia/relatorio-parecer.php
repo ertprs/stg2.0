@@ -22,25 +22,25 @@ $data = substr($lista[0]->dataparecer,8,2) ."/". substr($lista[0]->dataparecer,5
                         <a>Paciente</a>
                     </dt>
                     <dd >
-                        <p><?=utf8_decode($lista[0]->nome);?></p><br/>
+                        <p><?=($lista[0]->nome);?></p><br/>
                     </dd>
                     <dt>
                         <a>Descri&ccedil;&atilde;o</a>
                     </dt>
                     <dd >
-                        <p><?= utf8_decode($teste);?></p><br/>
+                        <p><?= ($teste);?></p><br/>
                     </dd>
                     <dt>
                         <a>Especialidade</a>
                     </dt>
                     <dd >
-                        <p><?=utf8_decode($lista[0]->especialidadesolicitada);?></p><br/>
+                        <p><?=($lista[0]->especialidadesolicitada);?></p><br/>
                     </dd>
                     <dt>
                         <a>Conduta / tempo estimado</a>
                     </dt>
                     <dd >
-                        <p><?= utf8_decode($lista[0]->especialidade);?> / <?= utf8_decode($lista[0]->tempoconduta);?></p>
+                        <p><?= ($lista[0]->especialidade);?> / <?= ($lista[0]->tempoconduta);?></p>
                     </dd>
                     <dt>
                         <a>Data/hora do parecer</a>

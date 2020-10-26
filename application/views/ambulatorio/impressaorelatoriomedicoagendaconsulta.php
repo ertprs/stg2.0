@@ -1,3 +1,4 @@
+<meta charset="UTF-8">
 <div class="content"> <!-- Inicio da DIV content -->
     <? if (count($empresa) > 0) { ?>
         <h4><?= $empresa[0]->razao_social; ?></h4>
@@ -5,23 +6,80 @@
         <h4>TODAS AS CLINICAS</h4>
     <? } ?>
     <h4>Agenda Consultas</h4>
-    <h4>PERIODO: <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_inicio) ) ); ?> ate <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_fim) ) ); ?></h4>
-    <h4>Medico: <?= $medico[0]->operador; ?></h4>
+    <h4>PERIODO: <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_inicio))); ?> ate <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_fim))); ?></h4>
+    <h4>Medico: <?
+        if (count($medico) > 0 && $medico != null) {
+            echo $medico[0]->operador;
+        } else {
+            echo 'TODOS';
+        }
+        ?></h4>
     <hr>
-    <table border="1">
+
+    <?
+    @$empresa_id = $this->session->userdata('empresa_id');
+    @$data['retorno'] = $this->exame->permisoesempresa($empresa_id);
+    @$agenda_modificada = $data['retorno'][0]->agenda_modificada;
+    ?>
+
+
+    <table border=1 cellspacing=0 cellpadding=2 bordercolor="666633">
         <thead>
             <tr>
-                <th class="tabela_header" >Status</th>
+                <?
+                if (@$agenda_modificada == 't') {
+                    ?>
+                    <th class="tabela_header" width="20px;">Nº</th>
+                    <?
+                } else {
+                    ?>
+                    <th class="tabela_header" width="70px;">Status</th>
+                    <?
+                }
+                ?>
                 <th class="tabela_header" width="250px;">Nome</th>
-                <th class="tabela_header" width="70px;">Resp.</th>
+                <th class="tabela_header" width="70px;">Resp.</th>               
                 <th class="tabela_header" width="70px;">Data</th>
-                <th class="tabela_header" width="50px;">Dia</th>
-                <th class="tabela_header" width="70px;">Agenda</th>
+                <?
+                if (@$agenda_modificada == 't') {
+                    
+                } else {
+                    ?>
+                    <th class="tabela_header" width="70px;">Dia</th>
+
+                    <?
+                }
+                ?>
+                <?
+                if (@$data['retorno'][0]->agenda_modificada == 't') {
+                    ?>
+                    <th class="tabela_header" width="70px;">Horário</th>
+                    <?
+                } else {
+                    ?>
+                    <th class="tabela_header" width="70px;">Agenda</th>   
+                    <?
+                }
+                ?>
                 <th class="tabela_header" width="150px;">Medico</th>
                 <th class="tabela_header" width="150px;">Convenio</th>
                 <th class="tabela_header">Telefone</th>
                 <th class="tabela_header" width="250px;">Observa&ccedil;&otilde;es</th>
-                <th class="tabela_header" colspan="2"><center>Status</center></th>
+                <th class="tabela_header"><center>Status</center></th>
+
+        <?
+        if (@$data['retorno'][0]->agenda_modificada == 't') {
+            
+        } else {
+            ?>
+            <? if ($_POST['procedimento'] == 'SIM') { ?>
+                <th class="tabela_header" width="150px;">Procedimentos</th>
+                <? } ?>
+                <?
+            }
+            ?>
+
+
         </tr>
         </thead>
         <tbody>
@@ -89,27 +147,67 @@
                     }
                     ?>
                     <tr>
-                        <td ><b><?= $situacao; ?></b></td>
+                        <td ><b>
+                                <?
+                                if (@$agenda_modificada == 't') {
+                                    echo @$numero = 1 + $numero;
+                                } else {
+                                    echo @$situacao;
+                                }
+                                ?>
+                            </b></td>
                         <td <b><?= $item->paciente; ?></b></td>
                         <td ><?= substr($item->secretaria, 0, 9); ?></td>
                         <td><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
-                        <td ><?= substr($dia, 0, 3); ?></td>
-                        <td ><?= $item->inicio; ?></td>
-                        <td  width="150px;"><?= $item->sala . " - " . substr($item->medicoagenda, 0, 15); ?></td>
+                        <?
+                        if (@$agenda_modificada == 't') {
+                            
+                        } else {
+                            ?>
+                            <?
+                            echo "<td>";
+                            echo substr($dia, 0, 3);
+                            echo " </td>";
+                        }
+                        ?>        
+                        <td ><?= $item->inicio; ?></td>                          
+                        <td  width="150px;">
+                            <?
+                            if (@$agenda_modificada == 't') {
+                                
+                            } else {
+                                if ($_POST['sala'] == 'SIM') {
+                                    echo $item->sala . " - ";
+                                }
+                            }
+                            echo substr($item->medicoagenda, 0, 15);
+                            ?></td>
                         <td ><?= $item->convenio; ?></td>
                         <td ><?= $telefone; ?></td>
                         <td ><?= $item->observacoes; ?></td>
                         <? if ($item->bloqueado == 't') { ?>
                             <td width="60px;"> Bloqueado</td>
                             <?
-                        }elseif ($item->telefonema == 't') {
+                        } elseif ($item->telefonema == 't') {
                             ?>
                             <td width="60px;">Confirmado</td>
-                        <? }else{?>
+                        <? } else { ?>
                             <td width="60px;"></td>
-                       <? }
+                        <? }
                         ?>
 
+                        <?
+                        if (@$agenda_modificada == 't') {
+                            
+                        } else {
+                            ?>      
+                            <? if ($_POST['procedimento'] == 'SIM') {
+                                ?>
+                                <td ><?=$item->procedimento; ?></td>  
+                                <?
+                            }
+                        }
+                        ?>
                     </tr>
 
                 </tbody>
@@ -127,7 +225,7 @@
 
 
 
-    $(function() {
+    $(function () {
         $("#accordion").accordion();
     });
 

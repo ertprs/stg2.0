@@ -5,12 +5,15 @@ $convenios = $this->convenio->listarconvenionaodinheiro();
     <div id="accordion">
         <h3><a href="#">Carregar imagem individual </a></h3>
         <div >
-            <?= form_open_multipart(base_url() . 'ambulatorio/laudo/importarimagem'); ?>
+            <?// form_open_multipart(base_url() . 'ambulatorio/laudo/importarimagem'); ?>
+            <form method="POST" action="<?=base_url() . 'ambulatorio/laudo/importarimagem'?>" enctype="multipart/form-data">
             <label>Informe o arquivo para importa&ccedil;&atilde;o</label><br>
             <input type="file" multiple="" name="arquivos[]"/>
             <button type="submit" name="btnEnviar">Enviar</button>
             <input type="hidden" name="paciente_id" value="<?= $ambulatorio_laudo_id; ?>" />
-            <?= form_close(); ?>
+            <input type="hidden" name="paciente_id_real" value="<?= $paciente_id; ?>" />
+            </form>
+            <?// form_close(); ?>
 
         </div>
 

@@ -19,6 +19,8 @@
             $tipoempresa = 'TODAS';
         }
         ?>
+
+        
         <tr>
             <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">Relatorio Tempo de Atendimento</th>
         </tr>
@@ -34,7 +36,36 @@
         <tr>
             <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">PERIODO: <?= $txtdata_inicio ?> ate <?= $txtdata_fim; ?></th>
         </tr>
-
+        <? if (count($procedimentos) > 0) { ?>
+            <tr>
+                <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">PROCEDIMENTO: <?= $procedimentos[0]->nome; ?></th>
+            </tr>
+            <?
+            $procedimentos = $procedimentos[0]->nome;
+        } else {
+            ?>
+            <tr>
+                <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">PROCEDIMENTO: TODOS</th>
+            </tr>
+            <?
+            // $tipoempresa = 'TODAS';
+        }
+        ?>
+        <? if (count($medico) > 0) { ?>
+            <tr>
+                <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">MÉDICO: <?= $medico[0]->operador; ?></th>
+            </tr>
+            <?
+            $medico = $medico[0]->nome;
+        } else {
+            ?>
+            <tr>
+                <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">MÉDICO: TODOS</th>
+            </tr>
+            <?
+            // $tipoempresa = 'TODAS';
+        }
+        ?>
     </thead>
 </table>
 
@@ -51,7 +82,9 @@
                 <th class="tabela_teste">Data</th>
                 <!--<th class="tabela_teste">Escolaridade</th>-->
                 <th rowspan="2" class="tabela_teste">Hora de  <br> Chegada</th>
-                <th class="tabela_teste">Tempo entre chegada e <br> Horário Marcado</th>
+                <th class="tabela_teste">Tempo entre Chegada e <br> Horário Autorização</th>
+                <th rowspan="2" class="tabela_teste">Hora de  <br> Autorização</th>
+                <th class="tabela_teste">Tempo entre Autorização e <br> Horário Marcado</th>
                 <th class="tabela_teste">Horário <br> Marcado</th>
                 <th class="tabela_teste">Tempo entre horário<br> marcado e atendimento</th>
                 <th class="tabela_teste">Horário do <br> Atendimento</th>
@@ -85,6 +118,7 @@
             $outros = 0;
             $crianca = 0;
             
+            $total_senha = 0;
             $total_chegada = 0;
             $total_consulta = 0;
             $total_atendimento = 0;
@@ -160,6 +194,30 @@
                     }
                     ?></td>-->
 
+                    <td style='text-align: center;'><?= date(" H:i:s", strtotime($item->data_senha)) ?></td>
+                    <td style='text-align: center;'><?
+                        $data_senha = new DateTime($item->data_senha);
+                        $inicio = new DateTime($item->data_autorizacao);
+                        $diff2 = $data_senha->diff($inicio, true);
+                        if($data_senha > $inicio){
+                            echo 'Atraso:';
+                        }
+                        ?>
+                        <span 
+                        <?
+                        if ($diff2->format('%H:%I:%S') > date("H:i:s", strtotime($tempo[0]->tempo_senha))) {
+                            echo "style='color:red;'";
+                        }
+                        if (((int) $diff2->format('%H')) > 0) {
+                            $minutos_senha = (((int) $diff2->format('%H')) * 60 + $diff2->format('%i'));
+                        } else {
+                            $minutos_senha = ((int) $diff2->format('%i'));
+                        }
+                        $total_senha = $total_senha + $minutos_senha;
+                        ?>
+                            >
+                            <? echo $diff2->format('%H:%I:%S'); ?></span>
+                    </td>
                     <td style='text-align: center;'><?= date(" H:i:s", strtotime($item->data_autorizacao)) ?></td>
                     <td style='text-align: center;'><?
                         $data_autorizacao = new DateTime($item->data_autorizacao);
@@ -186,8 +244,8 @@
                     </td>
                     <td style='text-align: center;'><?= date("H:i:s", strtotime($item->inicio)) ?></td>
                     <td style='text-align: center;'><?
-                        $data_inicio = new DateTime($item->data . $item->inicio);
-                        $data_atendimento = new DateTime($item->data_atendimento);
+                        $data_inicio = new DateTime($item->data .' '. $item->inicio);
+                        $data_atendimento = new DateTime($item->data_cadastro);
                         $diff3 = $data_inicio->diff($data_atendimento, true);
                         ?>
                         <span 
@@ -206,9 +264,9 @@
                             >
                             <? echo $diff3->format('%H:%I:%S'); ?></span>
                     </td>
-                    <td style='text-align: center;'><?= date(" H:i:s", strtotime($item->data_atendimento)) ?></td>
+                    <td style='text-align: center;'><?= date(" H:i:s", strtotime($item->data_cadastro)) ?></td>
                     <td style='text-align: center;'><?
-                        $data_finalizado = new DateTime($item->data_finalizado);
+                        $data_finalizado = new DateTime($item->data_atualizacao);
                         $diff4 = $data_finalizado->diff($data_atendimento, true);
                         ?>
                         <span 
@@ -228,7 +286,7 @@
 
                             <? echo $diff4->format('%H:%I:%S'); ?></span>
                     </td>
-                    <td style='text-align: center;'><?= date("H:i:s", strtotime($item->data_finalizado)) ?></td>
+                    <td style='text-align: center;'><?= date("H:i:s", strtotime($item->data_atualizacao)) ?></td>
                 </tr>
             <? endforeach; ?>
 
@@ -238,6 +296,7 @@
         </tbody>
     </table>
     <?
+    $media_senha = round(($total_senha) / $qtdetotal);
     $media_chegada = round(($total_chegada) / $qtdetotal);
     $media_consulta = round(($total_consulta) / $qtdetotal);
     $media_atendimento = round(($total_atendimento) / $qtdetotal);
@@ -257,7 +316,12 @@
         <tbody>
 
             <tr>
-                <td style='text-align: center;'>Chegada/Cons</td>
+                <td style='text-align: center;'>Chegada/Autorização</td>
+                <td style='text-align: center;'><?= $media_senha; ?> Minutos</td>
+                <td style='text-align: center;'><?= date("i", strtotime($tempo[0]->tempo_senha)) . " Minutos"; ?></td>
+            </tr>
+            <tr>
+                <td style='text-align: center;'>Autorização/Cons</td>
                 <td style='text-align: center;'><?= $media_chegada; ?> Minutos</td>
                 <td style='text-align: center;'><?= date("i", strtotime($tempo[0]->tempo_chegada)) . " Minutos"; ?></td>
             </tr>
@@ -307,7 +371,8 @@
     Morris.Bar({
         element: 'graph',
         data: [
-            {x: 'Chegada/Horário', y: <?= $media_chegada; ?>, z: <?=date("i", strtotime($tempo[0]->tempo_chegada))?>},
+            {x: 'Chegada/Autorização', y: <?= $media_senha; ?>, z: <?=date("i", strtotime($tempo[0]->tempo_senha))?>},
+            {x: 'Autorização/Horário', y: <?= $media_chegada; ?>, z: <?=date("i", strtotime($tempo[0]->tempo_chegada))?>},
             {x: 'Horário/Atendim', y: <?= $media_consulta; ?>, z: <?=date("i", strtotime($tempo[0]->tempo_atendimento))?>},
             {x: 'Atendime/Final', y: <?= $media_atendimento; ?>, z: <?=date("i", strtotime($tempo[0]->tempo_finalizado))?>}
         ],

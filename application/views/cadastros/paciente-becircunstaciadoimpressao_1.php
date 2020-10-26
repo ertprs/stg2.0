@@ -6,7 +6,7 @@
     <TR><td width="55%">&ensp;</td><TD ><font size="-1">Fortaleza <?php echo substr($paciente['0']->data,7,3) . "/" . substr($paciente['0']->data,5,2) . "/" . substr($paciente['0']->data,0,5);?></font></TD></TR>
     <TR><TD width="55%"><font size="-1">CI: <?php echo $paciente['0']->relatoriocircuntanciado_id . "/" . substr($paciente['0']->data,0,4);?> </font></TD><td></td></TR>
     <TR><TD width="55%" ><font size="-1"></font></TD><td><font size="-1">Do: Dire&ccedil;&atilde;o M&eacute;dica / Emerg&ecirc;ncia</font></td></TR>
-    <TR><TD width="55%" ><font size="-1"></font></TD><td><font size="-1">Ao(&Agrave;) <?php echo utf8_decode($paciente['0']->ao);?></font></td></TR>
+    <TR><TD width="55%" ><font size="-1"></font></TD><td><font size="-1">Ao(&Agrave;) <?php echo ($paciente['0']->ao);?></font></td></TR>
     <TR><TD width="55%" ><font size="-1">Caro(a) Dr(a)<?php echo $paciente['0']->caro;?>,</font></TD><td></td></TR>
 </TABLE>
     <h5>Solicito a V.Sa. que seja enviado a esta Diretoria um relat&oacute;rio circunstanciado do paciente abaixo qualificado, contendo as seguintes informa&ccedil;&otilde;es:</h5>
@@ -49,9 +49,9 @@
 <br>
 
 
-<label><?=  utf8_decode($paciente['0']->solicitante);?></label><br>
-<label>&ensp;&ensp;&ensp;&ensp;&ensp;CRM / CPF <?= utf8_decode($paciente['0']->numero);?></label><br>
-<label>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;<?=  utf8_decode($paciente['0']->diretoria);?></label><br>
+<label><?=  ($paciente['0']->solicitante);?></label><br>
+<label>&ensp;&ensp;&ensp;&ensp;&ensp;CRM / CPF <?= ($paciente['0']->numero);?></label><br>
+<label>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;<?=  ($paciente['0']->diretoria);?></label><br>
                 &ensp;
                 <br>
                 <br>

@@ -23,16 +23,16 @@ $teste = $diff->format('%Ya %mm %dd');
     <td ><font size = -1>DATA: <?= substr($exame[0]->data_guia, 8, 2) . "/" . substr($exame[0]->data_guia, 5, 2) . "/" . substr($exame[0]->data_guia, 0, 4); ?></font></td>
 </tr>
 <tr>
-    <td ><font size = -1>NOME:<?= utf8_decode($paciente['0']->nome); ?></font></td>
+    <td ><font size = -1>NOME:<?= ($paciente['0']->nome); ?></font></td>
 </tr>
 <tr>
-    <td ><font size = -1>IDADE: <?= $teste; ?> - CONVENIO: <?= utf8_decode($exame[0]->convenio); ?></font></td>
+    <td ><font size = -1>IDADE: <?= $teste; ?> - CONVENIO: <?= ($exame[0]->convenio); ?></font></td>
 </tr>
 <tr>
     <td ><font size = -1>MEDICO:<?= substr($exame[0]->medico, 0, 20); ?></font></td>
 </tr>
 <tr>
-    <td ><font size = -1>PROFISSAO:<?= utf8_decode($exame[0]->profissaos); ?> </font></td>
+    <td ><font size = -1>PROFISSAO:<?= ($exame[0]->profissaos); ?> </font></td>
 </tr>
 
 <tr>
@@ -42,7 +42,7 @@ $teste = $diff->format('%Ya %mm %dd');
     <td ><font size = -1>DATA: <?= substr($exame[0]->data_autorizacao, 8, 2) . "/" . substr($exame[0]->data_autorizacao, 5, 2) . "/" . substr($exame[0]->data_autorizacao, 0, 4); ?> HORA: <?= substr($dataatualizacao, 10, 6); ?></font></td>
 </tr>
 <tr>
-    <td ><font size = -1><?= utf8_decode($exame[0]->texto); ?></font></td>
+    <td ><font size = -1><?= ($exame[0]->texto); ?></font></td>
 </tr>
 
 <tr>

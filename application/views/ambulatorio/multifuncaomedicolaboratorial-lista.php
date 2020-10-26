@@ -1,4 +1,6 @@
-
+<?
+$data['permissao'] = $this->empresa->listarverificacaopermisao2($this->session->userdata('empresa_id'));
+?>
 <div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
         <h3 class="singular"><a href="#">Multifuncao Laboratorial</a></h3>
@@ -6,7 +8,6 @@
             <?
             $salas = $this->exame->listartodassalas();
             $medicos = $this->operador_m->listarmedicos();
-            $especialidade = $this->exame->listarespecialidade();
             $perfil_id = $this->session->userdata('perfil_id');
             ?>
             <table>
@@ -15,11 +16,11 @@
 
                     <tr>
                         <th class="tabela_title">Salas</th>
-                        <?if ($perfil_id != 4){?>
-                        <th class="tabela_title">Especialidade</th>
-                        <th class="tabela_title">Medico</th>
+                        <? if ($perfil_id != 4) { ?>
+                            <th class="tabela_title">Medico</th>
                         <? } ?>
                         <th class="tabela_title">Data</th>
+                        <th colspan="2" class="tabela_title">Procedimento</th>
                         <th colspan="2" class="tabela_title">Nome</th>
                     </tr>
                     <tr>
@@ -28,44 +29,37 @@
                                 <option value=""></option>
                                 <? foreach ($salas as $value) : ?>
                                     <option value="<?= $value->exame_sala_id; ?>" <?
-                                if (@$_GET['sala'] == $value->exame_sala_id):echo 'selected';
-                                endif;
+                                    if (@$_GET['sala'] == $value->exame_sala_id):echo 'selected';
+                                    endif;
                                     ?>><?php echo $value->nome; ?></option>
                                         <? endforeach; ?>
                             </select>
                         </th>
-                        <?if ($perfil_id != 4){?>
-                        <th class="tabela_title">
-                            <select name="especialidade" id="especialidade" class="size1">
-                                <option value=""></option>
-                                <? foreach ($especialidade as $value) : ?>
-                                    <option value="<?= $value->descricao; ?>" <?
-                                    if (@$_GET['especialidade'] == $value->descricao):echo 'selected';
-                                    endif;
-                                    ?>><?php echo $value->descricao; ?></option>
-                                        <? endforeach; ?>
-                            </select>
-                        </th>
+                        <? if ($perfil_id != 4) { ?>
 
 
-                        <th class="tabela_title">
-                            <select name="medico" id="medico" class="size1">
-                                <option value=""> </option>
-                                <? foreach ($medicos as $value) : ?>
-                                    <option value="<?= $value->operador_id; ?>"<?
-                                    if (@$_GET['medico'] == $value->operador_id):echo 'selected';
-                                    endif;
-                                    ?>>
-                                                <?php echo $value->nome; ?>
 
-                                    </option>
-                                <? endforeach; ?>
+                            <th class="tabela_title">
+                                <select name="medico" id="medico" class="size2">
+                                    <option value=""> </option>
+                                    <? foreach ($medicos as $value) : ?>
+                                        <option value="<?= $value->operador_id; ?>"<?
+                                        if (@$_GET['medico'] == $value->operador_id):echo 'selected';
+                                        endif;
+                                        ?>>
+                                                    <?php echo $value->nome; ?>
 
-                            </select>
-                        </th>
+                                        </option>
+                                    <? endforeach; ?>
+
+                                </select>
+                            </th>
                         <? } ?>
                         <th class="tabela_title">
                             <input type="text"  id="data" alt="date" name="data" class="size1"  value="<?php echo @$_GET['data']; ?>" />
+                        </th>
+                        <th colspan="3" class="tabela_title">
+                            <input type="text" name="txtprocedimento" class="texto03 bestupper" value="<?php echo @$_GET['txtprocedimento']; ?>" />
                         </th>
                         <th colspan="3" class="tabela_title">
                             <input type="text" name="nome" class="texto06 bestupper" value="<?php echo @$_GET['nome']; ?>" />
@@ -145,64 +139,90 @@
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->procedimento; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->situacaolaudo; ?></td>
                                 <? if ($item->situacaolaudo != '') { ?>
-                                <? if (($item->medico_parecer1 == $operador_id && $item->situacaolaudo == 'FINALIZADO') || ($item->situacaolaudo != 'FINALIZADO' && $item->situacaolaudo != '') || $operador_id == 1) { 
-                                    if ($item->grupo == 'ECOCARDIOGRAMA') {
-                                        ?>
-                                        <td class="<?php echo $estilo_linha; ?>" width="40px;"><div class="bt_link">
-                                                <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/carregarlaudoeco/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?>');" >
-                                                    Laudo</a></div>
-                                        </td>
-                                        <?
+                                    <?
+                                    if (($item->medico_parecer1 == $operador_id && $item->situacaolaudo == 'FINALIZADO') || ($item->situacaolaudo != 'FINALIZADO' && $item->situacaolaudo != '') || $operador_id == 1) {
+                                        if ($item->grupo == 'ECOCARDIOGRAMA') {
+                                            ?>
+                                            <td class="<?php echo $estilo_linha; ?>" width="40px;"><div class="bt_link">
+                                                    <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/carregarlaudoeco/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?>');" >
+                                                        Laudo</a></div>
+                                            </td>
+                                            <?
+                                        } else {
+                                            ?>
+                                            <td class="<?php echo $estilo_linha; ?>" width="40px;"><div class="bt_link">
+                                                    <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/carregarlaudolaboratorial/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?>');" >
+                                                        Laudo</a></div>
+                                            </td>
+                                            <?
+                                        }
                                     } else {
                                         ?>
-                                        <td class="<?php echo $estilo_linha; ?>" width="40px;"><div class="bt_link">
-                                                <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/carregarlaudolaboratorial/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?>');" >
-                                                    Laudo</a></div>
+                                        <td class="<?php echo $estilo_linha; ?>" width="40px;"><font size="-2">
+                                            <a>Bloqueado</a></font>
                                         </td>
-                                        <?
-                                    }
-                                 } else { ?>
-                                    <td class="<?php echo $estilo_linha; ?>" width="40px;"><font size="-2">
-                                        <a>Bloqueado</a></font>
-                                    </td>
-                                <? }
-                                ?>
-                                
+            <? }
+            ?>
+
                                     <td class="<?php echo $estilo_linha; ?>" width="70px;"><div class="bt_link">
                                             <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaolaudolaboratorial/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>');">
                                                 Imprimir</a></div>
                                     </td>
+
+
+                                    <?
+                                    if (($perfil_id == 20 && $data['permissao'][0]->gerente_cancelar_atendimento == 't') || ($perfil_id == 1)) {
+                                        ?>
+                                        <td    class="<?php echo $estilo_linha; ?>" width="70px;"><div class="bt_link">
+                                                <a href="<?= base_url() ?>ambulatorio/exame/examecancelamento/<?= $item->exame_id ?>/<?= $item->agenda_exames_nome_id ?> /<?= $item->agenda_exames_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?> ">
+                                                    Cancelar  </a> </div>
+                                        </td>  
+                                        
+                                        <?
+                                    }
+                                    ?>
+
                                 <? } else { ?>
-                                    <td class="<?php echo $estilo_linha; ?>" width="70px;"><font size="-2">
-                                        <a></a></font>
-                                    </td>
-                                    <td class="<?php echo $estilo_linha; ?>" width="70px;"><font size="-2">
-                                        <a></a></font>
-                                    </td>
-                                    <td class="<?php echo $estilo_linha; ?>" width="70px;"><font size="-2">
-                                        <a></a></font>
-                                    </td>
-                                    <? }?>
-                                </tr>
+            <? if ($verifica == 3) { ?>
+                                        <td class="<?php echo $estilo_linha; ?>" width="70px;" colspan="">
+                                            <div class="bt_link">
+                                                <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/chamarpacientesalaespera/<?= $item->agenda_exames_id ?>');" >Chamar</a>
+                                            </div>
+                                        </td>
+                                        <td class="<?php echo $estilo_linha; ?>" width="70px;" colspan="">
+                                            <div class="bt_link">
+                                                <a target="_blank" onclick="javascript: return confirm('Deseja realmente confirmar o paciente?');" href="<?= base_url() ?>ambulatorio/exame/enviarsalaesperamedicolaboratorial/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?>/<?= $item->guia_id ?>/<?= $item->agenda_exames_id; ?>/<?= $item->medico_consulta_id ?>">Confirmar</a>
+                                            </div>
+                                        </td>
+            <? } else { ?>
+                                        <td colspan="2" class="<?php echo $estilo_linha; ?>" width="70px;"><font size="-2">
+                                            <a></a></font>
+                                        </td>
+            <? } ?>
+            <!--                                    <td class="<?php echo $estilo_linha; ?>" width="70px;"><font size="-2">
+                                    <a></a></font>
+                                </td>-->
+        <? } ?>
+                            </tr>
 
-                            </tbody>
-                            <?php
-                        }
+                        </tbody>
+                        <?php
                     }
-                    ?>
-                    <tfoot>
-                        <tr>
-                            <th class="tabela_footer" colspan="10">
-                                <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
-                                Total de registros: <?php echo $total; ?>
-                            </th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+                }
+                ?>
+                <tfoot>
+                    <tr>
+                        <th class="tabela_footer" colspan="10">
+<?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
+                            Total de registros: <?php echo $total; ?>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
+    </div>
 
-    </div> <!-- Final da DIV content -->
+</div> <!-- Final da DIV content -->
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.8.5.custom.min.js" ></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-meiomask.js" ></script>
@@ -210,8 +230,28 @@
 <!--<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>-->
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>    
 <script type="text/javascript">
-$(document).ready(function () {
+                                    $(document).ready(function () {
 //alert('teste_parada');
+                                        if ($('#especialidade').val() != '') {
+                                            $.getJSON('<?= base_url() ?>autocomplete/medicoespecialidade', {txtcbo: $('#especialidade').val(), ajax: true}, function (j) {
+                                                var options = '<option value=""></option>';
+                                                var slt = '';
+                                                for (var c = 0; c < j.length; c++) {
+                                                    if (j[0].operador_id != undefined) {
+                                                        if (j[c].operador_id == '<?= @$_GET['medico'] ?>') {
+                                                            slt = 'selected';
+                                                        }
+                                                        options += '<option value="' + j[c].operador_id + '" ' + slt + '>' + j[c].nome + '</option>';
+                                                        slt = '';
+                                                    }
+                                                }
+                                                $('#medico').html(options).show();
+                                                $('.carregando').hide();
+
+
+
+                                            });
+                                        }
                                         $(function () {
                                             $('#especialidade').change(function () {
 
@@ -259,7 +299,7 @@ $(document).ready(function () {
 
 
                                                     });
-                                                    
+
                                                 }
                                             });
                                         });

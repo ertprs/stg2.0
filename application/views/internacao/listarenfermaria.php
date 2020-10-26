@@ -7,17 +7,45 @@
     <div id="accordion">
         <h3><a href="#">Manter Enfermarias</a></h3>
         <div>
+            <form method="get" action="<?php echo base_url() ?>internacao/internacao/pesquisarenfermaria">
+                <table>
+                    <tr>
+                        <th class="tabela_title" colspan="1">
+                            Nome
+                        </th>
+                        <th class="tabela_title" colspan="1">
+                            Unidade
+                        </th>
+                    </tr>
+                    <tr>
+                        <? $unidade = $this->unidade_m->listaunidadepacientes(); ?>
+                        <th class="tabela_title" colspan="1">
+                            <input type="text" name="nome" value="<?php echo @$_GET['nome']; ?>" />
+                        </th>
+                        <th class="tabela_title" colspan="1">
+                            <select name="unidade" id="unidade" class="size2" >
+                                <option value=''>TODOS</option>
+                                <?php
+                                foreach ($unidade as $item) {
+                                    ?>
+                                    <option <?=($item->internacao_unidade_id == @$_GET['unidade'])? 'selected' : '';?> value="<?php echo $item->internacao_unidade_id; ?>">
+                                        <?php echo $item->nome; ?>
+                                    </option>
+                                    <?php
+                                }
+                                ?> 
+                            </select>
+                        </th>
+                        <th class="tabela_title" colspan="1">
+                            <button type="submit" name="enviar">Pesquisar</button>
+                        </th>
+                        
+                    </tr>
+                </table>
+            </form>
             <table>
                 <thead>
-                    <tr>
-                        <th class="tabela_title" colspan="4">
-                            Lista de Enfermarias
-                <form method="get" action="<?php echo base_url() ?>internacao/internacao/pesquisarenfermaria">
-                    <input type="text" name="nome" value="<?php echo @$_GET['nome']; ?>" />
-                    <button type="submit" name="enviar">Pesquisar</button>
-                </form>
-                </th>
-                </tr>
+                
                 <tr>
                     <th class="tabela_header">Codigo</th>
                     <th class="tabela_header">Nome</th>
@@ -28,6 +56,7 @@
                 </tr>
                 </thead>
                 <?php
+                 $perfil_id = $this->session->userdata('perfil_id');
                 $url = $this->utilitario->build_query_params(current_url(), $_GET);
                 $consulta = $this->enfermaria_m->listaenfermaria($_GET);
                 $total = $consulta->count_all_results();
@@ -54,11 +83,14 @@
                                         </center></a>
                                 </td>
                                 <td class="<?php echo $estilo_linha; ?>" width="30px;">
+                                    <?php if($this->session->userdata('perfil_id') != 25 && $perfil_id != 18 && $perfil_id != 20){?>
+
                                     <a onclick="javascript: return confirm('Deseja realmente excluir a Enfermaria?');"
                                        href="<?=base_url()?>internacao/internacao/excluirenfermaria/<?= $item->internacao_enfermaria_id ?>">
                                         <center><img border="0" title="Excluir" alt="Excluir"
                                                     src="<?=  base_url()?>img/form/page_white_delete.png" /></center>
                                     </a>
+                                    <?php }?>
                                 </td>
                             </tr>
                         </tbody>

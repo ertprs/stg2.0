@@ -1,11 +1,11 @@
 <div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
-        <h3><a href="#">Gerar relatorio Conferencia</a></h3>
+        <h3><a href="#">Relatório Procedimentos Convênio</a></h3>
         <div>
             <form method="post" action="<?= base_url() ?>ambulatorio/procedimento/gerarelatorioprocedimentoconvenio">
                 <dl>
                     <dt>
-                    <label>Convenio</label>
+                    <label>Convênio</label>
                     </dt>
                     <dd>
                         <select name="convenio" id="convenio" class="size2">
@@ -25,6 +25,28 @@
                             <? foreach ($grupo as $value) : ?>
                                 <option value="<?= $value->nome; ?>" ><?php echo $value->nome; ?></option>
                             <? endforeach; ?>
+
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Empresa</label>
+                    </dt>
+                    <dd>
+                        <select name="empresa" id="empresa" class="size2">
+                            <option value="0">TODOS</option>
+                            <? foreach ($empresa as $value) : ?>
+                                <option value="<?= $value->empresa_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                    <label>Gerar Planilha</label>
+                    </dt>
+                    <dd>
+                        <select name="planilha" id="planilha" class="size1" >
+                            <option value='0' >NÃO</option>
+                            <option value='1' >SIM</option>
+
 
                         </select>
                     </dd>

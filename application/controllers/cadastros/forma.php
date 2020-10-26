@@ -16,6 +16,8 @@ class Forma extends BaseController {
     function Forma() {
         parent::Controller();
         $this->load->model('cadastro/forma_model', 'forma');
+        $this->load->model('ambulatorio/guia_model', 'guia');
+        $this->load->model('seguranca/operador_model', 'operador_m');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -36,16 +38,18 @@ class Forma extends BaseController {
     function carregarforma($forma_entradas_saida_id) {
         $obj_forma = new forma_model($forma_entradas_saida_id);
         $data['obj'] = $obj_forma;
-        //$this->carregarView($data, 'giah/servidor-form');
+        // $data['empresa'] = $this->guia->listarempresa2();
+        $data['empresa'] = $this->guia->listarempresas();
+        $data['perfil'] = $this->operador_m->listarPerfil();
         $this->loadView('cadastros/forma-form', $data);
     }
 
     function excluir($forma_entradas_saida_id) {
         $valida = $this->forma->excluir($forma_entradas_saida_id);
         if ($valida == 0) {
-            $data['mensagem'] = array('Sucesso ao excluir a conta' ,'success');
+            $data['mensagem'] = 'Sucesso ao excluir a Forma';
         } else {
-            $data['mensagem'] = array('Erro ao excluir a conta. Operação Cancelada.', 'error');
+            $data['mensagem'] = 'Erro ao excluir a forma. Opera&ccedil;&atilde;o cancelada.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/forma");
@@ -54,13 +58,25 @@ class Forma extends BaseController {
     function gravar() {
         $exame_forma_id = $this->forma->gravar();
         if ($exame_forma_id == "-1") {
-            $data['mensagem'] = array('Erro ao gravar a Forma. Opera&ccedil;&atilde;o cancelada.', 'error');
+            $data['mensagem'] = 'Erro ao gravar a Forma. Opera&ccedil;&atilde;o cancelada.';
         } else {
-            $data['mensagem'] = array('Sucesso ao gravar a Forma.', 'success');
+            $data['mensagem'] = 'Sucesso ao gravar a Forma.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/forma");
     }
+    
+//    function listarcontas() {
+//        header('Access-Control-Allow-Origin: *');
+//
+//        $result = $this->forma->listar2();
+//
+//        $json_empresas = json_decode($result[0]->empresa_id);
+//
+//        $result2 = $this->forma->listarcontas($json_empresas);
+//
+//        echo json_encode($result2);
+//    }
 
     private function carregarView($data = null, $view = null) {
         if (!isset($data)) {

@@ -4,14 +4,29 @@
         <div>
             <form name="form_faturar" id="form_faturar" action="<?= base_url() ?>ambulatorio/guia/gravarfaturadoconvenio" method="post">
                 <fieldset>
-
                     <dl class="dl_desconto_lista">
                         <dt>
                         <label>Tem certeza que deseja Faturar?</label>
                         </dt>
                         <dd>
-                            <input type="text" name="valorafaturar" id="valorafaturar" class="texto01" value="<?= $exame[0]->valor_total; ?>" />
+                            <?php 
+                            if ($exame[0]->ajuste_cbhpm == 't' && $exame[0]->valor != $exame[0]->valor_total) { 
+                                $valor = $exame[0]->valor_total;
+                            }else{
+                                $valor = $exame[0]->valor;
+                            } 
+                            ?>
+                            <input type="text" name="valorafaturar" id="valorafaturar" class="texto01" value="<?= $valor; ?>" />
                             <input type="hidden" name="agenda_exames_id" id="agenda_exames_id" class="texto01" value="<?= $agenda_exames_id; ?>"/>
+                        </dd>
+                        <dt>
+                        <label>Carater Atendimento</label>
+                        </dt>
+                        <dd>
+                            <select name="carater_xml" id="carater_xml" style="width: 100px">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>
                         </dd>
                     </dl>    
 

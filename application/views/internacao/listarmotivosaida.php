@@ -27,8 +27,9 @@
                 </tr>
                 </thead>
                 <?php
+                $perfil_id = $this->session->userdata('perfil_id'); 
                 $url = $this->utilitario->build_query_params(current_url(), $_GET);
-                $consulta = $this->motivosaida->mantermotivosaida($_GET);
+                $consulta = $this->motivosaida->listamotivosaida($_GET);
                 $total = $consulta->count_all_results();
                 $limit = 10;
                 isset($_GET['per_page']) ? $pagina = $_GET['per_page'] : $pagina = 0;
@@ -37,7 +38,7 @@
                     ?>
                     <tbody>
                         <?php
-                        $lista = $this->motivosaida->mantermotivosaida($_GET)->orderby('nome')->limit($limit, $pagina)->get()->result();
+                        $lista = $this->motivosaida->listamotivosaida($_GET)->orderby('nome')->limit($limit, $pagina)->get()->result();
                         $estilo_linha = "tabela_content01";
                         foreach ($lista as $item) {
                             ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
@@ -52,11 +53,15 @@
                                         </center></a>
                                 </td>
                                 <td class="<?php echo $estilo_linha; ?>" width="30px;">
+                                    <?php if($this->session->userdata('perfil_id') != 25 && $perfil_id != 18 && $perfil_id != 20){?>
+
                                     <a onclick="javascript: return confirm('Deseja realmente excluir o Motivo de Saida <?= $item->nome ?>');"
                                        href="<?=base_url()?>internacao/internacao/excluirmotivosaida/<?= $item->internacao_motivosaida_id ?>">
                                         <img border="0" title="Excluir" alt="Excluir"
                                      src="<?=  base_url()?>img/form/page_white_delete.png" />
+                                        
                                     </a>
+                                    <?php }?>
                                 </td>
                                 
                             </tr>

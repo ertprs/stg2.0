@@ -1,3 +1,4 @@
+<meta charset="utf8"/>
 <div class="content"> <!-- Inicio da DIV content -->
     <?
     $i = 0;
@@ -5,7 +6,7 @@
     <table>
         <thead>
 
-            <? if (count($empresa) > 0) { ?>
+            <? if (count(@$empresa) > 0) { ?>
                 <tr>
                     <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4"><?= $empresa[0]->razao_social; ?></th>
                 </tr>
@@ -18,19 +19,41 @@
                 <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">FATURAMENTO POR GRUPO DE PRODUTO</th>
             </tr>
             <tr>
-                <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">PERIODO: <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_inicio) ) ); ?> ate <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_fim) ) ); ?></th>
+                <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">PERIODO: <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_inicio))); ?> ate <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_fim))); ?></th>
             </tr>
-            <? if ($grupo == "0") { ?>
+            <? if (count(@$medico) > 0) { ?>
                 <tr>
-                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">ESPECIALIDADE: TODOS</th>
-                </tr>
-            <? } elseif ($grupo == "1") { ?>
-                <tr>
-                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">ESPECIALIDADE: SEM RM</th>
+                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">MEDICO: <?= (@$medico[0]->operador != '')? $medico[0]->operador : 'TODOS'; ?></th>
                 </tr>
             <? } else { ?>
                 <tr>
-                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">ESPECIALIDADE: <?= $grupo; ?></th>
+                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">TODAS AS CLINICAS</th>
+                </tr>
+            <? } ?>
+            <? if (count(@$_POST['grupo']) == 0 || @in_array('0', @$_POST['grupo'])) { ?>
+                <tr>
+                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">ESPECIALIDADE: TODOS</th>
+                </tr>
+            <? } else { ?>
+                <tr>
+                    <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">ESPECIALIDADE: 
+                      <?
+                        if (@$_POST['grupo'] == '1') {
+                            echo "SEM RM/TOMOGRAFIA";
+                        }
+                        if (count($_POST['grupo']) > 1 && @$_POST['grupo'] != '1') {
+                            foreach ($_POST['grupo'] as $item) {
+                                if ($item == '1') {
+                                    echo 'SEM RM/TOMOGRAFIA' . ', ';
+                                } else {
+                                    echo $item . ', ';
+                                }
+                            }
+                        }else{
+                            echo $_POST['grupo'];                            
+                        }
+                        
+                        ?></th>
                 </tr>
             <? } ?>
             <? if ($conveniotipo == "0") { ?>
@@ -45,7 +68,7 @@
                 <tr>
                     <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">CONVENIOS</th>
                 </tr>
-            <?
+                <?
             } else {
                 $i = 1;
                 ?>
@@ -53,7 +76,7 @@
                     <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">CONVENIO: <?= $convenios[0]->nome; ?></th>
                 </tr>
 
-<? } ?>
+            <? } ?>
             <tr>
                 <th style='width:10pt;border:solid windowtext 1.0pt;
                     border-bottom:none;mso-border-top-alt:none;border-left:
@@ -65,6 +88,8 @@
                 <tr>
                     <td class="tabela_teste"><font size="-1">Grupo de produtos</th>
                     <td><font width="180px;"></td>
+                    <td class="tabela_teste"><font size="-1">Grupo</th>
+                    <td class="tabela_teste"><font size="-1">Código Tuss</th>
                     <td class="tabela_teste"><font size="-1">Quantidade</th>
                     <td class="tabela_teste" width="80px;"><font size="-1">Valor</th>
                     <td class="tabela_teste" width="80px;"><font size="-1">Percentual</th>
@@ -100,18 +125,19 @@
                             $y++;
                             ?>
                             <tr>
-                                <td colspan="4"><font ><b><?= utf8_decode($item->convenio); ?></b></td>
+                                <td colspan="4"><font ><b><?= ($item->convenio); ?></b></td>
                             </tr>
                         <? }
                         ?>
                         <tr>
                             <td><font width="180px;"></td>
                             <td><font size="-2"><?= $item->nome; ?></td>
+                            <td><font size="-2"><?= $item->grupo; ?></td>
+                            <td><font size="-2"><?= $item->codigo; ?></td>
                             <td><font size="-2"><?= $item->quantidade; ?></td>
                             <td><font size="-2"><?= number_format($item->valor, 2, ',', '.') ?></td>
                         </tr>
                         <?php
-    
                         $qtde = $qtde + $item->quantidade;
                         $qtdetotal = $qtdetotal + $item->quantidade;
                         $valor = $valor + $item->valor;
@@ -121,7 +147,9 @@
                         ?>  
                         <tr>
                             <td><font width="180px;"></td>
-                            <td ><font size="-1"><b>TOTAL <?= utf8_decode($convenio); ?></b></td>
+                            <td ><font size="-1"><b>TOTAL <?= ($convenio); ?></b></td>
+                            <td><font width="180px;"></td>
+                            <td><font width="180px;"></td>
                             <td ><font size="-1"><b><?= $qtde; ?></b></td>
                             <td ><font size="-1"><b><?= number_format($valor, 2, ',', '.'); ?></b></td>
                             <td ><font size="-1"><b><?= substr($perc, 0, 4); ?>%</b></td>
@@ -130,11 +158,13 @@
                         <tr><td></td></tr>
                         <tr><td></td></tr>
                         <tr>
-                            <td colspan="3"><font ><b><?= utf8_decode($item->convenio); ?></b></td>
+                            <td colspan="3"><font ><b><?= ($item->convenio); ?></b></td>
                         </tr>
                         <tr>
                             <td><font width="180px;"></td>
                             <td><font size="-2"><?= $item->nome; ?></td>
+                            <td><font size="-2"><?= $item->grupo; ?></td>
+                            <td><font size="-2"><?= $item->codigo; ?></td>
                             <td><font size="-2"><?= $item->quantidade; ?></td>
                             <td><font size="-2"><?= number_format($item->valor, 2, ',', '.') ?></td>
 
@@ -157,15 +187,18 @@
                 ?>
                 <tr>
                     <td><font width="180px;"></td>
-                    <td ><font size="-1"><b>TOTAL <?= utf8_decode($convenio); ?> </b></td>
+                    <td ><font size="-1"><b>TOTAL <?= ($convenio); ?> </b></td>
+                    <td><font width="180px;"></td>
+                    <td><font width="180px;"></td>
                     <td ><font size="-1"><b><?= $qtde; ?></b></td>
+                   
                     <td ><font size="-1"><b><?= number_format($valor, 2, ',', '.'); ?></b></td>
                     <td ><font size="-1"><b><?= substr($perc, 0, 4); ?>%</b></td>
                 </tr>
             </tbody>
         </table>
         <hr>
-     
+
     <? } else {
         ?>
         <h4>N&atilde;o h&aacute; resultados para esta consulta.</h4>
@@ -181,7 +214,7 @@
 
 
 
-    $(function() {
+    $(function () {
         $("#accordion").accordion();
     });
 

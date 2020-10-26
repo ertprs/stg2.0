@@ -11,6 +11,9 @@ require_once APPPATH . 'controllers/base/BaseController.php';
  * @package Model
  * @subpackage GIAH
  */
+// Estamos atualmente na versão 1.0.00043
+// Dia 18/04/2019
+
 class Versao extends BaseController {
 
     function Versao() {
@@ -29,6 +32,13 @@ class Versao extends BaseController {
     function pesquisar($args = array()) {
 
         $this->loadView('ambulatorio/versao-lista', $args);
+
+//            $this->carregarView($data);
+    }
+
+    function pesquisardetalhes($versao) {
+        $data['lista'] = $this->versao->listardetalhesversao($versao);
+        $this->loadView('ambulatorio/versaodetalhes-lista', $data);
 
 //            $this->carregarView($data);
     }

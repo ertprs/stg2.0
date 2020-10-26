@@ -19,6 +19,7 @@
                 <label>Convênio</label>
                 <select name="convenio" id="procedimento" class="size4" required>
                     <option value="">SELECIONE</option>
+                      <option value="TODOS">TODOS</option>
                     <? foreach ($convenio as $value) : ?>
                         <option value="<?= $value->convenio_id; ?>"><?php echo $value->nome; ?></option>
                     <? endforeach; ?>
@@ -35,41 +36,41 @@
     </form>
 </fieldset>
 
-        <fieldset>
-<?
-$contador = count($valor);
-if ($contador > 0) {
-    ?>
-            <table id="table_agente_toxico" border="0">
-                <thead>
-
-                    <tr>
-                        <th class="tabela_header">Convenio</th>
-                        <th class="tabela_header">Valor</th>
-                        <th class="tabela_header">&nbsp;</th>
-                    </tr>
-                </thead>
+<fieldset>
     <?
-    $estilo_linha = "tabela_content01";
-    foreach ($valor as $item) {
-        ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
+    $contador = count($valor);
+    if ($contador > 0) {
         ?>
-                        <tbody>
-                            <tr>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->convenio; ?></td>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->valor; ?></td>
-                                <td class="<?php echo $estilo_linha; ?>" width="100px;"><div class="bt_link">
-                                    <a href="<?= base_url() ?>ambulatorio/procedimento/excluirprocedimentoconveniovalor/<?= $item->procedimento_convenio_produto_valor_id; ?>/<?= $item->procedimento_tuss_id; ?>">Excluir
-                                    </a></div>
+        <table id="table_agente_toxico" border="0">
+            <thead>
 
-                                </td>
-                            </tr>
+                <tr>
+                    <th class="tabela_header">Convênio</th>
+                    <th class="tabela_header">Valor</th>
+                    <th class="tabela_header">&nbsp;</th>
+                </tr>
+            </thead>
+            <?
+            $estilo_linha = "tabela_content01";
+            foreach ($valor as $item) {
+                ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
+                ?>
+                <tbody>
+                    <tr>
+                        <td class="<?php echo $estilo_linha; ?>"><?= $item->convenio; ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor, 2, ',', '.'); ?></td>
+                        <td class="<?php echo $estilo_linha; ?>" width="100px;"><div class="bt_link">
+                                <a onclick="javascript: return confirm('Deseja realmente excluir o procedimento? Irá excluir também os procedimentos vinculados a esse No Percentual Médico');" href="<?= base_url() ?>ambulatorio/procedimento/excluirprocedimentoconveniovalor/<?= $item->procedimento_convenio_id; ?>/<?= $item->procedimento_tuss_id; ?>">Excluir
+                                </a></div>
 
-                        </tbody>
-        <?
-    }
-}
-?>
+                        </td>
+                    </tr>
+
+                </tbody>
+                <?
+            }
+        }
+        ?>
         <tfoot>
             <tr>
                 <th class="tabela_footer" colspan="4">

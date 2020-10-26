@@ -22,45 +22,47 @@
                         <th class="tabela_header">Codigo</th>
                         <th class="tabela_header">Descricao</th>
                         <th class="tabela_header" colspan=""><center></center></th>
-                    </tr>
+                </tr>
                 </thead>
                 <?php
-                    $url      = $this->utilitario->build_query_params(current_url(), $_GET);
-                    $consulta = $this->centrocirurgico_m->listargrauparticipacao($_GET);
-                    $total    = $consulta->count_all_results();
-                    $limit    = 20;
-                    isset ($_GET['per_page']) ? $pagina = $_GET['per_page'] : $pagina = 0;
-
-                    if ($total > 0) {
-                ?>
-                <tbody>
-                    <?php
-                        $lista = $this->centrocirurgico_m->listargrauparticipacao($_GET)->limit($limit, $pagina)->get()->result();
+                $perfil_id = $this->session->userdata('perfil_id');
+                $url = $this->utilitario->build_query_params(current_url(), $_GET);
+                $consulta = $this->centrocirurgico_m->listargrauparticipacao($_GET);
+                $total = $consulta->count_all_results();
+                $limit = 20;
+                isset($_GET['per_page']) ? $pagina = $_GET['per_page'] : $pagina = 0;
+                if ($total > 0) {
+                    ?>
+                    <tbody>
+                        <?php
+                        $lista = $this->centrocirurgico_m->listargrauparticipacao($_GET)->orderby('codigo')->limit($limit, $pagina)->get()->result();
                         $estilo_linha = "tabela_content01";
                         foreach ($lista as $item) {
                             ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
-                     ?>
+                            ?>
                             <tr>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->codigo; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->descricao; ?></td>
+                               
                                 <td class="<?php echo $estilo_linha; ?>" width="60px;">
+                                     <?php if($this->session->userdata('perfil_id') != 25 && $perfil_id != 18 && $perfil_id != 20){?>
                                     <a onclick="javascript: return confirm('Deseja realmente excluir <?= $item->descricao; ?>');"
                                        href="<?= base_url() ?>centrocirurgico/centrocirurgico/excluirgrauparticipacao/<?= $item->grau_participacao_id; ?>" class="delete"></a>
-                                </td>
-
-                        </tr>
-
+                                     <?php }?> 
+                                </td> 
+                              
+                            </tr>
                         </tbody>
                         <?php
-                                }
-                            }
-                        ?>
-                        <tfoot>
-                            <tr>
-                                <th class="tabela_footer" colspan="6">
-                                   <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
+                    }
+                }
+                ?>
+                <tfoot>
+                    <tr>
+                        <th class="tabela_footer" colspan="6">
+                            <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
                             Total de registros: <?php echo $total; ?>
-                                </th>
+                        </th>
                     </tr>
                 </tfoot>
             </table>
@@ -70,8 +72,8 @@
 </div> <!-- Final da DIV content -->
 <script type="text/javascript">
 
-    $(function() {
-        $( "#accordion" ).accordion();
+    $(function () {
+        $("#accordion").accordion();
     });
 
 </script>

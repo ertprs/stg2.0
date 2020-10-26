@@ -46,7 +46,7 @@
                 <td ><font size="-1"><?= $item->nome; ?></font></td>
                 <td ><font size="-1"><?= $item->descricao_resumida; ?></font></td>
                 <td ><font size="-1"><?= $tempo; ?></font></td>
-                <td ><font size="-1"><?= utf8_decode($item->descricao); ?></font></td>
+                <td ><font size="-1"><?= ($item->descricao); ?></font></td>
                 <td ><font size="-1"><?= $item->status; ?><a href="<?= base_url() ?>cadastros/pacientes/carregarpacientecensostatus/<?= $item->prontuario; ?>/<?= $item->nome; ?>">
                             <img border="0" title="Alterar registro" alt="Detalhes"
                                  src="<?= base_url() ?>img/form/page_white_edit.png" />
@@ -83,7 +83,7 @@
         ?>
             <tr>
                 <td ><font size="-1"><?= $item->demanda; ?></font></td>
-                <td ><font size="-1"><?= utf8_decode($item->descricao); ?></font></td>
+                <td ><font size="-1"><?= ($item->descricao); ?></font></td>
                 <td ><font size="-1"><a onclick="javascript: return confirm('Deseja realmente fechar a demanda ');"
                                        href="<?=base_url()?>cadastros/pacientes/atualizardemanda/<?=$item->censo_demanda_diretoria; ?>">
                                         <img border="0" title="Fechar" alt="Fechar"

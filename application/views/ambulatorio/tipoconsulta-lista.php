@@ -2,11 +2,11 @@
 <div class="content"> <!-- Inicio da DIV content -->
     <div class="bt_link_new">
         <a href="<?php echo base_url() ?>ambulatorio/tipoconsulta/carregartipoconsulta/0">
-            Novo Tipo consulta
+            Novo Tipo Agenda
         </a>
     </div>
     <div id="accordion">
-        <h3 class="singular"><a href="#">Tipo cancelamento</a></h3>
+        <h3 class="singular"><a href="#">Tipo Agenda</a></h3>
         <div>
             <table>
                 <thead>
@@ -24,6 +24,7 @@
                     </tr>
                 </thead>
                 <?php
+                    $perfil_id = $this->session->userdata('perfil_id');
                     $url      = $this->utilitario->build_query_params(current_url(), $_GET);
                     $consulta = $this->tipoconsulta->listar($_GET);
                     $total    = $consulta->count_all_results();
@@ -45,9 +46,11 @@
                                 <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
                                     <a href="<?= base_url() ?>ambulatorio/tipoconsulta/carregartipoconsulta/<?= $item->ambulatorio_tipo_consulta_id ?>">Editar</a>
                             </td>
+                            <?php if($perfil_id != 18 && $perfil_id != 20){ ?>
                                 <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
                                     <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Tipo?');" href="<?= base_url() ?>ambulatorio/tipoconsulta/excluir/<?= $item->ambulatorio_tipo_consulta_id ?>">Excluir</a>
-                            </td>
+                                </td>
+                            <?php }?>
                         </tr>
 
                         </tbody>

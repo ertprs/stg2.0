@@ -2,12 +2,14 @@
     <div id="accordion">
         <h3><a href="#">Carregar imagem Contas a pagar </a></h3>
         <div >
-            <?= form_open_multipart(base_url() . 'cadastros/contaspagar/importarimagemcontasapagar'); ?>
+            <?// form_open_multipart(base_url() . 'cadastros/contaspagar/importarimagemcontasapagar'); ?>
+            <form method="POST" action="<?=base_url() . 'cadastros/contaspagar/importarimagemcontasapagar'?>"  enctype="multipart/form-data">
             <label>Informe o arquivo para importa&ccedil;&atilde;o</label><br>
-            <input type="file" name="userfile"/>
+            <input type="file" multiple="" name="arquivos[]"/>
             <button type="submit" name="btnEnviar">Enviar</button>
             <input type="hidden" name="paciente_id" value="<?= $financeiro_contaspagar_id; ?>" />
-            <?= form_close(); ?>
+            </form>
+            <?// form_close(); ?>
 
         </div>
 

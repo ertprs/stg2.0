@@ -1,99 +1,100 @@
-<div id="page-wrapper"> <!-- Inicio da DIV content -->
-    <div class="row">
-        <!--<h3 class="singular"><a href="#">Manter Modelos de Declaração</a></h3>-->
-        <div class="col-lg-12">
-            <div class="panel panel-default">
 
-                <div class="table-responsive" id="pesquisar">
-                    <form method="post" action="<?= base_url() ?>ambulatorio/modeloreceita/pesquisar">
-                        <table width="100%" class="table " id="dataTables-example">
-                            <tr class="info">
-                                <th>Nome</th>
+<div class="content"> <!-- Inicio da DIV content -->
+    <div class="bt_link_new">
+        <a href="<?php echo base_url() ?>ambulatorio/modeloreceita/carregarmodeloreceita/0">
+            Novo Modelo
+        </a>
+    </div>
+    <div id="accordion">
+        <h3 class="singular"><a href="#">Modelo Receituário Simples</a></h3>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="5" class="tabela_title">
+                            <form method="get" action="<?= base_url() ?>ambulatorio/modeloreceita/pesquisar">
+                                <input type="text" name="nome" class="texto10 bestupper" value="<?php echo @$_GET['nome']; ?>" />
+                                <button type="submit" id="enviar">Pesquisar</button>
+                            </form>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="tabela_header">Nome</th>
+                        <th class="tabela_header">Medico</th>
+                        <th class="tabela_header" colspan="4"><center>Detalhes</center></th>
+                    </tr>
+                </thead>
+                <?php
+                    $empresapermissao = $this->guia->listarempresapermissoes();
+                    $url      = $this->utilitario->build_query_params(current_url(), $_GET);
+                    $consulta = $this->modeloreceita->listar($_GET);
+                    $total    = $consulta->count_all_results();
+                    $limit    = 10;
+                    isset ($_GET['per_page']) ? $pagina = $_GET['per_page'] : $pagina = 0;
 
-                                <th style="text-align: center;">Ações</th>
-                            </tr> 
-                            <tr class="">
-                                <td><input type="text" name="nome" id="" class="form-control" alt="date" value="<?php echo @$_POST['nome']; ?>" /></td>
-                                <td style="text-align: center;"><button type="submit" class="btn btn-default btn-outline btn-danger" name="enviar"><i class="fa fa-search fa-1x"></i></button></td>
-                            </tr> 
+                    if ($total > 0) {
+                ?>
+                <tbody>
+                    <?php
+                        $lista = $this->modeloreceita->listar($_GET)->limit($limit, $pagina)->orderby('nome')->get()->result();
+                        $estilo_linha = "tabela_content01";
+                        foreach ($lista as $item) {
+                            ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
+                     ?>
+                            <tr>
+                                <td class="<?php echo $estilo_linha; ?>"><?= $item->nome; ?></td>
+                                <td class="<?php echo $estilo_linha; ?>"><?= $item->medico; ?></td>
+                                
+                                <? 
+                                if (@$empresapermissao[0]->carregar_modelo_receituario == 't') { 
+                                    if (@$item->carregar_automaticamente != 't') { ?>
+                                        <td class="<?php echo $estilo_linha; ?>" width="100px;">
+                                            <a href="<?= base_url() ?>ambulatorio/modeloreceita/ativarmodeloreceitaautomatico/<?= $item->ambulatorio_modelo_receita_id ?>">
+                                                Ativar
+                                            </a>
+                                        </td>
+                                    <? } else { ?>
+                                        <td class="<?php echo $estilo_linha; ?>" width="100px;">
+                                            <a href="<?= base_url() ?>ambulatorio/modeloreceita/desativarmodeloreceitaautomatico/<?= $item->ambulatorio_modelo_receita_id ?>">
+                                                Desativar
+                                            </a>
+                                        </td>
+                                    <? } 
+                                } ?>
+                                <td class="<?php echo $estilo_linha; ?>" width="100px;">
+                                    <a href="<?= base_url() ?>ambulatorio/modeloreceita/carregarmodeloreceita/<?= $item->ambulatorio_modelo_receita_id ?>">
+                                        editar
+                                    </a>
+                                </td>
+                                <td class="<?php echo $estilo_linha; ?>" width="100px;">
+                                    <a href="<?= base_url() ?>ambulatorio/modeloreceita/excluirmodelo/<?= $item->ambulatorio_modelo_receita_id ?>">
+                                        Excluir
+                                    </a>
+                                </td>
+                            </tr>
 
-                        </table> 
-                    </form>
-                </div>
-                <div class="panel-body">
-                    <a class="btn btn-outline btn-danger" href="<?php echo base_url() ?>ambulatorio/modeloreceita/carregarmodeloreceita/0">
-                        <i class="fa fa-plus fa-w"></i> Novo Modelo
-                    </a>
-                    <div class="table-responsive" id="pesquisar">
-                        <table width="100%" class="table table-striped table-bordered table-hover " id="dataTables-example">
-                            <thead>
-                                <tr>
-                                    <th class="tabela_header">Nome</th>
-                                    <th class="tabela_header">Medico</th>
-                                    <th class="tabela_acoes">Ações</th>
-
-                                </tr>
-                            </thead>
-                            <?php
-                            $url = $this->utilitario->build_query_params(current_url(), $_POST);
-                            $consulta = $this->modeloreceita->listar($_POST);
-                            $total = $consulta->count_all_results();
-                            $limit = 10;
-                            isset($_POST['per_page']) ? $pagina = $_POST['per_page'] : $pagina = 0;
-
-                            if ($total > 0) {
-                                ?>
-                                <tbody>
-                                    <?php
-                                    $lista = $this->modeloreceita->listar($_POST)->limit($limit, $pagina)->orderby('nome')->get()->result();
-                                    $estilo_linha = "tabela_content01";
-                                    foreach ($lista as $item) {
-                                        ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
-                                        ?>
-                                        <tr>
-                                            <td class="<?php echo $estilo_linha; ?>"><?= $item->nome; ?></td>
-                                            <td class="<?php echo $estilo_linha; ?>"><?= $item->medico; ?></td>
-
-                                            <td class="tabela_acoes" width="100px;">
-
-                                                <a  class="btn btn-outline btn-primary btn-sm" href="<?= base_url() ?>ambulatorio/modeloreceita/carregarmodeloreceita/<?= $item->ambulatorio_modelo_receita_id ?>">
-                                                    Editar
-                                                </a>
-                                            </td>
-                                        </tr>
-
-                                    </tbody>
-                                    <?php
+                        </tbody>
+                        <?php
                                 }
                             }
-                            ?>
+                        ?>
+                        <tfoot>
                             <tr>
-                                <th class="tabela_footer  btn-info" colspan="9">
-                                    <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
-
+                                <th class="tabela_footer" colspan="6">
+                                   <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
+                            Total de registros: <?php echo $total; ?>
                                 </th>
-                            </tr>
-                            <tr>
-                                <th class="tabela_footer btn-info" colspan="9">
-
-                                    Total de registros: <?php echo $total; ?>
-                                </th>
-                            </tr>
-                        </table> 
-                    </div>
-
-                </div>
-            </div>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
 
-
-</div>
- <!-- Final da DIV content -->
+</div> <!-- Final da DIV content -->
 <script type="text/javascript">
 
-    $(function () {
-        $("#accordion").accordion();
+    $(function() {
+        $( "#accordion" ).accordion();
     });
 
 </script>

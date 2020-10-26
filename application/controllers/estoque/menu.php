@@ -55,8 +55,13 @@ class Menu extends BaseController {
     }
 
     function excluirmenu($estoque_menu_produtos_id, $estoque_menu_id) {
-        $this->menu->excluirmenuproduto($estoque_menu_produtos_id);  
-        $data['mensagem'] = 'Sucesso ao excluir a Menu';
+        $teste = $this->menu->excluirmenuproduto($estoque_menu_produtos_id); 
+        if ($teste != "-1") {
+              $data['mensagem'] = 'Sucesso ao excluir a Menu';
+        }else{
+              $data['mensagem'] = 'Erro ao excluir a Menu';
+        }
+      
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "estoque/menu/criarmenu/$estoque_menu_id");
     }

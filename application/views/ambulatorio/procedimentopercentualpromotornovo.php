@@ -1,115 +1,66 @@
-<div id="page-wrapper"> <!-- Inicio da DIV content -->
-    <div class="row">
-        <div class="col-lg-12">
-            <!--<div class="panel panel-default">-->
-            <div class="alert alert-success">
-                Cadastro de Procedimento
-            </div>
 
-            <!--</div>-->
+<div class="content"> <!-- Inicio da DIV content -->
+    <div id="accordion">
+        <h3 class="singular"><a href="#">Cadastro de Honor&aacute;rios M&eacute;dicos</a></h3>
+        <div>
+            <form name="form_procedimentonovopromotor" id="form_procedimentonovopromotor" action="<?= base_url() ?>ambulatorio/procedimentoplano/gravarnovopromotor/<?= $procedimento_percentual_promotor_id ?>/<?= $convenio_id ?>" method="post" onSubmit="enviardados();">
+
+                <dl class="dl_desconto_lista">
+                    <dt>
+                        <label>Covênio</label>
+                    </dt>
+                    <dd>                        
+                        <input type="text" name="covenio" id="covenio" class="texto04" value="<?= $dados[0]->convenio; ?>" readonly />                                                                                                                                                                                 
+                    </dd>                                                           
+                    <dt>                         
+                        <label>Grupo</label>
+                    </dt>                    
+                    <dd>                       
+                        <input type="text" name="grupo" id="grupo" class="texto04" value="<?= $dados[0]->grupo ?>" readonly />
+                    </dd>
+                    <dt>
+                        <label>Procedimento</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="procedimento" id="procedimento" class="texto04" value="<?= $dados[0]->procedimento ?>" readonly />
+
+                    </dd>
+                    <dt>
+                        <label>Promotor</label>
+                    </dt>
+                    <dd>                    
+                        <select name="promotor" id="promotor" class="size4" required="true">
+                            <option value="">Selecione</option>
+                            <? foreach ($promotors as $value) : ?>
+                                <option value="<?= $value->paciente_indicacao_id; ?>"><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Valor</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="valor" id="valor" class="texto01" required="true"/>
+                    </dd>
+                    <dt>
+                        <label>Percentual</label>
+                    </dt>
+                    <dd>
+                        <select name="percentual"  id="percentual" class="size1">                            
+                            <option value="1"> SIM</option>
+                            <option value="0"> NÃO</option>                                   
+                        </select>
+                    </dd>
+                </dl>    
+                <hr/>
+                <button type="submit" name="btnEnviar">Enviar</button>
+                <button type="reset" name="btnLimpar">Limpar</button>
+                <button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
+            </form>
+
         </div>
     </div>
-    <form name="form_procedimentoplano" id="form_procedimentoplano" action="<?= base_url() ?>ambulatorio/procedimentoplano/gravarnovopromotor/<?= $procedimento_percentual_promotor_id ?>" method="post">
-        <div class="panel panel-default ">
-            <div class="alert alert-info">
-                Dados do Procedimento
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Convênio*</label>
-                            <input type="text" name="covenio" id="covenio" class="form-control" value="<?= $dados[0]->convenio; ?>" readonly />     
-                        </div>
-
-
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Grupo*</label>
-                            <input type="text" name="grupo" id="grupo" class="form-control" value="<?= $dados[0]->grupo ?>" readonly />
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Procedimento</label>
-                            <input type="text" name="procedimento" id="procedimento" class="form-control" value="<?= $dados[0]->procedimento ?>" readonly />
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Promotor</label>
-                            <select name="promotor" id="promotor" class="form-control" required="true">
-                                <option value="">Selecione</option>
-                                <? foreach ($promotors as $value) : ?>
-                                    <option value="<?= $value->paciente_indicacao_id; ?>"><?php echo $value->nome; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Valor</label>
-                            <input type="text" name="valor" id="valor" class="form-control" required/>
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label>Percentual</label>
-                            <select name="percentual"  id="percentual" class="form-control">  
-
-                                <option value="1"> SIM</option>
-                                <option value="0"> NÃO</option>                               
-                            </select>
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <br>
-                <div class="row">
-
-                    <div class="col-lg-5">
-                        <p>
-                            <button class="btn btn-outline btn-success btn-sm" type="submit" name="btnEnviar"><i class="fa fa-floppy-o" aria-hidden="true"></i>
-                                Enviar</button>
-                            <!--</div>-->
-                            <!--<div class="col-lg-1">-->
-                            <button class="btn btn-outline btn-danger btn-sm" type="reset" name="btnLimpar">Limpar</button>
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </form>
-
-</div> 
-<!-- Final da DIV content -->
+</div> <!-- Final da DIV content -->
 <link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css">
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
 <script type="text/javascript">

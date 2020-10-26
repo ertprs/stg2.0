@@ -5,6 +5,8 @@ if ($sexo == "M") {
     $sexopaciente = "Masculino";
 } elseif ($sexo == "F") {
     $sexopaciente = "Feminino";
+} else {
+    $sexopaciente = "Outro";
 }
 $dataFuturo = date("Y-m-d");
 $dataAtual = $paciente['0']->nascimento;
@@ -20,14 +22,14 @@ $agenda = $exame[0]->agenda;
 <table>
     <tbody>
         <tr>
-            <td colspan="2"  ><font size = -1><?= utf8_decode($paciente['0']->nome); ?> - <?= $paciente['0']->paciente_id; ?></font></td>
+            <td colspan="2"  ><font size = -1><?= ($paciente['0']->nome); ?> - <?= $paciente['0']->paciente_id; ?></font></td>
             <td ><font size = -1>Idade: <?= $teste; ?>&nbsp; </font></td>
             <td width="280px"><font size = -1><center></center></font></td>
 <td width="30px">&nbsp;</td>
-<td ><font size = -1><u><?= utf8_decode($empresa[0]->razao_social); ?></u></font></td>
+<td ><font size = -1><u><?= ($empresa[0]->razao_social); ?></u></font></td>
 </tr>
 <tr>
-    <td colspan="2" ><font size = -1><?= utf8_decode($exame[0]->convenio); ?>&nbsp;&nbsp; - &nbsp;&nbsp;<?= $exame[0]->guia_id?></font></td>
+    <td colspan="2" ><font size = -1><?= ($exame[0]->convenio); ?>&nbsp;&nbsp; - &nbsp;&nbsp;<?= $exame[0]->guia_id?></font></td>
     <td ><font size = -1>SEXO: <?= $sexopaciente ?></font></td>
     <td><font size = -2></font></td>
     <td >&nbsp;</td>
@@ -44,7 +46,7 @@ $agenda = $exame[0]->agenda;
     <td colspan="2" ><font size = -1>
         <?
         foreach ($exames as $item) :
-            echo utf8_decode($item->procedimento);
+            echo ($item->procedimento);
             ?> VALOR <?= number_format($item->valor_total, 2, ",", "."); ?><br><? endforeach; ?>
         </font></td>
     <td ><font size = -1>MEDICO:<?= substr($exame[0]->medicosolicitante, 0, 8); ?></font></td>
@@ -52,7 +54,7 @@ $agenda = $exame[0]->agenda;
     <td >&nbsp;</td> 
     <td ><font size = -1><?
         foreach ($exames as $item) :
-            echo utf8_decode($item->procedimento);
+            echo ($item->procedimento);
             ?><br><? endforeach; ?></font></td>
 </tr>
 <tr>
@@ -246,7 +248,7 @@ $agenda = $exame[0]->agenda;
     <p>
     <p><center>N&SmallCircle; PEDIDO:<?= $exame[0]->agenda_exames_id; ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALOR:# <?= $valor;?> &nbsp;#</center></p>
     <p>
-    <p>Recebi de <?= utf8_decode($paciente['0']->nome); ?>, a importancia de <?= $valor;?> (<?= $extenso;?>)  referente
+    <p>Recebi de <?= ($paciente['0']->nome); ?>, a importancia de <?= $valor;?> (<?= $extenso;?>)  referente
      a   <? 
      $formapagamento= "";
      $teste= "";
@@ -255,7 +257,7 @@ $agenda = $exame[0]->agenda;
      $teste4= "";
      foreach ($exames as $item) :
                
-                echo utf8_decode($item->procedimento);
+                echo ($item->procedimento);
                 ?><br><?
                                                         if($item->forma_pagamento != null && $item->formadepagamento != $teste && $item->formadepagamento != $teste2 && $item->formadepagamento != $teste3 && $item->formadepagamento != $teste4){
                                                             $teste= $item->formadepagamento; 

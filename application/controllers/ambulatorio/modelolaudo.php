@@ -18,6 +18,7 @@ class Modelolaudo extends BaseController {
         $this->load->model('ambulatorio/modelolaudo_model', 'modelolaudo');
         $this->load->model('seguranca/operador_model', 'operador_m');
         $this->load->model('ambulatorio/procedimento_model', 'procedimento');
+        $this->load->model('ambulatorio/guia_model', 'guia');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -35,6 +36,13 @@ class Modelolaudo extends BaseController {
 //            $this->carregarView($data);
     }
 
+    function pesquisar2($args = array()) {
+
+        $this->load->View('ambulatorio/modelolaudo2-lista', $args);
+
+//            $this->carregarView($data);
+    }
+
     function carregarmodelolaudo($exame_modelolaudo_id) {
         $obj_modelolaudo = new modelolaudo_model($exame_modelolaudo_id);
         $data['obj'] = $obj_modelolaudo;
@@ -45,7 +53,7 @@ class Modelolaudo extends BaseController {
     }
 
     function excluir($exame_modelolaudo_id) {
-        if ($this->procedimento->excluir($exame_modelolaudo_id)) {
+        if ($this->modelolaudo->excluir($exame_modelolaudo_id)) {
             $mensagem = 'Sucesso ao excluir a Modelolaudo';
         } else {
             $mensagem = 'Erro ao excluir a modelolaudo. Opera&ccedil;&atilde;o cancelada.';
@@ -58,12 +66,12 @@ class Modelolaudo extends BaseController {
     function gravar() {
         $exame_modelolaudo_id = $this->modelolaudo->gravar();
         if ($exame_modelolaudo_id == "-1") {
-            $data['mensagem'] = array('Erro ao gravar o modelo de laudo. Operação cancelada.', 'error');
+            $data['mensagem'] = 'Erro ao gravar a Modelolaudo. Opera&ccedil;&atilde;o cancelada.';
         } else {
-            $data['mensagem'] = array('Sucesso ao gravar o modelo de laudo.', 'success');
+            $data['mensagem'] = 'Sucesso ao gravar a Modelolaudo.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
-        redirect(base_url() . "ambulatorio/modelolaudo/pesquisar");
+        redirect(base_url() . "ambulatorio/modelolaudo");
     }
 
     private function carregarView($data = null, $view = null) {

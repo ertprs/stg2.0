@@ -67,7 +67,7 @@
                 <tr>
                     <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">MEDICO: <?= $medico[0]->operador; ?></th>
                 </tr>
-            <? } ELSE { ?>
+            <? } else { ?>
                 <tr>
                     <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4">MEDICO: TODOS</th>
                 </tr>
@@ -90,7 +90,6 @@
 
 
 
-
     <? if ($contador > 0) {
         ?>
 
@@ -102,6 +101,9 @@
                     <td class="tabela_teste">Paciente</th>
                     <td class="tabela_teste">QTDE</th>
                     <td class="tabela_teste">Procedimento</th>
+                    <?if($_POST['medico_mostrar'] == 'SIM'){?>
+                        <td class="tabela_teste">Medico</th>
+                    <?}?>
                     <td class="tabela_teste">Status</th>
                     <td class="tabela_teste">Revisor</th>
                     <td class="tabela_teste" width="80px;">Autoriza&ccedil;&atilde;o</th>
@@ -124,7 +126,7 @@
                         if ($i == 1) {
                             ?>
                             <tr>
-                                <td colspan="8"><font ><b>Convenio:&nbsp;<?= utf8_decode($item->convenio); ?></b></td>
+                                <td colspan="8"><font ><b>Convenio:&nbsp;<?= ($item->convenio); ?></b></td>
                             </tr>
                         <? } ?>
                         <tr>
@@ -136,7 +138,10 @@
                                 <td><?= $item->paciente; ?></td>
                             <? } ?>
                             <td><font size="-2"><?= $item->quantidade; ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->procedimento); ?></td>
+                            <td><font size="-2"><?= ($item->procedimento); ?></td>
+                            <?if($_POST['medico_mostrar'] == 'SIM'){?>
+                                <td><font size="-2"><?= $item->medico; ?></td>
+                            <?}?>
                             <td><font size="-2"><?= $item->situacaolaudo; ?></td>
                             <td><font size="-2"><?= substr($item->revisor, 0, 20); ?></td>
                             <td><font size="-2"><?= $item->autorizacao; ?></td>
@@ -160,7 +165,7 @@
                         $qtdetotal++;
                         ?>
                         <tr>
-                            <td colspan="8"><font ><b>Convenio:&nbsp;<?= utf8_decode($item->convenio); ?></b></td>
+                            <td colspan="8"><font ><b>Convenio:&nbsp;<?= ($item->convenio); ?></b></td>
                         </tr>
                         <tr>
                             <td><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
@@ -172,6 +177,9 @@
                             <? } ?>
                             <td><font size="-2"><?= $item->quantidade; ?></td>
                             <td><font size="-2"><?= $item->procedimento; ?></td>
+                            <?if($_POST['medico_mostrar'] == 'SIM'){?>
+                                <td><font size="-2"><?= $item->medico; ?></td>
+                            <?}?>
                             <td><font size="-2"><?= $item->situacaolaudo; ?></td>
                             <td><font size="-2"><?= substr($item->revisor, 0, 20); ?></td>
                             <td><font size="-2"><?= $item->autorizacao; ?></td>

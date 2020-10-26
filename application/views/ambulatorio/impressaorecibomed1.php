@@ -28,13 +28,13 @@ $formapagamento ='';
     <td ><font size = -1>DATA: <?= substr($exame[0]->data, 8, 2) . "/" . substr($exame[0]->data, 5, 2) . "/" . substr($exame[0]->data, 0, 4); ?> HORA: <?= substr($dataatualizacao, 10, 6); ?></font></td>
 </tr>
 <tr>
-    <td ><font size = -1>Paciente: <?= utf8_decode($paciente['0']->nome); ?></font></td>
+    <td ><font size = -1>Paciente: <?= ($paciente['0']->nome); ?></font></td>
 </tr>
 <tr>
     <td ><font size = -1>Idade: <?= $idade; ?></font></td>
 </tr>
 <tr>
-    <td ><font size = -1>Convenio: <?= utf8_decode($exame[0]->convenio); ?></font></td>
+    <td ><font size = -1>Convenio: <?= ($exame[0]->convenio); ?></font></td>
 </tr>
 <tr>
     <td ><font size = -1>-------------------------------------------------------------</font></td>
@@ -54,7 +54,7 @@ $formapagamento ='';
                                                         if($item->forma_pagamento4 != null && $item->formadepagamento4 != $teste && $item->formadepagamento4 != $teste2 && $item->formadepagamento4 != $teste3 && $item->formadepagamento4 != $teste4){
                                                             $teste4= $item->formadepagamento4;
                                                             $formapagamento = $formapagamento . "/" . $item->formadepagamento4; }
-        echo utf8_decode($item->procedimento);
+        echo ($item->procedimento);
         ?><br><? endforeach; ?></font>
 </td>
 <tr>

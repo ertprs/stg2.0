@@ -64,9 +64,9 @@
 
                     <? } ?>
                     <tr>
-                        <td><font size="-2"><?= utf8_decode($item->produto); ?></td>
-                        <td><font size="-2"><?= utf8_decode($item->unidade); ?></td>
-                        <td><font size="-2"><?= utf8_decode($item->subclasse); ?></td>
+                        <td><font size="-2"><?= ($item->produto); ?></td>
+                        <td><font size="-2"><?= ($item->unidade); ?></td>
+                        <td><font size="-2"><?= ($item->subclasse); ?></td>
                         <td style='text-align: right;'><font size="-2"><?= number_format($item->valor_compra, 2, ",", "."); ?></td>
                         <td style='text-align: right;'><font size="-2"><?= number_format($item->valor_venda, 2, ",", "."); ?></td>
                         <td style='text-align: right;'><font size="-2"><?= $item->estoque_minimo; ?></td>

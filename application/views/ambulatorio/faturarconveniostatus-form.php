@@ -1,3 +1,4 @@
+<meta charset="UTF-8">
 <body bgcolor="#C0C0C0">
     <div class="content"> <!-- Inicio da DIV content -->
         <h3 class="singular">Faturar</h3>
@@ -16,7 +17,11 @@
                                 <option value="GLOSADO" <?if($exame[0]->situacao_faturamento == 'GLOSADO'){
 echo 'selected';}?>>Glosado </option>
                                 <option value="PAGO" <?if($exame[0]->situacao_faturamento == 'PAGO'){
+                                    
 echo 'selected';}?>>Pago </option>
+                                <option value="NAO PAGO" <?if($exame[0]->situacao_faturamento == 'NAO PAGO'){
+                                    
+echo 'selected';}?>>Não Pago </option>
                             </select>
                         </dd>
                     </dl>    

@@ -5,7 +5,7 @@
     <h4>TODAS AS CLINICAS</h4>
     <?}?>
     <h4>AJUSTAR VALORES</h4>
-    <h4>PERIODO: <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_inicio) ) ); ?> ate <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_fim) ) ); ?></h4>
+    <h4>PERÍODO: <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_inicio) ) ); ?> ate <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_fim) ) ); ?></h4>
     <h4>NOVO VALOR:</h4>
 
     <? 
@@ -31,7 +31,7 @@
                         ?>
                         <tr>
                             <td><font size="-2"><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->paciente); ?></td>
+                            <td><font size="-2"><?= ($item->paciente); ?></td>
                             <td><font size="-2"><?= $item->convenio; ?></td>
                             <td><font size="-2"><?= $item->exame; ?></td>
                             <td><font size="-2"><?= number_format($item->valor, 2, ',', '.'); ?></td>
@@ -44,6 +44,7 @@
                 <input type="hidden" class="texto3" name="txtdata_inicio" value="<?= $txtdata_inicio; ?>"/>
                 <input type="hidden" class="texto3" name="txtdata_fim" value="<?= $txtdata_fim; ?>" />
                 <input type="hidden" class="texto3" name="procedimento" value="<?= $procedimento; ?>"/>
+                <input type="hidden" class="texto3" name="empresa_id" value="<?= $empresa_id; ?>"/>
                 <input type="text" class="texto3" name="valor" alt="decimal"/>
                <button type="submit" name="btnEnviar">Atualizar</button>
 

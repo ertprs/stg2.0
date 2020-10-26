@@ -22,18 +22,18 @@
         </thead>
 
         <tbody>
-            <tr><td ></td><td><b><textarea id="titulo" name="titulo" cols="80"><?= utf8_decode($laudo['0']->nomeexame); ?></textarea></b></td><td></td></tr>
-            <tr><td ></td><td><textarea id="laudo" name="laudo" rows="35" cols="80"><?= $laudo['0']->laudo; ?></textarea></td><td></td></tr>
+            <tr><td ></td><td><b><textarea id="titulo" name="titulo" cols="80"><?= ($laudo['0']->nomeexame); ?></textarea></b></td><td></td></tr>
+            <tr><td ></td><td><?= $laudo['0']->laudo; ?></td><td></td></tr>
 
 
 
 
-            <tr><td width="50px"></td><td><center><img  width="130px" height="80px" src="<?= base_url() . "upload/1ASSINATURAS/" . $laudo['0']->nrmedicolaudo . ".bmp" ?>"></center></td></tr>
+            <!-- <tr><td width="50px"></td><td><center><img  width="130px" height="80px" src="<?= base_url() . "upload/1ASSINATURAS/" . $laudo['0']->nrmedicolaudo . ".bmp" ?>"></center></td></tr> -->
         <p></p>
         <p></p>
         <p></p>
         <p></p>
-            <tr><td width="20px"></td><td><FONT size="-1"> REALIZAMOS EXAMES DE RESSON&Acirc;CIA MAGN&Eacute;TICA DE ALTO CAMPO (1,5T)</td><td></td></tr>
+            <!-- <tr><td width="20px"></td><td><FONT size="-1"> REALIZAMOS EXAMES DE RESSON&Acirc;CIA MAGN&Eacute;TICA DE ALTO CAMPO (1,5T)</td><td></td></tr> -->
     </tbody>
 </table>
 

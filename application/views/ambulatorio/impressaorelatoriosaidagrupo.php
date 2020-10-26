@@ -1,4 +1,5 @@
 <div class="content"> <!-- Inicio da DIV content -->    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <? if (count($tipo) > 0) { ?>
         <h4>TIPO: <?= $tipo[0]->descricao; ?></h4>
     <? } else { ?>
@@ -35,9 +36,8 @@
                     <th class="tabela_header">Classe</th>
                     <th class="tabela_header">Observacao</th>
                     <th class="tabela_header">Dt saida</th>
-                    <th class="tabela_header">Valor</th>
-
-
+                    <th class="tabela_header">Valor</th> 
+                    <th class="tabela_header">Empresa</th> 
                 </tr>
             </thead>
             <tbody>
@@ -47,54 +47,67 @@
                 $i = 0;
                 $s = '';
                 foreach ($relatorio as $item) :
-                    $totalgeral = $totalgeral + $item->valor;
+                    if ($item->tipo != 'TRANSFERENCIA') {
+                        $totalgeral = $totalgeral + $item->valor;
+                    }
+
                     if ($i == 0 || $item->tipo == $s) {
                         $s = $item->tipo;
-                        $totaltipo = $totaltipo + $item->valor;
+
+                        if ($item->tipo != 'TRANSFERENCIA') {
+                            $totaltipo = $totaltipo + $item->valor;
+                        }
                         ?>
                         <tr>
-                            <td ><?= utf8_decode($item->conta); ?></td>
-                            <td ><?= utf8_decode($item->razao_social); ?></td>
-                            <td ><?= utf8_decode($item->tipo); ?></td>
-                            <td ><?= utf8_decode($item->classe); ?></td>
-                            <td ><?= utf8_decode($item->observacao); ?></td>
+                            <td ><?= ($item->conta); ?></td>
+                            <td ><?= ($item->razao_social); ?></td>
+                            <td ><?= ($item->tipo); ?></td>
+                            <td ><?= ($item->classe); ?></td>
+                            <td ><?= ($item->observacao); ?></td>
+
                             <td ><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
                             <td ><?= number_format($item->valor, 2, ",", "."); ?></td>
+                            <td ><?= ($item->empresa); ?></td>
 
                         </tr>
                     <? } else { ?>
                         <tr>
                             <td colspan="6" bgcolor="#C0C0C0"><b>SUB-TOTAL</b></td>
-                            <td bgcolor="#C0C0C0"><b><?= number_format($totaltipo, 2, ",", "."); ?></b></td>
+                            <td colspan="2" bgcolor="#C0C0C0"><b><?= number_format($totaltipo, 2, ",", "."); ?></b></td>
 
                         </tr>
                         <tr>
-                            <td ><?= utf8_decode($item->conta); ?></td>
-                            <td ><?= utf8_decode($item->razao_social); ?></td>
-                            <td ><?= utf8_decode($item->tipo); ?></td>
-                            <td ><?= utf8_decode($item->classe); ?></td>
-                            <td ><?= utf8_decode($item->observacao); ?></td>
+                            <td ><?= ($item->conta); ?></td>
+                            <td ><?= ($item->razao_social); ?></td>
+                            <td ><?= ($item->tipo); ?></td>
+                            <td ><?= ($item->classe); ?></td>
+                            <td ><?= ($item->observacao); ?></td>
+
                             <td ><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
                             <td ><?= number_format($item->valor, 2, ",", "."); ?></td>
+                            <td ><?= ($item->empresa); ?></td>
 
                         </tr>
                         <?
                         $s = $item->tipo;
                         $totaltipo = 0;
-                        $totaltipo = $item->valor;
+                        if ($item->tipo != 'TRANSFERENCIA') {
+                           $totaltipo = $item->valor;
+                        }
+                        
                     }
                     if ($i == (count($relatorio) - 1)) {
                         ?>
                         <tr>
                             <td colspan="6" bgcolor="#C0C0C0"><b>SUB-TOTAL</b></td>
-                            <td bgcolor="#C0C0C0"><b><?= number_format($totaltipo, 2, ",", "."); ?></b></td>
+                            <td colspan="2" bgcolor="#C0C0C0"><b><?= number_format($totaltipo, 2, ",", "."); ?></b></td>
 
                         </tr>
-                    <?
+                        <?
                     }
                     $i++
                     ?>
-    <? endforeach; ?>
+                <? endforeach; ?>
 
                 <tr>
                     <td colspan="6" bgcolor="#C0C0C0"><b>TOTAL</b></td>
@@ -102,17 +115,20 @@
                 </tr>
             </tbody>
 
+        </table>
 
-            <?
-        } else {
-            ?>
-            <h4>N&atilde;o h&aacute; resultados para esta consulta.</h4>
-            <?
-        }
+        <h4>Obs: Transfer&ecirc;ncias n&atilde;o s&atilde;o somadas no valor total</h4>
+
+        <?
+    } else {
         ?>
+        <h4>N&atilde;o h&aacute; resultados para esta consulta.</h4>
+        <?
+    }
+    ?>
 
 </div> <!-- Final da DIV content -->
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+ 
 <link rel="stylesheet" href="<?php base_url() ?>css/jquery-ui-1.8.5.custom.css">
 <script type="text/javascript">
 

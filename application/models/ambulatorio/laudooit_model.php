@@ -235,8 +235,8 @@ class laudooit_model extends Model {
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
             $this->db->set('laudo_id', $ambulatorio_laudo_id);
-            $this->db->set('qualidade_tecnica', 1);
-            $this->db->set('radiografia_normal', 'on');
+            // $this->db->set('qualidade_tecnica', 1);
+            // $this->db->set('radiografia_normal', 'on');
             $this->db->set('data_cadastro', $horario);
             $this->db->set('operador_cadastro', $operador_id);
             $this->db->insert('tb_ambulatorio_laudooit');
@@ -256,11 +256,34 @@ class laudooit_model extends Model {
         return $return;
     }
 
+    function medicoresponsavel($ambulatorio_laudo_id) {
+
+        $this->db->select('medico_parecer1');
+        $this->db->from('tb_ambulatorio_laudo');
+        $this->db->where("ambulatorio_laudo_id", $ambulatorio_laudo_id);
+        $return = $this->db->get()->result();
+        return $return;
+    }
+ 
+
     function consultalaudo($ambulatorio_laudo_id) {
 
         $this->db->select('ambulatorio_laudooit_id');
         $this->db->from('tb_ambulatorio_laudooit');
         $this->db->where("laudo_id", $ambulatorio_laudo_id);
+        $query = $this->db->get();
+        $return = $query->result();
+        return $return;
+    }
+
+    function consultalaudooit($ambulatorio_laudo_id) {
+
+        $this->db->select('oit.*, al.exame_id, al.guia_id, op.nome as medico, pa.nome as paciente');
+        $this->db->from('tb_ambulatorio_laudooit oit');
+        $this->db->join('tb_operador op', 'oit.medico_parecer = op.operador_id', 'left');
+        $this->db->join('tb_ambulatorio_laudo al', 'oit.laudo_id = al.ambulatorio_laudo_id', 'left');
+        $this->db->join('tb_paciente pa', 'al.paciente_id = pa.paciente_id', 'left');
+        $this->db->where("oit.laudo_id", $ambulatorio_laudo_id);
         $query = $this->db->get();
         $return = $query->result();
         return $return;
@@ -320,7 +343,45 @@ class laudooit_model extends Model {
        al.antigopaciente_id,
        p.nome,
        ag.exame_id,
-       o.nome as medico');
+       ag.guia_id,
+       o.nome as medico,
+       al.extensao_parede_e_3b_numero,
+       al.extensao_parede_e_3d_numero,
+       al.largura_e_3b_letra,
+       al.largura_e_3d_letra,
+       al.extensao_parede_d_3b_numero,
+       al.extensao_parede_d_3d_numero,
+       al.largura_d_3b_letra,
+       al.largura_d_3d_letra,
+       al.rx_digital,
+       al.leitura_negatoscopio,
+       al.forma_primaria_array,
+       al.forma_secundaria_array,
+       al.zonas_d_e_array,
+       al.profusao_array,
+       al.grandes_opacidades_array,
+       al.local_paredeperfil_3b_array,
+       al.calcificacao_paredeperfil_3b_array,
+       al.local_frontal_3b_array,
+       al.calcificacao_frontal_3b_array,
+       al.local_diafragma_3b_array,
+       al.calcificacao_diafragma_3b_array,
+       al.local_outroslocais_3b_array,
+       al.calcificacao_outroslocais_3b_array,
+       al.extensao_parede_d_3b_array,
+       al.extensao_parede_e_3b_array,
+       al.largura_d_3b_array,
+       al.largura_e_3b_array,
+       al.obliteracao_array,
+       al.local_parede_perfil_3d_array,
+       al.calcificacao_parede_perfil_3d_array,
+       al.local_parede_frontal_3d_array,
+       al.calcificacao_parede_frontal_3d_array,
+       al.extensao_parede_d_3d_array,
+       al.extensao_parede_e_3d_array,
+       al.largura_d_3d_array,
+       al.largura_e_3d_array,
+       al.simbolos_array');
             $this->db->from('tb_ambulatorio_laudooit al');
             $this->db->join('tb_ambulatorio_laudo ag', 'ag.ambulatorio_laudo_id = al.laudo_id', 'left');
             $this->db->join('tb_paciente p', 'p.paciente_id = ag.paciente_id', 'left');
@@ -337,6 +398,7 @@ class laudooit_model extends Model {
 
             $this->_ambulatorio_laudooit_id = $return[0]->ambulatorio_laudooit_id;
             $this->_exame_id = $return[0]->exame_id;
+            $this->_guia_id = $return[0]->guia_id;
             $this->_nome = $return[0]->nome;
             $this->_data_leitura = $return[0]->data;
             $this->_medico = $return[0]->medico;
@@ -388,6 +450,47 @@ class laudooit_model extends Model {
             $this->_data_unificacao = $return[0]->data_unificacao;
             $this->_operador_unificacao = $return[0]->operador_unificacao;
             $this->_antigopaciente_id = $return[0]->antigopaciente_id;
+            $this->_extensao_parede_e_3b_numero = $return[0]->extensao_parede_e_3b_numero;
+            $this->_extensao_parede_e_3d_numero = $return[0]->extensao_parede_e_3d_numero;
+            $this->_largura_e_3b_letra = $return[0]->largura_e_3b_letra;
+            $this->_largura_e_3d_letra = $return[0]->largura_e_3d_letra;
+            $this->_extensao_parede_d_3b_numero = $return[0]->extensao_parede_d_3b_numero;
+            $this->_extensao_parede_d_3d_numero = $return[0]->extensao_parede_d_3d_numero;
+            $this->_largura_d_3b_letra = $return[0]->largura_d_3b_letra;
+            $this->_largura_d_3d_letra = $return[0]->largura_d_3d_letra;
+            $this->_rx_digital = $return[0]->rx_digital;
+            $this->_leitura_negatoscopio = $return[0]->leitura_negatoscopio;
+
+            // ARRAYS OIT
+            $this->_forma_primaria_array = $return[0]->forma_primaria_array;
+            $this->_forma_secundaria_array = $return[0]->forma_secundaria_array;
+            $this->_zonas_d_e_array = $return[0]->zonas_d_e_array;
+            $this->_profusao_array = $return[0]->profusao_array;
+            $this->_grandes_opacidades_array = $return[0]->grandes_opacidades_array;
+            $this->_local_paredeperfil_3b_array = $return[0]->local_paredeperfil_3b_array;
+            $this->_calcificacao_paredeperfil_3b_array = $return[0]->calcificacao_paredeperfil_3b_array;
+            $this->_local_frontal_3b_array = $return[0]->local_frontal_3b_array;
+            $this->_calcificacao_frontal_3b_array = $return[0]->calcificacao_frontal_3b_array;
+            $this->_local_diafragma_3b_array = $return[0]->local_diafragma_3b_array;
+            $this->_calcificacao_diafragma_3b_array = $return[0]->calcificacao_diafragma_3b_array;
+            $this->_local_outroslocais_3b_array = $return[0]->local_outroslocais_3b_array;
+            $this->_calcificacao_outroslocais_3b_array = $return[0]->calcificacao_outroslocais_3b_array;
+            $this->_extensao_parede_d_3b_array = $return[0]->extensao_parede_d_3b_array;
+            $this->_extensao_parede_e_3b_array = $return[0]->extensao_parede_e_3b_array;
+            $this->_largura_d_3b_array = $return[0]->largura_d_3b_array;
+            $this->_largura_e_3b_array = $return[0]->largura_e_3b_array;
+            $this->_obliteracao_array = $return[0]->obliteracao_array;
+            $this->_local_parede_perfil_3d_array = $return[0]->local_parede_perfil_3d_array;
+            $this->_calcificacao_parede_perfil_3d_array = $return[0]->calcificacao_parede_perfil_3d_array;
+            $this->_local_parede_frontal_3d_array = $return[0]->local_parede_frontal_3d_array;
+            $this->_calcificacao_parede_frontal_3d_array = $return[0]->calcificacao_parede_frontal_3d_array;
+            $this->_extensao_parede_d_3d_array = $return[0]->extensao_parede_d_3d_array;
+            $this->_extensao_parede_e_3d_array = $return[0]->extensao_parede_e_3d_array;
+            $this->_largura_d_3d_array = $return[0]->largura_d_3d_array;
+            $this->_largura_e_3d_array = $return[0]->largura_e_3d_array;
+            $this->_simbolos_array = $return[0]->simbolos_array;
+            
+
         } else {
             $this->_ambulatorio_laudooit_id = null;
         }

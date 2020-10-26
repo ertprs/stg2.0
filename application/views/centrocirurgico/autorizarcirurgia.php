@@ -1,102 +1,275 @@
-<div class="content ficha_ceatox">
-    <div>
-        <form name="form_autorizar" id="form_autorizar" action="<?= base_url() ?>centrocirurgico/centrocirurgico/autorizarcirurgia" method="post">
-            <fieldset>
-                <legend>Dados da Solicitacao</legend>
-                <div>
-                    <label>Paciente</label>                      
-                    <input type="text" id="paciente" name="paciente"  class="texto09" value="<?= $solicitacao[0]->nome; ?>" readonly/>
-                </div>
-                <div style="display: none;">                     
-                    <input type="text" id="idpaciente" name="idpaciente"  class="texto09" value="<?= $solicitacao[0]->paciente_id; ?>" readonly/>
-                    <input type="text" id="idsolicitacaocirurgia" name="idsolicitacaocirurgia"  class="texto09" value="<?= $solicitacao[0]->solicitacao_cirurgia_id; ?>" readonly/>
-                </div>
-            </fieldset>                
+<div class="content ficha_ceatox"> <!-- Inicio da DIV content -->      
+    <form name="form_cirurgia_orcamento" id="form_cirurgia_orcamento" action="<?= base_url() ?>centrocirurgico/centrocirurgico/autorizarsolicitacaocirurgica" method="post">
+        <fieldset>
+            <legend>Outras Opções</legend>   
+            <div class="bt_link">
+                <a href="<?= base_url() ?>centrocirurgico/centrocirurgico/carregarsolicitacaoeditar/<?= @$solicitacao[0]->solicitacao_cirurgia_id; ?>">Cadastrar</a>
+            </div>
+            <div class="bt_link">
+                <a href="<?= base_url() ?>centrocirurgico/centrocirurgico/montarequipe/<?= @$solicitacao[0]->solicitacao_cirurgia_id; ?>">Equipe</a>
+            </div>
+            <div class="bt_link">
+                <a href="<?= base_url() ?>centrocirurgico/centrocirurgico/solicitacarorcamento/<?= @$solicitacao[0]->solicitacao_cirurgia_id; ?>">Orçamento</a>
+            </div>
+            <div class="bt_link">
+                <a target="_blank" href="<?= base_url() ?>centrocirurgico/centrocirurgico/solicitacarorcamentoconvenio/<?= @$solicitacao[0]->solicitacao_cirurgia_id; ?>">Guia Convênio</a>
+            </div>
+            <div class="bt_link">
+                <a href="<?= base_url() ?>centrocirurgico/centrocirurgico/carregarsolicitacaomaterial/<?= @$solicitacao[0]->solicitacao_cirurgia_id; ?>">Cadastrar Material</a>
+            </div>
+        </fieldset>
+        <fieldset >
+            <legend>Dados da Solicitacao</legend>
+
+            <div>
+                <label>Paciente</label>
+                <input type="hidden" id="txtsolcitacao_id" class="texto_id" name="txtsolcitacao_id" readonly="true" value="<?= @$solicitacao_id; ?>" />
+                <input type="hidden" id="txtNomeid" class="texto_id" name="txtNomeid" readonly="true" value="<?= @$solicitacao[0]->paciente_id; ?>" />
+                <input type="hidden" id="internacao_id" class="texto_id" name="internacao_id"  value="<?= @$internacao_id; ?>" />
+                <input type="text" id="txtNome" required name="txtNome" class="texto10" value="<?= @$solicitacao[0]->paciente; ?>" readonly="true"/>
+            </div>
+
+            <div>
+                <label>Telefone</label>
+                <input type="text" id="telefone" class="texto02" name="telefone" value="<?= @$solicitacao[0]->telefone; ?>" readonly="true"/>
+            </div>
+
+            <div>
+                <label>Solicitante</label>
+                <input type="text"  id="solicitante" class="texto02" name="solicitante" value="<?= @$solicitacao[0]->solicitante; ?>" readonly="true"/>
+            </div>
+
+            <div>
+                <label>Convenio</label>
+                <input type="text"  id="convenio" class="texto02" name="convenio" value="<?= @$solicitacao[0]->convenio; ?>" readonly="true"/>
+            </div>
+
+            <div>
+                <label>Hospital</label>
+                <input type="text"  id="hospital" class="texto02" name="hospital" value="<?= @$solicitacao[0]->hospital; ?>" readonly="true"/>
+            </div>
+            <div>
+                <label>Observação</label>
+                <textarea readonly="" cols="" rows="5" name="observacao" class="texto_area"><?= @$solicitacao[0]->observacao; ?></textarea>
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Autorizar Procedimentos</legend>
 
             <fieldset>
-                <legend></legend>
                 <div>
-                    <label>Medico Agendado</label>                      
-                    <select  name="medicoagendadoid" id="medicoagendadoid" class="size04" required="true">
-                        <option value="">Selecione</option>
-                        <? foreach ($medicos as $item) : ?>
-                            <option value="<?= $item->operador_id; ?>"
-                                    <?if($solicitacao[0]->medico_agendado == $item->operador_id): echo 'selected'; endif;?>>
-                                <?= $item->nome; ?>
-                            </option>
-                        <? endforeach; ?>
-                    </select>
+                    <label>Data Cirurgia</label>
+                    <input type="text" name="txtdata" id="txtdata" alt="date" class="texto02" value="<?
+                    if (@$solicitacao[0]->data_prevista != '') {
+                        echo date("d/m/Y", strtotime(@$solicitacao[0]->data_prevista));
+                    }
+                    ?>" required/>
                 </div>
                 <div>
-                    <label>Sala Agendada</label>                      
-                    <select name="salaagendada" id="salaagendada" required>
-                        <option value="">Selecione</option>
-                        <? foreach ($salas as $item) { ?>
-                            <option value="<?= $item->exame_sala_id ?>"><? echo $item->nome; ?></option>    
-                        <? } ?>                    
-                    </select>
+                    <label>Hora Inicio</label>
+                    <input type="text" name="hora" id="hora" alt="99:99" class="texto02" value="<?
+                    if (@$solicitacao[0]->hora_prevista != '') {
+                        echo date("H:i", strtotime(@$solicitacao[0]->hora_prevista));
+                    }
+                    ?>" required/>
                 </div>
                 <div>
-                    <label>Data/hora Prevista ex.( 20/01/2017 14:30)</label>
-                    <input type="text" id="dataprevista" class="texto08" name="dataprevista" alt="39/19/9999 24:59" />
+                    <label>Hora Fim</label>
+                    <input type="text" name="hora_fim" id="hora_fim" alt="99:99" class="texto02" value="<?
+                    if (@$solicitacao[0]->hora_prevista_fim != '') {
+                        echo date("H:i", strtotime(@$solicitacao[0]->hora_prevista_fim));
+                    }
+                    ?>" required/>
                 </div>
-            </fieldset>   
-            <button type="submit">Enviar</button>
-            <button type="reset">Limpar</button>
-        </form>    
-    </div>
+                <div>
+                    <label>Desconto (%)</label>
+                    <input type="number" id="desconto" name="desconto" value="0" step="0.01" min="0" required=""/>
+                </div>
 
-    <div class="clear"></div>
-</div>
-<link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css">
+
+            </fieldset>
+
+            <fieldset>
+                <div>
+                    <div id="alterardatacirurgia"  style="cursor: pointer;" class="bt_link"><a>Alterar Data</a></div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Procedimentos</legend>
+                <table id="table_agente_toxico" border="0">
+                    <thead>
+
+                        <tr>
+                            <th class="tabela_header">Procedimento</th>
+                            <th class="tabela_header">Convênio</th>
+                            <th class="tabela_header">Valor U</th>
+                            <th class="tabela_header">Quantidade</th>
+                            <th class="tabela_header">Valor T</th>
+                            <th class="tabela_header">Horario Especial</th>
+                            <th class="tabela_header" colspan="2">Via</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?
+                        $estilo_linha = "tabela_content01";
+                        $i = 0;
+                        foreach ($procedimentos as $item) {
+                            ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
+                            ?>
+                            <tr>
+                                <td  class="<?php echo $estilo_linha; ?>">
+                                    <input type="hidden" name="procedimento_convenio_id[<?= $i; ?>]" value="<?= $item->procedimento_convenio_id; ?>" />
+                                    <input type="hidden" name="cirurgia_procedimento_id[<?= $i; ?>]" value="<?= $item->solicitacao_cirurgia_procedimento_id; ?>" />
+                                    <?= $item->procedimento; ?>
+                                </td>
+                                <td class="<?php echo $estilo_linha; ?>">
+                                    <?= $item->convenio; ?>
+                                </td>
+                                <td class="<?php echo $estilo_linha; ?>">
+                                    <input type="number" id="valor<?= $i; ?>" class="texto02" name="valor[<?= $i; ?>]" value="<?= @$item->valor_unitario; ?>" step="0.01" required=""/>
+                                </td> 
+                                <td class="<?php echo $estilo_linha; ?>">
+                                    <input type="number" name="quantidade[<?= $i; ?>]" id="quantidade<?= $i; ?>" alt="integer" class="texto01" value="<?= @$item->quantidade; ?>" required=""/>
+                                </td>
+                                <td class="<?php echo $estilo_linha; ?>">
+                                    <input type="number" id="valor_total<?= $i; ?>" class="texto02"  name="valor_total[<?= $i; ?>]" value="<?= @$item->quantidade * @$item->valor_unitario; ?>" step="0.01" required=""/>
+                                </td> 
+
+                <!--                                <td class="<?php echo $estilo_linha; ?>">
+                    <input type="number" id="valor_total<?= $i; ?>" name="valor_total[<?= $i; ?>]" value="<?= @$item->quantidade * @$item->valor_unitario; ?>" step="0.01" required=""/>
+                    <input type="number" id="valor<?= $i; ?>" name="valor[<?= $i; ?>]" value="<?= @$item->quantidade * @$item->valor_unitario; ?>" step="0.01" required=""/>
+                </td> -->
+                                <td class="<?php echo $estilo_linha; ?>">
+                                    <input type="text" name="quantidade[<?= $i; ?>]" id="quantidade" alt="integer" class="texto01" value="<?= @$item->quantidade; ?>" required=""/>
+                                </td>
+                                <td class="<?php echo $estilo_linha; ?>">
+                                    <input type="checkbox" name="horEspecial[<?= $i; ?>]">
+                                </td>                            
+                                <td style="width: 300px" class="<?php echo $estilo_linha; ?>">
+                                    <div id="via">
+                                        <input type="radio" name="via[<?= $i; ?>]" id="m" <?
+                                        if ($item->via == 'M') {
+                                            echo 'checked';
+                                        }
+                                        ?> value="M" required/> <label for="m">Mesma Via</label>
+                                        <input type="radio" name="via[<?= $i; ?>]" id="d" <?
+                                        if ($item->via == 'D') {
+                                            echo 'checked';
+                                        }
+                                        ?>  value="D" required/> <label for="d">Via Diferente</label>
+                                    </div>
+                                </td>                            
+
+
+                            </tr>
+                            <?
+                            $i++;
+                        }
+                        ?>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="tabela_footer" colspan="4">
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table> 
+            </fieldset>
+
+            <hr/>
+
+            <button type="submit" name="btnEnviar">Enviar</button>
+            <button type="reset" name="btnLimpar">Limpar</button>
+        </fieldset>
+
+    </form>
+</div> <!-- Final da DIV content -->
+<style>
+    div#via label { color: black;}
+    div#via label, div#via input{ display: inline-block; }
+</style>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>js/jquery-verificaCPF.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>js/funcoes.js"></script>
-<script>
-    $(document).ready(function () {
-        jQuery('#form_autorizar').validate({
-            rules: {
-                medicoagendado: {
-                    required: true,
-                    minlength: 3
-                },
-                salaagendada: {
-                    required: true
-                },
-                dataprevista: {
-                    required: true
-                }
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery.maskedinput.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#txtdata").datepicker({
+            autosize: true,
+            changeYear: true,
+            changeMonth: true,
+            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+            buttonImage: '<?= base_url() ?>img/form/date.png',
+            dateFormat: 'dd/mm/yy'
+        });
+    });
 
-            },
-            messages: {
-                medicoagendado: {
-                    required: "*",
-                    minlength: 3
-                },
-                salaagendada: {
-                    required: "*"
-                },
-                dataprevista: {
-                    required: "*"
-                }
-            }
+    $(function () {
+        $('#valor').blur(function () {
+
         });
     });
 
 
     $(function () {
-        $("#medicoagendado").autocomplete({
-            source: "<?= base_url() ?>index?c=autocomplete&m=operador",
-            minLength: 2,
-            focus: function (event, ui) {
-                $("#medicoagendado").val(ui.item.label);
-                return false;
-            },
-            select: function (event, ui) {
-                $("#medicoagendado").val(ui.item.value);
-                $("#medicoagendadoid").val(ui.item.id);
-                return false;
-            }
+        $('#alterardatacirurgia').click(function () {
+//            $('#txtdata').val();
+//            $('#hora').val();
+//            $('#hora_fim').val();
+            alert('Data alterada com sucesso');
+
+            $.getJSON('<?= base_url() ?>autocomplete/alterardatacirurgiajson', {solicitacao_id: $('#txtsolcitacao_id').val(), txtdata: $('#txtdata').val(), hora: $('#hora').val(), hora_fim: $('#hora_fim').val(), ajax: true}, function (t) {
+//                   if(j == 'true'){
+//                        alert('Data Alterada com sucesso');
+//                   }else{
+//                       alert('Erro ao alterar data'); 
+//                   }
+                   console.log(t);
+//                   window.location.reload(); 
+            });
+
         });
     });
+
+
+    $(function () {
+
+        $('#desconto').blur(function () {
+            desconto = $('#desconto').val();
+<? for ($b = 0; $b < $i; $b++) { ?>
+                valor_destacado<?= $b ?> = $('#valor_total<?= $b ?>').val();
+                valor<?= $b ?> = valor_destacado<?= $b ?> - (valor_destacado<?= $b ?> * (desconto / 100));
+                //               alert(valor<?= $b ?>);
+                $('#valor_total<?= $b ?>').val(valor<?= $b ?>);
+<? } ?>
+        });
+    });
+
+<? for ($b = 0; $b < $i; $b++) { ?>
+        $(function () {
+            $('#quantidade<?= $b ?>').change(function () {
+
+                var valor_total = $("#valor<?= $b ?>").val() * $("#quantidade<?= $b ?>").val();
+                //            alert(valor_total);
+                $("#valor_total<?= $b ?>").val(valor_total);
+
+
+            });
+        });
+        $(function () {
+            $('#valor<?= $b ?>').change(function () {
+
+                var valor_total = $("#valor<?= $b ?>").val() * $("#quantidade<?= $b ?>").val();
+                //            alert(valor_total);
+                $("#valor_total<?= $b ?>").val(valor_total);
+
+
+            });
+        });
+<? } ?>
+
 </script>

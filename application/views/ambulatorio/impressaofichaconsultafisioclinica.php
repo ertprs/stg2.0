@@ -91,8 +91,8 @@
                 if ($item->grupo == $exame[0]->grupo) {
                 ?>
             <tr>
-                <td ><?= utf8_decode($item->quantidade) ?></td>
-                <td width="40%;"><?= utf8_decode($item->procedimento)  . "-" . utf8_decode($item->sala) ?></td>
+                <td ><?= ($item->quantidade) ?></td>
+                <td width="40%;"><?= ($item->procedimento)  . "-" . ($item->sala) ?></td>
                 <td ><?= $item->convenio ?></td>
                 <td ><?= $item->autorizacao ?></td>
                 <td ><?= number_format($item->valor_total, 2, ",", "."); ?></td>
@@ -109,10 +109,10 @@
                 if ($item->grupo != $exame[0]->grupo) {
                 ?>
             <tr>
-                <td width="40%;"><?= utf8_decode($item->procedimento)  . "-" . utf8_decode($item->sala)  ?></td>
+                <td width="40%;"><?= ($item->procedimento)  . "-" . ($item->sala)  ?></td>
                 <td ><?= $item->convenio ?></td>
                 <td ><?= $item->autorizacao ?></td>
-                <td width="25%;"><?= utf8_decode($item->medicosolicitante) ?></td>
+                <td width="25%;"><?= ($item->medicosolicitante) ?></td>
             </tr>
         <? 
                 }

@@ -18,11 +18,11 @@
             ?>
                  <tr>
                     <td><?php echo $item->matricula; ?></td>
-                    <td><?php echo utf8_decode($item->nome); ?></td>
-                    <td><?php echo utf8_decode($item->cargo); ?></td>
-                    <td><?php echo utf8_decode($item->funcao); ?></td>
-                    <td><?php echo utf8_decode($item->setor); ?></td>
-                    <td><?php echo utf8_decode($item->horariostipo); ?></td>
+                    <td><?php echo ($item->nome); ?></td>
+                    <td><?php echo ($item->cargo); ?></td>
+                    <td><?php echo ($item->funcao); ?></td>
+                    <td><?php echo ($item->setor); ?></td>
+                    <td><?php echo ($item->horariostipo); ?></td>
                  </tr>
 
             <?php

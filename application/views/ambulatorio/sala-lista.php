@@ -11,7 +11,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="5" class="tabela_title">
+                        <th colspan="8" class="tabela_title">
                             <form method="get" action="<?= base_url() ?>ambulatorio/sala/pesquisar">
                                 <input type="text" name="nome" class="texto10 bestupper" value="<?php echo @$_GET['nome']; ?>" />
                                 <button type="submit" id="enviar">Pesquisar</button>
@@ -20,11 +20,14 @@
                     </tr>
                     <tr>
                         <th class="tabela_header">Nome</th>
-                        <th class="tabela_header">Tipo</th>
-                        <th class="tabela_header" colspan="3">Detalhes</th>
+                        <!--<th class="tabela_header">Tipo</th>-->
+                        <th class="tabela_header" colspan="8">Detalhes</th>
                     </tr>
                 </thead>
                 <?php
+                    $empresapermissoes = $this->guia->listarempresapermissoes();
+                    $botao_ativar_sala = $empresapermissoes[0]->botao_ativar_sala;
+                    $perfil_id = $this->session->userdata('perfil_id');
                     $url      = $this->utilitario->build_query_params(current_url(), $_GET);
                     $consulta = $this->sala->listar($_GET);
                     $total    = $consulta->count_all_results();
@@ -40,21 +43,30 @@
                         foreach ($lista as $item) {
                             ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
                      ?>
-                            <tr>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->nome; ?></td>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->tipo; ?></td>
+                        <tr>
+                            <td class="<?php echo $estilo_linha; ?>"><?= $item->nome; ?></td>
+                            <!--<td class="<?php echo $estilo_linha; ?>"><?= $item->tipo; ?></td>-->
 
-                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
-                                    <a href="<?= base_url() ?>ambulatorio/sala/carregarsala/<?= $item->exame_sala_id ?>">Editar</a></div>
+                            <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
+                                <a href="<?= base_url() ?>ambulatorio/sala/carregarsala/<?= $item->exame_sala_id ?>">Editar</a></div>
                             </td>
+                            <?if ($botao_ativar_sala == "t"){?>
                                 <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
                                     <a href="<?= base_url() ?>ambulatorio/sala/ativar/<?= $item->exame_sala_id ?>">Ativar</a></div>
+                                </td>
+                            <?}?>
+                            <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
+                                <a href="<?= base_url() ?>ambulatorio/sala/carregarsalagrupo/<?= $item->exame_sala_id ?>">Grupo</a></div>
                             </td>
-                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
-                                    <a href="<?= base_url() ?>ambulatorio/sala/excluirsala/<?= $item->exame_sala_id ?>">excluir</a></div>
+                            <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
+                                <a href="<?= base_url() ?>ambulatorio/sala/carregarsalapainel/<?= $item->exame_sala_id ?>">Painel</a></div>
                             </td>
+                            <?php if($perfil_id != 18 && $perfil_id != 20){ ?>
+                            <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
+                                <a href="<?= base_url() ?>ambulatorio/sala/excluirsala/<?= $item->exame_sala_id ?>">Excluir</a></div>
+                            </td>
+                            <?}?>
                         </tr>
-
                         </tbody>
                         <?php
                                 }
@@ -62,7 +74,7 @@
                         ?>
                         <tfoot>
                             <tr>
-                                <th class="tabela_footer" colspan="6">
+                                <th class="tabela_footer" colspan="7">
                                    <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
                             Total de registros: <?php echo $total; ?>
                                 </th>

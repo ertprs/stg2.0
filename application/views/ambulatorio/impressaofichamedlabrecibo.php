@@ -5,6 +5,8 @@ if ($sexo == "M") {
     $sexopaciente = "Masculino";
 } elseif ($sexo == "F") {
     $sexopaciente = "Feminino";
+} else {
+    $sexopaciente = "Outro";
 }
 $dataFuturo = date("Y-m-d");
 $dataAtual = $paciente['0']->nascimento;
@@ -25,7 +27,7 @@ $agenda = $exame[0]->agenda;
     <p>
     <p><center>N&SmallCircle; PEDIDO:<?= $exame[0]->agenda_exames_id; ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALOR:# <?= $valor;?> &nbsp;#</center></p>
     <p>
-    <p>Recebi de <?= utf8_decode($paciente['0']->nome); ?>, a importancia de <?= $valor;?> (<?= $extenso;?>)  referente
+    <p>Recebi de <?= ($paciente['0']->nome); ?>, a importancia de <?= $valor;?> (<?= $extenso;?>)  referente
      a   <? 
      $formapagamento= "";
      $teste= "";
@@ -34,7 +36,7 @@ $agenda = $exame[0]->agenda;
      $teste4= "";
      foreach ($exames as $item) :
                
-                echo utf8_decode($item->procedimento);
+                echo ($item->procedimento);
                 ?><br><?
                                                         if($item->forma_pagamento != null && $item->formadepagamento != $teste && $item->formadepagamento != $teste2 && $item->formadepagamento != $teste3 && $item->formadepagamento != $teste4){
                                                             $teste= $item->formadepagamento; 

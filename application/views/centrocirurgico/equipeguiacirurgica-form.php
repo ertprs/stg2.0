@@ -1,5 +1,10 @@
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content --> 
     <h3 class="singular"><a href="#">Montar Equipe</a></h3>
+    <div class="bt_link_new">
+        <a href="<?php echo base_url() ?>centrocirurgico/centrocirurgico/excluirguiacirurgica/<?= @$guia_id; ?>" onclick="javascript: return confirm('Deseja realmente excluir esta guia?');">
+            Cancelar Guia
+        </a>
+    </div>
     <form name="form_cirurgia_orcamento" id="form_cirurgia_orcamento" action="<?= base_url() ?>centrocirurgico/centrocirurgico/gravarguiacirurgicaequipe" method="post">
 
         <fieldset>
@@ -43,7 +48,7 @@
                     <tr>
                         <th class="tabela_header">Médico</th>
                         <th class="tabela_header">Função</th>
-                        <!--<th class="tabela_header" width="30px;" ><center></center></th>-->
+                        <th class="tabela_header" width="30px;" ><center></center></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -55,10 +60,10 @@
                         <tr>
                             <td class="<?php echo $estilo_linha; ?>"><?php echo $item->medico; ?></td>
                             <td class="<?php echo $estilo_linha; ?>"><?php echo $item->funcao; ?></td>
-<!--                            <td class="<?php echo $estilo_linha; ?>" width="30px;" style="width: 60px;">
-                                <a href="<?= base_url() ?>centrocirurgico/centrocirurgico/excluiritemequipe/<?= $item->agenda_exame_equipe_id; ?>" class="delete">
+                            <td class="<?php echo $estilo_linha; ?>" width="30px;" style="width: 60px;">
+                                <a href="<?= base_url() ?>centrocirurgico/centrocirurgico/excluiroperadorequipecirurgica/<?= @$guia_id; ?>/<?= $item->funcao_id; ?>" class="delete">
                                 </a>
-                            </td>-->
+                            </td>
 
                         </tr>
                     </tbody>

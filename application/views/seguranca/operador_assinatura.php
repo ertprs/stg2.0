@@ -1,105 +1,96 @@
-<div id="page-wrapper"> <!-- Inicio da DIV content -->
-    <div class="row">
-        <div class="col-lg-12"> 
-            <div class="alert alert-success ">
-                Carregar Assinatura
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-4">
-            <!--<form enctype="multipart/form-data" action="<?= base_url() . 'seguranca/operador/importarimagem' ?>" method="POST">-->
-                <?= form_open_multipart(base_url() . 'seguranca/operador/importarimagem'); ?>
-                <div class="form-group">
-                    <label>Informe o arquivo para importa&ccedil;&atilde;o</label><br>
-                    <input type="file" name="userfile"/>
-                    <!--<button type="submit" name="btnEnviar">Enviar</button>-->
-                    <input type="hidden" name="operador_id" value="<?= $operador_id; ?>" />
-                </div>
-
-                <!--<input type="hidden" name="guia_id" value="<?= $guia_id; ?>" />-->
-                <button type="submit" class="btn btn-outline btn-success btn-sm" name="btnEnviar"><i class="fa fa-floppy-o" aria-hidden="true"></i> Enviar</button>
-                <?= form_close(); ?>
-            <!--</form>-->
-        </div>
-    </div>
-<!--    <div class="row">
-        <div class="col-lg-4">
-
-
-
-        </div>
-    </div>-->
-
-    <br>
-    <div class="row">
-        <div class="col-lg-12"> 
-            <div class="alert alert-success ">
-                Visualizar Imagens
-            </div>
-        </div>
-    </div>
-    <div class="table-responsive">
-        <table class="tabel">
-            <tr>
-                <?
-//                file_exists($filename)
-//              var_dump(base_url() . "upload/1ASSINATURAS/$operador_id.jpg");
-//                var_dump($arquivo_pasta);
-//                die;
-                $i = 0;
-                if (file_exists("./upload/1ASSINATURAS/$operador_id.jpg")):
-                    ?>
-                    <td width="10px"><img  width="50px" height="50px" onclick="javascript:window.open('<?= base_url() . "upload/1ASSINATURAS/$operador_id.jpg" ?>', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600');" src="<?= base_url() . "upload/1ASSINATURAS/$operador_id.jpg" ?>"><br><? echo "$operador_id.jpg" ?>
-                        <br/><a class="btn btn-outline btn-danger btn-xs" onclick="confirmacaoexcluir(<?=$operador_id?>);">Excluir</a></td>
-                    <?
-                endif
-                ?>
-        </table>
-    </div> <!-- Final da DIV content -->
-
-    <!-- Final da DIV content -->
-</div>
-<!--<div id="page-wrapper">  Inicio da DIV content 
+<div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
-        <h3><a href="#"> </a></h3>
+        <h3><a href="#">Carregar Assinatura </a></h3>
         <div >
-            
-
-            <?= form_close(); ?>
+            <?// form_open_multipart(base_url() . 'seguranca/operador/importarimagem'); ?>
+            <form method="POST" action="<?=base_url() . 'seguranca/operador/importarimagem'?>"  enctype="multipart/form-data">
+            <label>Informe o arquivo para importa&ccedil;&atilde;o</label><br>
+            <input type="file" name="userfile"/>
+            <button type="submit" name="btnEnviar">Enviar</button>
+            <input type="hidden" name="operador_id" value="<?= $operador_id; ?>" />
+            </form>
+            <?// form_close(); ?>
 
         </div>
 
         <h3><a href="#">Vizualizar imagens </a></h3>
         <div >
+            <table>
+                <tr>
+                    <?
+                    $perfil_id = $this->session->userdata('perfil_id'); 
+                    $i = 0;
+                    if ($arquivo_pasta != false):
+                        if (in_array($operador_id . ".jpg", $arquivo_pasta) || in_array($operador_id . ".jpeg", $arquivo_pasta) || in_array($operador_id . ".png", $arquivo_pasta)){
+                        ?>
 
-        </div>  Final da DIV content 
-    </div>  Final da DIV content 
-</div>  Final da DIV content -->
+                            <td width="10px">
+                                <img  width="50px" height="50px" onclick="javascript:window.open('<?= base_url() . "upload/1ASSINATURAS/$operador_id" ?>.jpg', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600');" src="<?= base_url() . "upload/1ASSINATURAS/$operador_id" ?>.jpg">
+                                <br><? echo "$operador_id.jpg" ?>
+                                <br/>
+                                <?php if($perfil_id != 18 && $perfil_id != 20){?>
+                                <a onclick="javascript: return confirm('Deseja realmente excluir o arquivo <?= $operador_id; ?>.jpg');" href="<?= base_url() ?>seguranca/operador/ecluirimagem/<?= $operador_id ?>">Excluir</a>
+                                <?php }?>
+                            </td>
+                            <?
+                        }
+                    endif
+                    ?>
+            </table>
+        </div> 
+
+        <h3><a href="#">Carregar Certificado Digital </a></h3>
+        <div >
+            <?// form_open_multipart(base_url() . 'seguranca/operador/importarimagem'); ?>
+            <form method="POST" action="<?=base_url() . 'seguranca/operador/importarcertificadomedico'?>"  enctype="multipart/form-data">
+            <label>Informe o Certificado para importa&ccedil;&atilde;o</label><br>
+            
+            <input type="file" name="userfile"/> 
+            <br>
+            Senha Certificado: <input type="password" name="senha" id="senha"/>
+
+            <button type="submit" name="btnEnviar">Enviar</button>
+            <input type="hidden" name="operador_id" value="<?= $operador_id; ?>" />
+            </form>
+            <?// form_close(); ?>
+
+        </div>
+
+        <h3><a href="#">Vizualizar Arquivo Certificado </a></h3>
+        <div >
+            <table>
+                <tr>
+                    <?
+                    $perfil_id = $this->session->userdata('perfil_id'); 
+                    $i = 0;
+                    if ($arquivo_pasta_certificado != false):
+                        if (in_array($operador_id . ".crt", $arquivo_pasta_certificado)){
+                        ?>
+
+                            <td width="10px">
+                                <img  width="50px" height="50px" onclick="javascript:window.open('<?= base_url() . "upload/certificadomedico/$operador_id" ?>.crt', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600');" src="<?= base_url() . "upload/certificadomedico/$operador_id" ?>.crt">
+                                <br><? echo "$operador_id.crt" ?>
+                                <br/>
+                                <?php if($perfil_id != 18 && $perfil_id != 20){?>
+                                <a onclick="javascript: return confirm('Deseja realmente excluir o Certificado ?');" href="<?= base_url() ?>seguranca/operador/ecluirimagemcertificado/<?= $operador_id ?>">Excluir</a>
+                                <?php }?>
+                            </td>
+                            <?
+                        }
+                    endif
+                    ?>
+            </table>
+        </div>
+
+
+
+    </div> <!-- Final da DIV content -->
+</div> <!-- Final da DIV content -->
 <script type="text/javascript">
 
-    function confirmacaoexcluir(idexcluir) {
-        swal({
-            title: "Tem certeza?",
-            text: "Você está prestes a deletar um arquivo! Não será possível recuperá-lo depois",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#337ab7",
-            confirmButtonText: "Sim, quero deletar!",
-            cancelButtonText: "Não, cancele!",
-            closeOnConfirm: false,
-            closeOnCancel: false
-        },
-                function (isConfirm) {
-                    if (isConfirm) {
-                        window.open('<?= base_url() ?>seguranca/operador/ecluirimagem/' + idexcluir, '_self');
-                    } else {
-                        swal("Cancelado", "Você desistiu de deletar um arquivo", "error");
-                    }
-                });
-
-    }
+    $(function () {
+        $("#accordion").accordion();
+    });
 
 
 

@@ -5,9 +5,9 @@
     <tr><td width="80%"><font size="-2">CNPJ:07.206.048/0002-80</font></td><td></td><td></td></tr>
 </table>
 <table>
-    <tr><td width="50%"><font size="-2">Atividade: Hospitalar</font></td><td><font size="-2">Setor: <?= utf8_decode(@$obj->_setor); ?></font></td><td></td></tr>
-    <tr><td width="50%"><font size="-2">Endere&ccedil;o:Av Jornalista Tomas Coelho, 1578</font></td><td><font size="-2">Fun&ccedil;&atilde;o: <?= utf8_decode(@$obj->_funcao); ?></font></td><td></td></tr>
-    <tr><td width="50%"><font size="-2">Nome: <?= utf8_decode(@$obj->_nome); ?></font></td><td><font size="-2">Matr&iacute;cula: <?= utf8_decode(@$obj->_matricula); ?></font></td><td></td></tr>
+    <tr><td width="50%"><font size="-2">Atividade: Hospitalar</font></td><td><font size="-2">Setor: <?= (@$obj->_setor); ?></font></td><td></td></tr>
+    <tr><td width="50%"><font size="-2">Endere&ccedil;o:Av Jornalista Tomas Coelho, 1578</font></td><td><font size="-2">Fun&ccedil;&atilde;o: <?= (@$obj->_funcao); ?></font></td><td></td></tr>
+    <tr><td width="50%"><font size="-2">Nome: <?= (@$obj->_nome); ?></font></td><td><font size="-2">Matr&iacute;cula: <?= (@$obj->_matricula); ?></font></td><td></td></tr>
 </table>
 <br>
 <table border="1">
@@ -91,7 +91,7 @@
                 <td ><font size="-2"><?= $value->entrada3; ?></font></td>
                 <td ><font size="-2"><?= $value->saida3; ?></font>
                 <td width="35%">
-                    <font size="-2"><?= utf8_decode($value->critica1); ?></font></td>
+                    <font size="-2"><?= ($value->critica1); ?></font></td>
             </tr>
     <?
 endforeach;

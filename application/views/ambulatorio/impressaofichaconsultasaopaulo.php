@@ -33,25 +33,25 @@ if ($exame[0]->celular == ""){
     <td ><font size = -1>DATA: <?= substr($exame[0]->data, 8, 2) . "/" . substr($exame[0]->data, 5, 2) . "/" . substr($exame[0]->data, 0, 4); ?> HORA: <?= substr($dataatualizacao, 10, 6); ?></font></td>
 </tr>
 <tr>
-    <td ><font size = -1>PACIENTE:<?= utf8_decode($paciente['0']->nome); ?></font></td>
+    <td ><font size = -1>PACIENTE:<?= ($paciente['0']->nome); ?></font></td>
 </tr>
 <tr>
     <td ><font size = -1>NASCIMENTO: <?= substr($paciente['0']->nascimento, 8, 2) . "/" . substr($paciente['0']->nascimento, 5, 2) . "/" . substr($paciente['0']->nascimento, 0, 4); ?> - IDADE: <?= $teste; ?></font></td>
 </tr>
 <tr>
-    <td ><font size = -1>END: <?= utf8_decode($exame[0]->logradouro_paciente) . " " . $exame[0]->numero_paciente . " " .  $exame[0]->bairro_paciente; ?></font></td>
+    <td ><font size = -1>END: <?= ($exame[0]->logradouro_paciente) . " " . $exame[0]->numero_paciente . " " .  $exame[0]->bairro_paciente; ?></font></td>
 </tr>
 <tr>
     <td ><font size = -1>TEL: <?= $telefone; ?></font></td>
 </tr>
 <tr>
-    <td ><font size = -1>CONVENIO: <?= utf8_decode($exame[0]->convenio); ?></font></td>
+    <td ><font size = -1>CONVENIO: <?= ($exame[0]->convenio); ?></font></td>
 </tr>
 <tr>
     <td ><font size = -1>-----------------------------------------------------</font></td>
 </tr>
 <tr>
-    <td ><font size = -1><?= utf8_decode($exame[0]->procedimento); ?></font></td>
+    <td ><font size = -1><?= ($exame[0]->procedimento); ?></font></td>
 </tr>
 
 

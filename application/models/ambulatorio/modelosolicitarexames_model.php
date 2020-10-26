@@ -17,11 +17,13 @@ class modelosolicitarexames_model extends Model {
     function listar($args = array()) {
         $this->db->select('ambulatorio_modelo_solicitar_exames_id,
                             aml.nome,
+                            aml.carregar_automaticamente,
                             medico_id,
                             o.nome as medico,
                             texto');
         $this->db->from('tb_ambulatorio_modelo_solicitar_exames aml');
         $this->db->join('tb_operador o', 'o.operador_id = aml.medico_id', 'left');
+        $this->db->where('aml.ativo', 't');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
             $this->db->where('aml.nome ilike', "%" . $args['nome'] . "%");
             $this->db->orwhere('o.nome ilike', "%" . $args['nome'] . "%");
@@ -39,6 +41,46 @@ class modelosolicitarexames_model extends Model {
         $this->db->set('operador_atualizacao', $operador_id);
         $this->db->where('ambulatorio_modelo_solicitar_exames_id', $ambulatorio_modelo_solicitar_exames_id);
         $this->db->update('tb_ambulatorio_modelo_solicitar_exames');
+        $erro = $this->db->_error_message();
+        if (trim($erro) != "") // erro de banco
+            return false;
+        else
+            return true;
+    }
+
+
+    function desativarmodeloexameautomatico($modelo_id) {
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->set('carregar_automaticamente', 'f');
+        $this->db->where('ambulatorio_modelo_solicitar_exames_id', $modelo_id);
+        $this->db->update('tb_ambulatorio_modelo_solicitar_exames');
+        
+        $erro = $this->db->_error_message();
+        if (trim($erro) != "") // erro de banco
+            return false;
+        else
+            return true;
+    }
+
+    function ativarmodeloexameautomatico($modelo_id) {
+
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->set('carregar_automaticamente', 't');
+        $this->db->where('ambulatorio_modelo_solicitar_exames_id', $modelo_id);
+        $this->db->update('tb_ambulatorio_modelo_solicitar_exames');
+
+        $this->db->set('carregar_automaticamente', 'f');
+        $this->db->where('ambulatorio_modelo_solicitar_exames_id !=', $modelo_id);
+        $this->db->update('tb_ambulatorio_modelo_solicitar_exames');
+        
         $erro = $this->db->_error_message();
         if (trim($erro) != "") // erro de banco
             return false;
@@ -82,6 +124,7 @@ class modelosolicitarexames_model extends Model {
         if ($ambulatorio_modelo_solicitar_exames_id != 0) {
             $this->db->select('ambulatorio_modelo_solicitar_exames_id,
                             aml.nome,
+                            aml.carregar_automaticamente,
                             medico_id,
                             o.nome as medico,
                             aml.texto');
@@ -92,6 +135,7 @@ class modelosolicitarexames_model extends Model {
             $return = $query->result();
             $this->_ambulatorio_modelo_solicitar_exames_id = $ambulatorio_modelo_solicitar_exames_id;
             $this->_nome = $return[0]->nome;
+            $this->_carregar_automaticamente = $return[0]->carregar_automaticamente;
             $this->_medico_id = $return[0]->medico_id;
             $this->_texto = $return[0]->texto;
         } else {

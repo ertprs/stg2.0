@@ -2,7 +2,7 @@
         <meta http-equiv="content-type" content="text/html;charset=utf-8" />
             <?php
     $this->load->library('utilitario');
-    Utilitario::pmf_mensagem($this->session->flashdata('message'));
+    // Utilitario::pmf_mensagem($this->session->flashdata('message'));
     ?>
 
 <script>
@@ -18,7 +18,7 @@
         <h3 class="singular">Alterar Nome Imegem</h3>
         <div>
             <?
-//            var_dump(utf8_decode($imagem_id));
+//            var_dump(($imagem_id));
 //            die;
             
             ?>
@@ -27,7 +27,7 @@
                     <div>
                         <input type="hidden" name="imagem_id" id="imagem_id" value="<?=$imagem_id; ?> " readonly/>
                     </div>
-                    <?if (count($contador) == 1) {?>
+                    <?if (count($contador) > 0) {?>
                     <div>
                         <input type="text" name="imagem_nome" id="imagem_nome" value="<?=$contador[0]->nome; ?> " readonly/>
                     </div>

@@ -44,6 +44,14 @@ class Entrada extends BaseController {
         $this->loadView('estoque/entrada-form', $data);
     }
 
+    function carregarfracionamento($estoque_entrada_id) {
+        // $data['obj'] = $obj_entrada;
+        $data['sub'] = $this->entrada->listararmazem();
+        $data['produtos'] = $this->entrada->listarprodutosfracionamento();
+        //$this->carregarView($data, 'giah/servidor-form');
+        $this->loadView('estoque/fracionamento-form', $data);
+    }
+
     function relatoriosaldoarmazem() {
         $data['armazem'] = $this->entrada->listararmazem();
         $data['empresa'] = $this->guia->listarempresas();
@@ -81,6 +89,12 @@ class Entrada extends BaseController {
         $data['empresa'] = $this->guia->listarempresas();
         $this->loadView('estoque/relatoriosaldo', $data);
     }
+    
+    function relatoriosaldoproduto() {
+        $data['armazem'] = $this->entrada->listararmazem();
+        $data['empresa'] = $this->guia->listarempresas();
+        $this->loadView('estoque/relatoriosaldoprodutos', $data);
+    }
 
     function gerarelatoriosaldo() {
         $armazem = $_POST['armazem'];
@@ -106,6 +120,54 @@ class Entrada extends BaseController {
         $data['contador'] = $this->entrada->relatoriosaldocontador();
         $data['relatorio'] = $this->entrada->relatoriosaldo();
         $this->load->View('estoque/impressaorelatoriosaldo', $data);
+    }
+    
+    function gerarelatoriosaldoprodutos() {
+        $armazem = $_POST['armazem'];
+        $estoque_fornecedor_id = $_POST['txtfornecedor'];
+        $estoque_produto_id = $_POST['txtproduto'];
+        if ($armazem == 0) {
+            $data['armazem'] = 0;
+        } else {
+            $data['armazem'] = $this->entrada->listararmazemcada($armazem);
+        }
+        if ($estoque_fornecedor_id == '') {
+            $data['fornecedor'] = 0;
+        } else {
+            $data['fornecedor'] = $this->entrada->listarfornecedorcada($estoque_fornecedor_id);
+        }
+        if ($estoque_produto_id == '') {
+            $data['produto'] = 0;
+        } else {
+            $data['produto'] = $this->entrada->listarprodutocada($estoque_produto_id);
+        }
+
+        $data['empresa'] = $this->guia->listarempresa($_POST['empresa']);
+        $data['contador'] = $this->entrada->relatoriosaldoprodutoscontador();
+        $data['relatorio'] = $this->entrada->relatoriosaldoprodutos();
+        $this->load->View('estoque/impressaorelatoriosaldoprodutos', $data);
+    }
+
+    function relatorioprodutosvencimento() {
+        $data['armazem'] = $this->entrada->listararmazem();
+        $data['empresa'] = $this->guia->listarempresas();
+        $this->loadView('estoque/relatorioprodutosvencimento', $data);
+    }
+
+    function gerarelatorioprodutosvencimento() {
+        $armazem = $_POST['armazem'];
+        // $data['txtdata_inicio'] = $_POST['txtdata_inicio'];
+        // $data['txtdata_fim'] = $_POST['txtdata_fim'];
+        if ($armazem == 0) {
+            $data['armazem'] = 0;
+        } else {
+            $data['armazem'] = $this->entrada->listararmazemcada($armazem);
+        }
+      
+        $data['empresa'] = $this->guia->listarempresa($_POST['empresa']);
+        $data['relatorio'] = $this->entrada->relatorioprodutosvencimento();
+        // var_dump($data['relatorio']); die;
+        $this->load->View('estoque/impressaorelatorioprodutosvencimento', $data);
     }
 
     function relatoriominimo() {
@@ -217,6 +279,7 @@ class Entrada extends BaseController {
         $data['empresa'] = $this->guia->listarempresa($_POST['empresa']);
         $data['contador'] = $this->entrada->relatoriosaidaarmazemcontador();
         $data['relatorio'] = $this->entrada->relatoriosaidaarmazem();
+        $data['relatorioconsolidado'] = $this->entrada->relatoriosaidaarmazemconsolidado();
         $this->load->View('estoque/impressaorelatoriosaidaarmazem', $data);
     }
 
@@ -240,6 +303,42 @@ class Entrada extends BaseController {
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "estoque/entrada");
+    }
+    
+    function gravarnota() {
+//        var_dump($_POST);die;
+        $estoque_entrada_nota_id = $this->entrada->gravarnota();
+        if ($estoque_entrada_nota_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar a Entrada. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar a Entrada.';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "estoque/entrada");
+    }
+
+    function gravarfracionamento() {
+        if($_POST['quantidade'] > 0 || $_POST['quantidade_entrada'] > 0){
+            $exame_entrada_id = $this->entrada->gravarfracionamento();
+            if ($exame_entrada_id == "-1") {
+                $data['mensagem'] = 'Erro ao gravar a Entrada. Opera&ccedil;&atilde;o cancelada.';
+            } else {
+                $data['mensagem'] = 'Sucesso ao gravar a Entrada.';
+            }
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "estoque/entrada");  
+        }else{
+            if($_POST['quantidade'] > 0){
+                $data['mensagem'] = 'A quantidade a ser fracionada deve ser maior que zero';
+            }else{
+                $data['mensagem'] = 'A quantidade de entrada deve ser maior que zero';
+            }
+            
+
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "estoque/entrada/carregarfracionamento/0");  
+        }
+        
     }
 
     private function carregarView($data = null, $view = null) {

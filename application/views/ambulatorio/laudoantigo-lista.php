@@ -75,10 +75,10 @@
                                 <td class="<?php echo $estilo_linha; ?>" width="30px;"><?= substr($item->emissao, 8, 2) . "/" . substr($item->emissao, 5, 2) . "/" . substr($item->emissao, 0, 4); ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->nomemedicolaudo; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->nomeexame; ?></td>
-<!--                                <td class="<?php echo $estilo_linha; ?>" width="40px;"><div class="bt_link">
+                               <!-- <td class="<?php echo $estilo_linha; ?>" width="40px;"><div class="bt_link">
                                         <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/carregarlaudoantigo/<?= $item->id ?>');" >
                                             Laudo</a></div>
-                                </td>-->
+                                </td> -->
 
                                 <td class="<?php echo $estilo_linha; ?>" width="70px;"><div class="bt_link">
                                         <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaolaudoantigo/<?= $item->id ?>');">

@@ -1,384 +1,379 @@
-<link href="<?= base_url() ?>css/ambulatorio/consultapacientetemp-form.css" rel="stylesheet"/>
-<div id="page-wrapper"> <!-- Inicio da DIV content -->
+<div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
+    <div class="clear"></div>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <!--<div class="panel panel-default">-->
-            <div class="alert alert-success">
-                Marcar Atendimento
-            </div>
-
-            <!--</div>-->
-        </div>
-    </div>
     <form name="form_exametemp" id="form_exametemp" action="<?= base_url() ?>ambulatorio/exametemp/gravarconsultapacientetemp" method="post">
-        <div class="panel panel-default ">
-            <div class="alert alert-info">
-                Dados do Paciente
+        <fieldset>
+            <div>
+                <td width="100px;"><center>
+                    <div class="bt_link_new">
+                        <a href="<?php echo base_url() ?>ambulatorio/exametemp/novopacienteconsulta">
+                            Nova Consulta
+                        </a>
+                    </div>
+                    </td>
             </div>
-            <!-- <div class="panel-body"> -->
-                <div class="container inpt">
+        </fieldset>
+        <fieldset>
+            <?
+            if (@$obj->_telefone != '' && strlen(@$obj->_telefone) > 3) {
 
-                    <div class="col-lg-12 tb1">
-                        <div class="form-group ">
-                            <label>Nome</label>
-                            <input type="text" name="txtNome" read class="form-control" value="<?= @$obj->_nome; ?>" />
-                            <br>
-                            <label>End.</label>
-                            <input type="text" id="txtEnd" class="form-control" name="txtEnd"  value="<?= @$obj->_endereco; ?> - <?= @$obj->_numero; ?>" />
-                            <br>
-                            <a class="btn btn-outline btn-primary btn-sm" href="<?= base_url() ?>cadastros/pacientes/carregar/<?= @$obj->_paciente_id ?>" target="_blank">
-                            Editar
-                        </a> 
-                        </div>
+                if (preg_match('/\(/', @$obj->_telefone)) {
+                    $telefone = @$obj->_telefone;
+                } else {
+                    $telefone = "(" . substr(@$obj->_telefone, 0, 2) . ")" . substr(@$obj->_telefone, 2, strlen(@$obj->_telefone) - 2);
+                }
+            } else {
+                $telefone = '';
+            }
+            if (@$obj->_celular != '' && strlen(@$obj->_celular) > 3) {
+                if (preg_match('/\(/', @$obj->_celular)) {
+                    $celular = @$obj->_celular;
+                } else {
+                    $celular = "(" . substr(@$obj->_celular, 0, 2) . ")" . substr(@$obj->_celular, 2, strlen(@$obj->_celular) - 2);
+                }
+            } else {
+                $celular = '';
+            }
+            if (@$obj->_whatsapp != '' && strlen(@$obj->_whatsapp) > 3) {
+                if (preg_match('/\(/', @$obj->_whatsapp)) {
+                    $whatsapp = @$obj->_whatsapp;
+                } else {
+                    $whatsapp = "(" . substr(@$obj->_whatsapp, 0, 2) . ")" . substr(@$obj->_whatsapp, 2, strlen(@$obj->_whatsapp) - 2);
+                }
+            } else {
+                $whatsapp = '';
+            }
+            ?>
 
+            <legend>Marcar Consulta</legend>
 
-                    </div>
-                    <div class="col-lg-6 tb2">
-                        <div class="form-group ">
-                            <label>Dt de nascimento</label>
-                            <input type="text" name="nascimento" id="txtNascimento" class="form-control" alt="date" value="<?php echo substr(@$obj->_nascimento, 8, 2) . '/' . substr(@$obj->_nascimento, 5, 2) . '/' . substr(@$obj->_nascimento, 0, 4); ?>"/>
-                            <br>
-                            <label>Telefone</label>
-                            <input type="text" id="txtTelefone" class="form-control" name="telefone" value="<?= @$obj->_telefone; ?>" />
-                            <label>Celular</label>
-                            <input type="text" id="txtCelular" class="form-control" name="celular" value="<?= @$obj->_celular; ?>" />
-                        </div>
+            <div>
+                <label>Nome</label>
+                <input type="text" name="txtNome" class="texto10 bestupper" value="<?= @$obj->_nome; ?>" />
+            </div>
+            <div>
+                <label>Dt de nascimento</label>
 
-
-                    </div>
-                    <div class="col-lg-8 tb3">
-                            <label>Convenio</label>
-                            <input type="text" id="txtconvenio" class="form-control" name="convenio" value="<?= @$obj->_descricaoconvenio; ?>" />
-                            <br>
-                            <!-- <label>Celular</label>
-                            <input type="text" id="txtCelular" class="form-control" name="celular" value="<?= @$obj->_celular; ?>" /> -->
-                        </div>
-
-
-                    </div>
-                    <!-- </div>
-                    <div class="row"> -->
-
-                    <!-- <div class="col-lg-6 tb21"> -->
-                        <div class="form-group">
-                            <!-- <label>End.</label>
-                            <input type="text" id="txtEnd" class="form-control" name="txtEnd"  value="<?= @$obj->_endereco; ?> - <?= @$obj->_numero; ?>" /> -->
-                        </div>
-
-
-                    </div>
-                    <!-- <div class="col-lg-2 tb22">
-                        <div class="form-group">
-                            <label>Telefone</label>
-                            <input type="text" id="txtTelefone" class="form-control" name="telefone" value="<?= @$obj->_telefone; ?>" />
-                        </div> -->
-
-
-                    <!-- </div>
-                    <div class="col-lg-2 tb23">
-                        <div class="form-group">
-                            <label>Celular</label>
-                            <input type="text" id="txtCelular" class="form-control" name="celular" value="<?= @$obj->_celular; ?>" />
-                        </div>
-
-                    </div> -->
-                <!-- </div>
-                <div class="row"> -->
-                    <div class="col-lg-2">
-                        <!-- <a class="btn btn-outline btn-primary btn-sm" href="<?= base_url() ?>cadastros/pacientes/carregar/<?= @$obj->_paciente_id ?>" target="_blank">
-                            Editar
-                        </a>  -->
-                    </div>
-                </div>
-
-
-
+                <input type="text" name="nascimento" id="txtNascimento" class="texto02" alt="date" value="<?php echo substr(@$obj->_nascimento, 8, 2) . '/' . substr(@$obj->_nascimento, 5, 2) . '/' . substr(@$obj->_nascimento, 0, 4); ?>"/>
+            </div>
+            <div>
+                <label>Idade</label>
+                <input type="text" name="idade2" id="idade2" class="texto02" readonly/>
+            </div>
+            <div>
+                <input type="hidden" name="idade" id="txtIdade" class="texto01" alt="numeromask" value="<?= @$obj->_idade; ?>"  />
 
             </div>
-
-        </div>
-        <!-- <div class="panel panel-default "> -->
-            <div class="alert alert-info">
-                Dados do Agendamento
+            <div>
+                <label>End.</label>
+                <input type="text" id="txtEnd" class="texto06" name="txtEnd"  value="<?= @$obj->_endereco; ?> - <?= @$obj->_numero; ?>" />
             </div>
-            <div class="panel-body">
-                <div class="container">
+            <div>
+                <label>Telefone</label>
+                <input type="text" id="txtTelefone" class="texto02" name="telefone" value="<?= @$telefone; ?>" />
+            </div>
+            <div>
+                <label>Celular</label>
+                <input type="text" id="txtCelular" class="texto02" name="celular" value="<?= @$celular; ?>" />
+            </div>
+              <div>
+                <label>WhatsApp</label>
+                <input type="text" id="txtwhatsapp" class="texto02" name="txtwhatsapp" value="<?= @$obj->_whatsapp; ?>"/>
+            </div>
+            <div>
+                <label>Convenio</label>
+                <input type="text" id="txtconvenio" class="texto02" name="convenio" value="<?= @$obj->_descricaoconvenio; ?>" />
+            </div>
+        </fieldset>
+        <fieldset>
+            <div>
+                <label>Data</label>
+                <? $dt = (@$exames[0]->data != "") ? date("d/m/Y", strtotime(@$exames[0]->data)) : ''; ?>
+                <input type="text"  id="data_ficha" name="data_ficha" class="size1" required value="<?= $dt ?>"/>
+                <input type="hidden" name="txtpaciente_id" value="<?= @$obj->_paciente_id; ?>" />
+            </div>
+            <legend>Medicos</legend>
 
-                    <div class="col-lg-6 tb1">
-                        <div class="form-group">
-                            <label>Data</label>
-                            <input type="text"  id="data_ficha" name="data_ficha" class="form-control" required />
-                            <input type="hidden" name="txtpaciente_id" value="<?= @$obj->_paciente_id; ?>" />
-                            <label>Convenio *</label>
-                            <select name="convenio" id="convenio" class="form-control" required>
-                                <option  value="0">Selecione</option>
-                                <? foreach ($convenio as $value) : ?>
-                                    <option value="<?= $value->convenio_id; ?>"><?php echo $value->nome; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                        </div>
-
-
-                    </div>
-                    <div class="col-lg-6 tb2">
-                        <div class="form-group">
-                            <label>Medico</label>
-                            <select name="exame" id="exame" class="form-control" required>
-                                <option value="" >Selecione</option>
-                                <? foreach ($medico as $item) : ?>
-                                    <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                            <label>Convenio *</label>
-                            <select name="convenio" id="convenio" class="form-control" required>
-                                <option  value="0">Selecione</option>
-                                <? foreach ($convenio as $value) : ?>
-                                    <option value="<?= $value->convenio_id; ?>"><?php echo $value->nome; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                        </div>
-
-
-                    </div>
-                    <div class="col-lg-4 tb3">
-                        <div class="form-group">
-                            <label>Horarios</label>
-                            <select name="horarios" id="horarios" class="form-control">
-                                <option value="" >-- Escolha um horário --</option>
-                            </select>
-                        </div>
-
-
-                    </div>
-
-                <!-- </div>
-                <div class="row"> -->
-
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <!-- <label>Convenio *</label>
-                            <select name="convenio" id="convenio" class="form-control" required>
-                                <option  value="0">Selecione</option>
-                                <? foreach ($convenio as $value) : ?>
-                                    <option value="<?= $value->convenio_id; ?>"><?php echo $value->nome; ?></option>
-                                <? endforeach; ?>
-                            </select> -->
-                        </div>
-
-
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <!-- <label>Procedimento*</label>
-                            <select  name="procedimento" id="procedimento" class="form-control" required>
-                                <option value="">Selecione</option>
-                            </select> -->
-                        </div>
-
-
-                    </div>
-
-<!-- 
-                </div>
-                <div class="row"> -->
-
-                    <div class="col-lg-8 tb4">
-                        <div class="form-group">
-                            <label>Observações</label>
-                            <textarea id="observacoes" class="form-control" name="observacoes"></textarea>
-                        </div>
-
-
-                    </div>
-
-
-
-                </div>
-
-
-                <div class="tb4">
-                    <div class="col-lg-1 ">
-                        <button class="btn btn-outline btn-success btn-sm" type="submit" name="btnEnviar"><i class="fa fa-floppy-o" aria-hidden="true"></i>
-                            Enviar</button>
-                    </div>
-                    <div class="col-lg-1">
-                        <button class="btn btn-outline btn-danger btn-sm" type="reset" name="btnLimpar">Limpar</button>
-                    </div>
-                </div>
-
-
-
+            <div>
+                <label>Medico</label>
+                <select name="exame" id="exame" class="size4" required>
+                    <option value="" >Selecione</option>
+                    <?
+                    $lastMed = @$exames[0]->medico_consulta_id;
+                    foreach ($medico as $item) :
+                        ?>
+                        <option value="<?= $item->operador_id; ?>" <? if ($lastMed == $item->operador_id) echo 'selected'; ?>>
+                            <?= $item->nome; ?>
+                        </option>
+                    <? endforeach; ?>
+                </select>
             </div>
 
-        </div>
+            <div>
+                <label>Horarios</label>
+                <select name="horarios" id="horarios" class="size2" required>
+                    <option value="" >-- Escolha um exame --</option>
+                </select>
+            </div>
+            <div>
+                <label>Convenio *</label>
+                <select name="convenio" id="convenio" class="size4" required>
+                    <option  value="0">Selecione</option>
+                    <?
+                    $lastCov = @$exames[0]->convenio_id;
+                    foreach ($convenio as $value) :
+                        ?>
+                        <option value="<?= $value->convenio_id; ?>" <? if ($lastCov == $value->convenio_id) echo 'selected'; ?>>
+                            <?php echo $value->nome; ?>
+                        </option>
+                    <? endforeach; ?>
+                </select>
+            </div>
+            <div>
+                <label>Procedimento</label>
+<!--                <select  name="procedimento" id="procedimento" class="size1" required>
+                    <option value="">Selecione</option>
+                </select>-->
+                <select name="procedimento" id="procedimento" class="size4 chosen-select" data-placeholder="Selecione" tabindex="1" required="">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Obsedrva&ccedil;&otilde;es</label>
+                <input type="text" id="observacoes" class="size3" name="observacoes" />
+            </div>
+
+            <div>
+                <label>&nbsp;</label>
+                <button type="submit" name="btnEnviar">Adicionar</button>
+            </div>
     </form>
+</fieldset>
 
-
+<fieldset>
     <?
     if ($contador > 0) {
         ?>
-        <div class="row">
-            <div class="col-lg-12">
+        <table id="table_agente_toxico" border="0">
+            <thead>
 
+                <tr>
+                    <th class="tabela_header">Data</th>
+                    <th class="tabela_header">Hora</th>
+                    <th class="tabela_header">M&eacute;dico</th>
+                    <th class="tabela_header">Observa&ccedil;&otilde;es</th>
+                    <th class="tabela_header" colspan="4">&nbsp;</th>
+                </tr>
+            </thead>
+            <?
+            $estilo_linha = "tabela_content01";
+            foreach ($exames as $item) {
+                ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
+                ?>
+                <tbody>
+                    <tr>
+                        <td class="<?php echo $estilo_linha; ?>"><?= substr($item->data, 8, 2) . '/' . substr($item->data, 5, 2) . '/' . substr($item->data, 0, 4); ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"><?= $item->inicio; ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"><?= $item->sala . "-" . $item->medico; ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"><a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exame/alterarobservacao/<?= $item->agenda_exames_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,\n\
+                                                                                width=500,height=230');">=><?= $item->observacoes; ?></a></td>
 
-                <div class="panel panel-default ">
-                    <div class="alert alert-info">
-                        Agendamentos
-                    </div>
-                    <div class="panel-body">
-                        <div class="table-responsive">
+                        <? if (empty($faltou)) { ?>
+                            <? if ($item->encaixe == 't') { ?>
+                                <td class="<?php echo $estilo_linha; ?>" width="40px;">
+                                    <div class="bt_link">
+                                        <a href="<?= base_url() ?>ambulatorio/exame/examecancelamentoagendamento/<?= $item->agenda_exames_id; ?>/<?= @$obj->_paciente_id; ?>/CONSULTA/true">
+                                            Excluir
+                                        </a>
+                                    </div>
+                                </td>
+                            <? } else { ?>
+                                <td class="<?php echo $estilo_linha; ?>" width="40px;">
+                                    <div class="bt_link">
+                                        <a href="<?= base_url() ?>ambulatorio/exame/examecancelamentoagendamento/<?= $item->agenda_exames_id; ?>/<?= @$obj->_paciente_id; ?>/CONSULTA/false">
+                                            Excluir
+                                        </a>
+                                    </div>
+                                </td>
 
+                            <? } ?>
 
-                            <table class="table table-striped table-hover" border="0">
-                                <thead>
+                        <? } ?>
+                        <td class="<?php echo $estilo_linha; ?>" width="40px;"><div class="bt_link">
+                                <a href="<?= base_url() ?>ambulatorio/exametemp/reservarconsultatemp/<?= $item->agenda_exames_id; ?>/<?= @$obj->_paciente_id; ?>/<?= $item->medico_consulta_id; ?>/<?= $item->data; ?>">
+                                    reservar</a></div></td>
+                        <? if ($item->confirmado == 'f' && $item->realizada == 'f') {?>
+                            <td class="<?php echo $estilo_linha; ?>" width="40px;"><div class="bt_link">
+                                    <a href="<?= base_url() ?>ambulatorio/exametemp/reangedarconsultatemp/<?= $item->agenda_exames_id; ?>/<?= @$obj->_paciente_id; ?>/<?= $item->medico_consulta_id; ?>">
+                                        Re-Agendar</a></div></td>
+                        <? } ?>
+                    </tr>
 
-                                    <tr>
-                                        <th class="tabela_header">Data</th>
-                                        <th class="tabela_header">Hora</th>
-                                        <th class="tabela_header">M&eacute;dico</th>
-                                        <th class="tabela_header">Observa&ccedil;&otilde;es</th>
-                                        <th class="tabela_acoes" colspan="2">Ações</th>
-                                    </tr>
-                                </thead>
-                                <?
-                                $estilo_linha = "tabela_content01";
-                                foreach ($exames as $item) {
-                                    ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
-                                    ?>
+                </tbody>
+                <?
+            }
+        }
+        ?>
+        <tfoot>
+            <tr>
+                <th class="tabela_footer" colspan="4">
+                </th>
+            </tr>
+        </tfoot>
+    </table> 
+    <?
+    if (count($consultasanteriores) > 0) {
+        foreach ($consultasanteriores as $value) {
+            $data_atual = date('Y-m-d');
+            $data1 = new DateTime($data_atual);
+            $data2 = new DateTime($value->data);
 
-                                    <tr>
-                                        <td class="<?php echo $estilo_linha; ?>"><?= substr($item->data, 8, 2) . '/' . substr($item->data, 5, 2) . '/' . substr($item->data, 0, 4); ?></td>
-                                        <td class="<?php echo $estilo_linha; ?>"><?= $item->inicio; ?></td>
-                                        <td class="<?php echo $estilo_linha; ?>"><?= $item->sala . "-" . $item->medico; ?></td>
-                                        <td class="<?php echo $estilo_linha; ?>"><a  onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exame/alterarobservacao/<?= $item->agenda_exames_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,\n\
-                                                                                                                                                                                                                                                        width=500,height=230');">=><?= $item->observacoes; ?></a></td>
-                                        <td class="tabela_acoes">
-                                            <? if (empty($faltou)) { ?>
+            $intervalo = $data1->diff($data2);
+            ?>
+            <h6><b><?= $intervalo->days ?> dia(s)</b>&nbsp;&nbsp;&nbsp;-ULTIMA ATENDIMENTO: <?= $value->procedimento; ?> - DATA: <b><?= substr($value->data, 8, 2) . '/' . substr($value->data, 5, 2) . '/' . substr($value->data, 0, 4); ?> </b> - M&eacute;dico: <b> <?= $value->medico; ?></b> - Convenio:  <?= $value->convenio; ?></h6>
 
-
-                                                <a class="btn btn-outline btn-danger btn-sm" onclick="javascript: return confirm('Deseja realmente excluir a consulta?');" href="<?= base_url() ?>ambulatorio/exametemp/excluirconsultatemp/<?= $item->agenda_exames_id; ?>/<?= @$obj->_paciente_id; ?>">
-                                                    Excluir</a>
-
-                                            <? } ?>
-
-                                            <a class="btn btn-outline btn-info btn-sm"  href="<?= base_url() ?>ambulatorio/exametemp/reservarconsultatemp/<?= $item->agenda_exames_id; ?>/<?= @$obj->_paciente_id; ?>/<?= $item->medico_consulta_id; ?>/<?= $item->data; ?>">
-                                                Reservar</a></td>
-
-                                    </tr>
-
-
-                                <? }
-                                ?>
-                            </table> 
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    <? }
+            <?
+        }
+    } else {
+        ?>
+        <h6>NENHUMA CONSULTA ENCONTRADA</h6>
+        <?
+    }
     ?>
 
 
-    <div class="row">
-        <div class="col-lg-12">
-
-
-
-            <? if (count($consultasanteriores) > 0) { ?>
-                <div class="panel panel-default ">
-                    <div class="alert alert-info">
-                        Atendimentos Antigos
-                    </div>
-                    <div class="panel-body">
-
-
-                        <?
-                        foreach ($consultasanteriores as $value) {
-                            $data_atual = date('Y-m-d');
-                            $data1 = new DateTime($data_atual);
-                            $data2 = new DateTime($value->data);
-
-                            $intervalo = $data1->diff($data2);
-                            ?>
-                            <h6><b><?= $intervalo->days ?> dia(s)</b>&nbsp;&nbsp;&nbsp;-ULTIMA ATENDIMENTO: <?= $value->procedimento; ?> - DATA: <b><?= substr($value->data, 8, 2) . '/' . substr($value->data, 5, 2) . '/' . substr($value->data, 0, 4); ?> </b> - M&eacute;dico: <b> <?= $value->medico; ?></b> - Convenio:  <?= $value->convenio; ?></h6>
-
-                        <? }
-                        ?>
-                    </div>
-                </div>  
-            <? } else {
-                ?>
-                <div class="panel panel-default ">
-                    <div class="alert alert-info">
-                        Atendimentos Antigos
-                    </div>
-                    <div class="panel-body">
-                        <h6>NENHUMA ATENDIMENTO ENCONTRADO</h6>
-                    </div>
-                </div>
-                <?
-            }
-            ?>
-        </div>
-    </div>
-
-
-
+</fieldset>
 </div> <!-- Final da DIV content -->
-<!--<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.4.2.min.js" ></script>-->
-<!--<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>-->
+<link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css">
+<script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
-<!--<script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>-->
+<script type="text/javascript" src="<?= base_url() ?>js/jquery.maskedinput.js"></script>
+<link rel="stylesheet" href="<?= base_url() ?>js/chosen/chosen.css">
+<!--<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/style.css">-->
+<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/prism.css">
+<script type="text/javascript" src="<?= base_url() ?>js/chosen/chosen.jquery.js"></script>
+<!--<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/prism.js"></script>-->
+<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/init.js"></script>
+<style>
+    .chosen-container{ margin-top: 5pt;}
+    /*#procedimento1_chosen a { width: 130px; }*/
+</style>
+
 <script>
-                                        function mascaraTelefone(campo) {
+                            if ($("#exame").val() != "") {
+                                $.getJSON('<?= base_url() ?>autocomplete/horariosambulatorioconsulta', {exame: $("#exame").val(), teste: $("#data_ficha").val()}, function (j) {
+                                    var options = '<option value=""></option>';
+                                    for (var i = 0; i < j.length; i++) {
+                                        options += '<option value="' + j[i].agenda_exames_id + '">' + j[i].inicio + '</option>';
+                                    }
+                                    $('#horarios').html(options).show();
+                                    $('.carregando').hide();
+                                });
+                            }
 
-                                            function trata(valor, isOnBlur) {
+                            if ($("#convenio").val() != "0") {
+                                $.getJSON('<?= base_url() ?>autocomplete/procedimentoconvenioconsulta', {convenio1: $("#convenio").val(), ajax: true}, function (j) {
+                                    options = '<option value=""></option>';
+                                    for (var c = 0; c < j.length; c++) {
+                                        options += '<option value="' + j[c].procedimento_convenio_id + '">' + j[c].procedimento + '</option>';
+                                    }
+//                                    $('#procedimento').html(options).show();
+                                    $('#procedimento option').remove();
+                                    $('#procedimento').append(options);
+                                    $("#procedimento").trigger("chosen:updated");
+                                    $('.carregando').hide();
+                                });
+                            }
 
-                                                valor = valor.replace(/\D/g, "");
-                                                valor = valor.replace(/^(\d{2})(\d)/g, "($1)$2");
+                            function mascaraTelefone(campo) {
 
-                                                if (isOnBlur) {
+                                function trata(valor, isOnBlur) {
 
-                                                    valor = valor.replace(/(\d)(\d{4})$/, "$1-$2");
-                                                } else {
+                                    valor = valor.replace(/\D/g, "");
+                                    valor = valor.replace(/^(\d{2})(\d)/g, "($1)$2");
 
-                                                    valor = valor.replace(/(\d)(\d{3})$/, "$1-$2");
-                                                }
-                                                return valor;
-                                            }
+                                    if (isOnBlur) {
 
-                                            campo.onkeypress = function (evt) {
+                                        valor = valor.replace(/(\d)(\d{4})$/, "$1-$2");
+                                    } else {
 
-                                                var code = (window.event) ? window.event.keyCode : evt.which;
-                                                var valor = this.value
+                                        valor = valor.replace(/(\d)(\d{3})$/, "$1-$2");
+                                    }
+                                    return valor;
+                                }
 
-                                                if (code > 57 || (code < 48 && code != 0 && code != 8 && code != 9)) {
-                                                    return false;
-                                                } else {
-                                                    this.value = trata(valor, false);
-                                                }
-                                            }
+                                campo.onkeypress = function (evt) {
 
-                                            campo.onblur = function () {
+                                    var code = (window.event) ? window.event.keyCode : evt.which;
+                                    var valor = this.value
 
-                                                var valor = this.value;
-                                                if (valor.length < 13) {
-                                                    this.value = ""
-                                                } else {
-                                                    this.value = trata(this.value, true);
-                                                }
-                                            }
+                                    if (code > 57 || (code < 48 && code != 0 && code != 8 && code != 9)) {
+                                        return false;
+                                    } else {
+                                        this.value = trata(valor, false);
+                                    }
+                                }
 
-                                            campo.maxLength = 14;
-                                        }
+                                campo.onblur = function () {
+
+                                    var valor = this.value;
+                                    if (valor.length < 13) {
+                                        this.value = ""
+                                    } else {
+                                        this.value = trata(this.value, true);
+                                    }
+                                }
+
+                                campo.maxLength = 14;
+                            }
 
 
 </script>
 <script type="text/javascript">
-    mascaraTelefone(form_exametemp.txtTelefone);
-    mascaraTelefone(form_exametemp.txtCelular);
+    jQuery("#txtTelefone")
+            .mask("(99) 9999-9999?9")
+            .focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-999?9");
+                } else {
+                    element.mask("(99) 9999-9999?9");
+                }
+            });
+jQuery("#txtwhatsapp")
+            .mask("(99) 9999-9999?9")
+            .focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-999?9");
+                } else {
+                    element.mask("(99) 9999-9999?9");
+                }
+            });
+    jQuery("#txtCelular")
+            .mask("(99) 9999-9999?9")
+            .focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-999?9");
+                } else {
+                    element.mask("(99) 9999-9999?9");
+                }
+            });
 
     $(function () {
         $('#convenio').change(function () {
@@ -389,11 +384,18 @@
                     for (var c = 0; c < j.length; c++) {
                         options += '<option value="' + j[c].procedimento_convenio_id + '">' + j[c].procedimento + '</option>';
                     }
-                    $('#procedimento').html(options).show();
+                    console.log(options);
+//                    $('#procedimento').html(options).show();
+
+                    $('#procedimento option').remove();
+                    $('#procedimento').append(options);
+                    $("#procedimento").trigger("chosen:updated");
                     $('.carregando').hide();
                 });
             } else {
-                $('#procedimento').html('<option value="">Selecione</option>');
+                $('#procedimento option').remove();
+                $('#procedimento').append('');
+                $("#procedimento").trigger("chosen:updated");
             }
         });
     });
@@ -481,7 +483,15 @@
         var data = document.getElementById("txtNascimento").value;
         var ano = data.substring(6, 12);
         var idade = new Date().getFullYear() - ano;
-        document.getElementById("idade2").value = idade;
+
+        var dtAtual = new Date();
+        var aniversario = new Date(dtAtual.getFullYear(), parseInt(data.substring(3, 5)) - 1, data.substring(0, 2));
+
+        if (dtAtual < aniversario) {
+            idade--;
+        }
+
+        document.getElementById("idade2").value = idade + " ano(s)";
     }
 
     calculoIdade();

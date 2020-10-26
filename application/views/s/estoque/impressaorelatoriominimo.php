@@ -70,16 +70,16 @@
                         if ($i == 1) {
                             ?>
                             <tr>
-                                <td colspan="8"><font size="-2"><b>Armazem:&nbsp;<?= utf8_decode($item->armazem); ?></b></td>
+                                <td colspan="8"><font size="-2"><b>Armazem:&nbsp;<?= ($item->armazem); ?></b></td>
                             </tr>
                             <?
                         }
                         if ($item->quantidade <= $item->estoque_minimo) {
                             ?>
                             <tr>
-                                <td><font size="-2"><?= utf8_decode($item->produto); ?></td>
+                                <td><font size="-2"><?= ($item->produto); ?></td>
                                 <td style='text-align: right;'><font size="-2"><?= $item->quantidade; ?></td>
-                                <td style='text-align: right;'><font size="-2"><?= utf8_decode($item->estoque_minimo); ?></td>
+                                <td style='text-align: right;'><font size="-2"><?= ($item->estoque_minimo); ?></td>
                             </tr>
 
 
@@ -98,13 +98,13 @@
                         $qtdetotal++;
                         ?>
                         <tr>
-                            <td colspan="8"><font size="-2"><b>Armazem:&nbsp;<?= utf8_decode($item->armazem); ?></b></td>
+                            <td colspan="8"><font size="-2"><b>Armazem:&nbsp;<?= ($item->armazem); ?></b></td>
                         </tr>
                         <? if ($item->quantidade <= $item->estoque_minimo) { ?>
                             <tr>
-                                <td><font size="-2"><?= utf8_decode($item->produto); ?></td>
+                                <td><font size="-2"><?= ($item->produto); ?></td>
                                 <td style='text-align: right;'><font size="-2"><?= $item->quantidade; ?></td>
-                                <td style='text-align: right;'><font size="-2"><?= utf8_decode($item->estoque_minimo); ?></td>
+                                <td style='text-align: right;'><font size="-2"><?= ($item->estoque_minimo); ?></td>
                             </tr>
                             <?
                             $qtde = 0;

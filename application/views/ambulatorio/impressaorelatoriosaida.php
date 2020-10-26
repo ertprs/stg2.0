@@ -5,7 +5,7 @@
         <h4>TODOS OS TIPOS</h4>
     <? } ?>
     <? if (count($classe) > 0) { ?>
-         <? $texto = strtr(strtoupper($classe[0]->descricao), "àáâãäåæçèéêëìíîïðñòóôõö÷øùüúþÿ", "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÜÚÞß"); ?>
+        <? $texto = strtr(strtoupper($classe[0]->descricao), "àáâãäåæçèéêëìíîïðñòóôõö÷øùüúþÿ", "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÜÚÞß"); ?>
         <h4>CLASSE: <?= $texto; ?></h4>
     <? } else { ?>
         <h4>TODAS AS CLASSES</h4>
@@ -21,7 +21,7 @@
         <h4>TODAS OS CREDORES</h4>
     <? } ?>
     <h4>RELATORIO DE SAIDA</h4>
-    <h4>PERIODO: <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_inicio) ) ); ?> ate <?= str_replace("-","/",date("d-m-Y", strtotime($txtdata_fim) ) ); ?></h4>
+    <h4>PERIODO: <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_inicio))); ?> ate <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_fim))); ?></h4>
     <hr>
     <?
     if (count($relatorio) > 0) {
@@ -35,24 +35,27 @@
                     <th class="tabela_header">Classe</th>
                     <th class="tabela_header">Dt saida</th>
                     <th class="tabela_header">Valor</th>
-
                     <th class="tabela_header">Observacao</th>
+                    <th class="tabela_header">Empresa</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $total = 0;
                 foreach ($relatorio as $item) :
-                    $total = $total + $item->valor;
+                    if ($item->tipo != 'TRANSFERENCIA') {
+                        $total = $total + $item->valor;
+                    }
                     ?>
                     <tr>
-                        <td ><?= utf8_decode($item->conta); ?></td>
-                        <td ><?= utf8_decode($item->razao_social); ?></td>
-                        <td ><?= utf8_decode($item->tipo); ?></td>
-                        <td ><?= utf8_decode($item->classe); ?></td>
+                        <td ><?= ($item->conta); ?></td>
+                        <td ><?= ($item->razao_social); ?></td>
+                        <td ><?= ($item->tipo); ?></td>
+                        <td ><?= ($item->classe); ?></td>
                         <td ><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
                         <td ><?= number_format($item->valor, 2, ",", "."); ?></td>
-                        <td ><?= utf8_decode($item->observacao); ?></td>
+                        <td ><?= ($item->observacao); ?></td>
+                        <td ><?= ($item->empresa); ?></td>
                     </tr>
                 <? endforeach; ?>
                 <tr>
@@ -60,11 +63,12 @@
                     <td colspan="2"><b><?= number_format($total, 2, ",", "."); ?></b></td>
                 </tr>
             </tbody>
+        </table>
+    <h4>Obs: Transfer&ecirc;ncias n&atilde;o s&atilde;o somadas no valor total</h4>
 
 
             <?
-        }
-        else {
+        } else {
             ?>
             <h4>N&atilde;o h&aacute; resultados para esta consulta.</h4>
             <?

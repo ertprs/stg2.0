@@ -1,8 +1,9 @@
-<div id="page-wrapper"> <!-- Inicio da DIV content -->
-<div class="panel-body">
+
+<div class="content"> <!-- Inicio da DIV content -->
+    <div id="accordion">
         <h3 class="singular"><a href="#">Pesquisa Satisfação</a></h3>
         <div>
-            <table class="table table-striped table-bordered table-hover " id="dataTables-example">
+            <table>
                 <thead>
 <!--                    <tr>
                         <th colspan="5" class="tabela_title">

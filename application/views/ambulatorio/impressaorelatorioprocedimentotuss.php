@@ -1,3 +1,4 @@
+<meta charset="UTF-8">
 <div class="content"> <!-- Inicio da DIV content -->
 
     <? if (count($empresa) > 0) { ?>
@@ -21,7 +22,7 @@
                     ?>
                     <tr>
                         <td><?= $item->codigo; ?></td>
-                        <td><?= utf8_decode($item->descricao); ?></td>
+                        <td><?= $item->descricao; ?></td>
                         <td><?= number_format($item->valor, 2, ',', '.') ?></td>
                         <td><?= $item->classificacao; ?></td>
 

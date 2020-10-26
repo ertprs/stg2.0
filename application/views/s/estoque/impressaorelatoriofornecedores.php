@@ -61,7 +61,7 @@
 
                     <? } ?>
                     <tr>
-                        <td><font size="-2"><?= utf8_decode($item->fantasia); ?></td>
+                        <td><font size="-2"><?= ($item->fantasia); ?></td>
                         <td style='text-align: right;'><font size="-2"><?= $item->telefone; ?></td>
                         <td style='text-align: right;'><font size="-2"><?= $item->celular; ?></td>
                     </tr>

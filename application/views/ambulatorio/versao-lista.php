@@ -8,6 +8,7 @@
                     <tr>
                         <th class="tabela_header">Vers&atilde;o do Sistema</th>
                         <th class="tabela_header">Vers&atilde;o do Banco de Dados</th>
+                        <th class="tabela_header">Detalhes</th>
                     </tr>
                 </thead>
                 <?php
@@ -21,14 +22,19 @@
                     ?>
                     <tbody>
                         <?php
-                        $lista = $this->versao->listar($_GET)->limit($limit, $pagina)->get()->result();
+                        $lista = $this->versao->listar($_GET)->orderby('versao_id')->limit($limit, $pagina)->get()->result();
                         $estilo_linha = "tabela_content01";
                         foreach ($lista as $item) {
                             ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
                             ?>
                             <tr>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->sistema; ?></td>
+                                <td class="<?php echo $estilo_linha; ?>"><?// $item->sistema; ?> 1.0.000075</td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->banco_de_dados; ?></td>                                                    
+                                <td style="text-align: right" class="<?php echo $estilo_linha; ?>">
+                                    <div class="bt_link_new">
+                                        <a href="<?= base_url() . "ambulatorio/versao/pesquisardetalhes/" . $item->sistema; ?>" >Detalhes</a>
+                                    </div>
+                                </td>                                                    
 
                             </tr>
 

@@ -34,14 +34,14 @@
                         if ($i == 1) {
                             ?>
                             <tr>
-                                <td colspan="8"><font ><b>Atendente:&nbsp;<?= utf8_decode($item->atendente); ?></b></td>
+                                <td colspan="8"><font ><b>Atendente:&nbsp;<?= ($item->atendente); ?></b></td>
                             </tr>
                         <? } ?>
                         <tr>                            
                             <td><font size="-2"><?= $item->convenio; ?></td>
                             <td><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>                          
                             <td><?= $item->paciente; ?></td>                           
-                            <td><font size="-2"><?= utf8_decode($item->procedimento); ?></td>
+                            <td><font size="-2"><?= ($item->procedimento); ?></td>
                             <td ><font size="-2"><?= $item->quantidade; ?></td>                                  
                         </tr>
                         <?php
@@ -61,13 +61,13 @@
                         $qtdetotal++;
                         ?>
                         <tr>
-                            <td colspan="8"><font ><b>Atendente:&nbsp;<?= utf8_decode($item->atendente); ?></b></td>
+                            <td colspan="8"><font ><b>Atendente:&nbsp;<?= ($item->atendente); ?></b></td>
                         </tr>
                         <tr>
                             <td><font size="-2"><?= $item->convenio; ?></td>
                             <td><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>                          
                             <td><?= $item->paciente; ?></td>                           
-                            <td><font size="-2"><?= utf8_decode($item->procedimento); ?></td>
+                            <td><font size="-2"><?= ($item->procedimento); ?></td>
                             <td ><font size="-2"><?= $item->quantidade; ?></td>   
                         </tr>
                         <?

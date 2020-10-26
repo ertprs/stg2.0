@@ -28,7 +28,7 @@ $head ="
                              $pertotal = $pertotal +$per;
                              $body = $body . "
                             <tr>
-                                <td>" . utf8_decode($item->descricao) . " </td>
+                                <td>" . ($item->descricao) . " </td>
                                 <td>" . $item->total . " </td>
                                 <td>" . $item->total . " </td>
                                 <td>" . substr($per,0,4) . " %</td>

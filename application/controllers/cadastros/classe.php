@@ -17,6 +17,8 @@ class Classe extends BaseController {
     function Classe() {
         parent::Controller();
         $this->load->model('cadastro/classe_model', 'classe');
+        $this->load->model('cadastro/nivel1_model', 'nivel1');
+        $this->load->model('cadastro/nivel2_model', 'nivel2');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -38,6 +40,8 @@ class Classe extends BaseController {
         $obj_classe = new classe_model($financeiro_classe_id);
         $data['obj'] = $obj_classe;
         $data['tipo'] = $this->classe->listartipo();
+        $data['nivel1'] = $this->nivel1->listarnivel1();
+        $data['nivel2'] = $this->nivel2->listarnivel2();
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('cadastros/classe-form', $data);
     }
@@ -45,9 +49,9 @@ class Classe extends BaseController {
     function excluir($financeiro_classe_id) {
         $valida = $this->classe->excluir($financeiro_classe_id);
         if ($valida == 0) {
-            $data['mensagem'] = array('Sucesso ao excluir a Classe' ,'success');
+            $data['mensagem'] = 'Sucesso ao excluir a Classe';
         } else {
-            $data['mensagem'] = array('Erro ao excluir a classe. Operação Cancelada.', 'error');
+            $data['mensagem'] = 'Erro ao excluir a classe. Opera&ccedil;&atilde;o cancelada.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/classe");
@@ -56,9 +60,9 @@ class Classe extends BaseController {
     function gravar() {
         $exame_classe_id = $this->classe->gravar();
         if ($exame_classe_id == "-1") {
-            $data['mensagem'] = array('Erro ao gravar a Classe. Opera&ccedil;&atilde;o cancelada.', 'error');
+            $data['mensagem'] = 'Erro ao gravar a Classe. Opera&ccedil;&atilde;o cancelada.';
         } else {
-            $data['mensagem'] = array('Sucesso ao gravar a Classe.', 'success');
+            $data['mensagem'] = 'Sucesso ao gravar a Classe.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/classe");

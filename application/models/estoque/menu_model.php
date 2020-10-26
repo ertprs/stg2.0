@@ -132,12 +132,11 @@ class menu_model extends Model {
         return $return->result();
     }
 
-    
     function excluirmenuproduto($menu_produto_id) {
 
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
-        
+
         $this->db->set('ativo', 'f');
         $this->db->set('data_atualizacao', $horario);
         $this->db->set('operador_atualizacao', $operador_id);
@@ -149,7 +148,7 @@ class menu_model extends Model {
         else
             return 0;
     }
-    
+
     function excluir($estoque_menu_id) {
 
         $horario = date("Y-m-d H:i:s");
@@ -216,13 +215,92 @@ class menu_model extends Model {
     function gravaritens() {
         try {
             /* inicia o mapeamento no banco */
-            $this->db->set('menu_id', $_POST['txtestoque_menu_id']);
-            $this->db->set('produto', $_POST['produto_id']);
-            $horario = date("Y-m-d H:i:s");
-            $operador_id = $this->session->userdata('operador_id');
-            $this->db->set('data_cadastro', $horario);
-            $this->db->set('operador_cadastro', $operador_id);
-            $this->db->insert('tb_estoque_menu_produtos');
+ 
+
+            $this->db->select('p.estoque_produto_id');
+            $this->db->from('tb_estoque_produto p');
+            $this->db->join('tb_estoque_menu_produtos em', 'p.estoque_produto_id = em.produto');
+            $this->db->where('p.ativo', 'true');
+            $this->db->where('em.ativo', 'true');
+            $this->db->where('em.menu_id', $_POST['txtestoque_menu_id']);
+            $this->db->orderby('p.descricao');
+ 
+            $returnv = $this->db->get()->result();
+
+              $this->db->select('p.estoque_produto_id,
+                            p.descricao');
+            $this->db->from('tb_estoque_produto p');
+            $this->db->where('p.ativo', 'true');
+
+            foreach ($returnv as $prod) {
+                $this->db->where('p.estoque_produto_id !=', $prod->estoque_produto_id);
+            }
+
+            $this->db->orderby('p.descricao');
+            $return = $this->db->get()->result();
+            
+            
+//            var_dump($returnv);
+ 
+            if (count($return) <= 0) {
+                return -1;
+            } 
+
+            if (@$_POST['produto_id'] == "todos") {
+                
+                foreach ($return as $item) {
+                    $this->db->set('menu_id', $_POST['txtestoque_menu_id']);
+                    $this->db->set('produto', $item->estoque_produto_id);
+                    $horario = date("Y-m-d H:i:s");
+                    $operador_id = $this->session->userdata('operador_id');
+                    $this->db->set('data_cadastro', $horario);
+                    $this->db->set('operador_cadastro', $operador_id);
+                    $this->db->insert('tb_estoque_menu_produtos');
+                }
+                
+                
+                
+                
+            } elseif (@$_POST['produto_id'] != "") {
+
+                
+                
+                 $this->db->select('');
+                $this->db->from('tb_estoque_menu_produtos');
+                $this->db->where('menu_id', $_POST['txtestoque_menu_id']);
+                $this->db->where('ativo', 'true');
+                $this->db->where('produto', $_POST['produto_id']);
+                $verificar_prod = $this->db->get()->result();  
+                if (count($verificar_prod) >= 1) {
+                    return -2;
+                } 
+                
+                 
+
+                $this->db->set('menu_id', $_POST['txtestoque_menu_id']);
+                $this->db->set('produto', $_POST['produto_id']);
+                $horario = date("Y-m-d H:i:s");
+                $operador_id = $this->session->userdata('operador_id');
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+                $this->db->insert('tb_estoque_menu_produtos');
+          
+                
+            } else {
+                
+                
+                
+                
+            }
+
+
+
+
+
+
+
+
+
             $erro = $this->db->_error_message();
             if (trim($erro) != "") // erro de banco
                 return -1;

@@ -29,7 +29,7 @@ $head ="
                     $porcentagem = number_format($porcentagem,2,".","");
 $body = $body . "
                 <tr>
-              <td width=\"300px;\"> " . utf8_decode($item->descricao_agente_toxico) . "  </td>
+              <td width=\"300px;\"> " . ($item->descricao_agente_toxico) . "  </td>
 
               <td width=\"100px;\"> " .
 

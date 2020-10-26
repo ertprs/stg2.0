@@ -49,7 +49,7 @@
                                     <a href="<?= base_url() ?>estoque/menu/carregarmenu/<?= $item->estoque_menu_id ?>">Editar</a>
                             </td>
                                 <td class="<?php echo $estilo_linha; ?>" width="60px;">                                  
-                                    <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Menu?');" href="<?= base_url() ?>estoque/menu/excluir/<?= $item->estoque_menu_id ?>">Excluir</a>
+                                    <a onclick="javascript: return confirm('Deseja realmente Excluir esse Menu?');" href="<?= base_url() ?>estoque/menu/excluir/<?= $item->estoque_menu_id ?>">Excluir</a>
                             </td>
                         </tr>
 

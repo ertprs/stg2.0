@@ -17,6 +17,7 @@ class Modelosolicitarexames extends BaseController {
         parent::Controller();
         $this->load->model('ambulatorio/modelosolicitarexames_model', 'modelosolicitarexames');
         $this->load->model('seguranca/operador_model', 'operador_m');
+        $this->load->model('ambulatorio/guia_model', 'guia');
         $this->load->model('ambulatorio/procedimento_model', 'procedimento');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
@@ -35,6 +36,13 @@ class Modelosolicitarexames extends BaseController {
 //            $this->carregarView($data);
     }
 
+    function pesquisar2($args = array()) {
+
+        $this->load->View('ambulatorio/modelosolicitarexames-lista2', $args);
+
+//            $this->carregarView($data);
+    }
+
     function carregarmodelosolicitarexames($exame_modelosolicitarexames_id) {
         $obj_modelosolicitarexames = new modelosolicitarexames_model($exame_modelosolicitarexames_id);
         $data['obj'] = $obj_modelosolicitarexames;
@@ -44,14 +52,24 @@ class Modelosolicitarexames extends BaseController {
         $this->load->View('ambulatorio/modelosolicitarexames-form', $data);
     }
 
-    function excluir($exame_modelosolicitarexames_id) {
-        if ($this->procedimento->excluir($exame_modelosolicitarexames_id)) {
-            $mensagem = 'Sucesso ao excluir a Modelosolicitarexames';
+    function excluirmodelo($exame_modelosolicitarexames_id) {
+        if ($this->modelosolicitarexames->excluir($exame_modelosolicitarexames_id)) {
+            $mensagem = 'Sucesso ao excluir a Modelo solicitar exames';
         } else {
-            $mensagem = 'Erro ao excluir a Modelosolicitarexames. Opera&ccedil;&atilde;o cancelada.';
+            $mensagem = 'Erro ao excluir a Modelo solicitar exames. Opera&ccedil;&atilde;o cancelada.';
         }
 
         $this->session->set_flashdata('message', $mensagem);
+        redirect(base_url() . "ambulatorio/modelosolicitarexames");
+    }
+
+    function ativarmodeloexameautomatico($modeloexame_id) {
+        $this->modelosolicitarexames->ativarmodeloexameautomatico($modeloexame_id);
+        redirect(base_url() . "ambulatorio/modelosolicitarexames");
+    }
+
+    function desativarmodeloexameautomatico($modeloexame_id) {
+        $this->modelosolicitarexames->desativarmodeloexameautomatico($modeloexame_id);
         redirect(base_url() . "ambulatorio/modelosolicitarexames");
     }
 

@@ -1,84 +1,49 @@
-<div id="page-wrapper">
+<div class="content"> <!-- Inicio da DIV content -->
+    <div id="accordion">
+        <h3><a href="#">Gerar relatorio Aniversariantes</a></h3>
+        <div>
+            <form method="post" action="<?= base_url() ?>ambulatorio/guia/gerarelatorioaniversariantes">
+                <dl>
+                    <dt>
+                        <label>Periodo Inicial</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="txtdata_inicio" id="txtdata_inicio" alt="date" />
+                    </dd>
+                    <dt>
+                        <label>Periodo Final</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="txtdata_fim" id="txtdata_fim" alt="date" />
+                    </dd>
+                    <dt>
+                        <label for="mala_direta">Mala Direta</label>
+                    </dt>
+                    <dd>
+                        <input type="checkbox" name="mala_direta" id="mala_direta"/>
+                    </dd>
+                    <dt>
+                        <label>Empresa</label>
+                    </dt>
+                    <dd>
+                        <select name="empresa" id="empresa" class="size2">
+                            <? foreach ($empresa as $value) : ?>
+                                <option value="<?= $value->empresa_id; ?>" ><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                            <option value="0">TODOS</option>
+                        </select>
+                    </dd>
+                    <dt>
+                </dl>
+                <button type="submit" >Pesquisar</button>
+            </form>
 
-    <div class="row">
-        <div class="col-lg-12"> 
-            <div class="alert alert-success ">
-                Gerar Relatorio Aniversariantes
-            </div>
         </div>
     </div>
-    <!--<h3><a href="#">Gerar relatorio Faturamento</a></h3>-->
-    <div class="panel panel-default">
-        <div class="alert alert-info ">
-            Dados da Pesquisa
-        </div>
-
-        <?
-        $empresa = $this->guia->listarempresas();
-        $medicos = $this->operador_m->listarmedicos();
-        $salas = $this->exame->listartodassalas();
-        $convenios = $this->convenio->listarconvenionaodinheiro();
-        $guia = "";
-        ?>
-        <div class="panel-body">
-            <div class="col-sm-12">
-                <form method="post" action="<?= base_url() ?>ambulatorio/guia/gerarelatorioaniversariantes" target="_blank">
-                    
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Periodo Inicial</label>
-                                <input type="text" name="txtdata_inicio" class="form-control" id="txtdata_inicio" alt="date" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Periodo Final</label>
-                                <input type="text" name="txtdata_fim" class="form-control" id="txtdata_fim" alt="date" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label for="mala_direta">Mala Direta</label>
-                                <input type="checkbox" name="mala_direta" class="checkbox" id="mala_direta"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Empresa</label>
-
-                                <select name="empresa" id="empresa" class="form-control">
-                                    <? foreach ($empresa as $value) : ?>
-                                        <option value="<?= $value->empresa_id; ?>" ><?php echo $value->nome; ?></option>
-                                    <? endforeach; ?>
-                                    <option value="0">TODOS</option>
-                                </select>
-                            </div>   
-                        </div>   
-                    </div>   
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p>
-                            <button type="submit" class="btn btn-outline btn-success btn-sm" name="btnEnviar"><i class="fa fa-search" aria-hidden="true"></i> Pesquisar</button>
-                            </p>
-                        </div>
-                    </div>  
 
 
-
-                </form>
-            </div>   
-        </div>
-    </div>
-</div>
- <!-- Final da DIV content -->
-<script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
+</div> <!-- Final da DIV content -->
+<link rel="stylesheet" href="<?php base_url() ?>css/jquery-ui-1.8.5.custom.css">
 <script type="text/javascript">
     $(function () {
         $("#accordion").accordion();
@@ -95,7 +60,7 @@
             dateFormat: 'dd/mm/yy'
         });
     });
-
+    
     $(function () {
         $("#txtdata_fim").datepicker({
             autosize: true,

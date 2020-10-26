@@ -1,5 +1,10 @@
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
     <div class="clear"></div>
+    <div class="bt_link_new">
+        <a href="<?php echo base_url() ?>centrocirurgico/centrocirurgico/excluirguiacirurgica/<?= @$guia_id; ?>" onclick="javascript: return confirm('Deseja realmente excluir esta guia?');">
+            Cancelar Guia
+        </a>
+    </div>
     <form name="form_exametemp" id="form_exametemp" action="<?= base_url() ?>ambulatorio/exametemp/gravarguiacirurgicaprocedimentos" method="post">
         <fieldset>
             <legend>Dados da Guia</legend>
@@ -46,7 +51,7 @@
             <div >
 
                 <label>Data/Hora Autorização*</label>
-                <input type="text" name="data_autorizacao" id="data_autorizacao" alt="39/29/9999 29:69"class="texto03" required=""/>
+                <input type="text" name="data_autorizacao" id="data_autorizacao" alt="39/29/9999 29:69" class="texto03" required=""/>
 
             </div>
 
@@ -159,9 +164,12 @@
 <!--<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.4.2.min.js" ></script>-->
 <!--<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>-->
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
-<script type="text/javascript" src="<?= base_url() ?>js/jquery.maskedinput.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js" type="text/javascript"></script>
+<!--<script type="text/javascript" src="<?= base_url() ?>js/jquery.maskedinput.js"></script>-->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js" type="text/javascript"></script>-->
 <script type="text/javascript">
+//$('#data_realizacao').mask('00/00/0000  00:00');
+//  $('#data_realizacao').mask('00/00/0000 00:00:00');
+//  $('#data_autorizacao').mask('00/00/0000 00:00:00');
 
 
 

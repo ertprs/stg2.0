@@ -42,26 +42,67 @@ class Fornecedor extends BaseController {
         $this->loadView('cadastros/fornecedor-form', $data);
     }
 
-    function excluir($financeiro_credor_devedor_id) {
-        $valida = $this->fornecedor->excluir($financeiro_credor_devedor_id);
+    function unificarcredordevedor($financeiro_credor_devedor_id) {
+        $obj_fornecedor = new fornecedor_model($financeiro_credor_devedor_id);
+        $data['credordevedor'] = $this->fornecedor->listarcredordevedor($financeiro_credor_devedor_id);
+        $data['obj'] = $obj_fornecedor;
+        $data['tipo'] = $this->fornecedor->listartipo();
+        //$this->carregarView($data, 'giah/servidor-form');
+        $this->loadView('cadastros/unificarfornecedor-form', $data);
+    }
+
+    function reativar($financeiro_credor_devedor_id) {
+        $valida = $this->fornecedor->reativar($financeiro_credor_devedor_id);
         if ($valida == 0) {
-            $data['mensagem'] = array('Sucesso ao excluir a Fornecedor', 'success');
+            $data['mensagem'] = 'Sucesso ao reativar o Fornecedor';
         } else {
-            $data['mensagem'] =  array('Erro ao excluir a fornecedor. Opera&ccedil;&atilde;o cancelada.', 'error');
+            $data['mensagem'] = 'Erro ao reativar o fornecedor. Opera&ccedil;&atilde;o cancelada.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/fornecedor");
     }
 
-    function gravar() {
-        $exame_fornecedor_id = $this->fornecedor->gravar();
-        if ($exame_fornecedor_id == "-1") {
-            $data['mensagem'] = array('Erro ao gravar a Fornecedor. Opera&ccedil;&atilde;o cancelada.', 'error');
+    function excluir($financeiro_credor_devedor_id) {
+        $valida = $this->fornecedor->excluir($financeiro_credor_devedor_id);
+        if ($valida == 0) {
+            $data['mensagem'] = 'Sucesso ao excluir o Fornecedor';
         } else {
-            $data['mensagem'] = array('Sucesso ao gravar a Fornecedor.', 'success');
+            $data['mensagem'] = 'Erro ao excluir o fornecedor. Opera&ccedil;&atilde;o cancelada.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/fornecedor");
+    }
+
+    function verificadependenciasexclusao($financeiro_credor_devedor_id) {
+        $valida = $this->fornecedor->verificadependenciasexclusao($financeiro_credor_devedor_id);
+        echo json_encode($valida);
+    }
+
+    function gravar() {
+        $mensagem_existencia = $this->fornecedor->listarcredoexistentecpfcnpj();        
+       
+        if($mensagem_existencia != null){
+            $data['mensagem'] = $mensagem_existencia;
+        }else{
+            $exame_fornecedor_id = $this->fornecedor->gravar();
+            if ($exame_fornecedor_id == "-1") {
+                $data['mensagem'] = 'Erro ao gravar a Fornecedor. Opera&ccedil;&atilde;o cancelada.';
+            } else {
+                $data['mensagem'] = 'Sucesso ao gravar a Fornecedor.';
+            }
+        }
+       
+       
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "cadastros/fornecedor");
+    }
+
+    function gravarunificarcredor() {
+       
+        $exame_fornecedor_id = $this->fornecedor->gravarunificarcredor();
+
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
     }
 
     private function carregarView($data = null, $view = null) {

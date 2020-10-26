@@ -2,11 +2,22 @@
     <div class="clear"></div>
     <form name="form_solicitacaoitens" id="form_solicitacaoitens" action="<?= base_url() ?>centrocirurgico/centrocirurgico/gravarsolicitacaoprocedimentos" method="post">
         <fieldset>
+            <legend>Outras Opções</legend>   
+
+            <div class="bt_link">
+                <a target="_blank" href="<?= base_url() ?>centrocirurgico/centrocirurgico/carregarsolicitacaomaterial/<?= $dados[0]->solicitacao_cirurgia_id; ?>">Cadastrar Material</a>
+            </div>            
+            <div class="bt_link">
+                <a target="_blank" href="<?= base_url() ?>centrocirurgico/centrocirurgico/solicitacarorcamentoconvenio/<?= $dados[0]->solicitacao_cirurgia_id; ?>">Guia Convênio</a>
+            </div>
+        </fieldset>
+        <fieldset>
             <legend>Dados da Solicitação</legend>
             <div>
                 <label>Paciente</label>
                 <input type="text" class="texto06" readonly value="<?= $dados[0]->nome ?>"/> 
                 <!--<input type="text" class="texto06" readonly value="//<?= $dados[0]->orcamento ?>"/>--> 
+                <input type="hidden" name="solicitacao_id" class="texto06" readonly value="<?= $solicitacao_id ?>"/> 
             </div>
 
             <div>
@@ -19,22 +30,34 @@
             </div>
 
         </fieldset>
-        <fieldset>
-            <legend>Escolha</legend>
-            <input type="hidden" name="solicitacao_id" value="<?php echo $solicitacao_id; ?>"/>
+        <fieldset> 
 
-            <div id="opcoes">
-                <input type="radio" name="tipo" id="opcao_agrupador" value="agrupador" onclick="mostraagrupador()"> 
-                <label for="opcao_agrupador" id="label"> Agrupador</label><br>
-                <input type="radio" name="tipo" id="opcao_procedimento" value="procedimento" onclick="mostraprocedimentos()">
-                <label for="opcao_procedimento" id="label">Procedimento</label>
+            <div>
+                <label>Quantidade</label>
+                <input type="number" name="quantidade" id="quantidade" value="1"/>  
             </div>
-        </fieldset>    
-
-        <fieldset id="cadastro"> 
-            <!-- NAO REMOVA ESSE FIELDSET POIS O JAVASCRIPT IRA FUNCIONAR NELE!!! -->
+            <div>
+                <label for="procedimento">Procedimento</label>
+                <select style="" name="procedimentoID" id="procedimento" class="chosen-select" tabindex="1" >
+                    <option value="">Selecione</option>
+                    <optgroup label="Agrupadores">
+                        <? foreach ($agrupador as $value) : ?>
+                            <option value='<?= $value->procedimento_convenio_id; ?>'><?php echo $value->nome; ?></option>
+                        <? endforeach; ?>
+                    </optgroup>
+                    <optgroup label="Procedimentos">
+                        <? foreach ($procedimento as $item3) : ?>   
+                            <option value="<? echo $item3->procedimento_convenio_id; ?>"><? echo $item3->codigo . " - " . $item3->nome; ?></option>
+                        <? endforeach; ?> 
+                    </optgroup>
+                </select>
+            </div>
+            <div id="btnEnviar">
+                <label>&nbsp;</label>
+                <button type="submit" name="btnEnviar">Adicionar</button>
+            </div>
         </fieldset>
-        
+
         <fieldset > 
             <div class="bt_link">                                  
                 <a onclick="javascript: return confirm('Deseja realmente Liberar a solicitacao?');" href="<?= base_url() ?>centrocirurgico/centrocirurgico/liberar/<?= $solicitacao_id ?>/<?= $dados[0]->orcamento ?>">Liberar</a>
@@ -44,6 +67,9 @@
     </form>
     <?
     if (count($procedimentos) > 0) {
+        // echo '<pre>';
+        // print_r($procedimentos);
+        // die;
         ?>
         <table id="table_agente_toxico" border="0" style="width:600px">
             <thead>
@@ -51,6 +77,9 @@
                 <tr>
                     <th class="tabela_header">Procedimento</th>
                     <th class="tabela_header">Convenio</th>
+                    <th class="tabela_header">Quantidade</th>
+                    <th class="tabela_header">Valor U.</th>
+                    <th class="tabela_header">Valor Total</th>
                     <th class="tabela_header">&nbsp;</th>
                 </tr>
             </thead>
@@ -64,6 +93,9 @@
                     <tr>
                         <td class="<?php echo $estilo_linha; ?>"><?= $item->nome; ?></td>
                         <td class="<?php echo $estilo_linha; ?>"><?= $item->convenio; ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"><?= $item->quantidade; ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"><?= $item->valor_unitario; ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor_unitario * $item->quantidade, 2, '.', ''); ?></td>
                         <td class="<?php echo $estilo_linha; ?>" width="100px;">
                 <center>
                     <a href="<?= base_url() ?>centrocirurgico/centrocirurgico/excluirsolicitacaoprocedimento/<?= $item->solicitacao_procedimento_id; ?>/<?= $solicitacao_id; ?>" class="delete">
@@ -95,107 +127,40 @@
     }
 </style>
 
+<link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css">
+<script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-verificaCPF.js"></script>
 <link rel="stylesheet" href="<?= base_url() ?>js/chosen/chosen.css">
 <!--<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/style.css">-->
 <link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/prism.css">
 <script type="text/javascript" src="<?= base_url() ?>js/chosen/chosen.jquery.js"></script>
 <!--<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/prism.js"></script>-->
 <script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/init.js"></script>
-<!--<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.4.2.min.js" ></script>-->
-<!--<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>-->
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
-<script type="text/javascript" src="<?= base_url() ?>js/jquery.maskedinput.js"></script>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js" type="text/javascript"></script>-->
 <script type="text/javascript">
-                    function legend() {
-                        var leg = "<legend>Cadastrar procedimento</legend>";
-                        var verifica = jQuery("#cadastro legend").length;
-                        if (verifica == 0) {
-                            jQuery("#cadastro").append(leg);
-                        }
-                    }
-
-                    function mostraagrupador() {
-                        legend();
-                        var tags = '<div id="div_agrupador"><label>Agrupador</label>';
-                        tags += '<select name="agrupador_id" id="agrupador_id" class="size4" required="true">';
-                        tags += '<option value="">SELECIONE</option>';
-
-<? foreach ($agrupador as $value) : ?>
-                            tags += "<option value='<?= $value->agrupador_id; ?>'><?php echo $value->nome; ?></option>";
-<? endforeach; ?>
-
-                        tags += '</select></div>';
-
-                        var verifica = jQuery("#cadastro #div_agrupador").length;
-                        if (verifica == 0) {
-                            jQuery("#cadastro div").remove();
-                            jQuery("#cadastro").append(tags);
-                            adicionarbtn();
-                        }
-
-                    }
 
 
-                    function mostraprocedimentos() {
-                        legend();
-                        var tags = '<div id="div_procedimento"><label for="procedimento">Procedimento</label>';
-                        tags += '<select style="width: 400pt" name="procedimentoID" id="procedimento" class="chosen-select" tabindex="1" required="true" >';
-                        tags += '<option value="">Selecione</option>';
-                    <? foreach (@$procedimento as $item3) : ?>
-                        tags += '<option value="<? echo $item3->procedimento_convenio_id; ?>"><? echo $item3->codigo . " - " . $item3->nome; ?></option>';
-                    <? endforeach; ?>
-                        tags += '</select></div>';
-//                        tags += '<input type="hidden" name="procedimentoID" id="procedimentoID" class="texto2" value="" />';
-//                        tags += '<input type="text" name="procedimento" id="procedimento" class="texto10" value="" />';
-//                        tags += '';
 
-                        var verifica = jQuery("#cadastro #div_procedimento").length;
-                        if (verifica == 0) {
-                            jQuery("#cadastro div").remove();
-                            jQuery("#cadastro").append(tags);
-                            adicionarbtn();
-                        }
 
-                        //autocomplete dos procedimentos
-//                        $(function () {
-//                            $("#procedimento").autocomplete({
-//                                source: "<?= base_url() ?>index.php?c=autocomplete&m=procedimentoproduto",
-//                                minLength: 3,
-//                                focus: function (event, ui) {
-//                                    $("#procedimento").val(ui.item.label);
-//                                    return false;
-//                                },
-//                                select: function (event, ui) {
-//                                    $("#procedimento").val(ui.item.value);
-//                                    $("#procedimentoID").val(ui.item.id);
-//                                    return false;
-//                                }
-//                            });
-//                        });
-
-                    }
-                    
-//                    var procedimentosAutocomplete = function(){ 
-//                        jQuery.ajax({
-//                            url: "<?= base_url(); ?>" + "autocomplete/procedimentoproduto?convenio=<?= $dados[0]->convenio ?>,
-//                            type: "GET",
-//                            dataType: 'json'
-//                        });
+//                    function mostraagrupador() {
+//                        $('#fieldset_procedimento').hide();
+//                        $('#fieldset_agrupador').show();
+//
 //                    }
+//
+//
+//                    function mostraprocedimentos() {
+//                        $('#fieldset_agrupador').hide();
+//                        $('#fieldset_procedimento').show();
+//
+//                    }
+//
+//                    $('#fieldset_procedimento').hide();
+//                    $('#fieldset_agrupador').hide();
 
-                    function adicionarbtn() {
-                        var btn = '<div id="btnEnviar"><label>&nbsp;</label>';
-                        btn += '<button type="submit" name="btnEnviar">Adicionar</button></div>';
-                        var verifica = jQuery("#cadastro #btnEnviar").length;
-                        if (verifica == 0) {
-                            jQuery("#cadastro").append(btn);
-                        } else {
-                            jQuery("#cadastro #btnEnviar").remove();
-                            jQuery("#cadastro").append(btn);
-                        }
-                    }
-                    
-                    
+
+
+
 
 </script>

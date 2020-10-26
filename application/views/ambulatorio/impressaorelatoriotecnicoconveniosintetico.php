@@ -126,7 +126,7 @@
                         if ($i == 1) {
                             ?>
                             <tr>
-                                <td ><font >Tecnico:&nbsp;<?= utf8_decode($item->tecnico); ?></td>
+                                <td ><font >Tecnico:&nbsp;<?= ($item->tecnico); ?></td>
                             <? } ?>
 
                             <?php
@@ -142,7 +142,7 @@
                         $qtdetotal++;
                         ?>
                         <tr>
-                            <td ><font >Tecnico:&nbsp;<?= utf8_decode($item->tecnico); ?></td>
+                            <td ><font >Tecnico:&nbsp;<?= ($item->tecnico); ?></td>
 
 
                             <?

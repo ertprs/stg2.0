@@ -1,9 +1,12 @@
+<meta charset="UTF-8">
 <?
 $sexo = $exame[0]->sexo;
 if ($sexo == "M") {
     $sexopaciente = "Masculino";
 } elseif ($sexo == "F") {
     $sexopaciente = "Feminino";
+} else {
+    $sexopaciente = "Outro";
 }
 $dataFuturo = date("Y-m-d");
 $dataAtual = $paciente['0']->nascimento;
@@ -45,44 +48,29 @@ switch ($MES) {
         break;
 }
 ?>
-<?=$impressao_tipo[0]->cabecalho?>
+<?
+if (@$empresa[0]->cabecalho_config == 't') {
+    echo @$cabecalho[0]->cabecalho;
+} else {
+    if ($empresa[0]->impressao_declaracao == 1) {
+        ?>
+        <p style="text-align: center"><img align = 'center'  width='400px' height='200px' src="<?= base_url() . "img/cabecalho.jpg" ?>"></p>   
+    <? } else {
+        ?>
+        <p style="text-align: center"><img align = 'center'  width='1000px' height='300px' src="<?= base_url() . "img/cabecalho.jpg" ?>"></p> 
+        <?
+    }
+}
+?> 
 
-<p>Paciente: <strong><?= utf8_decode($paciente['0']->nome); ?></strong></p>
-<? echo $modelo[0]->texto ?>
 
-<!--<p><center><u><b><?= $empresa[0]->razao_social; ?></b></u></center></p>
-<br>
-<br>
-<br>
-<br>
-<p><center><font size = 4><b>DECLARA&Ccedil;&Atilde;O</b></font></center></p>
-<br>
-<br>
-<br>
-<br>
-<p>Declaro para os devidos fins que a paciente: <?= utf8_decode($paciente['0']->nome); ?>, compareceu a esta cl&iacute;nica na presente data para realizarconsulta e/ou exames.
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-<p><?= $exame[0]->municipio ?>, <?= substr($exame[0]->data, 8, 2) . " de " . $MES . " de " . substr($exame[0]->data, 0, 4); ?></p>
-<br>
-<br>
-<br>
-<h4><center>___________________________________________</center></h4>
-<h4><center><?= $empresa[0]->razao_social; ?></center></h4>
 
-<br>
-<br>
-<br>
-<p><center><?= $exame[0]->logradouro; ?><?= $exame[0]->numero; ?> - <?= $exame[0]->bairro; ?> - <?= $exame[0]->municipio ?></center></p>
-<p><center>Fone: (85) <?= $exame[0]->telefone; ?> - (85) <?= $exame[0]->celular; ?></center></p>-->
-<!--<br>
-<br>
-<br>
-<br>-->
+
+
+
+
+<p>Paciente: <strong><?= ($paciente['0']->nome); ?></strong></p>
+<? echo $modelo[0]->texto ?> 
 
 <style>
     footer {
@@ -107,9 +95,38 @@ switch ($MES) {
         , <?= substr($exame[0]->data, 8, 2) . " de " . $MES . " de " . substr($exame[0]->data, 0, 4); ?> /
 
         <?= date("H:i:s") ?>
-    </p>
-    <?=$impressao_tipo[0]->rodape?>
+        
+        
+        
+        <?
+        @$cabecalho = @$cabecalho[0]->rodape;
+        @$cabecalho = str_replace("_assinatura_", '', @$cabecalho);
+        if ($empresa[0]->rodape_config == 't') {
+            echo @$cabecalho;
+        } else {
+            if ($empresa[0]->impressao_declaracao == 1) {
+                ?>
+            <p style="text-align: center"><img align = 'center'  width='1000px' height='100px' src="<?= base_url() . "img/rodape.jpg" ?>"></p>    
+        <? } else {
+            ?>
+            <p style="text-align: center"><img align = 'center'  width='1000px' height='300px' src="<?= base_url() . "img/rodape.jpg" ?>"></p> 
+            <?
+        }
+    }
+    $perfil_id = $this->session->userdata('perfil_id');
+    ?>
+</p>
+<style>
+    @media print {
+        button { 
+            display: none; 
+        }
+    }
+</style>
+
+
 </footer>
+
 
 
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>

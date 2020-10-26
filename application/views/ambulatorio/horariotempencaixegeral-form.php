@@ -15,18 +15,33 @@
                 <select name="sala" id="sala" class="size4">
                     <option value="" >Selecione</option>
                     <? foreach ($salas as $item) : ?>
-                        <option value="<?= $item->exame_sala_id; ?>"><?= $item->nome; ?></option>
+                        <option value="<?= $item->exame_sala_id; ?>" <? if (count($salas) == 1) echo 'selected'; ?>>
+                            <?= $item->nome; ?>
+                        </option>
                     <? endforeach; ?>
                 </select>
             </div>
             <div>
                 <label>Medico</label>
-                <select name="medico" id="exame" class="size2" required>
-                    <option value="" >Selecione</option>
-                    <? foreach ($medico as $item) : ?>
-                        <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
-                    <? endforeach; ?>
-                </select>
+
+                <?php
+                if ($this->session->userdata('perfil_id') == 4 && $this->session->userdata('medico_agenda') == 't') {
+                    ?>  
+                    <select name="medico" id="exame" class="size2" required>                     
+                        <? foreach ($medico as $item) : ?>
+                            <?php if ($item->operador_id == $this->session->userdata('operador_id')) { ?>
+                                <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
+                            <?php } ?>
+                        <? endforeach; ?>
+                    </select>
+                <?php } else { ?>  
+                    <select name="medico" id="exame" class="size2" required>
+                        <option value="" >Selecione</option>
+                        <? foreach ($medico as $item) : ?>
+                            <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
+                        <? endforeach; ?>
+                    </select>
+                <?php } ?> 
             </div>
             <div>
                 <label>Tipo</label>

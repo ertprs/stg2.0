@@ -436,6 +436,8 @@
                                         <textarea id="laudo" name="laudo" rows="30" cols="80" style="width: 80%"><?= @$obj->_texto; ?></textarea>
                                     </div>
                                     <div>
+                                        <?$perfil_id = $this->session->userdata('perfil_id');?>
+                                        <?if ($perfil_id == 1 ||(@$empresapermissao[0]->liberar_perfil == "t" && ($perfil_id == 7 || $perfil_id == 15))) {?>
                                         <label>M&eacute;dico respons&aacutevel</label>
                                         <select name="medico" id="medico" class="size2">
                                             <option value=0 >selecione</option>
@@ -446,6 +448,7 @@
                                                 ?>><?= $value->nome; ?></option>
                                                     <? endforeach; ?>
                                         </select>
+                                        <? } ?>
                                         <?php
                                         if (@$obj->_revisor == "t") {
                                             ?>

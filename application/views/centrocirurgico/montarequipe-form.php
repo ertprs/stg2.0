@@ -1,16 +1,26 @@
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content --> 
     <h3 class="singular"><a href="#">Montar Equipe</a></h3>
-    <form name="form_cirurgia_orcamento" id="form_cirurgia_orcamento" action="<?= base_url() ?>centrocirurgico/centrocirurgico/gravarequipeoperadores" method="post">
+    <?
+            if (count($cirurgiao) > 0) {
+                $cirurgiao_id = $cirurgiao[0]->medico_cirurgiao;
+            } else {
+                $cirurgiao_id = 0;
+            }
+            ?> 
+    <form name="form_cirurgia_orcamento" id="form_cirurgia_orcamento" action="<?= base_url() ?>centrocirurgico/centrocirurgico/gravarequipeoperadores/<?= $cirurgiao_id ?>" method="post">
         <fieldset>
+                      
             <input type="hidden" name="solicitacao_id" id="solicitacao_id" value="<?= @$solicitacaocirurgia_id; ?>"/>
+            <input type="hidden" name="paciente_id" id="paciente_id" value="<?= @$paciente_id; ?>"/>
+            <input type="hidden" name="operatorio" id="operatorio" value="<?= @$operatorio; ?>"/>
             <div>
                 <label>Médico</label>
                 <select name="medico" id="medico" class="texto04" required>
                     <option value="">SELECIONE</option>
-                    <? foreach ($medicos as $value) { ?>
+                            <? foreach ($medicos as $value) { ?>
                         <option value="<?= $value->operador_id ?>"
                                 ><?= $value->nome ?></option>
-                            <? } ?>
+<? } ?>
                 </select>
             </div>
             <div>
@@ -18,14 +28,14 @@
                 <select name="funcao" id="funcao" class="texto03" required>
                     <option value="">SELECIONE</option>
                     <? foreach ($grau_participacao as $value) : ?>
-                        <option value="<?= $value->grau_id ?>"><?= $value->grau_participacao ?></option>
-                    <? endforeach; ?>
+                        <option value="<?= $value->codigo ?>"><?= $value->grau_participacao ?></option>
+<? endforeach; ?>
                 </select>
             </div>
-<!--            <div>
-                <label>Valor</label>
-                <input type="text" name="valor" id="valor" alt="decimal" class="texto01" required=""/>
-            </div>-->
+            <!--            <div>
+                            <label>Valor</label>
+                            <input type="text" name="valor" id="valor" alt="decimal" class="texto01" required=""/>
+                        </div>-->
             <div style="width: 100%">
                 <hr/>
                 <div>
@@ -36,9 +46,10 @@
     </form>
 
     <?php
-    if (count($equipe_operadores) > 0) {
+    if (count($equipe_operadores) > 0 || count($cirurgiao) > 0) {
         ?>
         <fieldset>
+    <? // var_dump($cirurgiao);die; ?>
 
             <table>
                 <thead>
@@ -49,6 +60,7 @@
                 </tr>
                 </thead>
                 <tbody>
+
                     <?php
                     $estilo_linha = "tabela_content01";
                     foreach ($equipe_operadores as $item) {
@@ -63,20 +75,24 @@
                             </td>
 
                         </tr>
-                    </tbody>
-    <?php }
-    ?>
+    <? } ?>
+
+                </tbody>
                 <tfoot>
                     <tr>
-                        <th class="tabela_footer" colspan="8">
-
-                        </th>
+                        <th class="tabela_footer" colspan="8"></th>
                     </tr>
                 </tfoot>
             </table>
         </fieldset>
-<? }
-?>
+
+        <div class="bt_link_new">
+            <a href="<?php echo base_url() ?>centrocirurgico/centrocirurgico/finalizarequipecirurgica/<?= @$solicitacaocirurgia_id; ?>/<?=$paciente_id?>/<?=$operatorio?>">
+                Finalizar Equipe
+            </a>
+        </div>
+<? } ?>
+
 
 
 

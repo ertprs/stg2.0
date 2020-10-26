@@ -6,7 +6,7 @@
 
 
             <tr>
-                <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4"><?= $empresa[0]->razao_social; ?></th>
+                <th style='text-align: left; font-family: serif; font-size: 12pt;' colspan="4"><?= @$empresa[0]->razao_social; ?></th>
             </tr>
             <tr>
                 <th style='width:10pt;border:solid windowtext 1.0pt;

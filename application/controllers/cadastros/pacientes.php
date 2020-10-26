@@ -7,6 +7,7 @@ class pacientes extends BaseController {
     function __construct() {
         parent::__construct();
         $this->load->model('cadastro/paciente_model', 'paciente');
+        $this->load->model('ambulatorio/laudo_model', 'laudo');
         $this->load->model('ambulatorio/exametemp_model', 'exametemp');
         $this->load->model('ambulatorio/exame_model', 'exame');
         $this->load->model('seguranca/operador_model', 'operador_m');
@@ -28,16 +29,25 @@ class pacientes extends BaseController {
         $this->loadView('cadastros/pacientes-lista');
     }
 
+    public function pesquisardesativado($args = array()) {
+        $this->loadView('cadastros/pacientesdesativados-lista');
+    }
+
     public function pesquisarsubstituir($args = array()) {
         $data['paciente_temp_id'] = $args;
         $this->loadView('cadastros/pacientes-listasubstituir', $data);
     }
 
+    function listarprecadastrosPaciente($args = array()){       
+        $this->loadView('cadastros/precadastropaciente-lista',  $args);       
+    }
     function novo() {
 
         $data['idade'] = 0;
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
         $data['listaLogradouro'] = $this->paciente->listaTipoLogradouro();
         $data['listaconvenio'] = $this->paciente->listaconvenio();
+//        $data['empresaPermissao'] = $this->guia->listarempresapermissoes();
         $this->loadView('cadastros/paciente-ficha', $data);
     }
 
@@ -64,13 +74,18 @@ class pacientes extends BaseController {
     function anexarimagem($paciente_id) {
 
         $this->load->helper('directory');
+        if (!is_dir("./upload/paciente")) {
+            mkdir("./upload/paciente");
+            $destino = "./upload/paciente";
+            chmod($destino, 0777);
+        }
         if (!is_dir("./upload/paciente/$paciente_id")) {
             mkdir("./upload/paciente/$paciente_id");
             $destino = "./upload/paciente/$paciente_id";
             chmod($destino, 0777);
         }
-//        $data['arquivo_pasta'] = directory_map("./upload/$paciente_id/");
-        $data['arquivo_pasta'] = directory_map("./upload/paciente//$paciente_id/");
+//        $data['arquivo_pasta'] = directory_map("./upload/paciente/$paciente_id/");
+        $data['arquivo_pasta'] = directory_map("./upload/paciente/$paciente_id/");
         if ($data['arquivo_pasta'] != false) {
             sort($data['arquivo_pasta']);
         }
@@ -80,25 +95,37 @@ class pacientes extends BaseController {
 
     function importarimagem() {
         $paciente_id = $_POST['paciente_id'];
-        if (!is_dir("./upload/paciente/$paciente_id")) {
-            mkdir("./upload/paciente/$paciente_id");
-            $destino = "./upload/paciente/$paciente_id";
-            chmod($destino, 0777);
-        }
 
-        $config['upload_path'] = "./upload/paciente/" . $paciente_id . "/";
-//        $config['upload_path'] = "./upload/paciente/" . $paciente_id . "/";
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xls|xlsx|ppt';
-        $config['max_size'] = '0';
-        $config['overwrite'] = FALSE;
-        $config['encrypt_name'] = FALSE;
-        $this->load->library('upload', $config);
+        for ($i = 0; $i < count($_FILES['arquivos']['name']); $i++) {
+            $_FILES['userfile']['name'] = $_FILES['arquivos']['name'][$i];
+            $_FILES['userfile']['type'] = $_FILES['arquivos']['type'][$i];
+            $_FILES['userfile']['tmp_name'] = $_FILES['arquivos']['tmp_name'][$i];
+            $_FILES['userfile']['error'] = $_FILES['arquivos']['error'][$i];
+            $_FILES['userfile']['size'] = $_FILES['arquivos']['size'][$i];
 
-        if (!$this->upload->do_upload()) {
-            $error = array('error' => $this->upload->display_errors());
-        } else {
-            $error = null;
-            $data = array('upload_data' => $this->upload->data());
+            if (!is_dir("./upload/paciente/$paciente_id")) {
+                mkdir("./upload/paciente/$paciente_id");
+                $destino = "./upload/paciente/$paciente_id";
+                chmod($destino, 0777);
+            }
+
+            //        $config['upload_path'] = "/home/vivi/projetos/clinica/upload/consulta/" . $paciente_id . "/";
+            $config['upload_path'] = "./upload/paciente/" . $paciente_id . "/";
+            $config['allowed_types'] = 'gif|jpg|BMP|bmp|png|jpeg|pdf|doc|docx|xls|xlsx|ppt|zip|rar|xml|txt';
+            $config['max_size'] = '0';
+            $config['overwrite'] = FALSE;
+            $config['encrypt_name'] = FALSE;
+            $this->load->library('upload', $config);
+
+            if (!$this->upload->do_upload()) {
+                $error = array('error' => $this->upload->display_errors());
+            } else {
+                $error = null;
+                $data = array('upload_data' => $this->upload->data());
+            }
+            if($error == null){
+                $this->laudo->gravaranexoarquivo(NULL, $paciente_id, 'upload/paciente/'.$paciente_id.'/'. $_FILES['userfile']['name'], $_FILES['userfile']['name']);
+            }
         }
         $data['paciente_id'] = $paciente_id;
 
@@ -126,58 +153,77 @@ class pacientes extends BaseController {
 //        $this->anexarimagem($paciente_id);
     }
 
+    function excluirimagemlaudo($paciente_id, $nome) {
+
+        if (!is_dir("./uploadopm/paciente/$paciente_id")) {
+            mkdir("./uploadopm/paciente");
+            mkdir("./uploadopm/paciente/$paciente_id");
+            $destino = "./uploadopm/paciente/$paciente_id";
+            chmod($destino, 0777);
+        }
+
+        $origem = "./upload/paciente/$paciente_id/$nome";
+        $destino = "./uploadopm/paciente/$paciente_id/$nome";
+        copy($origem, $destino);
+        unlink($origem);
+
+        redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+
+//        $this->anexarimagem($paciente_id);
+    }
+
     function autorizarambulatoriotemp($paciente_id) {
 
         $resultadoguia = $this->guia->listarguia($paciente_id);
         $ambulatorio_guia_id = $resultadoguia['ambulatorio_guia_id'];
-        if ($ambulatorio_guia_id == 0) {
+        if ($ambulatorio_guia_id == NULL) {
             $ambulatorio_guia_id = $this->guia->gravarguia($paciente_id);
         }
         $teste = $this->exametemp->autorizarpacientetemp($paciente_id, $ambulatorio_guia_id);
-        if ($teste == 0) {
-//            $this->gerardicom($ambulatorio_guia_id);
-            $data['mensagem'] = 'Paciente gravado com sucesso';
+        if (@$teste["cod"] == -1) {
+            if (@$teste['message'] == 'pending') {
+                $messagem = "O paciente possui pendência no sistema de fidelidade.";
+            } else {
+                $messagem = "O paciente não existe no sistema de fidelidade.";
+            }
+            $this->session->set_flashdata('message', $messagem);
+            redirect(base_url() . "cadastros/pacientes/procedimentoautorizarconsulta/$paciente_id");
         } else {
-            $data['mensagem'] = 'Erro ao gravar paciente';
+            if ($teste == 0) {
+                $data['mensagem'] = 'Paciente gravado com sucesso';
+            } else {
+                $data['mensagem'] = 'Erro ao gravar paciente';
+            }
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "ambulatorio/guia/pesquisar/$paciente_id");
         }
-        $this->session->set_flashdata('message', $data['mensagem']);
-        redirect(base_url() . "ambulatorio/guia/pesquisar/$paciente_id");
     }
 
     function autorizarambulatoriotempconsulta($paciente_id) {
         $resultadoguia = $this->guia->listarguia($paciente_id);
-        $ambulatorio_guia_id = $resultadoguia['ambulatorio_guia_id'];
+        $ambulatorio_guia_id = @$resultadoguia['ambulatorio_guia_id'];
         if ($ambulatorio_guia_id == 0) {
             $ambulatorio_guia_id = $this->guia->gravarguia($paciente_id);
         }
-        
-//        var_dump($_POST['confimado']); die;
-        if(count($_POST['confimado'])> 0){
-            $convenio_dinheiro = $this->exametemp->conveniodinheiro();
-            $teste = $this->exametemp->autorizarpacientetempconsulta($paciente_id, $ambulatorio_guia_id);
-        } 
-        else{
-            $teste = 1;
-        }
-        
-        
-//        var_dump($teste); die;
-        if ($teste == 0) {
-//            $this->gerardicom($ambulatorio_guia_id);
-            $data['mensagem'] = Array('Atendimento autorizado com sucesso', 'success');
+        $teste = $this->exametemp->autorizarpacientetempconsulta($paciente_id, $ambulatorio_guia_id);
+        if (@$teste["cod"] == -1) {
+            if (@$teste['message'] == 'pending') {
+                $messagem = "O paciente possui pendência no sistema de fidelidade.";
+            } else {
+                $messagem = "O paciente não existe no sistema de fidelidade.";
+            }
+            $this->session->set_flashdata('message', $messagem);
+            redirect(base_url() . "cadastros/pacientes/procedimentoautorizarconsulta/$paciente_id");
         } else {
-            $data['mensagem'] = Array('Erro ao autorizar atendimento', 'error');
+            if ($teste == 0) {
+                //            $this->gerardicom($ambulatorio_guia_id);
+                $data['mensagem'] = 'Paciente gravado com sucesso';
+            } else {
+                $data['mensagem'] = 'Erro ao gravar paciente';
+            }
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "ambulatorio/guia/pesquisar/$paciente_id");
         }
-        $this->session->set_flashdata('message', $data['mensagem']);
-        if($convenio_dinheiro == 't'){
-            redirect(base_url() . "ambulatorio/guia/faturarguia/$ambulatorio_guia_id");
-        }elseif($teste == 1){
-             redirect(base_url() . "emergencia/filaacolhimento/novo/$paciente_id");
-        }else{
-            redirect(base_url() . "seguranca/operador/pesquisarrecepcao");   
-        }
-        
-        
     }
 
     function autorizarambulatoriotempfisioterapia($paciente_id) {
@@ -188,33 +234,70 @@ class pacientes extends BaseController {
             $ambulatorio_guia_id = $this->guia->gravarguia($paciente_id);
         }
         $teste = $this->exametemp->autorizarpacientetempfisioterapia($paciente_id, $ambulatorio_guia_id);
-        if ($teste == 0) {
-//            $this->gerardicom($ambulatorio_guia_id);
-            $data['mensagem'] = 'Paciente gravado com sucesso';
+        if (@$teste["cod"] == -1) {
+            if (@$teste['message'] == 'pending') {
+                $messagem = "O paciente possui pendência no sistema de fidelidade.";
+            } else {
+                $messagem = "O paciente não existe no sistema de fidelidade.";
+            }
+            $this->session->set_flashdata('message', $messagem);
+            redirect(base_url() . "cadastros/pacientes/procedimentoautorizarfisioterapia/$paciente_id");
         } else {
-            $data['mensagem'] = 'Erro ao gravar paciente';
+            if ($teste == 0) {
+                //            $this->gerardicom($ambulatorio_guia_id);
+                $data['mensagem'] = 'Paciente gravado com sucesso';
+            } else {
+                $data['mensagem'] = 'Erro ao gravar paciente';
+            }
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "ambulatorio/guia/pesquisar/$paciente_id");
         }
-        $this->session->set_flashdata('message', $data['mensagem']);
-        redirect(base_url() . "ambulatorio/guia/pesquisar/$paciente_id");
     }
 
     function autorizarambulatoriotempgeral($paciente_id) {
+//        var_dump(date("Y-m-d", -370126800)); die;
+
+            if(isset($_POST['sem_atendimento'])){
+
+                $data['mensagem'] = 'Paciente sem Procedimentos agendado para hoje';
+                $this->session->set_flashdata('message', $data['mensagem']);
+                redirect(base_url() . "ambulatorio/guia/pesquisar/$paciente_id");
+            }
+
 
         $resultadoguia = $this->guia->listarguia($paciente_id);
-        $ambulatorio_guia_id = $resultadoguia['ambulatorio_guia_id'];
+        @$ambulatorio_guia_id = $resultadoguia['ambulatorio_guia_id'];
         if ($ambulatorio_guia_id == 0) {
             $ambulatorio_guia_id = $this->guia->gravarguia($paciente_id);
         }
+        
+      
+
         $teste = $this->exametemp->autorizarpacientetempgeral($paciente_id, $ambulatorio_guia_id);
-        if ($teste == 0) {
-//            $this->gerardicom($ambulatorio_guia_id);
-            $data['mensagem'] = 'Paciente gravado com sucesso';
-        } elseif ($teste == -1) {
-            $data['mensagem'] = 'Erro ao gravar paciente';
-        } elseif ($teste == 2) {
-            $data['mensagem'] = 'ERRO: Obrigatório preencher solicitante.';
-            $this->session->set_flashdata('message', $data['mensagem']);
+
+
+
+        if (@$teste["cod"] == -1) {
+            if (@$teste['message'] == 'pending') {
+                $messagem = "O paciente possui pendência no sistema de fidelidade.";
+            } else {
+                $messagem = "O paciente não existe no sistema de fidelidade.";
+            }
+            // die;
+            $this->session->set_flashdata('message', $messagem);
             redirect(base_url() . "cadastros/pacientes/procedimentoautorizaratendimento/$paciente_id");
+        } else {
+            if ($teste == 0) {
+                //            $this->gerardicom($ambulatorio_guia_id);
+                $data['mensagem'] = 'Paciente gravado com sucesso';
+            } elseif ($teste == -1) {
+                $data['mensagem'] = 'Erro ao gravar paciente';
+            } elseif ($teste == 2) {
+                $data['mensagem'] = 'ERRO: Obrigatório preencher solicitante.';
+                // die;
+                $this->session->set_flashdata('message', $data['mensagem']);
+                redirect(base_url() . "cadastros/pacientes/procedimentoautorizaratendimento/$paciente_id");
+            }
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "ambulatorio/guia/pesquisar/$paciente_id");
@@ -234,25 +317,19 @@ class pacientes extends BaseController {
     function procedimentoautorizar($paciente_id) {
         $data['paciente_id'] = $paciente_id;
         $data['convenio'] = $this->convenio->listardados();
+        $data['setor'] = $this->guia->listarsetores();
         $data['forma_pagamento'] = $this->guia->formadepagamento();
         $data['paciente'] = $this->paciente->listardados($data['paciente_id']);
+
+        if ($data['paciente'][0]->ativo == 'f') {
+            $data['mensagem'] = 'Paciente excluído';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "cadastros/pacientes");
+        }
         $data['procedimento'] = $this->procedimento->listarprocedimentos();
         $data['exames'] = $this->exametemp->listaragendaspaciente($paciente_id);
+        $data['grupos'] = $this->procedimento->listargruposexame();
         $this->loadView('ambulatorio/procedimentoautorizar-form', $data);
-    }
-
-    function contatosite() {
-
-        var_dump($_POST);
-        die;
-
-//        $data['paciente_id'] = $paciente_id;
-//        $data['convenio'] = $this->convenio->listardados();
-//        $data['forma_pagamento'] = $this->guia->formadepagamento();
-//        $data['paciente'] = $this->paciente->listardados($data['paciente_id']);
-//        $data['procedimento'] = $this->procedimento->listarprocedimentos();
-//        $data['exames'] = $this->exametemp->listaragendaspaciente($paciente_id);
-//        $this->loadView('ambulatorio/procedimentoautorizar-form', $data);
     }
 
     function procedimentoautorizarconsulta($paciente_id) {
@@ -262,6 +339,11 @@ class pacientes extends BaseController {
         $data['medicos'] = $this->operador_m->listarmedicos();
         $data['forma_pagamento'] = $this->guia->formadepagamento();
         $data['paciente'] = $this->paciente->listardados($data['paciente_id']);
+        if ($data['paciente'][0]->ativo == 'f') {
+            $data['mensagem'] = 'Paciente excluído';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "cadastros/pacientes");
+        }
         $data['consultasanteriores'] = $this->exametemp->listarconsultaanterior($paciente_id);
         $data['procedimento'] = $this->procedimento->listarprocedimentos();
         $data['exames'] = $this->exametemp->listaragendaspacienteconsulta($paciente_id);
@@ -276,9 +358,16 @@ class pacientes extends BaseController {
         $data['convenio'] = $this->convenio->listardados();
         $data['forma_pagamento'] = $this->guia->formadepagamento();
         $data['paciente'] = $this->paciente->listardados($data['paciente_id']);
-        $data['consultasanteriores'] = $this->exametemp->listarconsultaanterior($paciente_id);
+        if ($data['paciente'][0]->ativo == 'f') {
+            $data['mensagem'] = 'Paciente excluído';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "cadastros/pacientes");
+        }
+        $data['consultasanteriores'] = $this->exametemp->listarfisioterapiaanterior($paciente_id);
         $data['procedimento'] = $this->procedimento->listarprocedimentos();
         $data['exames'] = $this->exametemp->listaragendaspacientefisioterapia($paciente_id);
+        $data['grupos'] = $this->procedimento->listargruposespecialidade();
+//        var_dump($data['grupos']);die;
         $this->loadView('ambulatorio/procedimentoautorizarfisioterapia-form', $data);
 //        } else {
 //            $data['mensagem'] = 'Paciente com sessões pendentes.';
@@ -290,14 +379,23 @@ class pacientes extends BaseController {
     function procedimentoautorizaratendimento($paciente_id) {
         $lista = $this->exame->autorizarsessaofisioterapia($paciente_id);
         $data['paciente_id'] = $paciente_id;
-        $data['salas'] = $this->exame->listarsalastotal();
+        $data['salas'] = $this->exame->listarsalasativas();
+        $data['setor'] = $this->guia->listarsetores();
         $data['convenio'] = $this->convenio->listardados();
         $data['medicos'] = $this->operador_m->listarmedicos();
         $data['forma_pagamento'] = $this->guia->formadepagamento();
         $data['paciente'] = $this->paciente->listardados($data['paciente_id']);
+        if ($data['paciente'][0]->ativo == 'f') {
+            $data['mensagem'] = 'Paciente excluído';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "cadastros/pacientes");
+        }
         $data['consultasanteriores'] = $this->exametemp->listarconsultaanterior($paciente_id);
         $data['procedimento'] = $this->procedimento->listarprocedimentos();
         $data['exames'] = $this->exametemp->listaragendaspacienteatendimento($paciente_id);
+        $data['grupos'] = $this->procedimento->listargruposatendimento();
+        $data['tcd'] = $this->exametemp->listartcd($paciente_id)->get()->result();
+        $data['valortotal'] = $this->exametemp->listarsaldocreditopaciente($paciente_id);
         $this->loadView('ambulatorio/procedimentoautorizaratendimento-form', $data);
     }
 
@@ -309,11 +407,62 @@ class pacientes extends BaseController {
         $this->loadView('cadastros/paciente-fichasubstituir', $data);
     }
 
-    function carregar($paciente_id) {
+    function contatosite() {
+        var_dump($_POST);
+        die;
+
+//        $data['idade'] = 0;
+//        $data['listaLogradouro'] = $this->paciente->listaTipoLogradouro();
+//        $data['listaconvenio'] = $this->paciente->listaconvenio();
+//        $this->loadView('cadastros/paciente-fichasubstituir', $data);
+    }
+
+    function carregar($paciente_id, $agendado = NULL) {
+        //essa variavel agendado serve para verificar se esta vindo da multifunção
         $obj_paciente = new paciente_model($paciente_id);
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
+        $data['ocupacao_mae'] = $data['empresapermissoes'][0]->ocupacao_mae;
         $data['obj'] = $obj_paciente;
         $data['idade'] = 1;
+        $data['agendado'] = $agendado;
         $this->loadView('cadastros/paciente-ficha', $data);
+    }
+
+    function carregarcirurgico($paciente_id, $agendado = NULL) {
+        //essa variavel agendado serve para verificar se esta vindo da multifunção
+        $obj_paciente = new paciente_model($paciente_id);
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
+        $data['obj'] = $obj_paciente;
+        $data['idade'] = 1;
+        $data['agendado'] = $agendado;
+        $this->loadView('cadastros/pacientecirurgico-ficha', $data);
+    }
+
+    function carregarmobile($paciente_id, $agendado = NULL, $empresa_id = 1) {
+        //essa variavel agendado serve para verificar se esta vindo da multifunção
+        $obj_paciente = new paciente_model($paciente_id);
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoesweb($empresa_id);
+        $data['obj'] = $obj_paciente;
+        $data['idade'] = 1;
+        $data['agendado'] = $agendado;
+        $this->load->View('cadastros/pacienteeditarweb-ficha', $data);
+    }
+
+    function visualizarcarregar($paciente_id) {
+        $obj_paciente = new paciente_model($paciente_id);
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
+        $data['obj'] = $obj_paciente;
+        $data['idade'] = 1;
+        $this->loadView('cadastros/pacientevisualizar-ficha', $data);
+    }
+
+    function carregarinternacaoprecadastro($paciente_id, $internacao_ficha_id) {
+        $obj_paciente = new paciente_model($paciente_id);
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
+        $data['obj'] = $obj_paciente;
+        $data['internacao_ficha_id'] = $internacao_ficha_id;
+        $data['idade'] = 1;
+        $this->loadView('cadastros/pacienteinternacaoprecadastro-ficha', $data);
     }
 
     function carregarmedico($paciente_id) {
@@ -324,6 +473,27 @@ class pacientes extends BaseController {
     }
 
     function gravar() {
+        if(isset($_POST['idade2'])){
+            $_POST['idade2'] = str_replace(' ano(s)', '', $_POST['idade2']);
+        }else{
+            $_POST['idade2'] = 0; 
+        }
+        // echo '<pre>';
+        // print_r($_POST); 
+        // die;
+        $perfil_id = $this->session->userdata('perfil_id');
+        $empresa_id = $this->session->userdata('empresa_id');
+        $empresapermissoes = $this->guia->listarempresapermissoes($empresa_id);
+
+        if ($_POST['nascimento'] != '') {
+            $nascimento = str_replace('/', '-', $_POST['nascimento']);
+ 
+            $data_valida = $this->utilitario->validateDate($nascimento);
+            if (!$data_valida) {
+                $_POST['nascimento'] = '';
+            }
+ 
+        }
 
         if (!is_dir("./upload/webcam")) {
             mkdir("./upload/webcam");
@@ -340,56 +510,355 @@ class pacientes extends BaseController {
 
         $_POST['nascimento'] = date("Y-m-d", strtotime(str_replace("/", "-", $_POST['nascimento'])));
 
-        if ($_POST['cpf'] != "") {
-            $cpf = $this->paciente->contadorcpf();
-            $contadorcpf = count($cpf);
-            $paciente_id = $cpf[0]->paciente_id;
+        if ($_POST['cpf'] != "" && $_POST['cpf'] != "000.000.000-00") {
+            if ($this->utilitario->validaCPF($_POST['cpf'])) {
+                $contadorcpf = $this->paciente->contadorcpf2();
+                if ($_POST['cpf_responsavel'] == 'on') {
+                    $contadorcpf = 0;
+                }// Caso esteja marcado como CPF responsável, ele deixa cadastrar.
+
+                if ($contadorcpf > 0) {
+                    $data['mensagem'] = 'CPF do paciente já cadastrado';
+                    $this->session->set_flashdata('message', $data['mensagem']);
+                    if(isset($_POST['desativado']) && $_POST['desativado'] == "true"){
+                      redirect(base_url() . "cadastros/pacientes/pesquisardesativado", $data);
+                    }
+                    redirect(base_url() . "cadastros/pacientes", $data);
+                }
+            } else {
+                $data['mensagem'] = 'Erro ao gravar paciente. CPF inválido';
+                $this->session->set_flashdata('message', $data['mensagem']);
+                if(isset($_POST['desativado']) && $_POST['desativado'] == "true"){
+                      redirect(base_url() . "cadastros/pacientes/pesquisardesativado", $data);
+                }
+                redirect(base_url() . "cadastros/pacientes", $data);
+            }
+//            var_dump($contadorcpf); die;
+        } else {
+            $contadorcpf = 0;
+        }
+        
+         if ($this->utilitario->validaCPF($_POST['cpf']) || $contadorcpf == 0) {
+            if ($contador == 0 && $contadorcpf == 0) {
+                if ($paciente_id = $this->paciente->gravar()) {
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Erro ao gravar paciente';
+                }
+ 
+                if ($paciente_id != false && $_POST['mydata'] != '') {
+                    $encoded_data = $_POST['mydata'];
+                    $binary_data = base64_decode($encoded_data);
+                    $result = file_put_contents("upload/webcam/pacientes/$paciente_id.jpg", $binary_data);
+                }
+                $this->session->set_flashdata('message', $data['mensagem']);
+                if(isset($_POST['desativado']) && $_POST['desativado'] == "true"){
+                    redirect(base_url() . "cadastros/pacientes/pesquisardesativado", $data);
+                }
+                if ($empresapermissoes[0]->convenio_padrao == 't'  ) {
+                    redirect(base_url() . "ambulatorio/guia/novoatendimentogrupopadrao/$paciente_id");
+                } else {
+                    redirect(base_url() . "emergencia/filaacolhimento/novo/$paciente_id", $data);
+                }
+            } elseif ($contador > 0 && $_POST['paciente_id'] != "") {
+                //Atualiza cadastro
+                if ($paciente_id = $this->paciente->gravar()) {
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Erro ao gravar paciente';
+                }
+            } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] != "") {
+
+                if ($paciente_id = $this->paciente->gravar()) {
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Erro ao gravar paciente';
+                }
+            } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] == "") {
+
+                if ($_POST['cpf'] == "000.000.000-00") {
+                    $paciente_id = $this->paciente->gravar();
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'CPF do paciente já cadastrado';
+                    $this->session->set_flashdata('message', $data['mensagem']);
+                    if(isset($_POST['desativado']) && $_POST['desativado'] == "true"){
+                      redirect(base_url() . "cadastros/pacientes/pesquisardesativado", $data);
+                    }
+                    redirect(base_url() . "cadastros/pacientes", $data);
+                }
+            } else {
+                if ($_POST['cpf'] == "000.000.000-00") {
+                    $paciente_id = $this->paciente->gravar();
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Paciente ja cadastrado';
+                    $this->session->set_flashdata('message', $data['mensagem']);
+                    if(isset($_POST['desativado']) && $_POST['desativado'] == "true"){
+                      redirect(base_url() . "cadastros/pacientes/pesquisardesativado", $data);
+                    }
+                    redirect(base_url() . "cadastros/pacientes", $data);
+                }
+            }
+        } else {
+            $data['mensagem'] = 'CPF inválido';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            if(isset($_POST['desativado']) && $_POST['desativado'] == "true"){
+              redirect(base_url() . "cadastros/pacientes/pesquisardesativado", $data);
+            }
+            redirect(base_url() . "cadastros/pacientes", $data);
+        } 
+        if ($paciente_id != false && $_POST['mydata'] != '') {
+            $encoded_data = $_POST['mydata'];
+            $binary_data = base64_decode($encoded_data);
+            $result = file_put_contents("upload/webcam/pacientes/$paciente_id.jpg", $binary_data);
+        } 
+        $this->session->set_flashdata('message', $data['mensagem']);
+        if(isset($_POST['desativado']) && $_POST['desativado'] == "true"){
+          redirect(base_url() . "cadastros/pacientes/pesquisardesativado", $data);
+        }
+        if ($empresapermissoes[0]->convenio_padrao == 't' && $_POST['agendado'] != '1'  ) {
+            redirect(base_url() . "ambulatorio/guia/novoatendimentogrupopadrao/$paciente_id");
+        } else {
+            redirect(base_url() . "emergencia/filaacolhimento/novo/$paciente_id", $data);
+        }
+        
+    }
+
+
+    function gravarcirurgico() {
+         
+        $perfil_id = $this->session->userdata('perfil_id');
+        $empresa_id = $this->session->userdata('empresa_id');
+        $empresapermissoes = $this->guia->listarempresapermissoes($empresa_id);
+
+        if ($_POST['nascimento'] != '') {
+            $nascimento = str_replace('/', '-', $_POST['nascimento']);
+ 
+            $data_valida = $this->utilitario->validateDate($nascimento);
+            if (!$data_valida) {
+                $_POST['nascimento'] = '';
+            }
+ 
+        }
+
+        if (!is_dir("./upload/webcam")) {
+            mkdir("./upload/webcam");
+            $destino = "./upload/webcam";
+            chmod($destino, 0777);
+        }
+        if (!is_dir("./upload/webcam/pacientes")) {
+            mkdir("./upload/webcam/pacientes");
+            $destino = "./upload/webcam/pacientes";
+            chmod($destino, 0777);
+        }
+
+        $contador = $this->paciente->contador();
+
+        $_POST['nascimento'] = date("Y-m-d", strtotime(str_replace("/", "-", $_POST['nascimento'])));
+
+        if ($_POST['cpf'] != "" && $_POST['cpf'] != "000.000.000-00") {
+            if ($this->utilitario->validaCPF($_POST['cpf'])) {
+                $contadorcpf = $this->paciente->contadorcpf2();
+                if ($_POST['cpf_responsavel'] == 'on') {
+                    $contadorcpf = 0;
+                }// Caso esteja marcado como CPF responsável, ele deixa cadastrar.
+
+                if ($contadorcpf > 0) {
+                    $data['mensagem'] = 'CPF do paciente já cadastrado';
+                    $this->session->set_flashdata('message', $data['mensagem']);
+                    redirect(base_url() . "cadastros/pacientes", $data);
+                }
+            } else {
+                $data['mensagem'] = 'Erro ao gravar paciente. CPF inválido';
+                $this->session->set_flashdata('message', $data['mensagem']);
+                redirect(base_url() . "cadastros/pacientes", $data);
+            }
+//            var_dump($contadorcpf); die;
+        } else {
+            $contadorcpf = 0;
+        }
+        
+         if ($this->utilitario->validaCPF($_POST['cpf']) || $contadorcpf == 0) {
+            if ($contador == 0 && $contadorcpf == 0) {
+                if ($paciente_id = $this->paciente->gravar()) {
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Erro ao gravar paciente';
+                }
+ 
+                if ($paciente_id != false && $_POST['mydata'] != '') {
+                    $encoded_data = $_POST['mydata'];
+                    $binary_data = base64_decode($encoded_data);
+                    $result = file_put_contents("upload/webcam/pacientes/$paciente_id.jpg", $binary_data);
+                }
+                $this->session->set_flashdata('message', $data['mensagem']);
+
+                redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+                
+            } elseif ($contador > 0 && $_POST['paciente_id'] != "") {
+                //Atualiza cadastro
+                if ($paciente_id = $this->paciente->gravar()) {
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Erro ao gravar paciente';
+                }
+            } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] != "") {
+
+                if ($paciente_id = $this->paciente->gravar()) {
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Erro ao gravar paciente';
+                }
+            } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] == "") {
+
+                if ($_POST['cpf'] == "000.000.000-00") {
+                    $paciente_id = $this->paciente->gravar();
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'CPF do paciente já cadastrado';
+                    $this->session->set_flashdata('message', $data['mensagem']);
+                    redirect(base_url() . "cadastros/pacientes", $data);
+                }
+            } else {
+                if ($_POST['cpf'] == "000.000.000-00") {
+                    $paciente_id = $this->paciente->gravar();
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Paciente ja cadastrado';
+                    $this->session->set_flashdata('message', $data['mensagem']);
+                    redirect(base_url() . "cadastros/pacientes", $data);
+                }
+            }
+        } else {
+            $data['mensagem'] = 'CPF inválido';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "cadastros/pacientes", $data);
+        }
+
+        if ($paciente_id != false && $_POST['mydata'] != '') {
+            $encoded_data = $_POST['mydata'];
+            $binary_data = base64_decode($encoded_data);
+            $result = file_put_contents("upload/webcam/pacientes/$paciente_id.jpg", $binary_data);
+        }
+
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+       
+        
+    }
+
+    function gravarweb() {
+        //    echo'<pre>';
+        //    var_dump($_POST);die;
+        $empresa_id = $this->session->userdata('empresa_id');
+        $empresapermissoes = $this->guia->listarempresapermissoes($empresa_id);
+
+        if ($_POST['nascimento'] != '') {
+            $nascimento = str_replace('/', '-', $_POST['nascimento']);
+//            var_dump($nascimento); die;
+            $data_valida = $this->utilitario->validateDate($nascimento);
+            if (!$data_valida) {
+                $_POST['nascimento'] = '';
+            }
+//            die;
+        }
+
+        if (!is_dir("./upload/webcam")) {
+            mkdir("./upload/webcam");
+            $destino = "./upload/webcam";
+            chmod($destino, 0777);
+        }
+        if (!is_dir("./upload/webcam/pacientes")) {
+            mkdir("./upload/webcam/pacientes");
+            $destino = "./upload/webcam/pacientes";
+            chmod($destino, 0777);
+        }
+
+        $contador = $this->paciente->contador();
+
+        $_POST['nascimento'] = date("Y-m-d", strtotime(str_replace("/", "-", $_POST['nascimento'])));
+
+        if ($_POST['cpf'] != "" && $_POST['cpf'] != "000.000.000-00") {
+            if ($this->utilitario->validaCPF($_POST['cpf'])) {
+                $contadorcpf = $this->paciente->contadorcpf2();
+                if ($_POST['cpf_responsavel'] == 'on') {
+                    $contadorcpf = 0;
+                }// Caso esteja marcado como CPF responsável, ele deixa cadastrar.
+
+                if ($contadorcpf > 0) {
+                    $data['mensagem'] = 'CPF do paciente já cadastrado';
+                    $this->session->set_flashdata('message', $data['mensagem']);
+                    redirect(base_url() . "cadastros/pacientes/carregarmobile/{$_POST['paciente_id']}", $data);
+                }
+            } else {
+                $data['mensagem'] = 'Erro ao gravar paciente. CPF inválido';
+                $this->session->set_flashdata('message', $data['mensagem']);
+                redirect(base_url() . "cadastros/pacientes/carregarmobile/{$_POST['paciente_id']}", $data);
+            }
+//            var_dump($contadorcpf); die;
         } else {
             $contadorcpf = 0;
         }
 
-        if ($contador == 0 && $contadorcpf == 0) {
-            if ($paciente_id = $this->paciente->gravar()) {
-                $data['mensagem'] = array('Paciente gravado com sucesso', 'success');
+        if ($this->utilitario->validaCPF($_POST['cpf']) || $contadorcpf == 0) {
+            if ($contador == 0 && $contadorcpf == 0) {
+                if ($paciente_id = $this->paciente->gravar()) {
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Erro ao gravar paciente';
+                }
+
+
+                if ($paciente_id != false && $_POST['mydata'] != '') {
+                    $encoded_data = $_POST['mydata'];
+                    $binary_data = base64_decode($encoded_data);
+                    $result = file_put_contents("upload/webcam/pacientes/$paciente_id.jpg", $binary_data);
+                }
+                $this->session->set_flashdata('message', $data['mensagem']);
+                if ($empresapermissoes[0]->convenio_padrao == 't') {
+                    redirect(base_url() . "ambulatorio/guia/novoatendimentogrupopadrao/$paciente_id");
+                } else {
+                    redirect(base_url() . "emergencia/filaacolhimento/novo/$paciente_id", $data);
+                }
+            } elseif ($contador > 0 && $_POST['paciente_id'] != "") {
+                //Atualiza cadastro
+                if ($paciente_id = $this->paciente->gravar()) {
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Erro ao gravar paciente';
+                }
+            } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] != "") {
+
+                if ($paciente_id = $this->paciente->gravar()) {
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Erro ao gravar paciente';
+                }
+            } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] == "") {
+
+                if ($_POST['cpf'] == "000.000.000-00") {
+                    $paciente_id = $this->paciente->gravar();
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'CPF do paciente já cadastrado';
+                    $this->session->set_flashdata('message', $data['mensagem']);
+                    redirect(base_url() . "cadastros/pacientes/carregarmobile/{$_POST['paciente_id']}", $data);
+                }
             } else {
-                $data['mensagem'] = array('Erro ao gravar paciente', 'error');
+                if ($_POST['cpf'] == "000.000.000-00") {
+                    $paciente_id = $this->paciente->gravar();
+                    $data['mensagem'] = 'Paciente gravado com sucesso';
+                } else {
+                    $data['mensagem'] = 'Paciente ja cadastrado';
+                    $this->session->set_flashdata('message', $data['mensagem']);
+                    redirect(base_url() . "cadastros/pacientes/carregarmobile/{$_POST['paciente_id']}", $data);
+                }
             }
-            //Em caso de paciente novo
-            // Encodando o raw da imagem em base64, transformando em jpg e salvando
-
-            if ($paciente_id != false && $_POST['mydata'] != '') {
-                $encoded_data = $_POST['mydata'];
-                $binary_data = base64_decode($encoded_data);
-                $result = file_put_contents("upload/webcam/pacientes/$paciente_id.jpg", $binary_data);
-            }
-            $this->session->set_flashdata('message', $data['mensagem']);
-            redirect(base_url() . "emergencia/filaacolhimento/novo/$paciente_id", $data);
-        } elseif ($contador > 0 && $_POST['paciente_id'] != "") {
-            //Atualiza cadastro
-            if ($paciente_id = $this->paciente->gravar()) {
-                $data['mensagem'] = array('Paciente gravado com sucesso', 'success');
-            } else {
-                $data['mensagem'] = array('Erro ao gravar paciente', 'error');
-            }
-        } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] != "") {
-
-            if ($paciente_id = $this->paciente->gravar()) {
-
-                $data['mensagem'] = array('Paciente gravado com sucesso', 'success');
-            } else {
-
-                $data['mensagem'] = array('Erro ao gravar paciente', 'error');
-            }
-        } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] == "") {
-
-            $data['mensagem'] = array('CPF já cadastrado', 'warning');
-            $this->session->set_flashdata('message', $data['mensagem']);
-            redirect(base_url() . "emergencia/filaacolhimento/novo/$paciente_id", $data);
         } else {
-            $data['mensagem'] = array('Paciente ja cadastrado', 'warning');
-
-            $this->session->set_flashdata('message', $data['mensagem'], $data['mensagem_tipo']);
-            redirect(base_url() . "emergencia/filaacolhimento/novo/$paciente_id", $data);
+            $data['mensagem'] = 'CPF inválido';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "cadastros/pacientes/carregarmobile/{$_POST['paciente_id']}", $data);
         }
         // Em caso de atualização de cadastro
         // Encodando o raw da imagem em base64, transformando em jpg e salvando
@@ -399,13 +868,32 @@ class pacientes extends BaseController {
             $binary_data = base64_decode($encoded_data);
             $result = file_put_contents("upload/webcam/pacientes/$paciente_id.jpg", $binary_data);
         }
-        $data['mensagem'] = array('Paciente gravado com sucesso', 'success');
-        $this->session->set_flashdata('message', $data['mensagem']);
+        $base_url = base_url();
 
-        redirect(base_url() . "emergencia/filaacolhimento/novo/$paciente_id", $data);
+        $this->session->set_flashdata('message', $data['mensagem']);
+        // die;
+        echo "<html>
+            <meta charset='UTF-8'>
+            <script type='text/javascript'>
+                alert('Dados alterados com sucesso!');
+                window.location.href = '{$base_url}'; 
+            </script>
+            </html>";   
+        // redirect(base_url());
     }
 
-    function gravarpacientemedico() {
+    function gravarpacienteprecadastro($internacao_ficha_id) {
+
+        if ($_POST['nascimento'] != '') {
+            $nascimento = str_replace('/', '-', $_POST['nascimento']);
+//            var_dump($nascimento); die;
+            $data_valida = $this->utilitario->validateDate($nascimento);
+            if (!$data_valida) {
+                $_POST['nascimento'] = '';
+            }
+//            die;
+        }
+//         var_dump($_POST['nascimento']); die;
 
         if (!is_dir("./upload/webcam")) {
             mkdir("./upload/webcam");
@@ -420,21 +908,17 @@ class pacientes extends BaseController {
 
         $contador = $this->paciente->contador();
 
-        $_POST['nascimento'] = date("Y-m-d", strtotime(str_replace("/", "-", $_POST['nascimento'])));
-
         if ($_POST['cpf'] != "") {
-            $cpf = $this->paciente->contadorcpf();
-            $contadorcpf = count($cpf);
-            $paciente_id = $cpf[0]->paciente_id;
+            $contadorcpf = $this->paciente->contadorcpf();
         } else {
             $contadorcpf = 0;
         }
 
         if ($contador == 0 && $contadorcpf == 0) {
             if ($paciente_id = $this->paciente->gravar()) {
-                $data['mensagem'] = array('Paciente gravado com sucesso', 'success');
+                $data['mensagem'] = 'Paciente gravado com sucesso';
             } else {
-                $data['mensagem'] = array('Erro ao gravar paciente', 'error');
+                $data['mensagem'] = 'Erro ao gravar paciente';
             }
             //Em caso de paciente novo
             // Encodando o raw da imagem em base64, transformando em jpg e salvando
@@ -445,33 +929,30 @@ class pacientes extends BaseController {
                 $result = file_put_contents("upload/webcam/pacientes/$paciente_id.jpg", $binary_data);
             }
             $this->session->set_flashdata('message', $data['mensagem']);
-            redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+            redirect(base_url() . "internacao/internacao/novointernacao/$paciente_id/$internacao_ficha_id", $data);
         } elseif ($contador > 0 && $_POST['paciente_id'] != "") {
 //Atualiza cadastro
             if ($paciente_id = $this->paciente->gravar()) {
-                $data['mensagem'] = array('Paciente gravado com sucesso', 'success');
+                $data['mensagem'] = 'Paciente gravado com sucesso';
             } else {
-                $data['mensagem'] = array('Erro ao gravar paciente', 'error');
+                $data['mensagem'] = 'Erro ao gravar paciente';
             }
         } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] != "") {
 
             if ($paciente_id = $this->paciente->gravar()) {
-
-                $data['mensagem'] = array('Paciente gravado com sucesso', 'success');
+                $data['mensagem'] = 'Paciente gravado com sucesso';
             } else {
-
-                $data['mensagem'] = array('Erro ao gravar paciente', 'error');
+                $data['mensagem'] = 'Erro ao gravar paciente';
             }
         } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] == "") {
 
-            $data['mensagem'] = array('CPF já cadastrado', 'warning');
+            $data['mensagem'] = 'CPF do paciente já cadastrado';
             $this->session->set_flashdata('message', $data['mensagem']);
-            redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+            redirect(base_url() . "internacao/internacao/manterfichaquestionario", $data);
         } else {
-            $data['mensagem'] = array('Paciente ja cadastrado', 'warning');
-
-            $this->session->set_flashdata('message', $data['mensagem'], $data['mensagem_tipo']);
-            redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+            $data['mensagem'] = 'Paciente ja cadastrado';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "internacao/internacao/manterfichaquestionario", $data);
         }
         // Em caso de atualização de cadastro
         // Encodando o raw da imagem em base64, transformando em jpg e salvando
@@ -481,14 +962,112 @@ class pacientes extends BaseController {
             $binary_data = base64_decode($encoded_data);
             $result = file_put_contents("upload/webcam/pacientes/$paciente_id.jpg", $binary_data);
         }
-        $data['mensagem'] = array('Paciente gravado com sucesso', 'success');
-        $this->session->set_flashdata('message', $data['mensagem']);
 
-        redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "internacao/internacao/novointernacao/$paciente_id/$internacao_ficha_id");
+    }
+
+    function gravarmedico() {
+        if ($_POST['nascimento'] != '') {
+            $nascimento = str_replace('/', '-', $_POST['nascimento']);
+//            var_dump($nascimento); die;
+            $data_valida = $this->utilitario->validateDate($nascimento);
+            if (!$data_valida) {
+                $_POST['nascimento'] = '';
+            }
+//            die;
+        }
+
+
+        if (!is_dir("./upload/webcam")) {
+            mkdir("./upload/webcam");
+            $destino = "./upload/webcam";
+            chmod($destino, 0777);
+        }
+        if (!is_dir("./upload/webcam/pacientes")) {
+            mkdir("./upload/webcam/pacientes");
+            $destino = "./upload/webcam/pacientes";
+            chmod($destino, 0777);
+        }
+
+        $contador = $this->paciente->contador();
+
+        $_POST['nascimento'] = date("Y-m-d", strtotime(str_replace("/", "-", $_POST['nascimento'])));
+
+        if ($_POST['cpf'] != "") {
+            $contadorcpf = $this->paciente->contadorcpf();
+        } else {
+            $contadorcpf = 0;
+        }
+
+        if ($contador == 0 && $contadorcpf == 0) {
+            if ($paciente_id = $this->paciente->gravar()) {
+                $data['mensagem'] = 'Paciente gravado com sucesso';
+            } else {
+                $data['mensagem'] = 'Erro ao gravar paciente';
+            }
+            //Em caso de paciente novo
+            // Encodando o raw da imagem em base64, transformando em jpg e salvando
+
+            if ($paciente_id != false && $_POST['mydata'] != '') {
+                $encoded_data = $_POST['mydata'];
+                $binary_data = base64_decode($encoded_data);
+                $result = file_put_contents("upload/webcam/pacientes/$paciente_id.jpg", $binary_data);
+            }
+            $this->session->set_flashdata('message', $data['mensagem']);
+//            redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+        } elseif ($contador > 0 && $_POST['paciente_id'] != "") {
+//Atualiza cadastro
+            if ($paciente_id = $this->paciente->gravar()) {
+                $data['mensagem'] = 'Paciente gravado com sucesso';
+            } else {
+                $data['mensagem'] = 'Erro ao gravar paciente';
+            }
+        } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] != "") {
+
+            if ($paciente_id = $this->paciente->gravar()) {
+                $data['mensagem'] = 'Paciente gravado com sucesso';
+            } else {
+                $data['mensagem'] = 'Erro ao gravar paciente';
+            }
+        } elseif ($contador == 0 && $contadorcpf == 1 && $_POST['paciente_id'] == "") {
+
+            $data['mensagem'] = 'CPF do paciente já cadastrado';
+            $this->session->set_flashdata('message', $data['mensagem']);
+//            redirect(base_url() . "cadastros/pacientes", $data);
+        } else {
+            $data['mensagem'] = 'Paciente ja cadastrado';
+            $this->session->set_flashdata('message', $data['mensagem']);
+//            redircect(base_url() . "cadastros/pacientes", $data);
+        }
+        // Em caso de atualização de cadastro
+        // Encodando o raw da imagem em base64, transformando em jpg e salvando
+
+        if ($paciente_id != false && $_POST['mydata'] != '') {
+            $encoded_data = $_POST['mydata'];
+            $binary_data = base64_decode($encoded_data);
+            $result = file_put_contents("upload/webcam/pacientes/$paciente_id.jpg", $binary_data);
+        }
+
+        $this->session->set_flashdata('message', $data['mensagem']);
+        $mensagem = $data['mensagem'];
+        echo "<html>
+                    <meta charset='UTF-8'>
+        <script type='text/javascript'>
+        
+        alert('$mensagem');
+        window.onunload = fechaEstaAtualizaAntiga;
+        function fechaEstaAtualizaAntiga() {
+            window.opener.location.reload();
+            }
+        window.close();
+            </script>
+            </html>";
     }
 
     public function pesquisarprocedimento($args = array()) {
-        $this->loadView('cadastros/procedimento-lista');
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
+        $this->loadView('cadastros/procedimento-lista', $data);
     }
 
     public function pesquisarpacientecenso($args = array()) {
@@ -881,6 +1460,230 @@ class pacientes extends BaseController {
         $this->exame->gravardicom($data);
     }
 
+    function precadastropaciente($args = array()) {
+          
+        $this->load->View('cadastros/precadastro-ficha');
+    }
+
+    function gravarprecadastro() {
+        if ($this->paciente->gravarprecadastro()) {           
+           $data['mensagem'] = 'Aguarde um retorno, pelo email, do Gerente Administrativo';
+           $mensagem = "<h3 id='sucesso_precadastro'>Pré-Cadastro gravado com sucesso<h3>";
+        } else {
+          $data['mensagem'] = 'Erro ao gravar Pré-Cadastro';
+          $mensagem = "";
+         }
+         $this->session->set_flashdata('message', $data['mensagem']);
+         $this->session->set_userdata('precadsatro',$mensagem);
+        redirect(base_url() . "cadastros/pacientes/precadastropaciente");    
+    }
+
+    function listarprecadastros($args = array()) {
+        $this->load->helper('directory');
+        $this->loadView('cadastros/precadastro-lista');
+    }
+
+    function precadastroinfo($pacientes_precadastro_id) {
+        $this->load->helper('directory');
+        $data['listas'] = $this->paciente->listarprecadastroinfo($pacientes_precadastro_id);
+        $data['pacientes_precadastro_id'] = $pacientes_precadastro_id;
+        $this->load->View("cadastros/precadastroinfo", $data);
+    }
+
+    function confirmarprecadastro($pacientes_precadastro_id) {
+        $teste = $this->paciente->confirmarprecadastro($pacientes_precadastro_id);
+        if ($teste) {
+            $data['mensagem'] = 'Erro ao confirmar Pré-Cadastro';
+        } else {
+            $data['mensagem'] = 'Pré-Cadastro confirmado com sucesso';
+        }
+
+        redirect(base_url() . "cadastros/pacientes/listarprecadastros", $data);
+    }
+
+    function emaildeconfirmacao($pacientes_precadastro_id) {
+        $empresa = $this->guia->listarempresa();
+        $this->paciente->emailprecadastro($pacientes_precadastro_id);
+        $cadastro = $this->paciente->listarprecadastroinfo($pacientes_precadastro_id);
+
+        $mensagem = "Olá, {$cadastro[0]->nome}, continue no link a seguir para completar o cadastro em {$empresa[0]->nome}
+        <br>
+        {$empresa[0]->endereco_externo_base}seguranca/operador/confirmarprecadastro/{$cadastro[0]->pacientes_precadastro_id}
+
+        <br><br><br><br><br> 
+         
+         <span>Obs: Não responda esse email. Email automático</span>";
+        //  echo '<pre>';
+        //  var_dump($mensagem); die;  
+        $medico_email = $cadastro[0]->email;        
+        $this->load->library('email');
+
+        $config['protocol'] = 'smtp';
+        $config['smtp_host'] = 'ssl://smtp.gmail.com';
+        $config['smtp_port'] = '465';
+        $config['smtp_user'] = 'equipe2016gcjh@gmail.com';
+        $config['smtp_pass'] = 'aramis*123@';
+        $config['validate'] = TRUE;
+        $config['mailtype'] = 'html';
+        $config['charset'] = 'utf-8';
+        $config['newline'] = "\r\n";
+
+        $this->email->initialize($config);
+        if (@$empresa[0]->email != '') {
+            $this->email->from($empresa[0]->email, $empresa[0]->nome);
+        } else {
+            $this->email->from('equipe2016gcjh@gmail.com', $empresa[0]->nome);
+        }
+
+        $this->email->to($medico_email);
+        $this->email->subject("Confirmar cadastro em {$empresa[0]->nome}");
+        $this->email->message($mensagem);
+ 
+        if ($this->email->send()) {
+            $data['mensagem'] = "Email enviado com sucesso.";
+        } else {
+            $data['mensagem'] = "Envio de Email malsucedido.";
+        }
+
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "cadastros/pacientes/listarprecadastros", $data);
+    }
+
+    function desativarpaciente($paciente_id) {
+        $teste = $this->paciente->desativarpaciente($paciente_id);
+        if ($teste) {
+            $data['mensagem'] = 'Erro ao desativar paciente';
+        } else {
+            $data['mensagem'] = 'Paciente desativado com sucesso';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "cadastros/pacientes", $data); 
+    }
+
+    function excluirprecadastroPaciente($pacientes_precadastro_id) {
+        $teste = $this->paciente->excluirprecadastroPaciente($pacientes_precadastro_id);
+        if ($teste) {
+            $data['mensagem'] = 'Erro ao excluir Pré-Cadastro';
+        } else {
+            $data['mensagem'] = 'Pré-Cadastro excluido com sucesso';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "cadastros/pacientes/listarprecadastrosPaciente", $data); 
+    }
+
+    function confirmarprecadastroPaciente($pacientes_precadastro_id) {
+        $teste = $this->paciente->confirmarprecadastroPaciente($pacientes_precadastro_id);
+        if (!$teste) {
+            $data['mensagem'] = 'Erro ao confirmar Pré-Cadastro ';
+        } else {
+            $data['mensagem'] = "Pré-Cadastro confirmado com sucesso $teste";
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "cadastros/pacientes/listarprecadastrosPaciente", $data); 
+    }
+
+    function excluirprecadastro($pacientes_precadastro_id) {
+        $teste = $this->paciente->excluirprecadastro($pacientes_precadastro_id);
+        if ($teste) {
+            $data['mensagem'] = 'Erro ao confirmar Pré-Cadastro';
+        } else {
+            $data['mensagem'] = 'Pré-Cadastro confirmado com sucesso';
+        }
+        redirect(base_url() . "cadastros/pacientes/listarprecadastros", $data); 
+    }
+    
+    
+    function impressaoescolaridade($pacientes_precadastro_id){
+        $this->load->helper('directory');
+        $this->load->plugin('mpdf');
+        $data['lista'] = $this->paciente->listarprecadastroinfo($pacientes_precadastro_id);
+        $data['pacientes_precadastro_id'] =$pacientes_precadastro_id;
+        $html = $this->load->View('cadastros/impressaoescolaridadeprecadastro',$data, true);
+        $filename = "PreCadastro".date('d-m-Y');
+        $rodape = "";
+        downloadpdf($html, $filename, "", $rodape); 
+    }
+    
+   function listarocorrencia($args = array()) {
+        $this->load->helper('directory');
+        $this->loadView('cadastros/ocorrencia-lista');
+    }
+    
+    function carregarcampo($ocorrencia_id){
+        $data['template_ocorrencia_id'] = $ocorrencia_id;
+        $data['template'] = $this->paciente->listartemplateocorrenciaform($ocorrencia_id); 
+    
+        $this->loadView('cadastros/ocorrencia-ficha',$data);
+    }
+    
+    function gravartemplateocorrencia() { 
+        if ($this->paciente->gravartemplateocorrencia()) {
+            $mensagem = 'Sucesso ao gravar template';
+        } else {
+            $mensagem = 'Erro ao gravar o template. Opera&ccedil;&atilde;o cancelada.';
+        }
+        $this->session->set_flashdata('message', $mensagem);
+        // redirect(base_url() . "ambulatorio/empresa/listartemplatesconsulta");
+    }
+    
+    function excluirtemplateocorrencia($template_id) {
+        if ($this->paciente->excluirtemplateocorrencia($template_id)) {
+            $mensagem = 'Ocorrência desativada com sucesso';
+        } else {
+            $mensagem = 'Erro ao reativar Ocorrência. ';
+        } 
+        $this->session->set_flashdata('message', $mensagem);
+        redirect(base_url() . "cadastros/pacientes/listarocorrencia");
+    }
+    
+    function reativartemplateocorrencia($template_id) {
+        if ($this->paciente->reativartemplateocorrencia($template_id)) {
+            $mensagem = 'Ocorrência ativada com sucesso';
+        } else {
+            $mensagem = 'Erro ao reativar template. ';
+        } 
+        $this->session->set_flashdata('message', $mensagem);
+        redirect(base_url() . "cadastros/pacientes/listarocorrencia");
+    }
+    
+    function carregartemplatejson($template_id) {
+        $data['template_ocorrencia_id'] = $template_id;
+        $data['template'] = $this->paciente->listartemplateocorrenciaform($template_id);
+//        var_dump($data['impressao']); die;
+        if(count($data['template']) > 0){
+            echo $data['template'][0]->template;
+        }else{
+            echo json_encode(array());
+        }
+        
+    }
+    
+    function carregarocorrenciasjson() {
+        $data['template'] = $this->paciente->listarocorrencia();
+//        var_dump($data['impressao']); die;
+        if(count($data['template']) > 0){
+            echo json_encode($data['template']);
+        // echo $data['template'][0]->template;
+        }else{
+            echo json_encode(array());
+        }
+        
+    }
+
+    function carregardesativado($paciente_id, $agendado = NULL) {
+        //essa variavel agendado serve para verificar se esta vindo da multifunção
+        $obj_paciente = new paciente_model($paciente_id);
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
+        $data['ocupacao_mae'] = $data['empresapermissoes'][0]->ocupacao_mae;
+        $data['obj'] = $obj_paciente;
+        $data['idade'] = 1;
+        $data['agendado'] = $agendado;
+        $data['desativado'] = "true";
+        
+        $this->loadView('cadastros/paciente-ficha', $data);
+    }
+
+    
 }
 
 ?>

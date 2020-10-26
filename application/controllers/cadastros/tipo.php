@@ -11,11 +11,15 @@ require_once APPPATH . 'controllers/base/BaseController.php';
  * @package Model
  * @subpackage GIAH
  */
+
+
 class Tipo extends BaseController {
 
     function Tipo() {
         parent::Controller();
         $this->load->model('cadastro/tipo_model', 'tipo');
+        $this->load->model('cadastro/nivel1_model', 'nivel1');
+        $this->load->model('cadastro/nivel2_model', 'nivel2');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -36,6 +40,8 @@ class Tipo extends BaseController {
     function carregartipo($tipo_entradas_saida_id) {
         $obj_tipo = new tipo_model($tipo_entradas_saida_id);
         $data['obj'] = $obj_tipo;
+        $data['nivel1'] = $this->nivel1->listarnivel1();
+        $data['nivel2'] = $this->nivel2->listarnivel2();
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('cadastros/tipo-form', $data);
     }
@@ -43,15 +49,16 @@ class Tipo extends BaseController {
     function excluir($tipo_entradas_saida_id) {
         $valida = $this->tipo->excluir($tipo_entradas_saida_id);
         if ($valida == 0) {
-            $data['mensagem'] = array('Sucesso ao excluir o tipo' ,'success');
+            $data['mensagem'] = 'Sucesso ao excluir a Tipo';
         } else {
-            $data['mensagem'] = array('Erro ao excluir o tipo. Operação Cancelada.', 'error');
+            $data['mensagem'] = 'Erro ao excluir a tipo. Opera&ccedil;&atilde;o cancelada.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/tipo");
     }
 
     function gravar() {
+//        var_dump($_POST);die;
         $exame_tipo_id = $this->tipo->gravar();
         if ($exame_tipo_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar a Tipo. Opera&ccedil;&atilde;o cancelada.';

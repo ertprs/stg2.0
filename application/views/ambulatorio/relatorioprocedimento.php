@@ -1,6 +1,6 @@
 <div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
-        <h3><a href="#">Gerar relatorio Procedimento</a></h3>
+        <h3><a href="#">Gerar Relatório Procedimentos</a></h3>
         <div>
             <form method="post" action="<?= base_url() ?>ambulatorio/procedimento/gerarelatorioprocedimento">
                 <dl>
@@ -17,6 +17,17 @@
                                 endif;
                                 ?>><?= $grupo->nome ?></option>
                                     <? } ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Subgrupo</label>
+                    </dt>
+                    <dd>
+                        <select name="subgrupo" id="subgrupo" class="size1" >
+                            <option value='0' >TODOS</option>
+                            <? foreach ($subgrupos as $grupo) { ?>                                
+                                <option value='<?= $grupo->ambulatorio_subgrupo_id ?>'><?= $grupo->nome ?></option>
+                            <? } ?>
                         </select>
                     </dd>
                 </dl>

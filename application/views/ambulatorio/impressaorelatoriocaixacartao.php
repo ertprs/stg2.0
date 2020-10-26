@@ -1,11 +1,12 @@
 <meta charset="UTF-8">
 <div class="content"> <!-- Inicio da DIV content -->
+    <title>RELATÓRIO CAIXA CARTÃO</title>
     <? if (count($empresa) > 0) { ?>
         <h4><?= $empresa[0]->razao_social; ?></h4>
     <? } else { ?>
         <h4>TODAS AS CLINICAS</h4>
     <? } ?>
-    <h4>CONFERENCIA CAIXA</h4>
+    <h4>RELATÓRIO CAIXA CARTÃO</h4>
     <h4>PERIODO: <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_inicio))); ?> ate <?= str_replace("-", "/", date("d-m-Y", strtotime($txtdata_fim))); ?></h4>
     <? if (count($operador) != 0) { ?>
         <h3>ATENDENTE: <?= $operador[0]->nome; ?></h3>
@@ -31,6 +32,7 @@
                     <th class="tabela_header"><font size="-1">Emissao</th>
                     <th class="tabela_header"><font size="-1">Paciente</th>
                     <th class="tabela_header"><font size="-1">Exame</th>
+                    <th class="tabela_header"><font size="-1">Data Lançamento</th>
                     <th class="tabela_header"><font size="-1">F. Pagamento</th>
                     <th class="tabela_header" style="text-align: right"><font size="-1">QTDE</th>
                     <th class="tabela_header" width="80px;" style="text-align: right"><font size="-1">V. Total</th>
@@ -77,8 +79,33 @@
                 $operadorexames = "";
                 $paciente = "";
                 $exame = "";
-
+                
+         
                 foreach ($relatorio as $item) {
+
+                    if($item->cartao1 == 'f'){
+                        $item->forma_pagamento = '';
+                        $item->valor_total = $item->valor_total - $item->valor1;
+                        $item->valor1 = '0.00';
+                    }
+                    if($item->cartao2 == 'f'){
+                        $item->forma_pagamento_2 = '';
+                        $item->valor_total = $item->valor_total - $item->valor2;
+                        $item->valor2 = '0.00';
+                    }
+                    if($item->cartao3 == 'f'){
+                        $item->forma_pagamento_3 = '';
+                        $item->valor_total = $item->valor_total - $item->valor3;
+                        $item->valor3 = '0.00';
+                    }
+                    if($item->cartao4 == 'f'){
+                        $item->forma_pagamento_4 = '';
+                        $item->valor_total = $item->valor_total - $item->valor4;
+                        $item->valor4 = '0.00';
+                    }
+                    // echo '<pre>';
+                    // print_r($item);
+                    // die;
 
                     $i++;
                     $b++;
@@ -101,7 +128,7 @@
                         if ($i == 1) {
                             ?>
                             <tr>
-                                <td colspan="8"><font ><b>Operador:&nbsp;<?= utf8_decode($item->nome); ?></b></td>
+                                <td colspan="8"><font ><b>Operador:&nbsp;<?= ($item->nome); ?></b></td>
                             </tr>
                         <? }
                         ?>
@@ -119,13 +146,21 @@
                                         ?>&Sqrt;<? }
                                     ?>
                                 </td>
-                                <td><font size="-2"><?= utf8_decode($item->paciente); ?></td>
+                                <td><font size="-2"><?= ($item->paciente); ?></td>
                             <? } ?>
                             <? if ($item->exames_id == "") { ?>
-                                <td><font color="red" size="-2"><?= utf8_decode($item->exame) . " " . $item->numero_sessao; ?></td>
+                                <td><font color="red" size="-2"><?= ($item->exame) . " " . $item->numero_sessao; ?></td>
                             <? } else { ?>
-                                <td><font size="-2"><?= utf8_decode($item->exame) . " " . $item->numero_sessao; ?></td>
+                                <td><font size="-2"><?= ($item->exame) . " " . $item->numero_sessao; ?></td>
                             <? } ?>
+
+                                <?
+                                // print_r('entrou');
+                                // echo '<br>';
+                                ?>
+                                <td><font size="-2"><?= date('d/m/Y H:i:s', strtotime($item->data_faturamento)); ?></td>
+
+
                             <?
                             if ($item->forma_pagamento != '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 != '' && $item->forma_pagamento_4 != '') { ?>
                                 <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
@@ -166,6 +201,8 @@
                                 <?
                             }
                             if ($item->forma_pagamento != '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 == '') {
+                                // print_r('entrou');
+                                // die;
                                 ?>
                                 <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
                                         <font size="-2"><?= $item->forma_pagamento; ?><br><?= $item->forma_pagamento_2; ?></a></td>
@@ -183,7 +220,78 @@
                                 <? } ?>
                                 <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
                                 <?
-                            }                            
+                            } 
+                            
+                            
+                            if ($item->forma_pagamento == '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 == '') {
+                                // print_r('entrou');
+                                // die;
+                                ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento_2; ?></a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
+                                <? if ($item->operador_editar != '') { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor2, 2, ',', '.') . " (*)" ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor2, 2, ',', '.') ?></td>
+
+
+                                <? } ?>
+                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
+                                <?
+                            }
+
+
+                            if ($item->forma_pagamento == '' && $item->forma_pagamento_2 == '' && $item->forma_pagamento_3 != '' && $item->forma_pagamento_4 == '') {
+                                // print_r('entrou');
+                                // die;
+                                ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento_3; ?></a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
+                                <? if ($item->operador_editar != '') { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor3, 2, ',', '.') . " (*)" ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor3, 2, ',', '.') ?></td>
+
+
+                                <? } ?>
+                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
+                                <?
+                            }
+
+
+                            if ($item->forma_pagamento == '' && $item->forma_pagamento_2 == '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 != '') {
+                                // print_r('entrou');
+                                // die;
+                                ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento_4; ?></a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
+                                <? if ($item->operador_editar != '') { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor4, 2, ',', '.') . " (*)" ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor4, 2, ',', '.') ?></td>
+
+
+                                <? } ?>
+                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
+                                <?
+                            }
+
+
                             if ($item->forma_pagamento != '' && $item->forma_pagamento_2 == '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 == '') {
                                 ?>
                                 <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
@@ -268,6 +376,26 @@
                                 <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
                                 <?
                             }
+                            
+                            if ($item->forma_pagamento == '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 != '' && $item->forma_pagamento_4 == '') {
+                                ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento_2; ?><br><?= $item->forma_pagamento_3; ?></font>
+                                    </a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
+                                <? if ($item->operador_editar != '') { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor2, 2, ',', '.') ?><br><?= number_format($item->valor3, 2, ',', '.') . " (*)" ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor2, 2, ',', '.') ?><br><?= number_format($item->valor3, 2, ',', '.') ?></td>
+                                <? }
+                                ?>
+                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
+                                <?
+                            }
                             ?>
                         </tr>
 
@@ -316,7 +444,7 @@
                             <td colspan="5"></td><td colspan="2"><font size="-1"><b>VALOR TOTAL: <?= number_format($valor, 2, ',', '.'); ?></b></td>
                         </tr>
                         <tr>
-                            <td colspan="8"><font ><b>Operador:&nbsp;<?= utf8_decode($item->nome); ?></b></td>
+                            <td colspan="8"><font ><b>Operador:&nbsp;<?= ($item->nome); ?></b></td>
                         </tr>
 <!--                        <tr><td></td></tr>
                         <tr><td></td></tr>-->
@@ -330,15 +458,18 @@
                             <? } else { ?>
                                 <td><font size="-2"><?= $item->guia_id; ?></td>
                                 <td><font size="-2"><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
-                                <td><font size="-2"><?= utf8_decode($item->paciente); ?></td>
+                                <td><font size="-2"><?= ($item->paciente); ?></td>
                             <? } ?>
                             <? if ($item->exames_id == "") { ?>
-                                <td><font color="red" size="-2"><?= utf8_decode($item->exame) . " " . $item->numero_sessao; ?></td>
+                                <td><font color="red" size="-2"><?= ($item->exame) . " " . $item->numero_sessao; ?></td>
                             <? } else { ?>
-                                <td><font size="-2"><?= utf8_decode($item->exame) . " " . $item->numero_sessao; ?></td>
+                                <td><font size="-2"><?= ($item->exame) . " " . $item->numero_sessao; ?></td>
                             <? } ?>
-                            <? if ($item->forma_pagamento != '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 != '' && $item->forma_pagamento_4 != '') { ?>
-                                <td><font size="-2"><?= $item->forma_pagamento; ?><br><?= $item->forma_pagamento_2; ?><br><?= $item->forma_pagamento_3; ?><br><?= $item->forma_pagamento_4; ?></td>
+                            <td><font size="-2"><?= date('d/m/y H:i:s', strtotime($item->data_faturamento)); ?></td>
+                             <?
+                            if ($item->forma_pagamento != '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 != '' && $item->forma_pagamento_4 != '') { ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><font size="-2"><?= $item->forma_pagamento; ?><br><?= $item->forma_pagamento_2; ?><br><?= $item->forma_pagamento_3; ?><br><?= $item->forma_pagamento_4; ?></a></td>
                                 <? if ($item->faturado == "f") { ?>
                                     <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
                                 <? } else { ?>
@@ -349,26 +480,37 @@
                                 <? } else { ?>
                                     <td style="text-align: right"><font size="-2"><?= number_format($item->valor1, 2, ',', '.') ?><br><?= number_format($item->valor2, 2, ',', '.') ?><br><?= number_format($item->valor3, 2, ',', '.') ?><br><?= number_format($item->valor4, 2, ',', '.') ?></td>
 
-                                <? }
-                                ?>
+
+                                <? } ?>
                                 <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
                                 <?
-                            }if ($item->forma_pagamento != '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 != '' && $item->forma_pagamento_4 == '') {
+                            }
+                            
+                            if ($item->forma_pagamento != '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 != '' && $item->forma_pagamento_4 == '') {
                                 ?>
-                                <td><font size="-2"><?= $item->forma_pagamento; ?><br><?= $item->forma_pagamento_2; ?><br><?= $item->forma_pagamento_3; ?></td>
-                                <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento; ?><br><?= $item->forma_pagamento_2; ?><br><?= $item->forma_pagamento_3; ?></a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
                                 <? if ($item->operador_editar != '') { ?>
                                     <td style="text-align: right"><font size="-2"><?= number_format($item->valor1, 2, ',', '.') ?><br><?= number_format($item->valor2, 2, ',', '.') ?><br><?= number_format($item->valor3, 2, ',', '.') . " (*)" ?></td>
                                 <? } else { ?>
                                     <td style="text-align: right"><font size="-2"><?= number_format($item->valor1, 2, ',', '.') ?><br><?= number_format($item->valor2, 2, ',', '.') ?><br><?= number_format($item->valor3, 2, ',', '.') ?></td>
 
-                                <? }
-                                ?>
+
+                                <? } ?>
                                 <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
                                 <?
-                            }if ($item->forma_pagamento != '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 == '') {
+                            }
+                            if ($item->forma_pagamento != '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 == '') {
+                                // print_r('entrou');
+                                // die;
                                 ?>
-                                <td><font size="-2"><?= $item->forma_pagamento; ?><br><?= $item->forma_pagamento_2; ?></td>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento; ?><br><?= $item->forma_pagamento_2; ?></a></td>
                                 <? if ($item->faturado == "f") { ?>
                                     <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
                                 <? } else { ?>
@@ -379,40 +521,181 @@
                                 <? } else { ?>
                                     <td style="text-align: right"><font size="-2"><?= number_format($item->valor1, 2, ',', '.') ?><br><?= number_format($item->valor2, 2, ',', '.') ?></td>
 
-                                <? }
-                                ?>
-                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
-                                <?
-                            }if ($item->forma_pagamento != '' && $item->forma_pagamento_2 == '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 == '') {
-                                ?>
-                                <td><font size="-2"><?= $item->forma_pagamento; ?></td>
-                                <? if ($item->faturado == "f") { ?>
-                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
-                                <? } else { ?>
-                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
-                                <? } ?>
-                                <? if ($item->operador_editar != '') { ?>
-                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor1, 2, ',', '.') . " (*)" ?></td>
-                                <? } else { ?>
-                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor1, 2, ',', '.') ?></td>
 
-                                <? }
-                                ?>
+                                <? } ?>
                                 <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
                                 <?
-                            } if ($item->forma_pagamento == '' && $item->forma_pagamento_2 == '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 == '') {
+                            } 
+                            
+                            
+                            if ($item->forma_pagamento == '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 == '') {
+                                // print_r('entrou');
+                                // die;
                                 ?>
-                                <td><font size="-2"><?= $item->forma_pagamento; ?></td>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento_2; ?></a></td>
                                 <? if ($item->faturado == "f") { ?>
                                     <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
                                 <? } else { ?>
                                     <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
                                 <? } ?>
                                 <? if ($item->operador_editar != '') { ?>
-                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor_total, 2, ',', '.') . " (*)" ?></td>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor2, 2, ',', '.') . " (*)" ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor2, 2, ',', '.') ?></td>
+
+
+                                <? } ?>
+                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
+                                <?
+                            }
+
+
+                            if ($item->forma_pagamento == '' && $item->forma_pagamento_2 == '' && $item->forma_pagamento_3 != '' && $item->forma_pagamento_4 == '') {
+                                // print_r('entrou');
+                                // die;
+                                ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento_3; ?></a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
+                                <? if ($item->operador_editar != '') { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor3, 2, ',', '.') . " (*)" ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor3, 2, ',', '.') ?></td>
+
+
+                                <? } ?>
+                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
+                                <?
+                            }
+
+
+                            if ($item->forma_pagamento == '' && $item->forma_pagamento_2 == '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 != '') {
+                                // print_r('entrou');
+                                // die;
+                                ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento_4; ?></a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
+                                <? if ($item->operador_editar != '') { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor4, 2, ',', '.') . " (*)" ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor4, 2, ',', '.') ?></td>
+
+
+                                <? } ?>
+                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
+                                <?
+                            }
+
+
+                            if ($item->forma_pagamento != '' && $item->forma_pagamento_2 == '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 == '') {
+                                ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento; ?></font>
+                                    </a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
+                                <? if ($item->operador_editar != '') { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor_total, 2, ',', '.') ?> 
+                                        <a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/valoralterado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                            <font size="-1">  --(*)</font>
+                                        </a></td>
+                                <? } else { ?>
+                                        <td style="text-align: right"><font size="-2"><?= number_format($item->valor1, 2, ',', '.') ?></td>
+
+
+                                <? } ?>
+                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
+                                <?
+                            }
+                            if ($item->forma_pagamento == '' && $item->forma_pagamento_2 == '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 == '') {
+                                ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento; ?></font>
+                                    </a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
+                                <? if ($item->operador_editar != '') { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor_total, 2, ',', '.') ?> 
+                                        <a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/valoralterado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                            <font size="-1">  --(*)</font>
+                                        </a></td>
                                 <? } else { ?>
                                     <td style="text-align: right"><font size="-2"><?= number_format($item->valor_total, 2, ',', '.') ?></td>
 
+                                <? }
+                                ?>
+                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
+                                <?
+                            }
+                            if ($item->forma_pagamento != '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 != '') {
+                                ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento; ?><br><?= $item->forma_pagamento_2; ?><br><?= $item->forma_pagamento_4; ?></a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
+                                <? if ($item->operador_editar != '') { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor1, 2, ',', '.') ?><br><?= number_format($item->valor2, 2, ',', '.') ?><br><?= number_format($item->valor4, 2, ',', '.') . " (*)" ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor1, 2, ',', '.') ?><br><?= number_format($item->valor2, 2, ',', '.') ?><br><?= number_format($item->valor4, 2, ',', '.') ?></td>
+
+                                <? }
+                                ?>
+                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
+                                <?
+                            }if ($item->forma_pagamento != '' && $item->forma_pagamento_2 == '' && $item->forma_pagamento_3 == '' && $item->forma_pagamento_4 != '') {
+                                ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento; ?><br><?= $item->forma_pagamento_4; ?></font>
+                                    </a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
+                                <? if ($item->operador_editar != '') { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor1, 2, ',', '.') ?><br><?= number_format($item->valor4, 2, ',', '.') . " (*)" ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor1, 2, ',', '.') ?><br><?= number_format($item->valor4, 2, ',', '.') ?></td>
+
+                                <? }
+                                ?>
+                                <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
+                                <?
+                            }
+                            
+                            if ($item->forma_pagamento == '' && $item->forma_pagamento_2 != '' && $item->forma_pagamento_3 != '' && $item->forma_pagamento_4 == '') {
+                                ?>
+                                <td><a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/verificado/$item->agenda_exames_id"; ?> ', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=400');">
+                                        <font size="-2"><?= $item->forma_pagamento_2; ?><br><?= $item->forma_pagamento_3; ?></font>
+                                    </a></td>
+                                <? if ($item->faturado == "f") { ?>
+                                    <td style="text-align: right"><font size="-2" color="red"><?= $item->quantidade; ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= $item->quantidade; ?></td>
+                                <? } ?>
+                                <? if ($item->operador_editar != '') { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor2, 2, ',', '.') ?><br><?= number_format($item->valor3, 2, ',', '.') . " (*)" ?></td>
+                                <? } else { ?>
+                                    <td style="text-align: right"><font size="-2"><?= number_format($item->valor2, 2, ',', '.') ?><br><?= number_format($item->valor3, 2, ',', '.') ?></td>
                                 <? }
                                 ?>
                                 <td style="text-align: right"><font size="-2"><?= $item->desconto; ?></td>
@@ -589,7 +872,7 @@
                 <tbody>
         <? foreach ($caixa as $item) : ?>
                         <tr>
-                            <td><?= utf8_decode($item->operador_caixa); ?></td>
+                            <td><?= ($item->operador_caixa); ?></td>
                             <td><?= number_format($item->valor, 2, ',', '.'); ?></td>
                         </tr>
             <? endforeach; ?>

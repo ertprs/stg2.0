@@ -21,6 +21,8 @@ if ($sexo == "M") {
     $sexopaciente = "Masculino";
 } elseif ($sexo == "F") {
     $sexopaciente = "Feminino";
+} else {
+    $sexopaciente = "Outro";
 }
 $dataFuturo = date("Y-m-d");
 $dataAtual = $paciente['0']->nascimento;
@@ -31,22 +33,28 @@ $exame_id = $exame[0]->agenda_exames_id;
 $dataatualizacao = $exame[0]->data_autorizacao;
 $inicio = $exame[0]->inicio;
 $agenda = $exame[0]->agenda;
+
+$sistema_pacientes = $empresapermissoes[0]->endereco_ficha;
+print_r($sistema_pacientes.'---');
 ?>
 
 <table>
     <tbody>
         <tr>
-            <td colspan="2"  ><font size = -1><?= utf8_decode($paciente['0']->nome); ?> - <?= $paciente['0']->paciente_id; ?> <font size = -1>D.N.: <?= substr($paciente['0']->nascimento, 8, 2) . "/" . substr($paciente['0']->nascimento, 5, 2) . "/" . substr($paciente['0']->nascimento, 0, 4); ?></font></font></td>
+            <td colspan="2"  ><font size = -1><?= ($paciente['0']->nome); ?> - <?= $paciente['0']->paciente_id; ?> <font size = -1>D.N.: <?= substr($paciente['0']->nascimento, 8, 2) . "/" . substr($paciente['0']->nascimento, 5, 2) . "/" . substr($paciente['0']->nascimento, 0, 4); ?></font></font></td>
             <td ><font size = -1>Idade: <?= $teste; ?>&nbsp; </font></td>
             <td width="280px"><font size = -1><center></center></font></td>
 <td width="30px">&nbsp;</td>
 <td ><font size = -1><u><?= $empresa[0]->razao_social ?></u></font></td>
 </tr>
 <tr>
-    <td colspan="2" ><font size = -1><?= utf8_decode($exame[0]->convenio); ?>&nbsp;&nbsp; - &nbsp;&nbsp;<?= $exame[0]->guia_id ?></font></td>
+    <td colspan="2" ><font size = -1><?= ($exame[0]->convenio); ?>&nbsp;&nbsp; - &nbsp;&nbsp;<?= $exame[0]->guia_id ?></font></td>
     <td ><font size = -1>SEXO: <?= $sexopaciente ?></font></td>
     <td><font size = -2></font></td>
     <td >&nbsp;</td>
+    <?if($sistema_pacientes != ''){?>
+        <td ><font size = -1>Resultados: <?=$sistema_pacientes?></font></td>
+    <?}?>
     <td ><font size = -1><u>&nbsp;</u></font></td>
 </tr>
 <tr>
@@ -54,13 +62,16 @@ $agenda = $exame[0]->agenda;
     <td ><font size = -1>FONE:<?= $paciente['0']->telefone; ?> </font></td>
     <td><font size = -2></font></td>
     <td >&nbsp;</td>
-    <td ><font size = -1></font></td>
+    <!-- <td ><font size = -1></font></td> -->
+    <?if($sistema_pacientes != ''){?>
+        <td ><font size = -1>Usuário: <?=$paciente['0']->paciente_id?> Senha: <?=$exames[0]->agenda_exames_id?></font></td>
+    <?}?>
 </tr>
 <tr>
     <td colspan="2" ><font size = -1>
         <?
         foreach ($exames as $item) :
-            echo utf8_decode($item->procedimento);
+            echo ($item->procedimento);
             ?><br><? endforeach; ?>
         </font></td>
     <td ><font size = -1>MEDICO:<?= substr($exame[0]->medicosolicitante, 0, 8); ?></font></td>
@@ -68,7 +79,7 @@ $agenda = $exame[0]->agenda;
     <td >&nbsp;</td> 
     <td ><font size = -1><?
         foreach ($exames as $item) :
-            echo utf8_decode($item->procedimento);
+            echo ($item->procedimento);
             ?><br><? endforeach; ?></font></td>
 </tr>
 <tr>
@@ -137,7 +148,7 @@ $agenda = $exame[0]->agenda;
         border-bottom:none;border-top:none;mso-border-left-alt:
         solid windowtext .5pt;mso-border-right-alt:solid windowtext .5pt;'><font size = -2></font></td>
     <td >&nbsp;</td>
-    <td ><font size = -1>REALIZADO: <?= substr($exame[0]->data_autorizacao, 8, 2) . "/" . substr($exame[0]->data_autorizacao, 5, 2) . "/" . substr($exame[0]->data_autorizacao, 0, 4); ?>&agrave;s <?= substr($dataatualizacao, 10, 9); ?></u></font></td>
+    <td ><font size = -1>REALIZADO: <?= substr($exame[0]->data_autorizacao, 8, 2) . "/" . substr($exame[0]->data_autorizacao, 5, 2) . "/" . substr($exame[0]->data_autorizacao, 0, 4); ?> &agrave;s <?= substr($dataatualizacao, 10, 9); ?></u></font></td>
 </tr>
 <tr>
     <td ><font size = -2>( )TB RESIDUAL</font></td>
@@ -157,11 +168,11 @@ $agenda = $exame[0]->agenda;
     $data = $exame[0]->data_autorizacao;
     $dia = strftime("%A", strtotime($data));
 
-    if ($dia == "Saturday") {    
-    $DT_ENTREGA = date('d-m-Y', strtotime("+2 days", strtotime($exame[0]->data_autorizacao)));
-    }elseif($dia == "Sunday") {
-    $DT_ENTREGA = date('d-m-Y', strtotime("+1 days", strtotime($exame[0]->data_autorizacao)));
-    }
+//    if ($dia == "Saturday") {    
+//    $DT_ENTREGA = date('d-m-Y', strtotime("+2 days", strtotime($exame[0]->data_autorizacao)));
+//    }elseif($dia == "Sunday") {
+//    $DT_ENTREGA = date('d-m-Y', strtotime("+1 days", strtotime($exame[0]->data_autorizacao)));
+//    }
 //    if ($dia == "Saturday") {    
 //    $DT_ENTREGA = date('d-m-Y', strtotime("+2 days", strtotime($item->data_autorizacao)));
 //    }elseif($dia == "Sunday") {
@@ -220,7 +231,7 @@ $agenda = $exame[0]->agenda;
         border-bottom:none;border-top:none;mso-border-left-alt:
         solid windowtext .5pt;mso-border-right-alt:solid windowtext .5pt;'><font size = -2></font></td>
     <td >&nbsp;</td>
-    <td ><font size = -1>Seg a Sex de 07:30 as 17:00 hs</font></td>
+    <td ><font size = -1>Seg a Sex de <?=$empresa[0]->horario_seg_sex?></font></td>
 </tr>
 <tr>
     <td ><font size = -2>( )HIPERTENS&Atilde;O</font></td>
@@ -230,7 +241,7 @@ $agenda = $exame[0]->agenda;
         border-bottom:none;border-top:none;mso-border-left-alt:
         solid windowtext .5pt;mso-border-right-alt:solid windowtext .5pt;'><font size = -2></font></td>
     <td >&nbsp;</td>
-    <td ><font size = -1>Sab de 07:30 as 11:30 hs</font></td>
+    <td ><font size = -1>Sab de <?=$empresa[0]->horario_sab?></font></td>
 </tr>
 <tr>
     <td ><font size = -1>INDICA&Ccedil;&Atilde;O: <?= $exame[0]->indicacao; ?></font></td>
@@ -251,7 +262,7 @@ $agenda = $exame[0]->agenda;
     solid windowtext .5pt;mso-border-right-alt:solid windowtext .5pt;'><font size = -1><center></center></font></td>
 
 <td >&nbsp;</td>
-<td ><font size = -1>Fone: (85) - <?= $exame[0]->telefone; ?></font></td>
+<td ><font size = -1>Fone: <?= $exame[0]->telefoneempresa; ?> - <?= $exame[0]->celularempresa; ?></font></td>
 </tr>
 </table>
 <div style="float:left;">

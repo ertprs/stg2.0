@@ -17,6 +17,7 @@ class Modeloreceitaespecial extends BaseController {
         parent::Controller();
         $this->load->model('ambulatorio/modeloreceitaespecial_model', 'modeloreceitaespecial');
         $this->load->model('seguranca/operador_model', 'operador_m');
+        $this->load->model('ambulatorio/guia_model', 'guia');
         $this->load->model('ambulatorio/procedimento_model', 'procedimento');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
@@ -35,6 +36,13 @@ class Modeloreceitaespecial extends BaseController {
 //            $this->carregarView($data);
     }
 
+    function pesquisar2($args = array()) {
+
+        $this->load->View('ambulatorio/modeloreceitaespecial2-lista', $args);
+
+//            $this->carregarView($data);
+    }
+
     function carregarmodeloreceitaespecial($exame_modeloreceitaespecial_id) {
         $obj_modeloreceitaespecial = new modeloreceitaespecial_model($exame_modeloreceitaespecial_id);
         $data['obj'] = $obj_modeloreceitaespecial;
@@ -44,11 +52,11 @@ class Modeloreceitaespecial extends BaseController {
         $this->load->View('ambulatorio/modeloreceitaespecial-form', $data);
     }
 
-    function excluir($exame_modeloatestado_id) {
-        if ($this->procedimento->excluir($exame_modeloatestado_id)) {
-            $mensagem = 'Sucesso ao excluir a Modeloreceitaespecial';
+    function excluirmodelo($exame_modeloatestado_id) {
+        if ($this->modeloreceitaespecial->excluir($exame_modeloatestado_id)) {
+            $mensagem = 'Sucesso ao excluir o Modelo receita especial';
         } else {
-            $mensagem = 'Erro ao excluir a modeloreceitaespecial. Opera&ccedil;&atilde;o cancelada.';
+            $mensagem = 'Erro ao excluir a modelo receita especial. Opera&ccedil;&atilde;o cancelada.';
         }
 
         $this->session->set_flashdata('message', $mensagem);

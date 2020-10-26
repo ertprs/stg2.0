@@ -30,9 +30,9 @@ foreach ($critica as $value) :
     <tr><td width="80%"><font size="-2">CNPJ:07.206.048/0002-80</font></td><td></td><td></td></tr>
 </table>
         <table>
-            <tr><td width="50%"><font size="-2">Atividade: Hospitalar</font></td><td><font size="-2">Setor: <?= utf8_decode($value->setor); ?></font></td><td></td></tr>
-            <tr><td width="50%"><font size="-2">Endere&ccedil;o:Av Jornalista Tomas Coelho, 1578</font></td><td><font size="-2">Fun&ccedil;&atilde;o: <?= utf8_decode($value->funcao); ?></font></td><td></td></tr>
-            <tr><td width="50%"><font size="-2">Nome: <?= utf8_decode($value->nome); ?></font></td><td><font size="-2">Matr&iacute;cula: <?= utf8_decode($value->matricula); ?></font></td><td></td></tr>
+            <tr><td width="50%"><font size="-2">Atividade: Hospitalar</font></td><td><font size="-2">Setor: <?= ($value->setor); ?></font></td><td></td></tr>
+            <tr><td width="50%"><font size="-2">Endere&ccedil;o:Av Jornalista Tomas Coelho, 1578</font></td><td><font size="-2">Fun&ccedil;&atilde;o: <?= ($value->funcao); ?></font></td><td></td></tr>
+            <tr><td width="50%"><font size="-2">Nome: <?= ($value->nome); ?></font></td><td><font size="-2">Matr&iacute;cula: <?= ($value->matricula); ?></font></td><td></td></tr>
         </table>
         <br>
         <table border="1">
@@ -89,9 +89,9 @@ foreach ($critica as $value) :
     <tr><td width="80%"><font size="-2">CNPJ:07.206.048/0002-80</font></td><td></td><td></td></tr>
 </table>
         <table>
-            <tr><td width="50%"><font size="-2">Atividade: Hospitalar</font></td><td><font size="-2">Setor: <?= utf8_decode($value->setor); ?></font></td><td></td></tr>
-            <tr><td width="50%"><font size="-2">Endere&ccedil;o:Av Jornalista Tomas Coelho, 1578</font></td><td><font size="-2">Fun&ccedil;&atilde;o: <?= utf8_decode($value->funcao); ?></font></td><td></td></tr>
-            <tr><td width="50%"><font size="-2">Nome: <?= utf8_decode($value->nome); ?></font></td><td><font size="-2">Matr&iacute;cula: <?= utf8_decode($value->matricula); ?></font></td><td></td></tr>
+            <tr><td width="50%"><font size="-2">Atividade: Hospitalar</font></td><td><font size="-2">Setor: <?= ($value->setor); ?></font></td><td></td></tr>
+            <tr><td width="50%"><font size="-2">Endere&ccedil;o:Av Jornalista Tomas Coelho, 1578</font></td><td><font size="-2">Fun&ccedil;&atilde;o: <?= ($value->funcao); ?></font></td><td></td></tr>
+            <tr><td width="50%"><font size="-2">Nome: <?= ($value->nome); ?></font></td><td><font size="-2">Matr&iacute;cula: <?= ($value->matricula); ?></font></td><td></td></tr>
         </table>
         <br>
         <table border="1">
@@ -134,7 +134,7 @@ foreach ($critica as $value) :
                 <td ><font size="-2"><?= $value->entrada3; ?></font></td>
                 <td ><font size="-2"><?= $value->saida3; ?></font>
                 <td width="35%">
-                    <font size="-2"><?= utf8_decode($value->critica1); ?></font></td>
+                    <font size="-2"><?= ($value->critica1); ?></font></td>
             </tr>
     <?
     $matricula = $value->matricula;

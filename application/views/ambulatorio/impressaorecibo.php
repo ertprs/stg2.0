@@ -4,6 +4,8 @@ if ($sexo == "M") {
     $sexopaciente = "Masculino";
 } elseif ($sexo == "F") {
     $sexopaciente = "Feminino";
+} else {
+    $sexopaciente = "Outro";
 }
 $dataFuturo = date("Y-m-d");
 $dataAtual = $paciente['0']->nascimento;
@@ -16,25 +18,68 @@ $inicio = $exame[0]->inicio;
 $agenda = $exame[0]->agenda;
 $data = $exame[0]->data;
 $MES = substr($exame[0]->data, 5, 2);
+
+if ($empresapermissoes[0]->desativar_personalizacao_impressao == 'f') {  
+    if (file_exists("./upload/operadortimbrado/" . $exame['0']->medico_id . ".png")) {
+        $caminho_background = base_url() . "upload/operadortimbrado/" . $exame['0']->medico_id . ".png";
+        $timbrado = true;
+    } elseif (file_exists("./upload/timbrado/timbrado.png")) {
+        $caminho_background = base_url() . 'upload/timbrado/timbrado.png';
+        $timbrado = true;
+    } else {
+        $timbrado = false;
+    }
+    ?>
+
+    <? if ($timbrado) { ?>
+        <div class="teste" style="background-size: contain; height: 70%; width: 100%;background-image: url(<?= $caminho_background ?>);">
+        <? } ?>
+
+        <? 
+} 
 ?>
-<p><center><img align = 'center'  width='1000px' height='300px' src="<?= base_url() . "img/cabecalho.jpg" ?>"></center></p>
+<?
+//if(count()){
+//    
+//}
+if (@$empresa[0]->cabecalho_config == 't') {
+    echo @$cabecalho[0]->cabecalho;
+} else {
+    ?>
+    <p><center><img align = 'center'  width='1000px' height='300px' src="<?= base_url() . "img/cabecalho.jpg" ?>"></center></p>   
+<? }
+?>
 <p><center><u><?= $exame[0]->razao_social; ?></u></center></p>
 <p><center><?= $exame[0]->logradouro; ?> - <?= $exame[0]->numero; ?> - <?= $exame[0]->bairro; ?></center></p>
 <p><center>Fone: (85) <?= $exame[0]->telefoneempresa; ?> - (85) <?= $exame[0]->celularempresa; ?></center></p>
 <p>
 <p><center>Recibo</center></p>
 <p>
+    <? if ($empresapermissoes[0]->valor_recibo_guia == 't') { ?>
+<p><center>N&SmallCircle; PEDIDO:<?= $exame[0]->agenda_exames_id; ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALOR:# <?= $valor_total; ?> &nbsp;#</center></p>
+    <? } else { ?>
 <p><center>N&SmallCircle; PEDIDO:<?= $exame[0]->agenda_exames_id; ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALOR:# <?= $valor; ?> &nbsp;#</center></p>
+    <? }
+    ?>
+
 <p>
-<p>Recebi de <?= utf8_decode($paciente['0']->nome); ?>, a importancia de <?= $valor; ?> (<?= $extenso; ?>)  referente
-    a   <?
+    <? if ($empresapermissoes[0]->valor_recibo_guia == 't') { ?>
+    <p>Recebi de <?= ($paciente['0']->nome); ?>, a importancia de <?= $valor_total; ?> (<?= $extenso; ?>)  referente
+        a 
+    <? } else { ?>
+    <p>Recebi de <?= ($paciente['0']->nome); ?>, a importancia de <?= $guiavalor[0]->valor_guia; ?> (<?= $extenso; ?>)  referente
+        a 
+    <? }
+    ?>
+    <?
+//    var_dump($guia[0]->valor_guia); die;
     $formapagamento = "";
     $teste = "";
     $teste2 = "";
     $teste3 = "";
     $teste4 = "";
     foreach ($exames as $item) :
-            echo utf8_decode($item->procedimento);
+        echo ($item->procedimento);
         ?><br><?
         if ($item->forma_pagamento != null && $item->formadepagamento != $teste && $item->formadepagamento != $teste2 && $item->formadepagamento != $teste3 && $item->formadepagamento != $teste4) {
             $teste = $item->formadepagamento;
@@ -60,7 +105,19 @@ $MES = substr($exame[0]->data, 5, 2);
 <h4><center>___________________________________________</center></h4>
 <h4><center>Raz&atilde;o Social: <?= $exame[0]->razao_social; ?></center></h4>
 <h4><center>CNPJ: <?= $exame[0]->cnpj; ?></center></h4>
-<p><center><img align = 'center'  width='1000px' height='300px' src="<?= base_url() . "img/rodape.jpg" ?>"></center></p>
+<?
+@$cabecalho = @$cabecalho[0]->rodape;
+@$cabecalho = str_replace("_assinatura_", '', @$cabecalho);
+if (@$empresa[0]->rodape_config == 't') {
+
+    echo @$cabecalho;
+} else {
+    ?>
+    <p><center><img align = 'center'  width='1000px' height='300px' src="<?= base_url() . "img/rodape.jpg" ?>"></center></p>
+<? }
+?>
+<? if ($empresapermissoes[0]->desativar_personalizacao_impressao != 't' && $timbrado) { ?></div><? } ?>
+
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>

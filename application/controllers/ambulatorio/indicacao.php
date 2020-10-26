@@ -18,6 +18,10 @@ class Indicacao extends BaseController {
         $this->load->model('ambulatorio/indicacao_model', 'indicacao');
         $this->load->model('seguranca/operador_model', 'operador_m');
         $this->load->model('ambulatorio/procedimento_model', 'procedimento');
+        $this->load->model('cadastro/convenio_model', 'convenio');
+        $this->load->model('cadastro/tipo_model', 'tipo');
+        $this->load->model('cadastro/forma_model', 'forma');
+        $this->load->model('cadastro/classe_model', 'classe');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -35,35 +39,107 @@ class Indicacao extends BaseController {
 //            $this->carregarView($data);
     }
 
+    function pesquisargrupoindicacao($args = array()) {
+
+        $this->loadView('ambulatorio/grupoindicacao-lista', $args);
+
+//            $this->carregarView($data);
+    }
+
+    function carregargrupoindicacao($grupo_id) {
+        $data['grupo'] = $this->indicacao->carregargrupoindicacao($grupo_id);
+        $this->loadView('ambulatorio/grupoindicacao-form', $data);
+    }
+
     function carregarindicacao($exame_indicacao_id) {
         $obj_indicacao = new indicacao_model($exame_indicacao_id);
         $data['obj'] = $obj_indicacao;
-        $data['medicos'] = $this->operador_m->listarmedicos();
-        $data['procedimentos'] = $this->procedimento->listarprocedimentos();
-//        $this->load->View('ambulatorio/indicacao-form', $data);
+        $data['grupo'] = $this->indicacao->listargrupoindicacao();
+
+
         $this->loadView('ambulatorio/indicacao-form', $data);
+    }
+
+    function carregarindicacaofinanceiro($exame_indicacao_id) {
+        $obj_indicacao = new indicacao_model($exame_indicacao_id);
+        $data['obj'] = $obj_indicacao;
+        $data['grupo'] = $this->indicacao->listargrupoindicacao();
+
+
+        $this->loadView('ambulatorio/indicacaofinanceiro-form', $data);
+    }
+
+    function excluirgrupo($grupo_id) {
+        if ($this->indicacao->excluirgrupo($grupo_id)) {
+            $mensagem = 'Sucesso ao excluir o Grupo';
+        } else {
+            $mensagem = 'Erro ao excluir o Grupo. Opera&ccedil;&atilde;o cancelada.';
+        }
+
+        $this->session->set_flashdata('message', $mensagem);
+        redirect(base_url() . "ambulatorio/indicacao/pesquisargrupoindicacao");
     }
 
     function excluir($exame_indicacao_id) {
         if ($this->indicacao->excluir($exame_indicacao_id)) {
-            $mensagem = 'Sucesso ao excluir a Indicacao';
+            $mensagem = 'Sucesso ao excluir este item.';
         } else {
-            $mensagem = 'Erro ao excluir a indicacao. Opera&ccedil;&atilde;o cancelada.';
+            $mensagem = 'Erro ao excluir este item. Opera&ccedil;&atilde;o cancelada.';
         }
 
         $this->session->set_flashdata('message', $mensagem);
         redirect(base_url() . "ambulatorio/indicacao");
     }
 
+    function gravargrupo() {
+        $exame_indicacao_id = $this->indicacao->gravargrupo();
+        if ($exame_indicacao_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar o Grupo. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar o Grupo.';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "ambulatorio/indicacao/pesquisargrupoindicacao");
+    }
+
     function gravar() {
         $exame_indicacao_id = $this->indicacao->gravar();
         if ($exame_indicacao_id == "-1") {
-            $data['mensagem'] = array('Erro ao gravar a Indicacao. Opera&ccedil;&atilde;o cancelada.', 'error');
+            $data['mensagem'] = 'Erro ao gravar a Indicacao. Opera&ccedil;&atilde;o cancelada.';
         } else {
-            $data['mensagem'] =array( 'Sucesso ao gravar a Indicacao.', 'success');
+            $data['mensagem'] = 'Sucesso ao gravar a Indicacao.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "ambulatorio/indicacao");
+    }
+
+    function gravarfinanceiro() {
+        $exame_indicacao_id = $this->indicacao->gravarfinanceiro();
+//        var_dump($exame_indicacao_id); die;
+        if ($exame_indicacao_id == "-1") {
+                   echo '<html><meta charset="utf-8">
+        <script type="text/javascript">
+        alert("Operação Efetuada Com Sucesso");
+        window.onunload = fechaEstaAtualizaAntiga;
+        function fechaEstaAtualizaAntiga() {
+            window.opener.location.reload();
+            }
+        window.close();
+            </script>
+            </html>';
+        } else {
+                              echo '<html><meta charset="utf-8">
+        <script type="text/javascript">
+        alert("Operação Efetuada Com Sucesso");
+        window.onunload = fechaEstaAtualizaAntiga;
+        function fechaEstaAtualizaAntiga() {
+            window.opener.location.reload();
+            }
+        window.close();
+            </script>
+            </html>';
+        }
+
     }
 
     private function carregarView($data = null, $view = null) {

@@ -20,16 +20,16 @@ $valor_clinca = $exame[0]->valor_total - $valor_medico;
     <td ><font size = -1>DATA: <?= substr($exame[0]->data, 8, 2) . "/" . substr($exame[0]->data, 5, 2) . "/" . substr($exame[0]->data, 0, 4); ?> HORA: <?= substr($dataatualizacao, 10, 6); ?></font></td>
 </tr>
 <tr>
-    <td ><font size = -1>PACIENTE:<?= utf8_decode($paciente['0']->nome); ?></font></td>
+    <td ><font size = -1>PACIENTE:<?= ($paciente['0']->nome); ?></font></td>
 </tr>
 <tr>
-    <td ><font size = -1>CONVENIO: <?= utf8_decode($exame[0]->convenio); ?></font></td>
+    <td ><font size = -1>CONVENIO: <?= ($exame[0]->convenio); ?></font></td>
 </tr>
 <tr>
     <td ><font size = -1>-------------------------------------------------------------</font></td>
 </tr>
 <tr>
-    <td ><font size = -1><?= utf8_decode($exame[0]->procedimento); ?></font></td>
+    <td ><font size = -1><?= ($exame[0]->procedimento); ?></font></td>
 </tr>
 <tr>
     <td ><font size = -1>VALOR R$ <?= number_format($valor_medico, 2, ',', '.')?></font></td>

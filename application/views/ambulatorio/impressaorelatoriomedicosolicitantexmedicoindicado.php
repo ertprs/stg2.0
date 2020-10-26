@@ -34,10 +34,10 @@
 
                         ?>
                         <tr>
-                            <td><font size="-2"><?= utf8_decode($item->medicosolicitante); ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->medico); ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->paciente); ?></td>
-                            <td><font size="-2"><?= utf8_decode($item->procedimento); ?></td>
+                            <td><font size="-2"><?= ($item->medicosolicitante); ?></td>
+                            <td><font size="-2"><?= ($item->medico); ?></td>
+                            <td><font size="-2"><?= ($item->paciente); ?></td>
+                            <td><font size="-2"><?= ($item->procedimento); ?></td>
                             <td><font size="-2"><?= $item->situacao; ?></td>
                         </tr>
 

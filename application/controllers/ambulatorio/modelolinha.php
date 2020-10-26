@@ -18,6 +18,7 @@ class Modelolinha extends BaseController {
         $this->load->model('ambulatorio/modelolinha_model', 'modelolinha');
         $this->load->model('seguranca/operador_model', 'operador_m');
         $this->load->model('ambulatorio/procedimento_model', 'procedimento');
+        $this->load->model('ambulatorio/guia_model', 'guia');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -31,6 +32,13 @@ class Modelolinha extends BaseController {
     function pesquisar($args = array()) {
 
         $this->loadView('ambulatorio/modelolinha-lista', $args);
+
+//            $this->carregarView($data);
+    }
+
+    function pesquisar2($args = array()) {
+
+        $this->load->View('ambulatorio/modelolinha2-lista', $args);
 
 //            $this->carregarView($data);
     }

@@ -1,4 +1,5 @@
 <div class="content"> <!-- Inicio da DIV content -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <? if (count($tipo) > 0) { ?>
         <h4>TIPO<?= $tipo[0]->descricao; ?></h4>
     <? } else { ?>
@@ -31,27 +32,41 @@
                 <tr>
                     <th width="100px;" class="tabela_header">Conta</th>
                     <th class="tabela_header">Nome</th>
-                    <th class="tabela_header">Dt entrada</th>
                     <th class="tabela_header">Tipo</th>
                     <th class="tabela_header">Classe</th>
+                    <th class="tabela_header">Dt entrada</th>
                     <th class="tabela_header">Valor</th>
+                    <th class="tabela_header">Valor Bruto</th>
+                    <th class="tabela_header">Desconto</th>
                     <th class="tabela_header">Observacao</th>
+                    <th class="tabela_header">Empresa</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $total = 0;
                 foreach ($relatorioentrada as $item) :
-                    $total = $total + $item->valor;
+                    if($item->tipo != 'TRANSFERENCIA'){
+                         $total = $total + $item->valor;
+                    }
+                    if($item->valor_bruto > 0){
+                        $desconto = number_format($item->valor_bruto - $item->valor, 2, ",", ".");
+                    }else{
+                        $desconto = number_format(0, 2, ",", ".");;
+                    }
+                   
                     ?>
                     <tr>
-                        <td ><?= utf8_decode($item->conta); ?></td>
-                        <td ><?= utf8_decode($item->razao_social); ?>&nbsp;</td>
+                        <td ><?= ($item->conta); ?></td>
+                        <td ><?= ($item->razao_social); ?>&nbsp;</td>
+                        <td ><?= ($item->tipo); ?>&nbsp;</td>
+                        <td ><?= ($item->classe); ?>&nbsp;</td>
                         <td ><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
-                        <td ><?= utf8_decode($item->tipo); ?>&nbsp;</td>
-                        <td ><?= utf8_decode($item->classe); ?>&nbsp;</td>
                         <td ><?= number_format($item->valor, 2, ",", "."); ?></td>
-                        <td ><?= utf8_decode($item->observacao); ?>&nbsp;</td>
+                        <td ><?= number_format($item->valor_bruto, 2, ",", "."); ?></td>
+                        <td ><?=$desconto?></td>
+                        <td ><?= ($item->observacao); ?>&nbsp;</td>
+                        <td ><?= ($item->empresa); ?>&nbsp;</td>
                     </tr>
                 <? endforeach; ?>
                 <tr>
@@ -59,7 +74,8 @@
                     <td colspan="2"><b><?= number_format($total, 2, ",", "."); ?></b></td>
                 </tr>
             </tbody>
-
+        </table>
+            <h4>Obs: Transfer&ecirc;ncias n&atilde;o s&atilde;o somadas no valor total</h4>
 
             <?
         }
@@ -71,7 +87,7 @@
         ?>
 
 </div> <!-- Final da DIV content -->
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+ 
 <link rel="stylesheet" href="<?php base_url() ?>css/jquery-ui-1.8.5.custom.css">
 <script type="text/javascript">
 

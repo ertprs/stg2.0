@@ -108,7 +108,7 @@
                             $perc = (($item->valor ) / $valortotal) * 100;
                             ?>
                             <tr>
-                                <td><font size="-1" width="180px;"><?= utf8_decode($item->convenio); ?></td>
+                                <td><font size="-1" width="180px;"><?= ($item->convenio); ?></td>
                                 <td style='text-align: right;'><font size="-1" width="120px;"><?= $item->quantidade; ?></td>
                                 <td style='text-align: right;'><font size="-1" width="200px;"><?= number_format($item->valor, 2, ',', '.') ?></td>
                                 <td style='text-align: right;'><font size="-1" width="80px;"><?= substr($perc, 0, 4); ?>%</td>
@@ -121,7 +121,7 @@
                     if ($i == 0) {
                         ?>
                         <tr>
-                            <td><font size="-1" width="180px;"><?= utf8_decode($value->nome); ?></td>
+                            <td><font size="-1" width="180px;"><?= ($value->nome); ?></td>
                             <td style='text-align: right;'><font size="-1" width="120px;">0</td>
                             <td style='text-align: right;'><font size="-1" width="200px;">0</td>
                             <td style='text-align: right;'><font size="-1" width="80px;">0%</td>

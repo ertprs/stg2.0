@@ -38,7 +38,7 @@
                 <label>Unidade</label>
                 <input type="hidden" id="txtinternacao_solicitacao_id" name="internacao_solicitacao_id"  class="texto09" value="<?= @$obj->_internacao_solicitacao_id; ?>" readonly/>
                 <input type="hidden" id="txtUnidadeID" class="texto_id" name="UnidadeID" value="<?= @$obj->_unidade; ?>" />
-                <input type="text" id="txtUnidade" class="texto06" name="txtUnidade" value="<?= @$obj->_unidade_nome; ?>" />
+                <input type="text" id="txtUnidade" class="texto06" name="txtUnidade" value="<?= @$obj->_unidade_nome; ?>" required/>
             </div>
             <div>
                 <label>Estado</label>
@@ -70,7 +70,7 @@
 
     $(function() {
         $( "#txtUnidade" ).autocomplete({
-            source: "<?= base_url() ?>index?c=autocomplete&m=unidade",
+            source: "<?= base_url() ?>index.php?c=autocomplete&m=unidade",
             minLength: 2,
             focus: function( event, ui ) {
                 $( "#txtUnidade" ).val( ui.item.label );

@@ -1,3 +1,45 @@
+<meta charset="UTF-8">
+<?
+$usouCredito = false;
+$id = null;
+
+if (@$exame[0]->forma_pagamento == 1000) {
+    $usouCredito = true;
+    $id = '1';
+}
+if (@$exame[0]->forma_pagamento2 == 1000) {
+    $usouCredito = true;
+    $id = '2';
+}
+if (@$exame[0]->forma_pagamento3 == 1000) {
+    $usouCredito = true;
+    $id = '3';
+}
+if (@$exame[0]->forma_pagamento4 == 1000) {
+    $usouCredito = true;
+    $id = '4';
+}
+
+if(count($descontomaximo) > 0){
+    if($descontomaximo[0]->desconto_procedimento == '' || $descontomaximo[0]->desconto_procedimento == 0.00){
+        $desconto_maximo = 100.00;
+    }else if($descontomaximo[0]->desconto_procedimento > 100){
+        $desconto_maximo = 100.00;
+    }else{
+        $desconto_maximo = $descontomaximo[0]->desconto_procedimento;
+    }
+}else{
+    $desconto_maximo = 100.00;
+}
+
+$total_desconto = $exame[0]->valor * ($desconto_maximo / 100);
+// echo $total_desconto;
+?>
+<style>
+    .desconto_esp{
+        width: 230px;
+    }
+</style>
 <body bgcolor="#C0C0C0">
     <div class="content"> <!-- Inicio da DIV content -->
         <h3 class="singular">Faturar</h3>
@@ -10,33 +52,50 @@
                             <label>Valor total a faturar</label>
                         </dt>
                         <dd>
-                            <input type="text" name="valorafaturar" id="valorafaturar" class="texto01" value="<?= $exame[0]->valor_total; ?>" readonly />
+                            <input type="text" name="valorafaturar" id="valorafaturar" class="texto01" value="<?= $exame[0]->valor; ?>" readonly />
                             <input type="hidden" name="agenda_exames_id" id="agenda_exames_id" class="texto01" value="<?= $agenda_exames_id; ?>"/>
+                        </dd>
+                        <dt>
+                            <label>Desconto Especial</label>
+                        </dt>
+                        <dd>
+                            <select name="desconto_especial" id="desconto_especial" class="desconto_esp"> 
+                                <option value="">Nenhum</option>
+                                <option value="medico" <?= ($exame[0]->tipo_desconto == 'medico') ? 'selected' : '' ?>>Desconto com Permissão do Médico</option>
+                                <option value="clinica" <?= ($exame[0]->tipo_desconto == 'clinica') ? 'selected' : '' ?>>Desconto com Permissão da Clinica</option>
+                                <option value="medico_clinica" <?= ($exame[0]->tipo_desconto == 'medico_clinica') ? 'selected' : '' ?>>Desconto do Médico e da Clinica</option>
+                            </select>
+
                         </dd>
                         <dt>
                             <label>Desconto</label>
                         </dt>
                         <dd>
-                            <input type="text" name="desconto" id="desconto" class="texto01" value="<?= $exame[0]->desconto; ?>" />
+                            <input type="number" step="0.01" name="desconto" id="desconto" class="texto01" max="<?=$total_desconto?>" value="<?= $exame[0]->desconto; ?>" />
                         </dd>
+
                         <br/>
                         <dt>
                             <label><label >Valor1 / Forma de pagamento1 /  Ajuste1(%) /  Valor Ajustado1 / Parcelas1</label>
                         </dt>
                         <dd>
-                            <input type="text" name="valor1" id="valor1" class="texto01" value="<?= $exame[0]->valor1; ?>" onblur="history.go(0)" />
+                            <input type="text" name="valor1" id="valor1" class="texto01" value="<?= $exame[0]->valor1; ?>" onblur="multiplica()" <?
+                            if (@$exame[0]->forma_pagamento == 1000) {
+                                echo "readonly";
+                            }
+                            ?>/>
                             <select  name="formapamento1" id="formapamento1" class="size1" >
                                 <option value="">Selecione</option>
                                 <? foreach ($forma_pagamento as $item) : ?>
                                     <option value="<?= $item->forma_pagamento_id; ?>"<?
-                                    if ($exame[0]->forma_pagamento == $item->forma_pagamento_id):echo 'selected';
+                                    if (@$exame[0]->forma_pagamento == $item->forma_pagamento_id):echo 'selected';
                                     endif;
                                     ?>><?= $item->nome; ?></option>
                                         <? endforeach; ?>
-                                <input type="text" name="ajuste1" id="ajuste1" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>                                                                           
-                                <input type="text" name="valorajuste1" id="valorajuste1" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/> 
-                                <input style="width: 60px;" type="number" name="parcela1" id="parcela1"  value="1" min="1" /> 
                             </select>
+                            <input type="text" name="ajuste1" id="ajuste1" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>                                                                           
+                            <input type="text" name="valorajuste1" id="valorajuste1" size="1" value="<?= $valor; ?>" onblur="multiplica()"/> 
+                            <input style="width: 60px;" type="number" name="parcela1" id="parcela1"  value="1" min="1" /> 
 
                         </dd>
                         <br/>
@@ -44,7 +103,11 @@
                             <label>Valor2/ Forma de pagamento2 / Ajuste2(%) / Valor Ajustado2 / Parcelas2</label>
                         </dt>
                         <dd>
-                            <input type="text" name="valor2" id="valor2" class="texto01" value="<?= $exame[0]->valor2; ?>" onblur="history.go(0)"/>
+                            <input type="text" name="valor2" id="valor2" class="texto01" value="<?= $exame[0]->valor2; ?>" onblur="multiplica()" <?
+                            if (@$exame[0]->forma_pagamento2 == 1000) {
+                                echo "readonly";
+                            }
+                            ?>/>
                             <select  name="formapamento2" id="formapamento2" class="size1" >
                                 <option value="">Selecione</option>
                                 <? foreach ($forma_pagamento as $item) : ?>
@@ -53,8 +116,8 @@
                                     endif;
                                     ?>><?= $item->nome; ?></option>
                                         <? endforeach; ?>
-                                <input type="text" name="ajuste2" id="ajuste2" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>
-                                <input type="text" name="valorajuste2" id="valorajuste2" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>
+                                <input type="text" name="ajuste2" id="ajuste2" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>
+                                <input type="text" name="valorajuste2" id="valorajuste2" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>
                                 <input style="width: 60px;" type="number" name="parcela2" id="parcela2"  value="1" min="1" /> 
                             </select>
 
@@ -64,7 +127,11 @@
                             <label>Valor3/ Forma de pagamento3 / Ajuste3(%) / Valor Ajustado3 / Parcelas3</label>
                         </dt>
                         <dd>
-                            <input type="text" name="valor3" id="valor3" class="texto01" value="<?= $exame[0]->valor3; ?>" onblur="history.go(0)"/>
+                            <input type="text" name="valor3" id="valor3" class="texto01" value="<?= $exame[0]->valor3; ?>" onblur="multiplica()" <?
+                            if (@$exame[0]->forma_pagamento3 == 1000) {
+                                echo "readonly";
+                            }
+                            ?>/>
                             <select  name="formapamento3" id="formapamento3" class="size1" >
                                 <option value="">Selecione</option>
                                 <? foreach ($forma_pagamento as $item) : ?>
@@ -73,8 +140,8 @@
                                     endif;
                                     ?>><?= $item->nome; ?></option>
                                         <? endforeach; ?>
-                                <input type="text" name="ajuste3" id="ajuste3" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>  
-                                <input type="text" name="valorajuste3" id="valorajuste3" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>
+                                <input type="text" name="ajuste3" id="ajuste3" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>  
+                                <input type="text" name="valorajuste3" id="valorajuste3" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>
                                 <input style="width: 60px;" type="number" name="parcela3" id="parcela3"  value="1" min="1" />                             
                             </select>
                         </dd>
@@ -83,7 +150,11 @@
                             <label>Valor4/ Forma de pagamento4 / Ajuste4(%) / Valor Ajustado4 / Parcelas4</label>
                         </dt>
                         <dd>                           
-                            <input type="text" name="valor4" id="valor4" class="texto01"  value="<?= $exame[0]->valor4; ?>" onblur="history.go(0)"/>
+                            <input type="text" name="valor4" id="valor4" class="texto01"  value="<?= $exame[0]->valor4; ?>" onblur="multiplica()" <?
+                            if (@$exame[0]->forma_pagamento4 == 1000) {
+                                echo "readonly";
+                            }
+                            ?>/>
 
                             <select  name="formapamento4" id="formapamento4" class="size1" >
                                 <option value="">Selecione</option>
@@ -93,8 +164,8 @@
                                     endif;
                                     ?>><?= $item->nome; ?></option>
                                         <? endforeach; ?>
-                                <input type="text" name="ajuste4" id="ajuste4" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>
-                                <input type="text" name="valorajuste4" id="valorajuste4" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>
+                                <input type="text" name="ajuste4" id="ajuste4" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>
+                                <input type="text" name="valorajuste4" id="valorajuste4" size="1" value="<?= $valor; ?>" onblur="multiplica()"/>
                                 <input style="width: 60px;" type="number" name="parcela4" id="parcela4"  value="1" min="1" />                             
                             </select>
 
@@ -105,13 +176,53 @@
                         </dt>
                         <dd>
                             <input type="text" name="valortotal" id="valortotal"  class="texto01" readonly/>
-                            <input type="hidden" name="valorcadastrado" id="valorcadastrado" value="<?= $exame[0]->valor_total; ?>"/>
+                            <input type="hidden" name="valorcadastrado" id="valorcadastrado" value="<?= $exame[0]->valor; ?>"/>
                             <input type="hidden" name="novovalortotal" id="novovalortotal">
+                            <input type="hidden" name="valorcredito" id="valorcredito" value="0">
+                            <input type="hidden" name="paciente_id" id="paciente_id" value="<?= $exame[0]->paciente_id; ?>">
                         </dd>
-                    </dl>    
-
+                    </dl> 
+                    
+                    
+                     <div style="margin-left:500px;margin-top:-550px;position: absolute;">
+                        <dt id="legenda_obs_cred" hidden>
+                            <label   >Observa&ccedil;&atilde;o(Caso for usar Crédito)</label>
+                        </dt>
+                        <dd>
+                            <div id="">
+                                <textarea style="  color:black; " type="text" id="observacaocred" name="observacaocred" class="texto"  value="" cols="50" rows="4"  disabled hidden><?
+                                    $contobs = count($obs);
+                                    foreach ($obs as $item) {
+                                        echo $item->observacaocredito;
+                                        if ($contobs > 1) {
+                                            echo ",";
+                                        }
+                                        $contobs--;
+                                    }
+//                            @$obs[0]->observacaocredito;
+                                    ?></textarea>  
+                            </div> 
+                        </dd>
+                    </div> 
+                    
+                    <dt>
+                        <label>Observa&ccedil;&atilde;o</label>
+                    </dt>
+                    <dd>
+                        <div id="">
+                            <textarea  type="text" id="observacao" name="observacao" class="texto"  value="" cols="50" rows="4"  ></textarea>  
+                        </div>  
+                    </dd>
+                   
+                   
                     <hr/>
-                    <button type="submit" name="btnEnviar" >Enviar</button>
+                    <? if ($exame[0]->financeiro == 'f') { ?>
+                        <button type="submit" name="btnEnviar" id="btnEnviar" <?= $usouCredito ? "disabled='true'" : '' ?>>
+                            Enviar
+                        </button>
+                    <? } else { ?>
+                        Caixa Fechado
+                    <? } ?>
             </form>
             </fieldset>
         </div>
@@ -124,12 +235,56 @@
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
 <script type="text/javascript">
+                                    if ($('#desconto_especial').val() != '') {
+                                        // $("#desconto").prop('readonly', true);
+                                    } else {
+                                        // $("#desconto").prop('readonly', false);
+                                    }
+
+
+                                    function multiplica()
+                                        {
+                                            total = 0;
+                                            valor = parseFloat(document.form_faturar.valorcadastrado.value.replace(",", "."));
+                                            valordesconto = parseFloat(document.form_faturar.desconto.value.replace(",", "."));
+                                            desconto = (100 - valordesconto) / 100;
+                                            numer1 = parseFloat(document.form_faturar.valor1.value.replace(",", "."));
+                                            numer2 = parseFloat(document.form_faturar.valor2.value.replace(",", "."));
+                                            numer3 = parseFloat(document.form_faturar.valor3.value.replace(",", "."));
+                                            numer4 = parseFloat(document.form_faturar.valor4.value.replace(",", "."));
+                                            total += numer1 + numer2 + numer3 + numer4;
+                                            
+                                              
+                                            valordescontado = valor - valordesconto;
+                                            resultado = valor - (total + valordesconto);
+                                            y = resultado.toFixed(2);
+                                            $('#valortotal').val(y);
+                                            $('#novovalortotal').val(valordescontado);
+                                                verificarTodos();
+//            document.getElementById("valortotal").value = 10;
+                                            //        document.form_faturar.valortotal.value = 10;
+                                        }
 
 
                                     $(document).ready(function () {
+                                        
+                                          verificarTodos();
+
+
+
+
+<? if ($usouCredito) { ?>
+                                            $(function () {
+                                                $('#formapamento<?= $id ?>').change(function () {
+                                                    $('#btnEnviar').removeAttr('disabled');
+                                                });
+                                            });
+
+<? } ?>
 
                                         function multiplica()
                                         {
+                                            
                                             total = 0;
                                             valor = parseFloat(document.form_faturar.valorcadastrado.value.replace(",", "."));
                                             valordesconto = parseFloat(document.form_faturar.desconto.value.replace(",", "."));
@@ -145,6 +300,7 @@
                                             y = resultado.toFixed(2);
                                             $('#valortotal').val(y);
                                             $('#novovalortotal').val(valordescontado);
+                                                verificarTodos();
 //            document.getElementById("valortotal").value = 10;
                                             //        document.form_faturar.valortotal.value = 10;
                                         }
@@ -152,6 +308,59 @@
 
                                         $(function () {
                                             $('#formapamento1').change(function () {
+
+                                                if (this.value == 1000) {
+                                                    var selecionado = false;
+
+                                                    for (var i = 1; i < 5; i++) {
+                                                        if (i == 1) {
+                                                            continue;
+                                                        }
+                                                        if ($('#formapamento' + i).val() == 1000) {
+                                                            selecionado = true;
+                                                        }
+                                                    }
+
+                                                    if (!selecionado) {
+                                                        $('#valor1').val('0');
+                                                        multiplica();
+                                                        var valorDiferenca = $('#valortotal').val();
+
+                                                        $.getJSON('<?= base_url() ?>autocomplete/buscarsaldopaciente', {guia_id: <?= $guia_id ?>, ajax: true}, function (j) {
+
+                                                            if (parseFloat(j.saldo) >= parseFloat(valorDiferenca)) {
+                                                                $('#valor1').val(valorDiferenca);
+
+                                                            } else {
+                                                                $('#valor1').val(j.saldo);
+                                                            }
+                                                            $('#valorcredito').val($('#valor1').val());
+
+                                                            if (j.saldo != "") {
+//                                                                alert('tsttt');
+                                                                $('#observacaocred').show();//COLOCA A OBSERVAÇÃO
+                                                                $('#legenda_obs_cred').show();//COLOCA A OBSERVAÇÃO
+
+
+                                                            }
+
+
+                                                            $('#paciente_id').val(j.paciente_id);
+                                                            $('#valor1').attr("readonly", 'true');
+
+                                                            multiplica();
+                                                        });
+                                                    } else {
+                                                        $('#formapamento1').val('');
+
+                                                    }
+                                                } else {
+                                                    $('#valor1').removeAttr("readonly");
+                                                    $('#observacaocred').hide(); //TIRA A OBSERVAÇÃO
+                                                    $('#legenda_obs_cred').hide();//TIRA A OBSERVAÇÃO
+                                                    multiplica();
+                                                }
+
                                                 if ($(this).val()) {
                                                     forma_pagamento_id = document.getElementById("formapamento1").value;
                                                     $('.carregando').show();
@@ -186,7 +395,73 @@
                                             });
                                         });
                                         $(function () {
+                                            $('#desconto_especial').change(function () {
+                                                // alert('asd');  
+                                                if ($(this).val() != '') {
+                                                    $.getJSON('<?= base_url() ?>autocomplete/descontoespecialvalor', {tipo_desconto: $(this).val(), agenda_exames_id: <?= $agenda_exames_id ?>, ajax: true}, function (j) {
+                                                        // alert(j);  
+                                                        $('#desconto').prop('max', j);
+                                                        multiplica();
+                                                    });
+                                                } else {
+                                                    $('#desconto').val(0.00);
+                                                    $('#desconto').prop('max', $('#valorafaturar').val());
+                                                    multiplica();
+                                                }
+
+                                            });
+                                        });
+
+                                        $(function () {
                                             $('#formapamento2').change(function () {
+
+                                                if (this.value == 1000) {
+                                                    var selecionado = false;
+
+                                                    for (var i = 1; i < 5; i++) {
+                                                        if (i == 2) {
+                                                            continue;
+                                                        }
+                                                        if ($('#formapamento' + i).val() == 1000) {
+                                                            selecionado = true;
+                                                        }
+                                                    }
+                                                    if (!selecionado) {
+                                                        $('#valor2').val('0');
+                                                        multiplica();
+                                                        var valorDiferenca = $('#valortotal').val();
+                                                        $.getJSON('<?= base_url() ?>autocomplete/buscarsaldopaciente', {guia_id: <?= $guia_id ?>, ajax: true}, function (j) {
+                                                            if (parseFloat(j.saldo) >= parseFloat(valorDiferenca)) {
+                                                                $('#valor2').val(valorDiferenca);
+                                                            } else {
+                                                                $('#valor2').val(j.saldo);
+                                                            }
+                                                            if (j.saldo != "") {
+//                                                                alert('tsttt');
+                                                                $('#observacaocred').show();//COLOCA A OBSERVAÇÃO
+                                                                $('#legenda_obs_cred').show();//COLOCA A OBSERVAÇÃO
+
+
+                                                            }
+
+                                                            $('#valorcredito').val($('#valor2').val());
+
+
+                                                            $('#paciente_id').val(j.paciente_id);
+                                                            $('#valor2').attr("readonly", 'true');
+
+                                                            multiplica();
+                                                        });
+                                                    } else {
+                                                        $('#formapamento2').val('');
+                                                    }
+                                                } else {
+                                                    $('#valor2').removeAttr("readonly");
+                                                    $('#observacaocred').hide(); //TIRA A OBSERVAÇÃO
+                                                    $('#legenda_obs_cred').hide();//TIRA A OBSERVAÇÃO
+                                                    multiplica();
+                                                }
+
                                                 if ($(this).val()) {
                                                     forma_pagamento_id = document.getElementById("formapamento2").value;
                                                     $('.carregando').show();
@@ -224,6 +499,54 @@
                                         });
                                         $(function () {
                                             $('#formapamento3').change(function () {
+                                                if (this.value == 1000) {
+//                                                    $('#valor3').val("");
+                                                    var selecionado = false;
+
+                                                    for (var i = 1; i < 5; i++) {
+                                                        if (i == 3) {
+                                                            continue;
+                                                        }
+                                                        if ($('#formapamento' + i).val() == 1000) {
+                                                            selecionado = true;
+                                                        }
+                                                    }
+                                                    if (!selecionado) {
+                                                        $('#valor3').val('0');
+                                                        multiplica();
+                                                        var valorDiferenca = $('#valortotal').val();
+                                                        $.getJSON('<?= base_url() ?>autocomplete/buscarsaldopaciente', {guia_id: <?= $guia_id ?>, ajax: true}, function (j) {
+
+                                                            if (parseFloat(j.saldo) >= parseFloat(valorDiferenca)) {
+                                                                $('#valor3').val(valorDiferenca);
+                                                            } else {
+                                                                $('#valor3').val(j.saldo);
+                                                            }
+                                                            if (j.saldo != "") {
+//                                                                alert('tsttt');
+                                                                $('#observacaocred').show();//COLOCA A OBSERVAÇÃO
+                                                                $('#legenda_obs_cred').show();//COLOCA A OBSERVAÇÃO
+
+
+                                                            }
+                                                            $('#valorcredito').val($('#valor3').val());
+
+
+                                                            $('#paciente_id').val(j.paciente_id);
+                                                            $('#valor3').attr("readonly", 'true');
+
+                                                            multiplica();
+                                                        });
+                                                    } else {
+                                                        $('#formapamento3').val('');
+                                                    }
+                                                } else {
+                                                    $('#valor3').removeAttr("readonly");
+                                                    $('#observacaocred').hide(); //TIRA A OBSERVAÇÃO
+                                                    $('#legenda_obs_cred').hide();//TIRA A OBSERVAÇÃO
+                                                    multiplica();
+                                                }
+
                                                 if ($(this).val()) {
                                                     forma_pagamento_id = document.getElementById("formapamento3").value;
                                                     $('.carregando').show();
@@ -259,6 +582,54 @@
                                         });
                                         $(function () {
                                             $('#formapamento4').change(function () {
+                                                if (this.value == 1000) {
+                                                    var selecionado = false;
+
+                                                    for (var i = 1; i < 5; i++) {
+                                                        if (i == 4) {
+                                                            continue;
+                                                        }
+                                                        if ($('#formapamento' + i).val() == 1000) {
+                                                            selecionado = true;
+                                                        }
+                                                    }
+                                                    if (!selecionado) {
+                                                        $('#valor4').val('0');
+                                                        multiplica();
+                                                        var valorDiferenca = $('#valortotal').val();
+                                                        $.getJSON('<?= base_url() ?>autocomplete/buscarsaldopaciente', {guia_id: <?= $guia_id ?>, ajax: true}, function (j) {
+
+                                                            if (parseFloat(j.saldo) >= parseFloat(valorDiferenca)) {
+                                                                $('#valor4').val(valorDiferenca);
+                                                            } else {
+                                                                $('#valor4').val(j.saldo);
+                                                            }
+                                                            if (j.saldo != "") {
+//                                                                alert('tsttt');
+                                                                $('#observacaocred').show();//COLOCA A OBSERVAÇÃO
+                                                                $('#legenda_obs_cred').show();//COLOCA A OBSERVAÇÃO
+
+
+                                                            }
+
+                                                            $('#valorcredito').val($('#valor4').val());
+
+
+                                                            $('#paciente_id').val(j.paciente_id);
+                                                            $('#valor4').attr("readonly", 'true');
+
+                                                            multiplica();
+                                                        });
+                                                    } else {
+                                                        $('#formapamento4').val('');
+                                                    }
+                                                } else {
+                                                    $('#valor4').removeAttr("readonly");
+                                                    $('#observacaocred').hide(); //TIRA A OBSERVAÇÃO
+                                                    $('#legenda_obs_cred').hide();//TIRA A OBSERVAÇÃO
+                                                    multiplica();
+                                                }
+
                                                 if ($(this).val()) {
                                                     forma_pagamento_id = document.getElementById("formapamento4").value;
                                                     $('.carregando').show();
@@ -291,6 +662,50 @@
                                             });
                                         });
 
-
                                     });
+
+
+//                                    $(function () {
+//                                        $('#formapamento1').change(function () {
+//                                            
+//                                            var forma_pagamento_id = document.getElementById("formapamento1").value; 
+//                                            
+//                                            if ($(this).val()) {
+//                                                $.getJSON('<?= base_url() ?>autocomplete/buscarobscredito', {guia_id:<?= $guia_id ?>,forma_pagamento_id:forma_pagamento_id}, function (j) {
+//                                                    var options = '';
+//                                                    for (var c = 0; c < j.length; c++) {
+//                                                        //CONTRUINDO LINHAS DA TABELA COM O NOME DO MEDICO TURNO E TEMPO DE ATENDIMENTO
+//                                                        options += j[c].observacaocredito;
+//                                                    }
+//                                                    
+////                                                    $('#observacao').remove();  
+//                                                    $('#observacao').append(options); //MANDANDO AS LINHAS DA TABELA
+//                                                    $("#divobservacao").trigger("chosen:updated"); //ATULIZANDO 
+//                                                    $('.carregando').hide();
+//                                                });
+//                                            } else {
+//
+//                                            }
+//
+//                                        });
+//                                    });
+
+
+
+function verificarTodos(){
+     if ($('#formapamento1').val() == 1000) {
+        $('#valor1').attr("readonly", 'true'); 
+     }
+     if ($('#formapamento2').val() == 1000) {
+        $('#valor2').attr("readonly", 'true'); 
+     }
+     if ($('#formapamento3').val() == 1000) {
+        $('#valor3').attr("readonly", 'true'); 
+     }
+     if ($('#formapamento4').val() == 1000) {
+        $('#valor4').attr("readonly", 'true'); 
+     }  
+}
+
+
 </script>
