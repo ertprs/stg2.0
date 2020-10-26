@@ -163,6 +163,41 @@ function debug($object) {
                         <i class="fa fa-edit fa-fw"></i>Geral </a>
                     
                 </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbar-primary_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown</a>
+                    <div aria-labeldiv class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar-primary_dropdown_1">
+                        <a href="#" class="dropdown-item">Some action </a>
+                        <a href="#" class="dropdown-item">Some other action</a>
+
+                        <li class="dropdown-divider"></li>
+
+                        <!-- Level two dropdown-->
+                        <li class="dropdown-submenu">
+                        <a id="dropdownMenu2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Hover for action</a>
+                        <ul aria-labelledby="dropdownMenu2" class="dropdown-menu border-0 shadow">
+                            <li>
+                            <a tabindex="-1" href="#" class="dropdown-item">level 2</a>
+                            </li>
+
+                            <!-- Level three dropdown-->
+                            <li class="dropdown-submenu">
+                            <a id="dropdownMenu3" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">level 2</a>
+                            <ul aria-labelledby="dropdownMenu3" class="dropdown-menu border-0 shadow">
+                                <li><a href="#" class="dropdown-item">3rd level</a></li>
+                                <li><a href="#" class="dropdown-item">3rd level</a></li>
+                            </ul>
+                            </li>
+                            <!-- End Level three -->
+
+                            <li><a href="#" class="dropdown-item">level 2</a></li>
+                            <li><a href="#" class="dropdown-item">level 2</a></li>
+                        </ul>
+                        </li>
+                        <!-- End Level two -->
+                    </div>
+                </li>
                 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbar-primary_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -308,6 +343,27 @@ function debug($object) {
 </body>
 
 <script>
+$(function() {
+  // ------------------------------------------------------- //
+  // Multi Level dropdowns
+  // ------------------------------------------------------ //
+  $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    $(this).siblings().toggleClass("show");
+
+
+    if (!$(this).next().hasClass('show')) {
+      $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+    }
+    $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+      $('.dropdown-submenu .show').removeClass("show");
+    });
+
+  });
+});
+
     $(document).ready(function () {
         $('#txtNascimento').mask('99/99/9999');
         $("#valor").maskMoney();

@@ -1,6 +1,9 @@
+.nav-item {
+    margin-left: -1vh;
+}
 
 .navbar-brand{
-    margin-left: 1vh;
+    margin-left: 5vh;
 }
 .navbar-nav-hover {
     width: 100%;
@@ -18,9 +21,8 @@
     margin-left: -1vw;
 }
 
-  
 .nav-item-user {
-    margin-left: 4vh;
+    margin-left: 1vh;
     float: right;
 }
 .navbar-expand-lg {
@@ -33,7 +35,7 @@
 
 @media (max-width: 1440px) {
     .navbar-brand{
-        margin-left: -5vh;
+        margin-left: -4vh;
         margin-right: -1vh;
     }
 
