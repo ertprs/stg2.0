@@ -110,7 +110,7 @@ $perfil_id = $this->session->userdata('perfil_id');
             </table>
 
               <?php
-            $creditosusados = $this->exametemp->listartcdusados($paciente_id)->orderby('p.nome')->limit($limit, $pagina)->get()->result();
+            $creditosusados = $this->exametemp->listartcdusados($paciente_id)->orderby('p.nome')->get()->result();
             $totalusados = count($creditosusados);
             $estilo_linha2 = "tabela_content01"; 
             if ($totalusados > 0) {
@@ -119,7 +119,7 @@ $perfil_id = $this->session->userdata('perfil_id');
                 <hr>
 
                 <fieldset style="border:1px solid silver;border-radius: 3px;" >
-                    <h1 style="font-size:15px;">Histórico Créditos Utilizados</h1> 
+                    <h1 style="font-size:15px;">Histórico TCD Utilizados</h1> 
                     <table style="margin:7px;">
                         <tr>
                             <th class="tabela_header">Paciente</th> 

@@ -173,6 +173,7 @@ $setores = $empresa[0]->setores;
                 <div>
                     <label>Nome</label>                      
                     <input type="text" id="txtNome" name="nome"  class="texto09" value="<?= $paciente['0']->nome; ?>" readonly/>
+                    <input type="hidden" id="ambulatorio_orcamento_id" name="ambulatorio_orcamento_id"  class="texto09" value="<?= @$ambulatorio_orcamento_id; ?>"/>
                 </div>
                 <div>
                     <label>Sexo</label>

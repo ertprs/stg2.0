@@ -11,7 +11,16 @@
         $medico_solicitante_id = "";
         $convenio_paciente = "";
         $empresa = $this->guia->listarempresapermissoes(); 
-        $odontologia_alterar = $empresa[0]->odontologia_valor_alterar;
+        $odontologia_alterar = $empresa[0]->odontologia_valor_alterar; 
+        $bt_autorizar = false;
+//        echo "<pre>";;
+//        print_r($exames);
+        foreach($exames as $item){
+            if($item->autorizacao_finalizada != "t"){
+               $bt_autorizar = true;
+               break;
+            } 
+        }
         ?>
         <h3 class="singular"><a href="#">Orçamento exames</a></h3>
         <div>
@@ -289,7 +298,8 @@
                                     </center>
                                 </th>
                                 <th colspan="2" align="center">
-                                    <?  if ($exames[0]->autorizado != 't') {  ?>
+                                    <?   
+                                    if ($bt_autorizar) {  ?>
                                         <center>
                                             <div class="bt_linkf">
                                                 <a href="<?= base_url() . "ambulatorio/exame/gravarautorizarorcamento/" . $orcamento; ?>" target='_blank'>Autorizar Orçamento</a>
@@ -358,7 +368,7 @@
 
                                     $orcamento = $item->orcamento_id;
                                     
-                                    if ($item->autorizado == 't'){
+                                    if ($item->autorizacao_finalizada == 't'){
                                         $autorizado = true;
                                     }
 

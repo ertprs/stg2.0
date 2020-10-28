@@ -509,42 +509,43 @@
                             // echo ' - ';
                            
 
-                            $arrayVerificarrayVerificarCredito = $item->forma_pagamento_array;
-                            $arrayVerificarrayVerificarCredito = str_replace('{', '', str_replace('}', '', $arrayVerificarrayVerificarCredito));
-                            if ($arrayVerificarrayVerificarCredito != 'NULL') {
-                                $arraycredito_atualizacao = explode(',', $arrayVerificarrayVerificarCredito);
-                            } else {
-                                $arraycredito_atualizacao = array();
-                            }
+                            // $arrayVerificarrayVerificarCredito = $item->forma_pagamento_array;
+                            // $arrayVerificarrayVerificarCredito = str_replace('{', '', str_replace('}', '', $arrayVerificarrayVerificarCredito));
+                            // if ($arrayVerificarrayVerificarCredito != 'NULL') {
+                            //     $arraycredito_atualizacao = explode(',', $arrayVerificarrayVerificarCredito);
+                            // } else {
+                            //     $arraycredito_atualizacao = array();
+                            // }
 
 
+                            $valor_total += $valor_totalProc;  
 
-                            if(count($arraycredito_atualizacao) > 0){
-                                $nao_repetir = 1;
-                                foreach($arraycredito_atualizacao as $numerochave => $pagamento){
-                                    // print_r($pagamento);
-                                    // echo ' - ';
-                                        if($pagamento == $formapagamentocomcredito[0]->nome || @$item->nao_constar_financeiro == 't'){
+                            // if(count($arraycredito_atualizacao) > 0){
+                            //     $nao_repetir = 1;
+                            //     foreach($arraycredito_atualizacao as $numerochave => $pagamento){
+                            //         // print_r($pagamento);
+                            //         // echo ' - ';
+                            //             if($pagamento == $formapagamentocomcredito[0]->nome || @$item->nao_constar_financeiro == 't'){
 
-                                        }else{
-                                            if($nao_repetir == 1){
-                                                $valor_total += $valor_totalProc; 
-                                            }else{
+                            //             }else{
+                            //                 if($nao_repetir == 1){
+                            //                     $valor_total += $valor_totalProc; 
+                            //                 }else{
 
-                                            }
-                                            $nao_repetir = 2;
-                                            // print_r($valor_total); 
-                                        }
+                            //                 }
+                            //                 $nao_repetir = 2;
+                            //                 // print_r($valor_total); 
+                            //             }
 
-                                    }
-                                }else{
-                                    if($item->nao_constar_financeiro == 't'){
+                            //         }
+                                //}else{
+                                   // if($item->nao_constar_financeiro == 't'){
 
-                                    }else{
-                                        $valor_total += $valor_totalProc;  
-                                    }
+                                   // }else{
+                                        // $valor_total += $valor_totalProc;  
+                                  //  }
                                 // print_r($valor_total);
-                            }
+                           // }
 
                             // echo '<br>';
 

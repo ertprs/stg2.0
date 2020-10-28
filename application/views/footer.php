@@ -1,6 +1,7 @@
-<div class="footer">
-    <div class="footer-copyright text-center py-3">
-        <h6>STG Sa&uacute;de - Todos os direitos reservados</h6>
+<div class="footer_conteiner">
+    <div class="decoration_footer"></div>
+    <div class="footer">
+        <h2><center>STGSa&uacute;de - Todos os direitos reservados </center></h2>
         <!-- end .footer -->
     </div>
 </div>

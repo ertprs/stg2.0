@@ -3766,6 +3766,7 @@ ORDER BY ae.agenda_exames_id)";
         $this->db->join('tb_operador_grupo_medico ogm', 'ae.medico_consulta_id = ogm.operador_id', 'left'); 
         $this->db->join('tb_operador op', 'op.operador_id = ae.operador_faturamento', 'left'); 
         $this->db->where('aee.funcao', 0);
+        $this->db->where('aee.ativo', 't');
         $this->db->where("(c.dinheiro = 't' OR ae.equipe_particular = 't')");
         
         $this->db->where("(sc.excluido = 'f' or sc.excluido is null)");

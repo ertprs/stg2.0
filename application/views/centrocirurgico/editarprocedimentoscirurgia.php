@@ -188,7 +188,7 @@
                             <td class="<?php echo $estilo_linha; ?>">
                             <? if($mostrarBotao){?>
                                 <? if ($this->session->userdata('perfil_id') != 25) {   ?>
-                                    <a href="<?= base_url() ?>centrocirurgico/centrocirurgico/excluirprocedimentoscirurgia/<?= $item->solicitacao_cirurgia_procedimento_id; ?>/<?= @$guia_id; ?>/<?= $solicitacao_id ?>/<?= @$data ?>" class="delete">
+                                    <a href="<?= base_url() ?>centrocirurgico/centrocirurgico/excluirprocedimentoscirurgia/<?= $item->solicitacao_cirurgia_procedimento_id; ?>/<?= @$guia_id; ?>/<?= $solicitacao_id ?>/<?=$item->agenda_exames_id?>/<?= @$data ?>" class="delete">
                                     </a>
                                 <? }  ?>
                             <? } ?>

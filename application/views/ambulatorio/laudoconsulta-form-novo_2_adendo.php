@@ -519,7 +519,7 @@
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 10000; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  padding-top: 60px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -2964,6 +2964,12 @@ Paciente com escoliose...";
                     "</div>"+
                     "<div class='modal-body'>"+
                         // "<br><br>"+
+                        "<h1> Codigo BirdID:</h1>"+
+                        "<table border='0'>"+
+                        "<tr><td colspan='2'>Obs: Esse campo deve ser preenchido com a Senha do Certificado do BirdID, caso a assinatura não seja pelo BirdID favor deixar o campo em branco!</td></tr>"+
+                        "<tr><th>Código</th>"+
+                        "<td><input type='number' id='certificado_birdID' class='texto1' name='certificado_birdID' value=''></td></tr>"+
+                        "</table>"+
                         "<h1> Emails Paciente:</h1>"+
                         "<table border='0'>"+
                         "<tr><th>Email</th>"+
@@ -2972,7 +2978,7 @@ Paciente com escoliose...";
                         "<td><input type='text' id='txtCns2' class='texto10' name='cns2' onchange='validaremail2()' value='<?=@$obj->_email2?>'></td></tr>"+
                         "</table>"+
                         "<h1> Informações Email Paciente:</h1>"+
-                        "<textarea name='textoadicional' id='textoadicional' rows='5' cols='110'>Essas são receitas eletrônicas, assinadas digitalmente. Não é necessário imprimi-las. Basta encaminhar o arquivo para o farmacêutico, da farmácia onde irá comprar. O farmacêutico tem que abrir o arquivo em um leitor de PDF e ele também tem que assina-la digitalmente. Uma vez assinada digitalmente pela farmácia, ele envia o arquivo para o site https://validator.docusign.com/ e valida a mesma.</textarea>"+
+                        "<textarea name='textoadicional' id='textoadicional' rows='5' cols='110'>Essas são receitas eletrônicas, assinadas digitalmente. Não é necessário imprimi-las. Basta encaminhar o arquivo para o farmacêutico, da farmácia onde irá comprar. O farmacêutico tem que abrir o arquivo em um leitor de PDF e ele também tem que assina-la digitalmente. Uma vez assinada digitalmente pela farmácia, ele envia o arquivo para o site https://assinaturadigital.iti.gov.br/ e valida a mesma.</textarea>"+
                         "<br><br>"+
                     "</div>"+
                     "<div class='modal-footer'>"+
@@ -3034,6 +3040,11 @@ Paciente com escoliose...";
         var email = $("#txtCns").val();
         var email2 = $("#txtCns2").val();
         var textoadicional = $("#textoadicional").val();
+        var certificado_birdID = $('#certificado_birdID').val();
+
+        if(certificado_birdID == ''){
+            certificado_birdID = 0;
+        }
 
         if(impressoesGerais.length == 0){
             alert('Selecione alguma Impressão, para que possa Assinar e Imprimir');
@@ -3045,7 +3056,7 @@ Paciente com escoliose...";
                     },
                 url: "<?= base_url() ?>ambulatorio/laudo/imprimirnovoatendimento/<?=$ambulatorio_laudo_id?>",
                 success: function(data) {
-                      window.open('<?= base_url() ?>ambulatorio/laudo/assinareenviaronline/<?= $ambulatorio_laudo_id ?>/<?=@$obj->_medico_parecer1?>/'+impressoesGerais+'/'+email+'/'+email2+'/'+textoadicional);
+                      window.open('<?= base_url() ?>ambulatorio/laudo/assinareenviaronline/<?= $ambulatorio_laudo_id ?>/<?=@$obj->_medico_parecer1?>/'+impressoesGerais+'/'+email+'/'+email2+'/'+certificado_birdID+'/'+textoadicional);
                 },
                 error: function (data) {
                     alert('Erro ao Imprimir');

@@ -133,8 +133,7 @@ if (count($_GET) > 0) {
                         </th>
                         <th class="tabela_title">
                             <select name="nome" id="nome" class="size2">
-                                <option value="">TODOS</option>
-                                <option value="TRANSFERENCIA">TRANSFERÊNCIA</option>
+                                <option value="">TODOS</option> 
                                 <? foreach ($tipo as $value) : ?>
                                     <option value="<?= $value->tipo_entradas_saida_id; ?>" <?
                                     if (@$_GET['nome'] == $value->tipo_entradas_saida_id):echo 'selected';
@@ -249,7 +248,7 @@ if (count($_GET) > 0) {
                                    <?if($item->tipo != 'TRANSFERENCIA'){?>   <a href="<?= base_url() ?>cadastros/caixa/carregar/<?= $item->saidas_id ?>">Editar</a><?}?></div>
                                 </td>
                                 <td class="<?php echo $estilo_linha; ?>" width="100px;"><div class="bt_link">
-                                    <?if(($item->tipo == 'TRANSFERENCIA' && @$empresa_permissao[0]->excluir_transferencia == 't') || $item->tipo != 'TRANSFERENCIA'){?>  <a   href="<?= base_url() ?>cadastros/caixa/saidaexclusao/<?= $item->saidas_id ?>" target="_blank">Excluir</a><?}?></div>
+                                    <?if(($item->tipo == 'TRANSFERENCIA' && @$empresa_permissao[0]->excluir_transferencia == 't') || $item->tipo != 'TRANSFERENCIA'){?>  <a  style="cursor:pointer;" onclick="saidaexclusao(<?= $item->saidas_id ?>)" >Excluir</a><?}?></div>
                                 </td>
                                 <td class="<?php echo $estilo_linha; ?>" width="50px;"><div class="bt_link">
                                         <a href="<?= base_url() ?>cadastros/caixa/anexarimagemsaida/<?= $item->saidas_id ?>">Arquivos</a></div>
@@ -324,7 +323,9 @@ if (count($_GET) > 0) {
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
 <script type="text/javascript">
-    
+    function saidaexclusao(saidas_id){
+         window.open('<?= base_url(); ?>cadastros/caixa/saidaexclusao/'+saidas_id+'', '_blank');  
+    }
     function atualizaRestultados(empresaID){
         var parametros = "txtempresa="+empresaID;
         parametros += "&datainicio=<?= @$_GET['datainicio'] ?>&datafim=<?= @$_GET['datafim'] ?>"; 

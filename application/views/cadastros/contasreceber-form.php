@@ -71,7 +71,7 @@
                         <label>Tipo</label>
                     </dt>
                     <dd>
-                        <select name="tipo" id="tipo" class="size4">
+                        <select name="tipo" id="tipo" class="size4" required="">
                             <option value="">Selecione</option>
                             <? foreach ($tipo as $value) : ?>
                                 <option value="<?= $value->tipo_entradas_saida_id; ?>"                                <?

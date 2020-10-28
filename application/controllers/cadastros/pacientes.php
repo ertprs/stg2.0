@@ -270,12 +270,12 @@ class pacientes extends BaseController {
         if ($ambulatorio_guia_id == 0) {
             $ambulatorio_guia_id = $this->guia->gravarguia($paciente_id);
         }
-        
-      
-
+         
+        if(isset($_POST['ambulatorio_orcamento_id']) && $_POST['ambulatorio_orcamento_id'] != ""){
+          $this->exametemp->finalizarautoriazacaoorcamento($_POST['ambulatorio_orcamento_id']);
+        }
         $teste = $this->exametemp->autorizarpacientetempgeral($paciente_id, $ambulatorio_guia_id);
-
-
+ 
 
         if (@$teste["cod"] == -1) {
             if (@$teste['message'] == 'pending') {
@@ -396,6 +396,9 @@ class pacientes extends BaseController {
         $data['grupos'] = $this->procedimento->listargruposatendimento();
         $data['tcd'] = $this->exametemp->listartcd($paciente_id)->get()->result();
         $data['valortotal'] = $this->exametemp->listarsaldocreditopaciente($paciente_id);
+        if(isset($_GET['orcamento']) && $_GET['orcamento'] != ""){
+            $data['ambulatorio_orcamento_id'] = $_GET['orcamento']; 
+        }
         $this->loadView('ambulatorio/procedimentoautorizaratendimento-form', $data);
     }
 

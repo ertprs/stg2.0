@@ -10,9 +10,9 @@
 }
 .drop-head{
     font-size: 1rem;
-    border-left: 0.5px solid lightgray;
+    /* border-left: 0.5px solid lightgray; */
     height: 45px;
-    margin-left: -22px;
+    /*margin-left: -22px;*/
 }
 .dropdown-menu .title{
     margin-left: 1vw;
@@ -31,7 +31,9 @@
 }
 
 
-.dropdown-menu { width: 37vh; max-height: 90vh; overflow-y: auto;  }
+.dropdown-menu { 
+}
+
 
 @media (max-width: 1440px) {
     .navbar-brand{

@@ -3880,7 +3880,8 @@ class exame_model extends Model {
                             ao.data_criacao,
                             o.nome as operador,
                             aoi.data_preferencia,
-                            aoi.autorizado,                           
+                            aoi.autorizado,
+                            aoi.autorizacao_finalizada,
                             ao.recusado,                           
                             aoi.observacao,                           
                             e.nome as empresa_nome,
@@ -3934,10 +3935,10 @@ class exame_model extends Model {
             }
         }
         if ($_POST['status'] == "0") {
-            $this->db->where('ao.autorizado', 't');
+            $this->db->where('ao.autorizacao_finalizada', 't');
         }
         if ($_POST['status'] == "1") {
-            $this->db->where('ao.autorizado', 'f');
+            $this->db->where('ao.autorizacao_finalizada', 'f');
         }
         $data_inicio = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
         $data_fim = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
@@ -3960,7 +3961,8 @@ class exame_model extends Model {
                             ao.data_criacao,
                             o.nome,
                             aoi.data_preferencia,
-                            aoi.autorizado,                              
+                            aoi.autorizado,
+                            aoi.autorizacao_finalizada,
                             aoi.observacao,                        
                             e.nome,
                             (
@@ -4500,6 +4502,7 @@ class exame_model extends Model {
             $this->db->join('tb_ambulatorio_orcamento ao', 'ao.ambulatorio_orcamento_id = aoi.orcamento_id', 'left');
             $this->db->where('aoi.orcamento_id', $ambulatorio_orcamento_id);
             $this->db->where('ao.paciente_id IS NOT NULL');
+            $this->db->where('aoi.autorizado','f');
             $this->db->where('aoi.ativo', 't');
             $return = $this->db->get();
             $return = $return->result();
@@ -4533,9 +4536,7 @@ class exame_model extends Model {
 //                        $this->db->set('medico_consulta_id', $_POST['medico_id']);
 //                        $this->db->set('medico_agenda', $_POST['medico_id']);
 //                    }
-
-
-
+ 
 
                     $this->db->set('tipo', $value->tipo);
                     $this->db->set('empresa_id', $value->empresa_id);
@@ -4554,6 +4555,7 @@ class exame_model extends Model {
                     $this->db->set('operador_atualizacao', $operador_id);
                     $this->db->set('data_cadastro', $horario);
                     $this->db->set('operador_cadastro', $operador_id);
+                    $this->db->set('ambulatorio_orcamento_item_id', $value->ambulatorio_orcamento_item_id);
                     $this->db->insert('tb_agenda_exames');
                 }
             }

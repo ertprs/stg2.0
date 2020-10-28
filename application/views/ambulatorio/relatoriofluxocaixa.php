@@ -75,22 +75,29 @@
         trocarAnoMes();
     });
 
-    function trocarAnoMes(){
+   function trocarAnoMes(){
         if($('#tipoPesquisa').val() == 'MENSAL'){
             $('#ano').hide();
             $('#mes').show();
             $("#ano").prop('required', false);
             $('#txtdata_inicio').hide();
             $('#txtdata_fim').hide();
+             $("#txtdata_inicio").prop('required', false);
+            $("#txtdata_fim").prop('required', false);
         }else if($('#tipoPesquisa').val() == 'ANUAL'){
             $('#ano').show();
             $('#mes').hide();
             $("#ano").prop('required', true);
             $('#txtdata_inicio').hide();
             $('#txtdata_fim').hide();
+             $("#txtdata_inicio").prop('required', false);
+            $("#txtdata_fim").prop('required', false);
         }else{
             $('#txtdata_inicio').show();
             $('#txtdata_fim').show();
+            $("#txtdata_inicio").prop('required', true);
+            $("#txtdata_fim").prop('required', true);
+            $("#ano").prop('required', false);
             $('#ano').hide();
             $('#mes').hide();
         }

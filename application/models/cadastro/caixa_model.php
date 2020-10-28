@@ -1348,10 +1348,8 @@ class caixa_model extends Model {
             $data_inicio = "{$_POST['ano']}-01-01";
             $data_fim = "{$_POST['ano']}-12-31";
         }else{
-            $data['txtdata_inicio'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
-            $data['txtdata_fim'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
-            $data_inicio = $_POST['txtdata_inicio'];
-            $data_fim = $_POST['txtdata_fim'];
+             $data_inicio = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+             $data_fim = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         }
 
         $subquery = "SELECT sum(s2.valor) as valor
@@ -1428,10 +1426,8 @@ class caixa_model extends Model {
             $data_inicio = "{$_POST['ano']}-01-01";
             $data_fim = "{$_POST['ano']}-12-31";
         }else{
-            $data['txtdata_inicio'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
-            $data['txtdata_fim'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
-            $data_inicio = $_POST['txtdata_inicio'];
-            $data_fim = $_POST['txtdata_inicio'];
+             $data_inicio = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+             $data_fim = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         }
 
         $subquery = "SELECT sum(s2.valor) as valor
@@ -1688,10 +1684,8 @@ class caixa_model extends Model {
             $data_inicio = "{$_POST['ano']}-01-01";
             $data_fim = "{$_POST['ano']}-12-31";
         }else{
-            $data['txtdata_inicio'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
-            $data['txtdata_fim'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
-            $data_inicio = $_POST['txtdata_inicio'];
-            $data_fim = $_POST['txtdata_inicio'];
+             $data_inicio = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+              $data_fim = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         }
 
         $subquery = "SELECT sum(sd2.valor) as valor
@@ -1790,10 +1784,8 @@ class caixa_model extends Model {
             $data_inicio = "{$_POST['ano']}-01-01";
             $data_fim = "{$_POST['ano']}-12-31";
         }else{
-            $data['txtdata_inicio'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
-            $data['txtdata_fim'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
-            $data_inicio = $_POST['txtdata_inicio'];
-            $data_fim = $_POST['txtdata_fim'];
+           $data_inicio = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+           $data_fim = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         }
 
         $subquery = "SELECT sum(sd2.valor) as valor

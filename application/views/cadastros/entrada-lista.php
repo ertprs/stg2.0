@@ -117,9 +117,7 @@ if (count($_GET) > 0) {
                         </th>
                         <th class="tabela_title">
                             <select name="nome" id="nome" class="size2">
-                                <option value="">TODOS</option> 
-                                <option value="CAIXA" <?= (isset($_GET['nome']) && $_GET['nome'] == "CAIXA") ? "selected" : "";?>>CAIXA</option>
-                                <option value="TRANSFERENCIA" <?= (isset($_GET['nome']) && $_GET['nome'] == "TRANSFERENCIA") ? "selected" : "";?>>TRANSFERENCIA</option>
+                                <option value="">TODOS</option>  
                                 <? foreach ($tipo as $value) : ?>
                                     <option value="<?= $value->tipo_entradas_saida_id; ?>" <?
                                 if (@$_GET['nome'] == $value->tipo_entradas_saida_id):echo 'selected';

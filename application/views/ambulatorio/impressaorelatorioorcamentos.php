@@ -64,7 +64,7 @@
                 $data = $relatorio[0]->data_preferencia;
                 foreach ($relatorio as $item) {
                     $total_relatorio++;
-                    if ($item->autorizado == 't') {
+                    if ($item->autorizacao_finalizada == 't') {
                         $total_autorizado++;
                     } else {
                         $total_naoAutorizado++;
@@ -110,7 +110,7 @@
                             <b> 
                             <? if ($item->recusado == 'f') { ?>
                                 <?
-                                if ($item->autorizado == 't') {
+                                if ($item->autorizacao_finalizada == 't') {
                                     echo "<span style='color: green; font-size: 12pt'>Realizado</span>";
                                 } else {
                                     echo "<span style='color: red; font-size: 12pt'>Pendente</span>";
@@ -125,8 +125,8 @@
                         <td align="center">
 
 
-                    <? if ($item->recusado == 'f' && $item->autorizado == 'f') { ?>
-                            <? if ($item->autorizado == 'f') { ?>
+                    <? if ($item->recusado == 'f' && $item->autorizacao_finalizada == 'f') { ?>
+                            <? if ($item->autorizacao_finalizada == 'f') { ?>
                                 <? if ($item->paciente != '') { ?>
                                     <a href="<?= base_url() ?>ambulatorio/exame/gravarautorizarorcamentorelatorio/<?= $item->ambulatorio_orcamento_id . "/" . $data_enviar ?>" target="_blank">Autorizar</a>
                                 <?

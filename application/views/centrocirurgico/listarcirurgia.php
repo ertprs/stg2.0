@@ -94,14 +94,14 @@
                                             <a  href="<?= base_url() ?>centrocirurgico/centrocirurgico/listarfichaanestesia/<?= $item->solicitacao_cirurgia_id; ?>/<?= $item->guia_id; ?>" target="_blank">FICHA ANESTESIA</a></div>
                                     </td>
                                     <td class="<?php echo $estilo_linha; ?>" width="30px;"><div  class="bt_link">
-                                            <a  href="<?= base_url() ?>centrocirurgico/centrocirurgico/faturarprocedimentos/<?= $item->solicitacao_cirurgia_id; ?>/<?= $item->guia_id; ?>" target="_blank">Faturar</a></div>
+                                             <a onclick="javascript:window.open('<?= base_url(); ?>centrocirurgico/centrocirurgico/faturarprocedimentos/<?= $item->solicitacao_cirurgia_id; ?>/<?= $item->guia_id; ?>', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600');">Faturar</a></div>
                                     </td>  
                                     <td class="<?php echo $estilo_linha; ?>" style="width: 100px;"><div style="width: 100px;" class="bt_link">
-                                            <a  href="<?= base_url() ?>centrocirurgico/centrocirurgico/faturarequipe/<?= $item->solicitacao_cirurgia_id; ?>/<?= $item->guia_id; ?>" target="_blank">Faturar Eq.</a></div>
+                                             <a onclick="javascript:window.open('<?= base_url(); ?>centrocirurgico/centrocirurgico/faturarequipe/<?= $item->solicitacao_cirurgia_id; ?>/<?= $item->guia_id; ?>', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600');">Faturar Eq.</a></div>
                                     </td>
                                     <? if ($item->situacao == 'AGUARDANDO') { ?>
-                                        <td class="<?php echo $estilo_linha; ?>" width="30px;"><div class="bt_link">
-                                                <a  onclick="javascript: return confirm('Deseja confirmar a execução da cirgugia?  ');" href="<?= base_url() ?>centrocirurgico/centrocirurgico/confirmarcirurgia/<?= $item->solicitacao_cirurgia_id ?>">Confirmar</a></div>
+                                        <td class="<?php echo $estilo_linha; ?>" width="30px;"><div class="bt_link"> 
+                                             <a  onclick="javascript: if(confirm('Deseja confirmar a execução da cirurgia?  ')){ window.open('<?= base_url(); ?>centrocirurgico/centrocirurgico/confirmarcirurgia/<?= $item->solicitacao_cirurgia_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600')   };"  >Confirmar</a></div>
                                         </td>   
                                     <? } else { ?>
                                         <td class="<?php echo $estilo_linha; ?>"><div class="bt_link">

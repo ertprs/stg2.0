@@ -870,7 +870,8 @@ class solicita_cirurgia_model extends BaseModel {
                            scp.quantidade, scp.valor_unitario,
                            scp.via,
                            pc.procedimento_convenio_id,
-                           scp.solicitacao_cirurgia_procedimento_id');
+                           scp.solicitacao_cirurgia_procedimento_id,
+                           scp.agenda_exames_id');
         $this->db->from('tb_solicitacao_cirurgia sc');
         $this->db->join('tb_solicitacao_cirurgia_procedimento scp', 'scp.solicitacao_cirurgia_id = sc.solicitacao_cirurgia_id', 'left');
         $this->db->join('tb_procedimento_convenio pc', 'pc.procedimento_convenio_id = scp.procedimento_tuss_id', 'left');
@@ -2208,7 +2209,30 @@ class solicita_cirurgia_model extends BaseModel {
             $empresa_id = $this->session->userdata('empresa_id');
 
             $ambulatorio_guia_id = $guia_id;
+            // $this->db->where('guia_id', $ambulatorio_guia_id);
+            // $this->db->delete('tb_agenda_exames');
+
+            $this->db->set('ativo', 'f');
             $this->db->where('guia_id', $ambulatorio_guia_id);
+            $this->db->update('tb_agenda_exame_equipe');
+ 
+            return $ambulatorio_guia_id;
+        } catch (Exception $exc) {
+            return false;
+        }
+    }
+
+    function excluirentradasagendaexames2($guia_id, $agenda_exames_id) {
+
+        try {
+
+            $horario = date("Y-m-d H:i:s");
+            $data = date("Y-m-d");
+            $operador_id = $this->session->userdata('operador_id');
+            $empresa_id = $this->session->userdata('empresa_id');
+
+            $ambulatorio_guia_id = $guia_id;
+            $this->db->where('agenda_exames_id', $agenda_exames_id);
             $this->db->delete('tb_agenda_exames');
 
             $this->db->set('ativo', 'f');
@@ -2245,13 +2269,14 @@ class solicita_cirurgia_model extends BaseModel {
             $this->db->join('tb_solicitacao_cirurgia sc', 'sc.solicitacao_cirurgia_id = scp.solicitacao_cirurgia_id');
 //            $this->db->join('tb_agenda_exames ae','ae.agenda_exames_id = scp.agenda_exames_id','left');
             $this->db->where("scp.ativo", 't');
+            $this->db->where("scp.agenda_exames_id is null");
             $this->db->where('scp.solicitacao_cirurgia_id', $solicitacao_id);
             $this->db->orderby('scp.valor DESC');
             $procedimentos = $this->db->get()->result();
 
-//      echo "<pre>";      
-//print_r($procedimentos);
-//die();
+// echo "<pre>";      
+// print_r($procedimentos);
+// die();
             // Trazendo a lista com todos os integrantes da equipe cirurgica
             $this->db->select('leito, convenio, paciente_id');
             $this->db->from('tb_solicitacao_cirurgia');

@@ -2639,6 +2639,7 @@ class exametemp_model extends Model {
                             oi.dia_semana_preferencia,
                             oi.turno_prefencia,
                             ao.autorizado,
+                            oi.autorizacao_finalizada,
                             e.nome as empresa,
                             (oi.valor_ajustado * oi.quantidade) as valor_total_ajustado,
                             pc.convenio_id,
@@ -11971,7 +11972,17 @@ class exametemp_model extends Model {
     }
     
     
+        function finalizarautoriazacaoorcamento($ambulatorio_orcamento_id=null){
+            if($ambulatorio_orcamento_id != ""){
+                $this->db->set('autorizacao_finalizada', 't');
+                $this->db->where('ambulatorio_orcamento_id', $ambulatorio_orcamento_id);
+                $this->db->update('tb_ambulatorio_orcamento');
 
+                $this->db->set('autorizacao_finalizada', 't');
+                $this->db->where('orcamento_id', $ambulatorio_orcamento_id);
+                $this->db->update('tb_ambulatorio_orcamento_item');
+            }  
+        }
 }
 
 ?>

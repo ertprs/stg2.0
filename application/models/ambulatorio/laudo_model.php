@@ -10536,10 +10536,20 @@ class laudo_model extends Model {
         return $this->db->get()->result();
     }
 
+    function listalaudosantigos(){
+        $this->db->select('paciente_id, ambulatorio_laudo_id, exame_id, tipo');
+        $this->db->from('tb_ambulatorio_laudo');
+        $this->db->where('tipo', 'EXAME');
+        $this->db->where('situacao', 'FINALIZADO');
+
+        return $this->db->get()->result();
+    }
+
     function salvararquivolaudo($paciente_id, $nome, $laudo_id, $medico_id){
         $this->db->select('laudo_id');
         $this->db->from('tb_ambulatorio_arquivos_anexados');
         $this->db->where('laudo_id', $laudo_id);
+        $this->db->where('caminho', 'upload/laudopdf/'.$laudo_id.'/'.$nome);
         $return = $this->db->get()->result();
         
         if(count($return) > 0){

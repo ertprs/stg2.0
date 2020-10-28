@@ -477,9 +477,9 @@ $setor = $this->exame->listarsetores();
                     $aguardando = $aguardando + 1;
                 } elseif ($item->realizada == 't' && $item->situacaolaudo == 'FINALIZADO') {
                     $finalizado = $finalizado + 1;
-                } elseif ($item->confirmado == 'f') {
+                } elseif ($item->confirmado == 'f' && $item->situacao != "LIVRE") {
                     $agenda = $agenda + 1;
-                } else {
+                } elseif($item->situacao != "LIVRE"){
                     $espera = $espera + 1;
                 }
             }

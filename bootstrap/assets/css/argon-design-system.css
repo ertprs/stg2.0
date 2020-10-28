@@ -4681,7 +4681,7 @@ input[type="button"].btn-block {
 }
 
 .nav-link {
-  display: block;
+  /* display: block; */
   padding: 0.25rem 0.75rem;
 }
 
@@ -24313,6 +24313,15 @@ pre>code.highlight {
 .scrollbar-inner .scroll-element.scroll-x {
   height: 3px;
   bottom: 0;
+}
+ul.dropdown-menu li > ul.dropdown-menu {
+  left: 100%;
+  top: 0;
+}
+
+ul.dropdown-menu li:hover > ul.dropdown-menu,
+ul.dropdown-menu li:focus > ul.dropdown-menu {
+  display: block;
 }
 /* .table > thead > tr > th,
 .table > tbody > tr > th,

@@ -839,18 +839,16 @@ class Exame extends BaseController {
                 $this->session->set_flashdata('message', $mensagem);
                 redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
             } else {
-                redirect(base_url() . "cadastros/pacientes/procedimentoautorizaratendimento/$paciente_id");
+                redirect(base_url() . "cadastros/pacientes/procedimentoautorizaratendimento/$paciente_id?orcamento=$ambulatorio_orcamento_id");
             }
         } else {
             $paciente_id = $teste[0]->paciente_id;
-            redirect(base_url() . "cadastros/pacientes/procedimentoautorizaratendimento/$paciente_id");
+            redirect(base_url() . "cadastros/pacientes/procedimentoautorizaratendimento/$paciente_id?orcamento=$ambulatorio_orcamento_id");
         }
     }
 
     function gravarautorizarorcamentonaocadastro($ambulatorio_orcamento_id) {
-
-
-
+                    
         $teste = $this->exame->testarautorizarorcamento($ambulatorio_orcamento_id);
 //        var_dump($_POST);
 //        die;
@@ -888,11 +886,11 @@ class Exame extends BaseController {
                 $this->session->set_flashdata('message', $mensagem);
                 redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
             } else {
-                redirect(base_url() . "cadastros/pacientes/procedimentoautorizaratendimento/$paciente_id");
+                redirect(base_url() . "cadastros/pacientes/procedimentoautorizaratendimento/$paciente_id?orcamento=$ambulatorio_orcamento_id");
             }
         } else {
             $paciente_id = $teste[0]->paciente_id;
-            redirect(base_url() . "cadastros/pacientes/procedimentoautorizaratendimento/$paciente_id");
+            redirect(base_url() . "cadastros/pacientes/procedimentoautorizaratendimento/$paciente_id?orcamento=$ambulatorio_orcamento_id");
         }
     }
 

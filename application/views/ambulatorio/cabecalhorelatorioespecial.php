@@ -17,6 +17,7 @@ if(is_array($assinatura)){
 }   
 $encoding = mb_internal_encoding();
 ?>
+
 <?php if($permissao[0]->a4_receituario_especial == "t"){ ?>
 <table border="" width="100%">
     <tr>

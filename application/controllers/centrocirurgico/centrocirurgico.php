@@ -160,31 +160,31 @@ class centrocirurgico extends BaseController {
         if ($resulta == "0.00") {
 
             $erro = false;
-            if ($_POST['valorMinimo1'] != '' && ( ((float) $_POST['valorMinimo1']) > ((float) $_POST['valor1']) / $_POST['parcela1'] ) && $_POST['parcela1'] != 1) {
-                $data['mensagem'] = 'Erro ao gravar faturamento. Valor da forma de pagamento 1 é menor que o valor da parcela minima cadastrado na forma de pagamento.';
-                $erro = true;
-//                echo "<script>alert('something');</script>";
-            }
-            if ($_POST['valorMinimo2'] != '' && ( ((float) $_POST['valorMinimo2']) > ((float) $_POST['valor2']) / $_POST['parcela2'] ) && $_POST['parcela2'] != 1) {
-                $data['mensagem'] = 'Erro ao gravar faturamento. Valor da forma de pagamento 2 é menor que o valor da parcela minima cadastrado na forma de pagamento.';
-                $erro = true;
-//                echo "<script>alert('something');</script>";
-            }
-            if ($_POST['valorMinimo3'] != '' && ( ((float) $_POST['valorMinimo3']) > ((float) $_POST['valor3']) / $_POST['parcela3'] ) && $_POST['parcela3'] != 1) {
-                $data['mensagem'] = 'Erro ao gravar faturamento. Valor da forma de pagamento 3 é menor que o valor da parcela minima cadastrado na forma de pagamento.';
-                $erro = true;
-//                echo "<script>alert('something');</script>";
-            }
-            if ($_POST['valorMinimo4'] != '' && ( ((float) $_POST['valorMinimo4']) > ((float) $_POST['valor4']) / $_POST['parcela4'] ) && $_POST['parcela4'] != 1) {
-                $data['mensagem'] = 'Erro ao gravar faturamento. Valor da forma de pagamento 4 é menor que o valor da parcela minima cadastrado na forma de pagamento.';
-                $erro = true;
-//                echo "<script>alert('something');</script>";
-            }
-            if ($_POST['valorMinimo4'] == '' && $_POST['valorMinimo3'] == '' && $_POST['valorMinimo2'] == '' && $_POST['valorMinimo1'] == '') {
-               $data['mensagem'] = 'Erro  ao gravar faturamento.';
-                $erro = true;
-//                echo "<script>alert('something');</script>";
-            }
+//             if ($_POST['valorMinimo1'] != '' && ( ((float) $_POST['valorMinimo1']) > ((float) $_POST['valor1']) / $_POST['parcela1'] ) && $_POST['parcela1'] != 1) {
+//                 $data['mensagem'] = 'Erro ao gravar faturamento. Valor da forma de pagamento 1 é menor que o valor da parcela minima cadastrado na forma de pagamento.';
+//                 $erro = true;
+// //                echo "<script>alert('something');</script>";
+//             }
+//             if ($_POST['valorMinimo2'] != '' && ( ((float) $_POST['valorMinimo2']) > ((float) $_POST['valor2']) / $_POST['parcela2'] ) && $_POST['parcela2'] != 1) {
+//                 $data['mensagem'] = 'Erro ao gravar faturamento. Valor da forma de pagamento 2 é menor que o valor da parcela minima cadastrado na forma de pagamento.';
+//                 $erro = true;
+// //                echo "<script>alert('something');</script>";
+//             }
+//             if ($_POST['valorMinimo3'] != '' && ( ((float) $_POST['valorMinimo3']) > ((float) $_POST['valor3']) / $_POST['parcela3'] ) && $_POST['parcela3'] != 1) {
+//                 $data['mensagem'] = 'Erro ao gravar faturamento. Valor da forma de pagamento 3 é menor que o valor da parcela minima cadastrado na forma de pagamento.';
+//                 $erro = true;
+// //                echo "<script>alert('something');</script>";
+//             }
+//             if ($_POST['valorMinimo4'] != '' && ( ((float) $_POST['valorMinimo4']) > ((float) $_POST['valor4']) / $_POST['parcela4'] ) && $_POST['parcela4'] != 1) {
+//                 $data['mensagem'] = 'Erro ao gravar faturamento. Valor da forma de pagamento 4 é menor que o valor da parcela minima cadastrado na forma de pagamento.';
+//                 $erro = true;
+// //                echo "<script>alert('something');</script>";
+//             }
+//             if ($_POST['valorMinimo4'] == '' && $_POST['valorMinimo3'] == '' && $_POST['valorMinimo2'] == '' && $_POST['valorMinimo1'] == '') {
+//                $data['mensagem'] = 'Erro ao gravar faturamento.';
+//                 $erro = true;
+// //                echo "<script>alert('something');</script>";
+//             }
 
             $_POST['parcela1'] = ($_POST['parcela1'] == '' || $_POST['parcela1'] == 0) ? 1 : $_POST['parcela1'];
             $_POST['parcela2'] = ($_POST['parcela2'] == '' || $_POST['parcela2'] == 0) ? 1 : $_POST['parcela2'];
@@ -398,7 +398,7 @@ class centrocirurgico extends BaseController {
         $this->centrocirurgico_m->confirmarcirurgia($solicitacao_id);
         $data['mensagem'] = 'Cirurgia confirmada';
         $this->session->set_flashdata('message', $data['mensagem']);
-        redirect(base_url() . "centrocirurgico/centrocirurgico/pesquisarequipecirurgica");
+         redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
     }
 
     function excluirsolicitacaocirurgia($solicitacao_id,$calendario=NULL) {
@@ -539,7 +539,7 @@ class centrocirurgico extends BaseController {
         $data['forma_pagamento'] = $this->guia->formadepagamento();
         $data['procedimentos'] = $this->solicitacirurgia_m->listarprocedimentosolicitacaocirurgicaeditar($solicitacao_id);
         // echo '<pre>';
-        // print_r($data['solicitacao']);
+        // print_r($data['procedimentos']);
         // die;
         $this->loadView('centrocirurgico/editarprocedimentoscirurgia', $data);
     }
@@ -1668,7 +1668,7 @@ class centrocirurgico extends BaseController {
         redirect(base_url() . "centrocirurgico/centrocirurgico/pesquisar");
     }
 
-    function excluirprocedimentoscirurgia($solicitacao_cirurgia_procedimento_id, $guia_id, $solicitacao_id, $data) {
+    function excluirprocedimentoscirurgia($solicitacao_cirurgia_procedimento_id, $guia_id, $solicitacao_id, $agenda_exames_id, $data) {
 //        var_dump($_POST); die;
 
         $data = date("d/m/Y", strtotime($data));
@@ -1677,7 +1677,7 @@ class centrocirurgico extends BaseController {
 
         $this->solicitacirurgia_m->excluirprocedimentocirurgico($solicitacao_cirurgia_procedimento_id, $guia_id, $solicitacao_id);
         
-        $this->solicitacirurgia_m->excluirentradasagendaexames($guia_id);
+        $this->solicitacirurgia_m->excluirentradasagendaexames2($guia_id, $agenda_exames_id);
    
         $this->solicitacirurgia_m->gravarguiaeditarprocedimentoscirurgia($guia_id, $solicitacao_id); 
         

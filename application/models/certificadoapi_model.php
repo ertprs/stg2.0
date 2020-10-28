@@ -7,7 +7,7 @@ class certificadoapi_model extends Model {
 //        $this->load->library('utilitario');
     }
 
-    function autenticacao($ambulatorio_laudo_id){
+    function autenticacao($ambulatorio_laudo_id, $cod_BirdID){
         $this->db->select('link_certificado');
         $this->db->from('tb_empresa');
         $this->db->where('empresa_id', $this->session->userdata('empresa_id'));
@@ -41,7 +41,7 @@ class certificadoapi_model extends Model {
                 'client_id' => '18824545000188',
                 'client_secret' => 'QRafdhheuYTREok',
                 'username' => $value[0]->cpf,
-                'password' => $value[0]->certificado_digital,
+                'password' => $cod_BirdID,
                 'grant_type' => 'password',
                 'scope' => 'signature_session',
                 'lifetime' => '432000'

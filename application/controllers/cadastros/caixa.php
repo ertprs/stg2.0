@@ -596,12 +596,11 @@ class Caixa extends BaseController {
         $data['relatorio_saldo_entrada'] = $this->caixa->relatoriofluxocaixasaldoanteriorcompleto_entradas();
         $data['relatorio_saldo_saida'] = $this->caixa->relatoriofluxocaixasaldoanteriorcompleto_saidas();
 
-                    $empresa_id = $this->session->userdata('empresa_id');
-                    $this->db->select('ep.financ_4n');
-                    $this->db->from('tb_empresa_permissoes ep');        
-                    $this->db->where('ep.empresa_id', $empresa_id);
-                    $retorno = $this->db->get()->result();
-
+        $empresa_id = $this->session->userdata('empresa_id');
+        $this->db->select('ep.financ_4n');
+        $this->db->from('tb_empresa_permissoes ep');        
+        $this->db->where('ep.empresa_id', $empresa_id);
+        $retorno = $this->db->get()->result(); 
                     
         if($retorno[0]->financ_4n == 't'){
             
