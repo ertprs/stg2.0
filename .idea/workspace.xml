@@ -2,52 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7eedec7-0120-4f34-ae50-6afdde6a3e0e" name="Default Changelist" comment="Yan">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/application.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/config/database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/controllers/ambulatorio/exame.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/ambulatorio/exame.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/controllers/ambulatorio/laudo.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/ambulatorio/laudo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/controllers/cadastros/caixa.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/cadastros/caixa.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/controllers/cadastros/pacientes.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/cadastros/pacientes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/controllers/centrocirurgico/centrocirurgico.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/centrocirurgico/centrocirurgico.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/ambulatorio/exame_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/ambulatorio/exame_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/ambulatorio/exametemp_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/ambulatorio/exametemp_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/ambulatorio/laudo_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/ambulatorio/laudo_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/ambulatorio/procedimento_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/ambulatorio/procedimento_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/cadastro/caixa_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/cadastro/caixa_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/centrocirurgico/centrocirurgico_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/centrocirurgico/centrocirurgico_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/centrocirurgico/solicita_cirurgia_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/centrocirurgico/solicita_cirurgia_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/certificadoapi_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/certificadoapi_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/login_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/login_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/cabecalhorelatorioespecial.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/cabecalhorelatorioespecial.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/carregartcd-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/carregartcd-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioalteracaomedico.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioalteracaomedico.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatoriocaixamodelo2.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatoriocaixamodelo2.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioentradatipo.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioentradatipo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioinadimplencia.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioinadimplencia.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioorcamentos.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioorcamentos.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/laudoconsulta-form-novo_2.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/laudoconsulta-form-novo_2.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/laudoconsulta-form-novo_2_adendo.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/laudoconsulta-form-novo_2_adendo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/multifuncaomedicogeralnovo-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/multifuncaomedicogeralnovo-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/orcamento-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/orcamento-form.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/procedimentoarquivo.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/procedimentoarquivo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/procedimentoautorizaratendimento-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/procedimentoautorizaratendimento-form.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/relatorioalteracaomedico.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/relatorioalteracaomedico.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/relatorioentradatipo.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/relatorioentradatipo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/relatoriofluxocaixa.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/relatoriofluxocaixa.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/relatorioinadimplenciapaciente.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/relatorioinadimplenciapaciente.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/cadastros/contaspagar-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/contaspagar-form.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/cadastros/contasreceber-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/contasreceber-form.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/cadastros/entrada-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/entrada-form.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/cadastros/entrada-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/entrada-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/cadastros/saida-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/saida-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/centrocirurgico/editarprocedimentoscirurgia.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/centrocirurgico/editarprocedimentoscirurgia.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/centrocirurgico/listarcirurgia.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/centrocirurgico/listarcirurgia.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/footer.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/argon-design-system.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/argon-design-system.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/header1.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/header1.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/login.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +87,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.ide.settings.web.browsers" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -142,7 +101,8 @@
       <workItem from="1603395068041" duration="1066000" />
       <workItem from="1603453978555" duration="1306000" />
       <workItem from="1603886534724" duration="15849000" />
-      <workItem from="1603914197653" duration="646000" />
+      <workItem from="1603914197653" duration="775000" />
+      <workItem from="1603971619546" duration="11502000" />
     </task>
     <servers />
   </component>
@@ -179,10 +139,10 @@
       <screen x="0" y="24" width="1366" height="744" />
     </state>
     <state width="1320" height="186" key="GridCell.Tab.0.right/1366.0.1280.800/0.24.1366.744@0.24.1366.744" timestamp="1603395096239" />
-    <state x="260" y="40" key="SettingsEditor" timestamp="1603890004657">
+    <state x="260" y="39" key="SettingsEditor" timestamp="1603971876664">
       <screen x="0" y="24" width="1366" height="744" />
     </state>
-    <state x="260" y="40" key="SettingsEditor/0.768.1366.768/0.24.1366.744@0.24.1366.744" timestamp="1603890004657" />
+    <state x="260" y="39" key="SettingsEditor/0.768.1366.768/0.24.1366.744@0.24.1366.744" timestamp="1603971876664" />
     <state x="196" y="792" key="SettingsEditor/0.768.1366.768/0.24.1366.744@0.768.1366.768" timestamp="1603886626757" />
     <state x="346" y="89" width="672" height="678" key="search.everywhere.popup" timestamp="1603909568997">
       <screen x="0" y="24" width="1366" height="744" />

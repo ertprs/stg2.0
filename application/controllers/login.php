@@ -161,7 +161,7 @@ class Login extends Controller {
 
         $usuario = $_POST['txtLogin'];
         $senha   = $_POST['txtSenha'];
-//        $empresa = $_POST['txtempresa'];
+        $empresa = $_POST['txtempresa'];
 
         //Pegando o nome e versao do navegador
         preg_match('/Firefox.+/', $_SERVER['HTTP_USER_AGENT'], $browserPC);

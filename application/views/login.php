@@ -1,16 +1,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="pt-BR" >
     <head>
-        <title>STG - CONSULTORIO v1.0</title>
+        <title>STG CLINICAS v2.0</title>
         <meta http-equiv="Content-Style-Type" content="text/css" />
         <meta http-equiv="content-type" content="text/html;charset=utf-8" />
         <link href="<?= base_url() ?>bootstrap/vendor/bootstrap/css/bootstrap.css" rel="stylesheet" />
         <link href="<?= base_url() ?>bootstrap/vendor/metisMenu/metisMenu.css" rel="stylesheet" />
-        <link href="<?= base_url() ?>bootstrap/dist/css/sb-admin-2.css" rel="stylesheet" />
-        <link href="<?= base_url() ?>bootstrap/vendor/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
+        <link href="<?= base_url() ?>bootstrap/assets/css/argon-design-system.css" rel="stylesheet" />
+        <link href="<?= base_url() ?>bootstrap/assets/css/font-awesome.css" rel="stylesheet" />
+        <link href="<?= base_url() ?>bootstrap/assets/css/all.css" rel="stylesheet" />
         <link href="<?= base_url() ?>bootstrap/vendor/alert/dist/sweetalert.css" rel="stylesheet" type="text/css" />
+        <script src="<?= base_url() ?>bootstrap/vendor/jquery/jquery.js"></script>
+        <script src="<?= base_url() ?>bootstrap/dist/js/bootstrap.js"></script>
+        <script src="<?= base_url() ?>bootstrap/vendor/jquery/jquery.min.js"></script>
+         <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
 
     </head>
-
+    <?
+    $this->db->select('ep.*');
+    $this->db->from('tb_empresa_permissoes ep');
+    $this->db->orderby('ep.empresa_id');
+    $retorno_header = $this->db->get()->result();
+    $precadastro = @$retorno_header[0]->precadastro;
+    ?>
 
 
 
@@ -45,14 +57,14 @@
                             <div class=" alert alert-info text-center">
 
                                 <span>
-                                    <i class="fa fa-lock fa-fw fa-3x text-right" id="cadeado1" aria-hidden="true"></i>
-                                    <i class="fa fa-unlock fa-fw fa-3x text-right" style="display: none;" id="cadeado1d" aria-hidden="true"></i>
+                                    <i class="fas fa-lock fa-fw fa-3x text-right" id="cadeado1" aria-hidden="true"></i>
+                                    <i class="fas fa-unlock fa-fw fa-3x text-right" style="display: none;" id="cadeado1d" aria-hidden="true"></i>
 
                                 </span>
                                 <span>
 
-                                    <i class="fa fa-lock fa-fw fa-3x text-right" id="cadeado2" aria-hidden="true"></i>
-                                    <i class="fa fa-unlock fa-fw fa-3x text-right" style="display: none;" id="cadeado2d" aria-hidden="true"></i>
+                                    <i class="fas fa-lock fa-fw fa-3x text-right" id="cadeado2" aria-hidden="true"></i>
+                                    <i class="fas fa-unlock fa-fw fa-3x text-right" style="display: none;" id="cadeado2d" aria-hidden="true"></i>
 
                                 </span>
 <!--                                <span>
@@ -73,9 +85,17 @@
                                         <div class="form-group">
                                             <input class="form-control" placeholder="Senha" name="txtSenha" id="txtSenha" type="password" value="<?= @$obj->_senha; ?>" required>
                                         </div>
-<!--                                        <div class="form-group">
-                                            <input class="form-control" placeholder="CPF" name="Txtcpf" id="Txtcpf" type="text" value="<? //= @$obj->_senha;      ?>" required>
-                                        </div>-->
+                                        <div class="form-group">
+                                            <select  name="txtempresa" id="txtempresa" class="size08" >
+                                                <? if (count($empresa) > 1) { ?>
+                                                    <option value="">Selecione</option>
+                                                <? } ?>
+                                                <? foreach ($empresa as $item) : ?>
+                                                    <option value="<?= $item->empresa_id; ?>"><?= $item->nome; ?></option>
+                                                <? endforeach; ?>
+                                            </select>
+
+                                        </div>
 
                                         <br>
                                             <!-- Change this to a button or input when using this as a form -->
