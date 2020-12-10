@@ -1,4 +1,4 @@
-
+<link href="<?= base_url() ?>css/ambulatorio/laudoantigo-lista.css?" rel="stylesheet"/>
 <div class="content"> <!-- Inicio da DIV content -->
     <?
     $salas = $this->exame->listartodassalas();
@@ -7,39 +7,42 @@
     <div id="accordion">
         <h3 class="singular"><a href="#">Laudos antigos</a></h3>
         <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="5" class="tabela_title">
-                <form method="get" action="<?= base_url() ?>ambulatorio/laudo/pesquisarlaudoantigo">
-                    <tr>
-                        <th class="tabela_title">Medico</th>
-                        <th class="tabela_title">Data</th>
-                        <th colspan="2" class="tabela_title">Nome</th>
-                    </tr>
-                    <tr>
+            <form method="get" action="<?= base_url() ?>ambulatorio/laudo/pesquisarlaudoantigo">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div>
+                                <label>Médico</label>
+                                <select name="medico" id="medico" class="form-control">
+                                    <option value=""></option>
+                                    <? foreach ($medicos as $value) : ?>
+                                        <option value="<?= $value->operador_id; ?>"><?php echo $value->nome; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Data</label>
+                                <input type="date"  id="data" name="data" class="form-control"  value="<?php echo @$_GET['data']; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Nome</label>
+                                <input type="text" name="nome" class="form-control texto07" value="<?php echo @$_GET['nome']; ?>"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 btnsend">
+                            <div>
+                                <button class="btn btn-outline-success" type="submit" id="enviar">Pesquisar</button>
+                            </div>
+                        </div>
 
-                        <th class="tabela_title">
-                            <select name="medico" id="medico" class="size1">
-                                <option value=""></option>
-                                <? foreach ($medicos as $value) : ?>
-                                    <option value="<?= $value->operador_id; ?>"><?php echo $value->nome; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                        </th>
-
-                        <th class="tabela_title">
-                            <input type="text"  id="data" name="data" class="size1"  value="<?php echo @$_GET['data']; ?>" />
-                        </th>
-                        <th colspan="2" class="tabela_title">
-                            <input type="text" name="nome" class="texto06" value="<?php echo @$_GET['nome']; ?>" />
-                        </th>
-                        <th class="tabela_title">
-                            <button type="submit" id="enviar">Pesquisar</button>
-                        </th>
-                </form>
-                </thead>
-            </table>
+                    </div>
+                </fieldset>
+            </form>
+<br>
             <table>
                 <thead>
                     <tr>

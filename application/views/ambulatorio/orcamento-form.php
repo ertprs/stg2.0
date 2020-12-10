@@ -22,175 +22,176 @@
             } 
         }
         ?>
-        <h3 class="singular"><a href="#">Orçamento exames</a></h3>
+<!--        <h4 class="singular">Orçamento exames</h4>-->
         <div>
             <form name="form_guia" id="form_guia" action="<?= base_url() ?>ambulatorio/guia/gravarorcamento" method="post">
                 <fieldset>
-                    <legend>Dados do paciente</legend>
-                    <div>
-                        <label>Nome</label>                      
-                        <input type="text" id="txtNome" name="nome"  class="texto09" value="<?= $paciente['0']->nome; ?>" readonly/>
-                        <input type="hidden" id="txtpaciente_id" name="txtpaciente_id"  value="<?= $paciente_id; ?>"/>
-                    </div>
-                    <div>
-                        <label>Sexo</label>
-                        <select name="sexo" id="txtSexo" class="size2">
-                            <option value="M" <?
-                            if ($paciente['0']->sexo == "M"):echo 'selected';
-                            endif;
-                            ?>>Masculino</option>
-                            <option value="F" <?
-                            if ($paciente['0']->sexo == "F"):echo 'selected';
-                            endif;
-                            ?>>Feminino</option>
-                            <option value="O" <?
-                            if ($paciente['0']->sexo == "O"):echo 'selected';
-                            endif;
-                            ?>>Outros</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label>Nascimento</label>
-
-
-                        <input type="text" name="nascimento" id="txtNascimento" class="texto02" alt="date" value="<?php echo substr($paciente['0']->nascimento, 8, 2) . '/' . substr($paciente['0']->nascimento, 5, 2) . '/' . substr($paciente['0']->nascimento, 0, 4); ?>" onblur="retornaIdade()" readonly/>
-                    </div>
-                    
-                    <div>
-                        <label>CPF</label>
-                        <input type="text" name="cpf" id="cpf" class="texto02" value="<?= @$paciente['0']->cpf ?>" readonly/>
-                    </div>
-                    <div>
-                        <?
-                        $telefone = $paciente['0']->celular;
-                        if($paciente['0']->telefone != '') $telefone = $paciente['0']->telefone;
-                        ?>
-                        <label>Telefone</label>
-                        <input type="text" name="cpf" id="cpf" class="texto02" value="<?= @$telefone ?>" readonly/>
-                    </div>
-
-<!--                    <div>
-                        <label>Idade</label>
-                        <? 
-                        if($paciente['0']->nascimento != '') { 
-                            $data_atual = date('Y-m-d');
-                            $data1 = new DateTime($data_atual);
-                            $data2 = new DateTime($paciente[0]->nascimento);
-
-                            $intervalo = $data1->diff($data2);
-                            ?>
-                            <input type="text" name="idade" id="idade" class="texto02" readonly value="<?= $intervalo->y ?> ano(s)"/>
-                        <? } else { ?>
-                            <input type="text" name="nascimento" id="txtNascimento" class="texto01" readonly/>
-                        <? } ?>
-                    </div>
-
-                    <div>
-                        <label>Nome da M&atilde;e</label>
-
-
-                        <input type="text" name="nome_mae" id="txtNomeMae" class="texto08" value="<?= $paciente['0']->nome_mae; ?>" readonly/>
-                    </div>-->
+                    <div class="alert alert-info">Dados do paciente</div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div>
+                                    <label>Nome</label>
+                                    <input type="text" id="txtNome" name="nome"  class="form-control texto08" value="<?= $paciente['0']->nome; ?>" readonly/>
+                                    <input type="hidden" id="txtpaciente_id" name="txtpaciente_id"  value="<?= $paciente_id; ?>"/>
+                                </div>
+                                <div>
+                                    <label>Sexo</label>
+                                    <select name="sexo" id="txtSexo" class="form-control texto04">
+                                        <option value="M" <?
+                                        if ($paciente['0']->sexo == "M"):echo 'selected';
+                                        endif;
+                                        ?>>Masculino</option>
+                                        <option value="F" <?
+                                        if ($paciente['0']->sexo == "F"):echo 'selected';
+                                        endif;
+                                        ?>>Feminino</option>
+                                        <option value="O" <?
+                                        if ($paciente['0']->sexo == "O"):echo 'selected';
+                                        endif;
+                                        ?>>Outros</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div>
+                                    <label>Nascimento</label>
+                                    <input type="text" name="nascimento" id="txtNascimento" class="form-control texto02" alt="date" value="<?php echo substr($paciente['0']->nascimento, 8, 2) . '/' . substr($paciente['0']->nascimento, 5, 2) . '/' . substr($paciente['0']->nascimento, 0, 4); ?>" onblur="retornaIdade()" readonly/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div>
+                                    <label>CPF</label>
+                                    <input type="text" name="cpf" id="cpf" class="form-control texto03" value="<?= @$paciente['0']->cpf ?>" readonly/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div>
+                                    <?
+                                    $telefone = $paciente['0']->celular;
+                                    if($paciente['0']->telefone != '') $telefone = $paciente['0']->telefone;
+                                    ?>
+                                    <label>Telefone</label>
+                                    <input type="text" name="cpf" id="cpf" class="form-control texto03" value="<?= @$telefone ?>" readonly/>
+                                </div>
+                            </div>
+                        </div>
                 </fieldset>
-
+                <br/>
+                <div class="alert alert-info">Ficha</div>
                 <fieldset>
                     <table id="table_justa">
                         <thead>
-
                             <tr>
-                                <th class="tabela_header">Empresa*</th>
-                                <th class="tabela_header">Convenio*</th>
-                                <th class="tabela_header">Grupo</th>
-                                <th class="tabela_header">Procedimento*</th>
-                                <th class="tabela_header">Data Preferência</th>
-                                <th class="tabela_header">Horário Preferência</th>
-                                <th class="tabela_header">Qtde*</th>
-                                <th class="tabela_header">V. Unit</th>
-                                <th class="tabela_header">Forma de Pagamento</th>
-                                <th class="tabela_header">V. Ajuste</th>
+<!--                                <th class="tabela_header">Empresa*</th>-->
+<!--                                <th class="tabela_header">Convenio*</th>-->
+<!--                                <th class="tabela_header">Grupo</th>-->
+<!--                                <th class="tabela_header">Procedimento*</th>-->
+<!--                                <th class="tabela_header">Data Preferência</th>-->
+<!--                                <th class="tabela_header">Horário Preferência</th>-->
+<!--                                <th class="tabela_header">Qtde*</th>-->
+<!--                                <th class="tabela_header">V. Unit</th>-->
+<!--                                <th class="tabela_header">Forma de Pagamento</th>-->
+<!--                                <th class="tabela_header">V. Ajuste</th>-->
 <!--                                <th class="tabela_header">Observa&ccedil;&otilde;es</th>-->
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td  width="50px;">
-                                    <select  name="empresa1" id="empresa1" class="size1" required="">
-                                        <option value="">Selecione</option>
-                                        <? 
-                                        $lastEmp = $exames[count($exames) - 1]->empresa_id;
-                                        foreach ($empresasLista as $item) : ?>
-                                            <option <? if ($lastEmp == $item->empresa_id) echo 'selected'; ?> value="<?= $item->empresa_id; ?>"><?= $item->nome; ?></option>
-                                        <? endforeach; ?>
-                                    </select>
-                                </td>
-                                <td  width="50px;">
-                                    <? //echo "<pre>"; var_dump($exames[count($exames) - 1]);die;?>
-                                    <select  name="convenio1" id="convenio1" class="size1" >
-                                        <option value="-1">Selecione</option>
-                                        <?
-                                        $lastConv = $exames[count($exames) - 1]->convenio_id;
-                                        foreach ($convenio as $item) :
-                                            ?>
-                                            <option value="<?= $item->convenio_id; ?>" <? if ($lastConv == $item->convenio_id) echo 'selected'; ?>>
-                                                <?= $item->nome; ?>
-                                            </option>
-                                        <? endforeach; ?>
-                                    </select>
-                                </td>
+                        <form>
+                            <div class="panel-body">
+                                <div class="row">
 
-                                <td width="50px;">
-                                    <select  name="grupo1" id="grupo1" class="size1" >
-                                        <option value="">Selecione</option>
-                                        <?
-                                        $lastGrupo = $exames[count($exames) - 1]->grupo;
-                                        foreach ($grupos as $value) :
-                                            ?>
-                                            <option value="<?= $value->nome; ?>" <? if ($lastGrupo == $value->nome) echo 'selected'; ?>>
-                                                <?= $value->nome; ?>
-                                            </option>
-                                        <? endforeach; ?>
-                                    </select>
-                                </td>
-                                <td  width="50px;">
-
-                                    <select name="procedimento1" id="procedimento1" required class="size4 chosen-select" data-placeholder="Selecione" tabindex="1">
-                                        <option value="">Selecione</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <div class="input-data">
-                                        <input type="text" name="txtdata" id="txtdata" alt="date" class="size1"/>
+                                    <div class="form-group">
+                                        <label class="tabela_header">Empresa*</label>
+                                        <select  name="empresa1" id="empresa1" class="form-control texto03" required="">
+                                            <option value="">Selecione</option>
+                                            <?
+                                            $lastEmp = $exames[count($exames) - 1]->empresa_id;
+                                            foreach ($empresasLista as $item) : ?>
+                                                <option <? if ($lastEmp == $item->empresa_id) echo 'selected'; ?> value="<?= $item->empresa_id; ?>"><?= $item->nome; ?></option>
+                                            <? endforeach; ?>
+                                        </select>
                                     </div>
-                                    <!-- <div class="select-data">
-                                        <select name="txtdata" id="txtdata" class="size1" >
+
+                                    <div class="form-group">
+                                        <label class="tabela_header">Convenio*</label>
+                                        <? //echo "<pre>"; var_dump($exames[count($exames) - 1]);die;?>
+                                        <select  name="convenio1" id="convenio1" class="form-control texto04">
+                                            <option value="-1">Selecione</option>
+                                            <?
+                                            $lastConv = $exames[count($exames) - 1]->convenio_id;
+                                            foreach ($convenio as $item) :
+                                                ?>
+                                                <option value="<?= $item->convenio_id; ?>" <? if ($lastConv == $item->convenio_id) echo 'selected'; ?>>
+                                                    <?= $item->nome; ?>
+                                                </option>
+                                            <? endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="tabela_header">Grupo</label>
+                                        <select  name="grupo1" id="grupo1" class="form-control texto04" >
+                                            <option value="">Selecione</option>
+                                            <?
+                                            $lastGrupo = $exames[count($exames) - 1]->grupo;
+                                            foreach ($grupos as $value) :
+                                                ?>
+                                                <option value="<?= $value->nome; ?>" <? if ($lastGrupo == $value->nome) echo 'selected'; ?>>
+                                                    <?= $value->nome; ?>
+                                                </option>
+                                            <? endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="tabela_header">Procedimento*</label>
+                                        <select name="procedimento1" id="procedimento1" required class="form-control texto05" data-placeholder="Selecione" tabindex="1">
                                             <option value="">Selecione</option>
                                         </select>
-                                    </div> -->
-                                </td>
-                                <td>
-                                    <select name="turno_preferencia" id="turno_preferencia" class="size1" >
-                                        <option value="">Selecione</option>
-                                        <option value="manha" <?if(@$exames[count($exames)-1]->turno_prefencia == "manha") echo 'selected';?>>Manhã</option>
-                                        <option value="tarde" <?if(@$exames[count($exames)-1]->turno_prefencia == "tarde") echo 'selected';?>>Tarde</option>
-                                        <option value="noite" <?if(@$exames[count($exames)-1]->turno_prefencia == "noite") echo 'selected';?>>Noite</option>
-                                    </select>
-                                </td>
-                                <td  width="10px;"><input type="text" name="qtde1" id="qtde1" value="1" class="texto00"/></td>
-                                <td  width="20px;"><input type="text" name="valor1" id="valor1" class="texto01" readonly=""/></td>
-                                <td width="100px;">
-                                    
-                                    <select name="formapamento" id="formapamento" class="size1" >
-                                        <option value="">Selecione</option>
-                                        <? foreach ($forma_pagamento as $item) : ?>
-                                            <option value="<?= $item->forma_pagamento_id; ?>"><?= $item->nome; ?></option>
-                                        <? endforeach; ?>
-                                    </select>
-                                </td>
-                                <td  width="20px;"><input type="text" name="ajustevalor1" id="ajustevalor1" class="texto01" readonly=""/></td>
-                            </tr>
-
-                        </tbody>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="tabela_header">Data Preferência &nbsp</label>
+                                        <div class="input-data">
+                                            <input type="text" name="txtdata" id="txtdata" alt="date" class="form-control texto02"/>
+                                        </div>
+                                        <!-- <div class="select-data">
+                                            <select name="txtdata" id="txtdata" class="size1" >
+                                                <option value="">Selecione</option>
+                                            </select>
+                                        </div> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="tabela_header">Horário Preferência &nbsp</label>
+                                        <select name="turno_preferencia" id="turno_preferencia" class="form-control texto02" >
+                                            <option value="">Selecione</option>
+                                            <option value="manha" <?if(@$exames[count($exames)-1]->turno_prefencia == "manha") echo 'selected';?>>Manhã</option>
+                                            <option value="tarde" <?if(@$exames[count($exames)-1]->turno_prefencia == "tarde") echo 'selected';?>>Tarde</option>
+                                            <option value="noite" <?if(@$exames[count($exames)-1]->turno_prefencia == "noite") echo 'selected';?>>Noite</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="tabela_header">Qtde*</label>
+                                        <input type="text" name="qtde1" id="qtde1" value="1" class="form-control texto01"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="tabela_header">V. Unit &nbsp</label>
+                                        <input type="text" name="valor1" id="valor1" class="form-control texto01" readonly=""/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="tabela_header">Forma de Pagamento</label>
+                                        <select name="formapamento" id="formapamento" class="form-control texto04" >
+                                            <option value="">Selecione</option>
+                                            <? foreach ($forma_pagamento as $item) : ?>
+                                                <option value="<?= $item->forma_pagamento_id; ?>"><?= $item->nome; ?></option>
+                                            <? endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="tabela_header">V. Ajuste</label>
+                                        <input type="text" name="ajustevalor1" id="ajustevalor1" class="form-control texto01" readonly=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
 
                         <tfoot>
                             <tr>
@@ -200,7 +201,7 @@
                         </tfoot>
                     </table> 
                     <hr/>
-                    <button type="submit" name="btnEnviar">Adicionar</button>
+                    <button class="btn btn-success btn-round btn-sm" type="submit" name="btnEnviar">Adicionar</button>
                 </fieldset>
             </form>
             <fieldset>

@@ -1,4 +1,4 @@
-
+<link href="<?= base_url() ?>css/ambulatorio/laudoconsulta-lista.css" rel="stylesheet"/>
 <div class="content"> <!-- Inicio da DIV content -->
     <?
     $salas = $this->exame->listartodassalas();
@@ -12,10 +12,9 @@
     ?>
     <table>
         <tr>
-
-            <td>  
+            <td>
                 <div class="bt_link_new">
-                    <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/agenda/medicoagendaconsulta');">
+                    <a class="btn btn-outline-success btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/agenda/medicoagendaconsulta');">
                         Bloquear Agenda
                     </a>
                 </div>
@@ -25,90 +24,95 @@
     <div id="accordion">
         <h3 class="singular"><a href="#">Manter Consultas</a></h3>
         <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="5" class="tabela_title">
-                            <form method="get" action="<?= base_url() ?>ambulatorio/laudo/pesquisarconsulta">
-                                <tr>
-                                    <th class="tabela_title">Salas</th>
-                                    <th class="tabela_title">Especialidade</th>
-                                    <th class="tabela_title">Medico</th>
-                                    <th class="tabela_title">Status</th>
-                                    <th class="tabela_title">Data</th>
-                                    <th colspan="2" class="tabela_title">Nome</th>
-                                </tr>
-                                <tr>
-                                    <th class="tabela_title">
-                                        <select name="sala" id="sala" class="size1">
-                                            <option value=""></option>
-                                            <? foreach ($salas as $value) : ?>
-                                                <option value="<?= $value->exame_sala_id; ?>" <?
-                                                if (@$_GET['sala'] == $value->exame_sala_id):echo 'selected';
-                                                endif;
-                                                ?>><?php echo $value->nome; ?></option>
-                                                    <? endforeach; ?>
-                                        </select>
-                                    </th>
-                                    <th class="tabela_title">
-                                        <select name="especialidade" id="especialidade" class="size1">
-                                            <option value=""></option>
-                                            <? foreach ($especialidade as $value) : ?>
-                                                <option value="<?= $value->cbo_ocupacao_id; ?>" <?
-                                                if (@$_GET['especialidade'] == $value->cbo_ocupacao_id):echo 'selected';
-                                                endif;
-                                                ?>><?php echo $value->descricao; ?></option>
-                                                    <? endforeach; ?>
-                                        </select>
-                                    </th>
-                                    <th class="tabela_title">
-                                        <select name="medico" id="medico" class="size2">
-                                            <option value=""> </option>
-                                            <? foreach ($medicos as $value) : ?>
-                                                <option value="<?= $value->operador_id; ?>" <?
-                                                if (@$_GET['medico'] == $value->operador_id):echo 'selected';
-                                                endif;
-                                                ?>><?php echo $value->nome; ?></option>
-                                                    <? endforeach; ?>
-                                        </select>
-                                    </th>
-                                    <th class="tabela_title">
-                                        <select name="situacao" id="situacao" class="size1" >
-                                            <option value='' ></option>
-                                            <option value='AGUARDANDO' >AGUARDANDO</option>
-                                            <option value='DIGITANDO' >DIGITANDO</option>
-                                            <option value='FINALIZADO' >FINALIZADO</option>
-                                        </select>
-                                    </th>
-                                    <th class="tabela_title">
-                                        <input type="text"  id="data" name="data" class="size1"  value="<?php echo @$_GET['data']; ?>" />
-                                    </th>
-                                    <th colspan="2" class="tabela_title">
-                                        <input type="text" name="nome" class="texto06 bestupper" value="<?php echo @$_GET['nome']; ?>" />
-                                    </th>
-                                    <th class="tabela_title">
-                                        <button type="submit" id="enviar">Pesquisar</button>
-                                    </th>
-                                </tr>
-                                <tr class="tabela_title">
-                                  <td class="tabela_title">Convênio</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                       <select  style="width:100%" class="chosen-select" name="convenios[]" id="convenios" multiple data-placeholder="Selecione">
-                                               <option value="0" <?= @(in_array("0", $_GET['convenios'])) ? "selected":""; ?> >TODOS</option>
-                                            <?php foreach($convenios as $item){?>
-                                               <option value="<?= $item->convenio_id; ?>" <?= @(in_array($item->convenio_id, $_GET['convenios'])) ? "selected":""; ?> ><?= $item->nome; ?></option>
-                                            <?}?>
-                                        </select>
-                                   </td>
-                                </tr>
-                                
-                            </form>
-                </thead>
-            </table>
+            <form method="get" action="<?= base_url() ?>ambulatorio/laudo/pesquisarconsulta">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Salas</label>
+                                <select name="sala" id="sala" class="form-control">
+                                    <option value=""></option>
+                                    <? foreach ($salas as $value) : ?>
+                                        <option value="<?= $value->exame_sala_id; ?>" <?
+                                        if (@$_GET['sala'] == $value->exame_sala_id):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->nome; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Especialidade</label>
+                                <select name="especialidade" id="especialidade" class="form-control">
+                                    <option value=""></option>
+                                    <? foreach ($especialidade as $value) : ?>
+                                        <option value="<?= $value->cbo_ocupacao_id; ?>" <?
+                                        if (@$_GET['especialidade'] == $value->cbo_ocupacao_id):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->descricao; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Medico</label>
+                                <select name="medico" id="medico" class="form-control">
+                                    <option value=""> </option>
+                                    <? foreach ($medicos as $value) : ?>
+                                        <option value="<?= $value->operador_id; ?>" <?
+                                        if (@$_GET['medico'] == $value->operador_id):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->nome; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Status</label>
+                                <select name="situacao" id="situacao" class="form-control" >
+                                    <option value='' ></option>
+                                    <option value='AGUARDANDO' >AGUARDANDO</option>
+                                    <option value='DIGITANDO' >DIGITANDO</option>
+                                    <option value='FINALIZADO' >FINALIZADO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Data</label>
+                                <input type="date"  id="data" name="data" class="form-control"  value="<?php echo @$_GET['data']; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Nome</label>
+                                <input type="text" name="nome" class="texto07 form-control" value="<?php echo @$_GET['nome']; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Convênio</label>
+                                <select  class="chosen-select form-control" name="convenios[]" id="convenios" multiple data-placeholder="Selecione">
+                                    <option value="0" <?= @(in_array("0", $_GET['convenios'])) ? "selected":""; ?> >TODOS</option>
+                                    <?php foreach($convenios as $item){?>
+                                        <option value="<?= $item->convenio_id; ?>" <?= @(in_array($item->convenio_id, $_GET['convenios'])) ? "selected":""; ?> ><?= $item->nome; ?></option>
+                                    <?}?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 btnsend">
+                                <button class="btn btn-outline-success" type="submit" id="enviar">Pesquisar</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+
             <br>
-            <table>
+        <div class="table-responsive">
+            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                 <thead>
                     <tr>
                         <th class="tabela_header" width="300px;">Nome</th>
@@ -154,10 +158,10 @@
                             <tr>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->paciente; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>" width="30px;"><?= $idade; ?></td>
-                                <td class="<?php echo $estilo_linha; ?>" width="30px;"><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
+                                <td class="<?php echo $estilo_linha; ?>" width="100px;"><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
                                 <td class="<?php echo $estilo_linha; ?>" width="130px;"><?= $item->convenio; ?></td>
-                                <td class="<?php echo $estilo_linha; ?>" width="130px;"><?= substr($item->medico, 0, 18); ?></td>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->situacao; ?></td>
+                                <td class="<?php echo $estilo_linha; ?>" width="200px;"><?= substr($item->medico, 0, 18); ?></td>
+                                <td class="<?php echo $estilo_linha; ?>" width="150px;"><?= $item->situacao; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->procedimento; ?></td>
         <!--                                    <td class="<?php echo $estilo_linha; ?>"><?= $item->medicorevisor; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->situacao_revisor; ?></td>-->
@@ -165,7 +169,7 @@
                                     <?if ($perfil_id != 11 && $perfil_id != 12 && $perfil_id != 7 && $perfil_id != 15){
                                                     ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="40px;"><div class="bt_link">
-                                            <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/carregaranaminese/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?>');" >
+                                            <a class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/carregaranaminese/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?>');" >
                                                 Atender</a></div>
                                     </td>
                                     <? }else{ ?>
@@ -194,19 +198,19 @@
                                 <?if($bloquear_botao == 'f' && $liberarPerfil){?>
                                     <td class="<?php echo $estilo_linha; ?>" width="70px;">
                                         <div class="bt_link">
-                                        <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaolaudo/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>');">
+                                        <a class="btn btn-outline-primary btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/impressaolaudo/<?= $item->ambulatorio_laudo_id ?>/<?= $item->exame_id ?>');">
                                             Imprimir</a>
                                         </div>
                                     </td>
                                 <? } ?>
                                 
                                 <td class="<?php echo $estilo_linha; ?>" width="70px;"><div class="bt_link">
-                                        <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/anexarimagem/<?= $item->ambulatorio_laudo_id ?>');">
+                                        <a class="btn btn-outline-warning btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/laudo/anexarimagem/<?= $item->ambulatorio_laudo_id ?>');">
                                             Arquivos</a></div>
                                 </td>
                                 <? if ($perfil_id == 1) { ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="70px;"><div class="bt_link">
-                                            <a target="_blank" href="<?= base_url() ?>ambulatorio/exame/examecancelamento/<?= $item->exames_id ?>/<?= $item->sala_id ?> /<?= $item->agenda_exames_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?> ">
+                                            <a class="btn btn-outline-danger btn-sm" target="_blank" href="<?= base_url() ?>ambulatorio/exame/examecancelamento/<?= $item->exames_id ?>/<?= $item->sala_id ?> /<?= $item->agenda_exames_id ?>/<?= $item->paciente_id ?>/<?= $item->procedimento_tuss_id ?> ">
                                                 Cancelar
                                             </a></div>
                                     </td>
@@ -219,8 +223,8 @@
                 }
                 ?>
                 <tfoot>
-                    <tr>
-                        <th class="tabela_footer" colspan="12">
+                    <tr class="text-center pag">
+                        <th class="tabela_footer  pagination-container" colspan="12">
                             <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
                             Total de registros: <?php echo $total; ?>
                         </th>
@@ -229,6 +233,7 @@
             </table>
         </div>
     </div>
+</div>
 
 </div> <!-- Final da DIV content -->
 

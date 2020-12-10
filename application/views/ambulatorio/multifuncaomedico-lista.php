@@ -1,4 +1,4 @@
-
+<link href="<?= base_url() ?>css/ambulatorio/multifuncaomedico-lista.css?v=1" rel="stylesheet"/>
 <script>
     // Fazendo a integracao
     $(function () {
@@ -12,40 +12,20 @@
         });
     });
 </script>
-<style>
-.statusbardeira{
-    /* background-color:#000; */
-    /* color:#fff; */
-    display:inline-block;
-    padding: 5px 10px;
-    padding-left:15px;
-    padding-right:15px;
-    text-align:center;
-    border-radius:2px;
-    }
-</style>
 <div class="content"> <!-- Inicio da DIV content -->
     <table>
         <tr>
             <td>
-                <div class="bt_link_new">
-                    <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/mostrarlembretes', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=700');" >
+                <div class="btn-group-sm">
+                    <button class="btn btn-outline-default" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/mostrarlembretes', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=700');" >
                         Lembretes
-                    </a>
-                </div>
-            </td>
-            <td>
-                <div class="bt_link_new">
-                    <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/mostrarpendencias', '_blank', 'width=1600,height=700');" >
+                    </button>
+                    <button class="btn btn-outline-default" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/mostrarpendencias', '_blank', 'width=1600,height=700');" >
                         Ver Pendentes
-                    </a>
-                </div>
-            </td>
-            <td>  
-                <div class="bt_link_new">
-                    <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/agenda/medicoagenda');">
+                    </button>
+                    <button class="btn btn-outline-default" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/agenda/medicoagenda');">
                         Bloquear Agenda
-                    </a>
+                    </button>
                 </div>
             </td>
         </tr>
@@ -78,154 +58,156 @@
             $setor = $this->exame->listarsetores();
             $convenios = $this->convenio->listar()->get()->result();
             ?>
-            <table>
-                <thead>
-                <form method="get" action="<?= base_url() ?>ambulatorio/exame/listarmultifuncaomedico">
 
-                    <tr>
-                        <th class="tabela_title">Salas</th>
-
+            <form method="get" action="<?= base_url() ?>ambulatorio/exame/listarmultifuncaomedico">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Salas</label>
+                                <select name="sala" id="sala" class="form-control">
+                                    <option value=""></option>
+                                    <? foreach ($salas as $value) : ?>
+                                        <option value="<?= $value->exame_sala_id; ?>" <?
+                                        if (@$_GET['sala'] == $value->exame_sala_id):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->nome; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
                         <? if ($perfil_id != 4) { ?>
-                            <th class="tabela_title">Medico</th>
-                        <? } ?>
-                        <th class="tabela_title">Data</th>
-                        <th class="tabela_title">Prontu&aacute;rio</th>
-                        <th colspan="1" class="tabela_title">Nome</th>
-                        <?if($empresa[0]->prontuario_antigo_pesquisar == 't'){?>
-                            <th colspan="1" class="tabela_title">Prontuário Antigo</th>
-                        <?}else{?>
-                            <th colspan="1" class="tabela_title">Procedimento</th>
-                            <th colspan="1" class="tabela_title">Cid</th>
-                        <?}?>
-                        
-                    </tr>
-                    <tr>
-                        <th class="tabela_title">
-                            <select name="sala" id="sala" class="size2">
-                                <option value=""></option>
-                                <? foreach ($salas as $value) : ?>
-                                    <option value="<?= $value->exame_sala_id; ?>" <?
-                                    if (@$_GET['sala'] == $value->exame_sala_id):echo 'selected';
-                                    endif;
-                                    ?>><?php echo $value->nome; ?></option>
-                                        <? endforeach; ?>
-                            </select>
-                        </th>
-                        <? if ($perfil_id != 4) { ?>
-                                                        <!--                            <th class="tabela_title">
-                                                                                        <select name="especialidade" id="especialidade" class="size1">
-                                                                                            <option value=""></option>
-                                                     
-                                                                                        </select>
-                                                                                    </th>-->
-
-
-
-                            <th class="tabela_title">
-                                <select name="medico" id="medico" class="size1">
+                        <div class="col-lg-3">
+                            <div>
+                                <label>Medico</label>
+                                <select name="medico" id="medico" class="form-control">
                                     <option value=""> </option>
                                     <? foreach ($medicos as $value) : ?>
                                         <option value="<?= $value->operador_id; ?>"<?
                                         if (@$_GET['medico'] == $value->operador_id):echo 'selected';
                                         endif;
                                         ?>>
-                                                    <?php echo $value->nome; ?>
+                                            <?php echo $value->nome; ?>
 
                                         </option>
                                     <? endforeach; ?>
 
                                 </select>
-                            </th>
+                            </div>
+                        </div>
                         <? } ?>
-                        <th class="tabela_title">
-                            <input type="text"  id="data" alt="date" name="data" class="size1"  value="<?php echo @$_GET['data']; ?>" />
-                        </th>
-                        <th class="tabela_title">
-                            <input type="text"  id="prontuario" name="prontuario" class="size1"  value="<?php echo @$_GET['prontuario']; ?>" />
-                        </th>
-                        <th colspan="1" class="tabela_title">
-                            <input type="text" name="nome" class="texto03 bestupper" value="<?php echo @$_GET['nome']; ?>" />
-
-                        </th>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Data</label>
+                                <input type="date"  id="data" alt="date" name="data" class="form-control"  value="<?php echo @$_GET['data']; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Prontu&aacute;rio</label>
+                                <input type="text"  id="prontuario" name="prontuario" class="form-control"  value="<?php echo @$_GET['prontuario']; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Nome </label>
+                                <input type="text" name="nome" class="form-control bestupper" value="<?php echo @$_GET['nome']; ?>" />
+                            </div>
+                        </div>
                         <?if($empresa[0]->prontuario_antigo_pesquisar == 't'){?>
-                            <th colspan="1" class="tabela_title">
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Prontuário Antigo</label>
                                 <input type="text" name="prontuario_antigo" class="texto03 bestupper" value="<?php echo @$_GET['prontuario_antigo']; ?>" />
-
-                            </th> 
-                        <?}else{?>
-                            <th colspan="1" class="tabela_title">
-                                <select name="txtprocedimento" id="procedimento" class="size2 chosen-select" tabindex="1">
+                            </div>
+                        </div>
+                        <? } ?>
+                        <div class="col-lg-3">
+                            <div>
+                                <label>Procedimento</label>
+                                <select name="txtprocedimento" id="procedimento" class="chosen-select form-control">
                                     <option value="">Selecione</option>
                                     <? foreach ($procedimento as $value) : ?>
                                         <option value="<?= $value->nome; ?>"<?
                                         if (@$_GET['txtprocedimento'] == $value->nome):echo'selected';
                                         endif;
                                         ?>><?php echo $value->nome; ?></option>
-                                            <? endforeach; ?>
+                                    <? endforeach; ?>
                                 </select>
-                            </th>
-                            <th colspan="1" class="tabela_title">
-                                <input type="text" name="txtCICPrimariolabel" id="txtCICPrimariolabel" class="texto03" value="<?php echo @$_GET['txtCICPrimariolabel']; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Cid</label>
+                                <input type="text" name="txtCICPrimariolabel" id="txtCICPrimariolabel" class="form-control" value="<?php echo @$_GET['txtCICPrimariolabel']; ?>" />
                                 <input type="hidden" name="txtCICPrimario" id="txtCICPrimario" value="" class="size2" />
-                            </th>
-                        <?}?>
-                       
-                        <th colspan="3" class="tabela_title">
-                            <button type="submit" id="enviar">Pesquisar</button>
-                        </th>
-
-                    </tr>
-                    <tr class="tabela_title">
-                        <td class="tabela_title" colspan="2">Convênio</td>
-
-                                <?if($bardeira_status == 't'){?>
-                        <td class="tabela_title">Bardeiras de Status</td>
-                                <?}?>
-
-                                <?if($setores == 't'){?>
-                        <td class="tabela_title">Setores</td>
-                                <?}?>
-                     </tr>
-                     <tr>
-                         <td colspan="2">
-                            <select  style="width:100%" class="chosen-select" name="convenios[]" id="convenios" multiple data-placeholder="Selecione">
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div>
+                                <label>Convênio</label>
+                                <select  class="chosen-select" name="convenios[]" id="convenios" multiple data-placeholder="Selecione">
                                     <option value="0" <?= @(in_array("0", $_GET['convenios'])) ? "selected":""; ?> >TODOS</option>
-                                 <?php foreach($convenios as $item){?>
-                                    <option value="<?= $item->convenio_id; ?>" <?= @(in_array($item->convenio_id, $_GET['convenios'])) ? "selected":""; ?> ><?= $item->nome; ?></option>
-                                 <?}?>
-                             </select>
+                                    <?php foreach($convenios as $item){?>
+                                        <option value="<?= $item->convenio_id; ?>" <?= @(in_array($item->convenio_id, $_GET['convenios'])) ? "selected":""; ?> ><?= $item->nome; ?></option>
+                                    <?}?>
+                                </select>
+                            </div>
+                        </div>
+                        <?if($bardeira_status == 't'){?>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Bardeiras de Status</label>
+                                <select name="bardeirastatus" id="bardeirastatus" class="size2">
+                                    <option value=""></option>
+                                    <? foreach ($bardeiras as $value) : ?>
+                                        <option value="<?= $value->bardeira_id; ?>" <?
+                                        if (@$_GET['bardeirastatus'] == $value->bardeira_id):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->nome; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <? } ?>
+                        <?if($setores == 't'){?>
+                            <div class="col-lg-2">
+                                <div>
+                                    <label>Setores</label>
+                                    <select name="setores" id="setores" class="size2">
+                                        <option value=""></option>
+                                        <? foreach ($setor as $value) : ?>
+                                            <option value="<?= $value->setor_id; ?>" <?
+                                            if (@$_GET['setores'] == $value->setor_id):echo 'selected';
+                                            endif;
+                                            ?>><?php echo $value->nome; ?></option>
+                                        <? endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        <? } ?>
+                        <div class="col-lg-2 btnsend">
+                            <button class="btn btn-outline-success" type="submit" id="enviar">Pesquisar</button>
+                        </div>
+                    </div>
+                </fieldset>
+                         <td colspan="2">
+
                         </td>
                         <?if($bardeira_status == 't'){?>
                         <td class="tabela_title">
-                            <select name="bardeirastatus" id="bardeirastatus" class="size2">
-                                <option value=""></option>
-                                <? foreach ($bardeiras as $value) : ?>
-                                    <option value="<?= $value->bardeira_id; ?>" <?
-                                if (@$_GET['bardeirastatus'] == $value->bardeira_id):echo 'selected';
-                                endif;
-                                    ?>><?php echo $value->nome; ?></option>
-                                        <? endforeach; ?>
-                            </select>
+
                         </td>
                         <?}?>
 
                         <?if($setores == 't'){?>
                         <td class="tabela_title">
-                            <select name="setores" id="setores" class="size2">
-                                <option value=""></option>
-                                <? foreach ($setor as $value) : ?>
-                                    <option value="<?= $value->setor_id; ?>" <?
-                                if (@$_GET['setores'] == $value->setor_id):echo 'selected';
-                                endif;
-                                    ?>><?php echo $value->nome; ?></option>
-                                        <? endforeach; ?>
-                            </select>
+
                         </td>
                         <?}?>
-                    </tr> 
-                </form>
-                </thead>
-            </table>
+                    </tr>
+            </form>
+
             <br>
             <table>
                 <thead>
@@ -825,10 +807,10 @@
                 ?>
                 <tfoot>
                     <tr>
-                        <th class="tabela_footer" colspan="15">
+                        <nav class="pagination justify-content-center">
                             <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
                             <!-- Total de registros: <?php // echo $total;             ?> -->
-                        </th>
+                        </nav>
                     </tr>
                 </tfoot>
             </table>

@@ -1,7 +1,7 @@
-<div class="footer_conteiner">
-    <div class="decoration_footer"></div>
-    <div class="footer">
-        <h2><center>STGSa&uacute;de - Todos os direitos reservados </center></h2>
+<div class="conteiner">
+  <!--  <div class="decoration_footer"></div>
+    <div class="footer navbar-fixed-bottom text-center">
+        <h6>STG Sa&uacute;de - Todos os direitos reservados </h6> -->
         <!-- end .footer -->
     </div>
 </div>
@@ -16,5 +16,3 @@
     // })(jQuery);
 </script>
 
-</body>
-</html>

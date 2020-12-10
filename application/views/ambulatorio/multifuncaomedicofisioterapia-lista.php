@@ -1,3 +1,4 @@
+<link href="<?= base_url() ?>css/ambulatorio/multifuncaomedicofisioterapia-lista.css" rel="stylesheet"/>
 <?
 $this->db->select('o.operador_id,
                     o.profissional_agendar_o');
@@ -23,22 +24,22 @@ $data['permissao'] = $this->empresa->listarverificacaopermisao2($this->session->
             <? if ($profissional_agendar == 't' && $profissional_agendar_o == 't') { ?>
                 <td>
                     <div class="bt_link_new">
-                        <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/novopacientefisioterapiaencaixemedico');">
+                        <button class="bnt btn-outline-default btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/novopacientefisioterapiaencaixemedico');">
                             Encaixar Especialidade
-                        </a>
+                        </button>
                     </div>
                 </td>
             <? } ?>
             <td>
                 <div class="bt_link_new">
-                    <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/mostrarlembretes', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=700');" >
+                    <button class="btn btn-outline-default btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/mostrarlembretes', '_blank', 'toolbar=no,Location=no,menubar=no,width=600,height=700');" >
                         Lembretes
-                    </a>
+                    </button>
                 </div>
             </td>
             <td>
                 <div class="bt_link_new">
-                    <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/mostrarpendencias', '_blank', 'width=1600,height=700');" >
+                    <a class="btn btn-outline-default btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/mostrarpendencias', '_blank', 'width=1600,height=700');" >
                         Ver Pendentes
                     </a>
                 </div>
@@ -47,7 +48,7 @@ $data['permissao'] = $this->empresa->listarverificacaopermisao2($this->session->
         </tr>
     </table>
     <div id="accordion">
-        <h3 class="singular"><a href="#">Multifuncao Especialidade</a></h3>
+        <h3 class="singular">Multifuncao Especialidade</h3>
         <div>
             <?
             $salas = $this->exame->listartodassalas();
@@ -66,112 +67,116 @@ $data['permissao'] = $this->empresa->listarverificacaopermisao2($this->session->
             }
             $convenios = $this->convenio->listar()->get()->result();
             ?>
-            <table>
-                <thead>
-                <form method="get" action="<?= base_url() ?>ambulatorio/exame/listarmultifuncaomedicofisioterapia">
-
-                    <tr>
-                        <th class="tabela_title">Salas</th>
+            <form method="get" action="<?= base_url() ?>ambulatorio/exame/listarmultifuncaomedicofisioterapia">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Salas</label>
+                                <select name="sala" id="sala" class="form-control">
+                                    <option value=""></option>
+                                    <? foreach ($salas as $value) : ?>
+                                        <option value="<?= $value->exame_sala_id; ?>" <?
+                                        if (@$_GET['sala'] == $value->exame_sala_id):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->nome; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
                         <? if ($perfil_id != 4) { ?>
-                            <th class="tabela_title">Medico</th>
-                        <? } ?>
-                        <th class="tabela_title">Situação</th>
-                        <th class="tabela_title">Data</th>
-                        <th colspan="1" class="tabela_title">Nome</th>
-                        <th colspan="1" class="tabela_title">Procedimento</th>
-                        <th colspan="1" class="tabela_title">Cid</th>
-                    </tr>
-                    <tr>
-                        <th class="tabela_title">
-                            <select name="sala" id="sala" class="size2">
-                                <option value=""></option>
-                                <? foreach ($salas as $value) : ?>
-                                    <option value="<?= $value->exame_sala_id; ?>" <?
-                                    if (@$_GET['sala'] == $value->exame_sala_id):echo 'selected';
-                                    endif;
-                                    ?>><?php echo $value->nome; ?></option>
-                                        <? endforeach; ?>
-                            </select>
-                        </th>
-                        <? if ($perfil_id != 4) { ?>
-
-
-
-                            <th class="tabela_title">
-                                <select name="medico" id="medico" class="size1">
+                        <div class="col-lg-3">
+                            <div>
+                                <label>Médico</label>
+                                <select name="medico" id="medico" class="form-control">
                                     <option value=""> </option>
                                     <? foreach ($medicos as $value) : ?>
                                         <option value="<?= $value->operador_id; ?>"<?
                                         if (@$_GET['medico'] == $value->operador_id):echo 'selected';
                                         endif;
                                         ?>>
-                                                    <?php echo $value->nome; ?>
+                                            <?php echo $value->nome; ?>
 
                                         </option>
                                     <? endforeach; ?>
 
                                 </select>
-                            </th>
+                            </div>
+                        </div>
                         <? } ?>
-                        <th class="tabela_title">
-                            <select name="situacao" id="situacao" class="size1">
-                                <option value=""></option>
-                                <option value="BLOQUEADO" <?
-                                if (@$_GET['situacao'] == "BLOQUEADO") {
-                                    echo 'selected';
-                                }
-                                ?>>BLOQUEADO</option>
-                                <option value="FALTOU" <?
-                                if (@$_GET['situacao'] == "FALTOU") {
-                                    echo 'selected';
-                                }
-                                ?>>FALTOU</option>
-                                <option value="OK" <?
-                                if (@$_GET['situacao'] == "OK") {
-                                    echo 'selected';
-                                }
-                                ?>>OCUPADO</option>
-                                <option value="LIVRE" <?
-                                if (@$_GET['situacao'] == "LIVRE") {
-                                    echo 'selected';
-                                }
-                                ?>>VAGO</option>
-                            </select>
-                        </th>
-                        <th class="tabela_title">
-                            <input type="text"  id="data" alt="date" name="data" class="size1"  value="<?php echo @$_GET['data']; ?>" />
-                        </th>
-                        <th colspan="1" class="tabela_title">
-                            <input type="text" name="nome" class="texto03 bestupper" value="<?php echo @$_GET['nome']; ?>" />
-                        </th>
-                        <th colspan="1" class="tabela_title">
-                            <input type="text" name="txtprocedimento" class="texto03 bestupper" value="<?php echo @$_GET['txtprocedimento']; ?>" />
-                        </th>
-                        <th colspan="1" class="tabela_title">
-                            <input type="text" name="txtCICPrimariolabel" id="txtCICPrimariolabel" class="texto03" value="<?php echo @$_GET['txtCICPrimariolabel']; ?>" />
-                            <input type="hidden" name="txtCICPrimario" id="txtCICPrimario" value="" class="size2" />
-                        </th>
-                        <th colspan="3" class="tabela_title">
-                            <button type="submit" id="enviar">Pesquisar</button>
-                        </th>
-
-                    </tr>
-                    <tr class="tabela_title">
-                        <td class="tabela_title">Convênio</td>
-                     </tr>
-                     <tr>
-                         <td colspan="2">
-                            <select  style="width:100%" class="chosen-select" name="convenios[]" id="convenios" multiple data-placeholder="Selecione">
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Situação</label>
+                                <select name="situacao" id="situacao" class="form-control">
+                                    <option value=""></option>
+                                    <option value="BLOQUEADO" <?
+                                    if (@$_GET['situacao'] == "BLOQUEADO") {
+                                        echo 'selected';
+                                    }
+                                    ?>>BLOQUEADO</option>
+                                    <option value="FALTOU" <?
+                                    if (@$_GET['situacao'] == "FALTOU") {
+                                        echo 'selected';
+                                    }
+                                    ?>>FALTOU</option>
+                                    <option value="OK" <?
+                                    if (@$_GET['situacao'] == "OK") {
+                                        echo 'selected';
+                                    }
+                                    ?>>OCUPADO</option>
+                                    <option value="LIVRE" <?
+                                    if (@$_GET['situacao'] == "LIVRE") {
+                                        echo 'selected';
+                                    }
+                                    ?>>VAGO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Data</label>
+                                <input type="date"  id="data" alt="date" name="data" class="form-control"  value="<?php echo @$_GET['data']; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div>
+                                <label>Nome</label>
+                                <input type="text" name="nome" class="form-control bestupper" value="<?php echo @$_GET['nome']; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Procedimento</label>
+                                <input type="text" name="txtprocedimento" class="form-control texto03 bestupper" value="<?php echo @$_GET['txtprocedimento']; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Cid</label>
+                                <input type="text" name="txtCICPrimariolabel" id="txtCICPrimariolabel" class="form-control texto03" value="<?php echo @$_GET['txtCICPrimariolabel']; ?>" />
+                                <input type="hidden" name="txtCICPrimario" id="txtCICPrimario" value="" class="form-control size2" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Convênio</label>
+                                <select  style="width:100%" class="chosen-select form-control" name="convenios[]" id="convenios" multiple data-placeholder="Selecione">
                                     <option value="0" <?= @(in_array("0", $_GET['convenios'])) ? "selected":""; ?> >TODOS</option>
-                                 <?php foreach($convenios as $item){?>
-                                    <option value="<?= $item->convenio_id; ?>" <?= @(in_array($item->convenio_id, $_GET['convenios'])) ? "selected":""; ?> ><?= $item->nome; ?></option>
-                                 <?}?>
-                             </select>
-                        </td>
-                    </tr>
-                </form>
-                </thead>
-            </table>
+                                    <?php foreach($convenios as $item){?>
+                                        <option value="<?= $item->convenio_id; ?>" <?= @(in_array($item->convenio_id, $_GET['convenios'])) ? "selected":""; ?> ><?= $item->nome; ?></option>
+                                    <?}?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 btnsend">
+                            <div>
+                                <button class="btn btn-outline-success btn-sm" type="submit" id="enviar">Pesquisar</button>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+
             <br>
             <table>
                 <thead>

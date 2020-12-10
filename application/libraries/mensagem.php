@@ -11,19 +11,19 @@ class Mensagem {
                 return "Sucesso ao efetuar o login.";
                 break;
             case 'login002':
-                return "Usuário ou senha não validos ou usuário inativo.";
+                return "Usu&aacute;rio ou senha n&atilde;o validados ou usu&aacute;rio inativo.";
                 break;
             case 'login003':
                 return "Sucesso ao sair do sistema.";
                 break;
             case 'login004':
-                return "Usuário não autenticado.";
+                return "Usu&aacute;rio n&atilde;o autenticado.";
                 break;
             case 'login005':
-                return "Usuário não possui permissão de acesso a esse procedimento.";
+                return "Usu&aacute;rio n&atilde;o possui permiss&atilde;o de acesso a esse procedimento.";
                 break;
             case 'login006':
-                return "Navegador não suportado. Utilize o Firefox.";
+                return "Navegador n&atilde;o suportado. Utilize o Firefox.";
                 break;
 //            case 'servidor001':
 //                return "Sucesso ao gravar o servidor.";

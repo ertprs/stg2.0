@@ -14,9 +14,9 @@ if (count($_GET) > 0) {
 ?>
 <div class="content"> <!-- Inicio da DIV content -->
     <div class="bt_link_new">
-        <a href="<?php echo base_url() ?>cadastros/contasreceber/carregar/0/<?=@$empresa_form_id ?>/<?=@$url?>">
+        <button class="btn btn-outline-primary btn-round btn-sm" href="<?php echo base_url() ?>cadastros/contasreceber/carregar/0/<?=@$empresa_form_id ?>/<?=@$url?>">
             Nova Conta
-        </a>
+        </button>
     </div>
     <?
     $classe = $this->classe->listarclasse();
@@ -39,116 +39,129 @@ if (count($_GET) > 0) {
     }
     ?>
     <div id="accordion">
-        <h3 class="singular"><a href="#">Manter Contas a Receber</a></h3>
+        <div class="alert alert-info"><b>Manter Contas a Receber</b></div>
         <div>
-            <table>
-                <thead>
-                <form method="get" action="<?= base_url() ?>cadastros/contasreceber/pesquisar">
-                    <tr>
-                        <?if($id_financeiro == 't'){?>
-                            <th class="tabela_title">ID</th>  
-                        <?}?>
-                        <th class="tabela_title">Empresa</th>
-                        <th class="tabela_title">Conta</th>
-                        <th class="tabela_title">Data Inicio</th>
-                        <th class="tabela_title">Data Fim</th>
-                        <th class="tabela_title">Tipo</th>
-                        <th class="tabela_title">Classe</th>
-                        <th class="tabela_title">Credor/Devedor</th>
-                        <th class="tabela_title">Observacao</th>
-                    </tr>
+            <form method="get" action="<?= base_url() ?>cadastros/contasreceber/pesquisar">
+                <fieldset>
 
-                    <tr>
-                        <?if($id_financeiro == 't'){?>
-                            <th class="tabela_title">
-                                <input type="number"  id="idfinanceiro"  name="idfinanceiro" class="texto01"  value="<?php echo @$_GET['idfinanceiro']; ?>" />
-                            </th>
-                        <?}?>
-                        <th class="tabela_title">
-                            <select name="txtempresa" id="txtempresa" class="size1" onchange="atualizaRestultados(this.value)">
-                                <option value="0">TODOS</option>
-                                <? foreach ($empresas as $value) : ?>
-                                    <option value="<?= $value->empresa_id; ?>" <?
-                                    if (@$_GET['txtempresa'] == $value->empresa_id || ($empresa_id == $value->empresa_id && @$_GET['txtempresa'] == '')):echo 'selected';
-                                    endif;
-                                    ?>><?php echo $value->nome; ?></option>
-                                        <? endforeach; ?>
-                            </select>
-                        </th>
-                        <th class="tabela_title">
-                            <select name="conta" id="conta" class="size2">
-                                <option value="">TODAS</option>
-                                <? foreach ($conta as $value) : ?>
-                                    <option value="<?= $value->forma_entradas_saida_id; ?>" <?
-                                    if (@$_GET['conta'] == $value->forma_entradas_saida_id):echo 'selected';
-                                    endif;
-                                    ?>><?php echo $value->descricao; ?></option>
-                                        <? endforeach; ?>
-                            </select>
-                        </th>
-                        <th class="tabela_title">
-                            <? if (isset($_GET['datainicio'])) { ?>
-                                <input type="text"  id="datainicio" alt="date" name="datainicio" class="size1"  value="<?php echo @$_GET['datainicio']; ?>" />
-                            <? } else { ?>
-    <!--                                <input type="text"  id="datainicio" alt="date" name="datainicio" class="size1"  value="<?php echo @date('01/m/Y'); ?>" /> -->
-                                <input type="text"  id="datainicio" alt="date" name="datainicio" class="size1"  value="<?php echo @$_GET['datainicio']; ?>" />
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div>
+                                <?if($id_financeiro == 't'){?>
+                                    <label>ID</label>
+                                    <input type="number"  id="idfinanceiro"  name="idfinanceiro" class="texto01"  value="<?php echo @$_GET['idfinanceiro']; ?>" />
+                                <?}?>
+                            </div>
+                            <div>
+                                <?if($id_financeiro == 't'){?>
+                                    <label class="tabela_title">ID Contas Receber</label>
+                                    <input type="number"  id="idcontasreceber"  name="idcontasreceber" class="texto01"  value="<?php echo @$_GET['idcontasreceber']; ?>" />
+                                <?}?>
+                            </div>
+                            <div>
+                                <label class="tabela_title">Empresa</label>
+                                <select name="txtempresa" id="txtempresa" class="form-control" onchange="atualizaRestultados(this.value)">
+                                    <option value="0">TODOS</option>
+                                    <? foreach ($empresas as $value) : ?>
+                                        <option value="<?= $value->empresa_id; ?>" <?
+                                        if (@$_GET['txtempresa'] == $value->empresa_id || ($empresa_id == $value->empresa_id && @$_GET['txtempresa'] == '')):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->nome; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="tabela_title">Classe</label>
+                                <select name="nome_classe" id="nome_classe" class="form-control">
+                                    <option value="">TODOS</option>
+                                    <? foreach ($classe as $value) : ?>
+                                        <option value="<?= $value->descricao; ?>" <?
+                                        if (@$_GET['nome_classe'] == $value->descricao):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->descricao; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label class="tabela_title">Conta</label>
+                                <select name="conta" id="conta" class="form-control">
+                                    <option value="">TODAS</option>
+                                    <? foreach ($conta as $value) : ?>
+                                        <option value="<?= $value->forma_entradas_saida_id; ?>" <?
+                                        if (@$_GET['conta'] == $value->forma_entradas_saida_id):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->descricao; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="tabela_title">Credor/Devedor</label>
+                                <select name="empresa" id="empresa" class="form-control">
+                                    <option value="">TODOS</option>
+                                    <? foreach ($credores as $value) : ?>
+                                        <option value="<?= $value->financeiro_credor_devedor_id; ?>" <?
+                                        if (@$_GET['empresa'] == $value->financeiro_credor_devedor_id):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->razao_social; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label class="tabela_title">Data Inicio</label>
+                                <? if (isset($_GET['datainicio'])) { ?>
+                                    <input type="text"  id="datainicio" alt="date" name="datainicio" class="form-control"  value="<?php echo @$_GET['datainicio']; ?>" />
+                                <? } else { ?>
+                                    <!--                                <input type="text"  id="datainicio" alt="date" name="datainicio" class="size1"  value="<?php echo @date('01/m/Y'); ?>" /> -->
+                                    <input type="text"  id="datainicio" alt="date" name="datainicio" class="form-control"  value="<?php echo @$_GET['datainicio']; ?>" />
 
-                            <? } ?>
-                        </th>
-                        <th class="tabela_title">
-                            <? if (isset($_GET['datafim'])) { ?>
-                                <input type="text"  id="datafim" alt="date" name="datafim" class="size1"  value="<?php echo @$_GET['datafim']; ?>" />
-                            <? } else { ?>
-    <!--                                <input type="text"  id="datafim" alt="date" name="datafim" class="size1"  value="<?php echo @date('t/m/Y'); ?>" /> -->
-                                <input type="text"  id="datafim" alt="date" name="datafim" class="size1"  value="<?php echo @$_GET['datafim']; ?>" />
+                                <? } ?>
+                            </div>
+                            <div>
+                                <label class="tabela_title">Observacao</label>
+                                <input type="text"  id="obs" name="obs" class="size2"  value="<?php echo @$_GET['obs']; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label class="tabela_title">Data Fim</label>
 
-                            <? } ?>
-                        </th>
-                        <th class="tabela_title">
-                            <select name="nome" id="nome" class="size2">
-                                <option value="">TODOS</option>
-                                <? foreach ($tipo as $value) : ?>
-                                    <option value="<?= $value->tipo_entradas_saida_id; ?>" <?
-                                    if (@$_GET['nome'] == $value->tipo_entradas_saida_id):echo 'selected';
-                                    endif;
-                                    ?>><?php echo $value->descricao; ?></option>
-                                        <? endforeach; ?>
-                            </select>
-                        </th>
-                        <th class="tabela_title">
-                            <select name="nome_classe" id="nome_classe" class="size2">
-                                <option value="">TODOS</option>
-                                <? foreach ($classe as $value) : ?>
-                                    <option value="<?= $value->descricao; ?>" <?
-                                    if (@$_GET['nome_classe'] == $value->descricao):echo 'selected';
-                                    endif;
-                                    ?>><?php echo $value->descricao; ?></option>
-                                        <? endforeach; ?>
-                            </select>
-                        </th>
-                        <th class="tabela_title">
-                            <select name="empresa" id="empresa" class="size1">
-                                <option value="">TODOS</option>
-                                <? foreach ($credores as $value) : ?>
-                                    <option value="<?= $value->financeiro_credor_devedor_id; ?>" <?
-                                    if (@$_GET['empresa'] == $value->financeiro_credor_devedor_id):echo 'selected';
-                                    endif;
-                                    ?>><?php echo $value->razao_social; ?></option>
-                                        <? endforeach; ?>
-                            </select>
-                        </th>
-                        <th class="tabela_title">
-                            <input type="text"  id="obs" name="obs" class="size2"  value="<?php echo @$_GET['obs']; ?>" />
-                        </th>
-                        <th>
-                            <button type="submit" id="enviar">Pesquisar</button>
-                        </th>
-                </form>
-                </tr>
+                                <? if (isset($_GET['datafim'])) { ?>
+                                    <input type="text"  id="datafim" alt="date" name="datafim" class="form-control"  value="<?php echo @$_GET['datafim']; ?>" />
+                                <? } else { ?>
+                                    <input type="text"  id="datafim" alt="date" name="datafim" class="form-control"  value="<?php echo @date('t/m/Y'); ?>" />
+                                    <input type="text"  id="datafim" alt="date" name="datafim" class="form-control"  value="<?php echo @$_GET['datafim']; ?>" />
 
-                </thead>
-            </table>
-            <table>
+                                <? } ?>
+                            </div>
+                            <div>
+                                <br>
+                                <button type="submit" id="enviar" class=" btn btn-outline-success btn-round form-control">Pesquisar</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label class="tabela_title">Tipo</label>
+                                <select name="nome" id="nome" class="form-control texto08">
+                                    <option value="">TODOS</option>
+                                    <? foreach ($tipo as $value) : ?>
+                                        <option value="<?= $value->tipo_entradas_saida_id; ?>" <?
+                                        if (@$_GET['nome'] == $value->tipo_entradas_saida_id):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->descricao; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+
+
+                </fieldset>
+            </form>
+        <div class="table-responsive">
+            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                 <tr>
                     <th class="tabela_title" colspan="6">Saldo em Caixa:  <?= number_format($saldo[0]->sum, 2, ",", ".") ?></th>
                 </tr>
@@ -275,7 +288,7 @@ if (count($_GET) > 0) {
                     </tr>
                 </tfoot>
             </table>
-
+        </div>
             <br>
             <br>
             <table>

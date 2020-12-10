@@ -1,36 +1,57 @@
-
+<link href="<?= base_url() ?>css/cadastro/fornecedor-lista.css" rel="stylesheet"/>
 <div class="content"> <!-- Inicio da DIV content -->
     <div class="bt_link_new">
-        <a href="<?php echo base_url() ?>cadastros/fornecedor/carregarfornecedor/0">
+        <button class="btn btn-outline-primary btn-round btn-sm" href="<?php echo base_url() ?>cadastros/fornecedor/carregarfornecedor/0">
             Novo Credor/Devedor
-        </a>
+        </button>
     </div>
     <div id="accordion">
-        <h3 class="singular"><a href="#">Manter Credor/Devedor</a></h3>
-        <div>
+        <h3 class="singular"><b>Manter Credor/Devedor</b></h3>
+        <div class="table-responsive">
             
             <form method="get" action="<?= base_url() ?>cadastros/fornecedor/pesquisar">
-                <table>
+                <fieldset><br>
+                    <div class="row">
+                        <div class="nome">
+                            <label>Nome</label>
+                            <input type="text" name="nome" class="form-control texto10" value="<?php echo @$_GET['nome']; ?>" />
+                        </div>
+                        <div class="status">
+                            <label colspan="2" class="tabela_title">Status</label>
+                            <select name="ativo" id="" class="form-control texto04">
+                                <option value="t" <? if(@$_GET['ativo'] != 'f') echo 'selected'; ?>>Ativo</option>
+                                <option value="f" <? if(@$_GET['ativo'] == 'f') echo 'selected'; ?>>Inativo</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-success button1" type="submit" id="enviar">Pesquisar</button>
+                        </div>
+
+                    </div>
+
+                </fieldset>
+                <br/>
+                <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
-                        <tr>
-                            <th colspan="2" class="tabela_title">Nome</th>
-                            <th colspan="" class="tabela_title">Status</th>
-                            <th colspan="" class="tabela_title"></th>
-                        </tr>
-                        <tr>
-                            <th colspan="2" class="tabela_title">
-                                <input type="text" name="nome" class="texto10" value="<?php echo @$_GET['nome']; ?>" />
-                            </th>
-                            <th colspan="" class="tabela_title">
-                                <select name="ativo" id="">
-                                    <option value="t" <? if(@$_GET['ativo'] != 'f') echo 'selected'; ?>>Ativo</option>
-                                    <option value="f" <? if(@$_GET['ativo'] == 'f') echo 'selected'; ?>>Inativo</option>
-                                </select>
-                            </th>
-                            <th colspan="" class="tabela_title">
-                                <button type="submit" id="enviar">Pesquisar</button>
-                            </th>
-                        </tr>
+<!--                        <tr>-->
+<!--                            <th colspan="2" class="tabela_title">Nome</th>-->
+<!--                            <th colspan="2" class="tabela_title">Status</th>-->
+<!--                            <th colspan="0" class="tabela_title"></th>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <th colspan="2" class="tabela_title">-->
+<!--                                <input type="text" name="nome" class="texto10" value="--><?php //echo @$_GET['nome']; ?><!--" />-->
+<!--                            </th>-->
+<!--                            <th colspan="" class="tabela_title">-->
+<!--                                <select name="ativo" id="">-->
+<!--                                    <option value="t" --><?// if(@$_GET['ativo'] != 'f') echo 'selected'; ?> <!-- >Ativo</option>-->
+<!--                                    <option value="f" --><?// if(@$_GET['ativo'] == 'f') echo 'selected'; ?><!-- >Inativo</option>-->
+<!--                                </select>-->
+<!--                            </th>-->
+<!--                            <th colspan="" class="tabela_title">-->
+<!--                                <button type="submit" id="enviar">Pesquisar</button>-->
+<!--                            </th>-->
+<!--                        </tr>-->
                         <tr>
                             <th class="tabela_header">Nome</th>
                             <th class="tabela_header">CNPJ</th>
@@ -66,13 +87,13 @@
                                     <td class="<?php echo $estilo_linha; ?>"><?= $item->telefone; ?></td>
                                     <? if($item->ativo == 't') { ?>
                                         <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
-                                            <a href="<?= base_url() ?>cadastros/fornecedor/carregarfornecedor/<?= $item->financeiro_credor_devedor_id ?>" target="_blank">Editar</a>
+                                            <button class="btn btn-outline-default btn-sm" href="<?= base_url() ?>cadastros/fornecedor/carregarfornecedor/<?= $item->financeiro_credor_devedor_id ?>" target="_blank">Editar</button>
                                         </td>
                                         <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
-                                            <a href="<?= base_url() ?>cadastros/fornecedor/unificarcredordevedor/<?= $item->financeiro_credor_devedor_id ?>" target="_blank">Unificar</a>
+                                            <button class="btn btn-outline-primary btn-sm" href="<?= base_url() ?>cadastros/fornecedor/unificarcredordevedor/<?= $item->financeiro_credor_devedor_id ?>" target="_blank">Unificar</button>
                                         </td>
                                         <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
-                                            <a href="#" onclick="verificaDependenciasFornecedor(<?= $item->financeiro_credor_devedor_id ?>)">Excluir</a>
+                                            <button class="btn btn-outline-danger btn-sm" href="#" onclick="verificaDependenciasFornecedor(<?= $item->financeiro_credor_devedor_id ?>)">Excluir</button>
                                         </td>
                                     <? } else { ?>
                                         <td colspan="2" class="<?php echo $estilo_linha; ?>" width="70px;">                                  

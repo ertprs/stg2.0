@@ -119,7 +119,7 @@
 <script type="text/javascript" type="<?= base_url() ?>bootstrap/vendor/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>bootstrap/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>bootstrap/vendor/metisMenu/metisMenu.min.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>bootstrap/dist/js/sb-admin-2.js"></script>
+<!--<script type="text/javascript" src="--><?//= base_url() ?><!--bootstrap/dist/js/sb-admin-2.js"></script>-->
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.maskedinput.js"></script>
 <script src="<?= base_url() ?>bootstrap/vendor/alert/dist/sweetalert.min.js"></script> 

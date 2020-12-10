@@ -13,6 +13,323 @@ class Utilitario {
         }
     }
 
+    function validateDate($date, $format = 'd-m-Y') {
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) == $date;
+    }
+
+    function array_to_xml( $data, &$xml_data ) {
+        foreach( $data as $key => $value ) {
+            if( is_numeric($key) ){
+                $key = 'item'.$key; //dealing with <0/>..<n/> issues
+            }
+            if( is_array($value) ) {
+                $subnode = $xml_data->addChild($key);
+                $this->array_to_xml($value, $subnode);
+            } else {
+                $xml_data->addChild("$key",htmlspecialchars("$value"));
+            }
+         }
+    }
+
+    function convertXMLToArray($caminho){
+        $xml_imp = file_get_contents(base_url() . $caminho);
+        $xmlString = $xml_imp;
+        $xml = simplexml_load_string($xmlString);
+        $arrayData = $this->xmlToArray($xml);
+        // echo "<pre>";
+        // print_r($arrayData);
+        // echo '<pre>';
+        // var_dump($arrayData); die;
+        return $arrayData;
+    }
+
+    function xmlToArray($xml, $options = array()) {
+        $defaults = array(
+            'namespaceSeparator' => ':', // você pode querer que isso seja algo diferente de um cólon
+            'attributePrefix' => '@',    // para distinguir entre os nós e os atributos com o mesmo nome
+            'alwaysArray' => array(),    // array de tags que devem sempre ser array
+            'autoArray' => true,         // só criar arrays para as tags que aparecem mais de uma vez
+            'textContent' => '$',        // chave utilizada para o conteúdo do texto de elementos
+            'autoText' => true,          // pular chave "textContent" se o nó não tem atributos ou nós filho
+            'keySearch' => false,        // pesquisa opcional e substituir na tag e nomes de atributos
+            'keyReplace' => false        // substituir valores por valores acima de busca
+        );
+        $options = array_merge($defaults, $options);
+        $namespaces = $xml->getDocNamespaces();
+        $namespaces[''] = null; // adiciona namespace base(vazio) 
+    
+        // Obtém os atributos de todos os namespaces
+        $attributesArray = array();
+        foreach ($namespaces as $prefix => $namespace) {
+            foreach ($xml->attributes($namespace) as $attributeName => $attribute) {
+                // Substituir caracteres no nome do atributo
+                if ($options['keySearch']) $attributeName =
+                        str_replace($options['keySearch'], $options['keyReplace'], $attributeName);
+                $attributeKey = $options['attributePrefix']
+                        . ($prefix ? $prefix . $options['namespaceSeparator'] : '')
+                        . $attributeName;
+                $attributesArray[$attributeKey] = (string)$attribute;
+            }
+        }
+    
+        // Obtém nós filhos de todos os namespaces
+        $tagsArray = array();
+        foreach ($namespaces as $prefix => $namespace) {
+            foreach ($xml->children($namespace) as $childXml) {
+                // Recursividade em nós filho
+                $childArray = $this->xmlToArray($childXml, $options);
+                list($childTagName, $childProperties) = each($childArray);
+    
+                // Substituir caracteres no nome da tag
+                if ($options['keySearch']) $childTagName =
+                        str_replace($options['keySearch'], $options['keyReplace'], $childTagName);
+                // Adiciona um prefixo namespace, se houver
+                if ($prefix) $childTagName = $prefix . $options['namespaceSeparator'] . $childTagName;
+    
+                if (!isset($tagsArray[$childTagName])) {
+                    // Só entra com esta chave
+                    // Testa se as tags deste tipo deve ser sempre matrizes, não importa a contagem de elementos
+                    $tagsArray[$childTagName] =
+                            in_array($childTagName, $options['alwaysArray']) || !$options['autoArray']
+                            ? array($childProperties) : $childProperties;
+                } elseif (
+                    is_array($tagsArray[$childTagName]) && array_keys($tagsArray[$childTagName])
+                    === range(0, count($tagsArray[$childTagName]) - 1)
+                ) {
+                    $tagsArray[$childTagName][] = $childProperties;
+                } else {
+                    $tagsArray[$childTagName] = array($tagsArray[$childTagName], $childProperties);
+                }
+            }
+        }
+    
+        // Obtém o texto do nó
+        $textContentArray = array();
+        $plainText = trim((string)$xml);
+        if ($plainText !== '') $textContentArray[$options['textContent']] = $plainText;
+    
+        $propertiesArray = !$options['autoText'] || $attributesArray || $tagsArray || ($plainText === '')
+                ? array_merge($attributesArray, $tagsArray, $textContentArray) : $plainText;
+    
+        // Retorna o nó como array
+        return array(
+            $xml->getName() => $propertiesArray
+        );
+    }
+    
+    function retornarNomeMes($mes_number) {
+        if ($mes_number == '01') {
+            $mes = 'Janeiro';
+        } elseif ($mes_number == '02') {
+            $mes = 'Fevereiro';
+        } 
+        elseif ($mes_number == '03') {
+            $mes = 'Março';
+        } 
+        elseif ($mes_number == '04') {
+            $mes = 'Abril';
+        } 
+        elseif ($mes_number == '05') {
+            $mes = 'Maio';
+        } elseif ($mes_number == '06') {
+            $mes = 'Junho';
+        } elseif ($mes_number == '07') {
+            $mes = 'Julho';
+        } elseif ($mes_number == '08') {
+            $mes = 'Agosto';
+        } elseif ($mes_number == '09') {
+            $mes = 'Setembro';
+        } elseif ($mes_number == '10') {
+            $mes = 'Outubro';
+        } elseif ($mes_number == '11') {
+            $mes = 'Novembro';
+        } elseif ($mes_number == '12') {
+            $mes = 'Dezembro';
+        } else {
+            $mes = '';
+        }
+
+        return $mes;
+    }
+
+    function retornarNomeMesINT($mes_number) {
+        if ($mes_number == 1) {
+            $mes = 'Jan';
+        } elseif ($mes_number == 2) {
+            $mes = 'Fev';
+        } elseif ($mes_number == 3) {
+            $mes = 'Mar';
+        } elseif ($mes_number == 4) {
+            $mes = 'Abr';
+        } elseif ($mes_number == 5) {
+            $mes = 'Mai';
+        } elseif ($mes_number == 6) {
+            $mes = 'Jun';
+        } elseif ($mes_number == 7) {
+            $mes = 'Jul';
+        } elseif ($mes_number == 8) {
+            $mes = 'Ago';
+        } elseif ($mes_number == 9) {
+            $mes = 'Set';
+        } elseif ($mes_number == 10) {
+            $mes = 'Out';
+        } elseif ($mes_number == 11) {
+            $mes = 'Nov';
+        } elseif ($mes_number == 12) {
+            $mes = 'Dez';
+        } else {
+            $mes = '';
+        }
+
+        return $mes;
+    }
+
+    function ProporcaoMensal($mes_atual){
+        $ano_m = 12;
+        $contador = 0;
+        $calculo = $contador * $ano_m;
+        while($calculo < $mes_atual && $mes_atual > 12){
+            $contador++;
+            $calculo = $contador * $ano_m;
+        }
+        if($contador > 0){
+            $contador --;
+        }
+        $calculo = $contador * $ano_m;
+        // var_dump($calculo); die;
+
+        return $mes_atual - $contador * $ano_m;
+
+
+    }
+
+    function removerCaracter($string) {
+        $string = preg_replace("/[áàâãä]/", "a", $string);
+        $string = preg_replace("/[ÁÀÂÃÄ]/", "A", $string);
+        $string = preg_replace("/[éèê]/", "e", $string);
+        $string = preg_replace("/[ÉÈÊ]/", "E", $string);
+        $string = preg_replace("/[íì]/", "i", $string);
+        $string = preg_replace("/[ÍÌ]/", "I", $string);
+        $string = preg_replace("/[óòôõö]/", "o", $string);
+        $string = preg_replace("/[ÓÒÔÕÖ]/", "O", $string);
+        $string = preg_replace("/[úùü]/", "u", $string);
+        $string = preg_replace("/[ÚÙÜ]/", "U", $string);
+        $string = preg_replace("/ç/", "c", $string);
+        $string = preg_replace("/Ç/", "C", $string);
+        $string = preg_replace("/[][><}{)(:;,!?*%~^`@\.-]/", "", $string);
+        $string = str_replace(" ", "", $string);
+        $string = str_replace("+", "", $string);
+        return $string;
+    }
+
+    function removerCaracterEsp($string) {
+        return preg_replace(array("/(á|à|ã|â|ä)/", "/(Á|À|Ã|Â|Ä)/", "/(é|è|ê|ë)/", "/(É|È|Ê|Ë)/", "/(í|ì|î|ï)/", "/(Í|Ì|Î|Ï)/", "/(ó|ò|õ|ô|ö)/", "/(Ó|Ò|Õ|Ô|Ö)/", "/(ú|ù|û|ü)/", "/(Ú|Ù|Û|Ü)/", "/(ñ)/", "/(Ñ)/"), explode(" ", "a A e E i I o O u U n N"), $string);
+    }
+    function removeCharacter($string) {
+        return preg_replace("/[^a-zA-Z0-9]+/", "", $string);
+    }
+
+    function validaCPF($cpf = null) {
+
+        // Verifica se um número foi informado
+        if (empty($cpf)) {
+            return false;
+        }
+
+        // Elimina possivel mascara
+        $cpf = preg_replace('/[^0-9]/', '', (string) $cpf);
+        $cpf = str_pad($cpf, 11, '0', STR_PAD_LEFT);
+
+        // Verifica se o numero de digitos informados é igual a 11 
+        if (strlen($cpf) != 11) {
+            return false;
+        }
+        // Verifica se nenhuma das sequências invalidas abaixo 
+        // foi digitada. Caso afirmativo, retorna falso
+        else if (
+                $cpf == '11111111111' ||
+                $cpf == '22222222222' ||
+                $cpf == '33333333333' ||
+                $cpf == '44444444444' ||
+                $cpf == '55555555555' ||
+                $cpf == '66666666666' ||
+                $cpf == '77777777777' ||
+                $cpf == '88888888888' ||
+                $cpf == '99999999999') {
+            return false;
+            // Calcula os digitos verificadores para verificar se o
+            // CPF é válido
+        } else {
+            if($cpf == '00000000000'){
+                return true;
+            }else{
+
+            for ($t = 9; $t < 11; $t++) {
+
+                for ($d = 0, $c = 0; $c < $t; $c++) {
+                    $d += $cpf{$c} * (($t + 1) - $c);
+                }
+                $d = ((10 * $d) % 11) % 10;
+                if ($cpf{$c} != $d) {
+                    return false;
+                }
+            }
+
+            return true;
+            }
+        }
+    }
+
+    function validaExternoEndereco($endereco) {
+        if (substr($endereco, 0, 4) != "http") {
+            $endereco = "http://" . $endereco;
+        }
+
+        if (substr($endereco, -1, 1) != "/") {
+            $endereco = $endereco . "/";
+        }
+
+        return $endereco;
+    }
+
+    function validaTelefone($telefone) {
+        /* Essa função irá retornar se o numero é um telefone valido. 
+         * As verificações feitas aqui serão: 
+         *      -- A quantidade de caracteres no numero   
+         *      -- Caso o numero esteja correto, porem sem o digito 9 na frente, ele adcionará
+         *      -- Se possui um DDD válido */
+
+        $numFor = $this->removerCaracter($telefone);
+        $result = false;
+
+        if (strlen($numFor) > 9) {
+            if (strlen($numFor) == 10) { // Possui o DDD mas não possui o digito 9
+                $ddd = substr($numFor, 0, 2);
+                $num = "9" . substr($numFor, 2);
+                $result = true;
+            } elseif (strlen($numFor) == 11) { // Possui o DDD e o digito 9
+                $ddd = substr($numFor, 0, 2);
+                $num = substr($numFor, 2);
+                $result = true;
+            }
+
+            if (in_array((int) substr($num, 1, 1), array(9, 8, 7, 6))) { // Verificando se o numero é de telefonia movel             
+                $result = true;
+            }
+
+            $numFor = "+55" . $ddd . $num;
+        }
+        // Caso o numero de digtos seja <= 9, ele não possui DDD
+
+        $retorno = array(
+            "numFor" => $numFor,
+            "valido" => $result
+        );
+
+        return $retorno;
+    }
+
     function preencherDireita($valor, $tamanho, $caractere = "") {
         $i = strlen($valor);
 
@@ -146,45 +463,49 @@ class Utilitario {
         $config['total_rows'] = $total;
         $config['num_links'] = 10;
         $config['per_page'] = $limit;
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
+        $config['first_link'] = 'primeira';
+        $config['last_link'] = 'última';
         $config['next_link'] = '&gt;';
         $config['prev_link'] = '&lt;';
-//        $config['cur_tag_open'] = "<b style='color:green;'>";
-//        $config['cur_tag_close'] = '</b>';
-//        $config['attributes'] = array('class' => 'link-paginacao');
-//        $config['display_pages'] = FALSE;
-
-
 
         $CI->pagination->initialize($config);
         echo $CI->pagination->create_links();
     }
 
     function build_query_params($baseurl, $args = array()) {
-        $parts = array();
+        $parts = array();        
         foreach ($args as $chave => $valor) {
-            if ($chave != 'per_page') {
+            ///////verifica se é um array
+                if(is_array($valor)){ 
+                   foreach($valor as $item){
+                       // $chave é o nome do array e o $item é o que valor que ele possui
+                       array_push($parts, urlencode($chave."[]") . '=' . urlencode($item));
+                   }
+                } 
+            ////////////////////////
+            if ($chave != 'per_page' && !(is_array($valor))) {
                 array_push($parts, urlencode($chave) . '=' . urlencode($valor));
             }
         }
         return $baseurl . '?' . join('&', $parts);
     }
 
-    function pmf_mensagem($mensagem = null) {
-        
-        if ($mensagem != null) {
-            if($mensagem[1] == 'success'){
-                $titulo = 'Bom trabalho';
-            }else{
-               $titulo = 'Oops...'; 
-            }
-            echo "<script>
-        sweetAlert('$titulo', '$mensagem[0]', '$mensagem[1]');
-                </script>";
-            
+     static function pmf_mensagem($mensagem = '') {
+        // var_dump($mensagem);
+        if ($mensagem && strlen(trim($mensagem)) > 0) {
+            echo '<div class="div-mensagem hidden" title="Mensagem:">';
+            echo $mensagem;
+            echo '</div>';
         }
-        
+    }
+
+   static function pmf_mensagem2($mensagem = '') {
+        // var_dump($mensagem);
+        if ($mensagem && strlen(trim($mensagem)) > 0) {
+            echo '<div class="div-mensagem hidden" title="Mensagem:">';
+            echo $mensagem;
+            echo '</div>';
+        }
     }
 
     function barcode($text = "0", $filepath = "", $size = "20", $orientation = "horizontal", $code_type = "code128", $print = false, $SizeFactor = 1) {

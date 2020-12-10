@@ -1,9 +1,9 @@
 
 <div class="content"> <!-- Inicio da DIV content -->
     <div class="bt_link_new">
-        <a href="<?php echo base_url() ?>estoque/solicitacao/criarsolicitacao/0">
+        <button class="btn btn-outline-default btn-sm" href="<?php echo base_url() ?>estoque/solicitacao/criarsolicitacao/0">
             Novo Solicitacao
-        </a>
+        </button>
     </div>
     <?
     $perfil_id = $this->session->userdata('perfil_id');

@@ -36,4 +36,7 @@
       <path value="$PROJECT_DIR$/vendor/google/apiclient-services" />
     </include_path>
   </component>
+  <component name="PhpProjectSharedConfiguration">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
 </project>

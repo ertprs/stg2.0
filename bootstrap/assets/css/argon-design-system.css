@@ -1295,8 +1295,8 @@ pre code {
   }
 
   .col-lg-3 {
-    flex: 0 0 25%;
-    max-width: 25%;
+    flex: 0 0 27%;
+    max-width: 29%;
   }
 
   .col-lg-4 {
@@ -2103,7 +2103,6 @@ pre code {
   background-color: #fff;
   border-color: rgba(50, 151, 211, 0.25);
   outline: 0;
-  box-shadow: none, none;
 }
 
 .form-control::placeholder {
@@ -4242,8 +4241,9 @@ input[type="button"].btn-block {
 }
 
 .custom-control-input:focus~.custom-control-label::before {
-  box-shadow: none, none;
 }
+
+
 
 .custom-control-input:focus:not(:checked)~.custom-control-label::before {
   border-color: rgba(50, 151, 211, 0.25);
@@ -4510,16 +4510,14 @@ input[type="button"].btn-block {
   outline: none;
 }
 
-.custom-range:focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 1px #fff, none;
-}
+
 
 .custom-range:focus::-moz-range-thumb {
-  box-shadow: 0 0 0 1px #fff, none;
+  box-shadow: 0 0 0 1px #fff;
 }
 
 .custom-range:focus::-ms-thumb {
-  box-shadow: 0 0 0 1px #fff, none;
+  box-shadow: 0 0 0 1px #fff;
 }
 
 .custom-range::-moz-focus-outer {
@@ -15885,7 +15883,6 @@ a.text-darker:focus {
 }
 
 .text-hide {
-  font: 0/0 a;
   color: transparent;
   text-shadow: none;
   background-color: transparent;
@@ -18641,7 +18638,6 @@ a.btn-icon-only {
 
 .footer {
   background: #f4f5f7;
-  padding: 1.5rem 0;
 }
 
 .footer .col-footer .heading {
@@ -18726,7 +18722,7 @@ label {
 }
 
 .form-control {
-  font-size:1 rem;
+  font-size: 1 rem;
   transition: all 0.15s ease;
 }
 
@@ -18812,7 +18808,7 @@ textarea[resize="horizontal"] {
 
 .has-success:after {
   content: "\ea26";
-  color: daken(#2dce89, 18%);
+  color: darken(#2dce89, 18%);
   background-color: #69deac;
 }
 
@@ -18830,7 +18826,7 @@ textarea[resize="horizontal"] {
 
 .has-danger:after {
   content: "\ea53";
-  color: daken(#fb6340, 18%);
+  color: darken(#fb6340, 18%);
   background-color: #fda08b;
 }
 
@@ -19709,7 +19705,7 @@ textarea[resize="horizontal"] {
   }
 
   .navbar-collapse {
-    width: calc(100% - 1.4rem);
+    /*width: calc(100% - 1.4rem);*/
     position: absolute;
     top: 0;
     left: 0;
@@ -24587,4 +24583,3 @@ table th[class*="col-"] {
   background-color: #d7e9f2;
 } */
 
-/*# sourceMappingURL=kit-free.css.map */

@@ -17,7 +17,7 @@ aside,
 details,
 figcaption,
 figure,
-footer,
+footer,ma
 header,
 hgroup,
 main,
@@ -4290,7 +4290,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
             box-shadow: none;
   }
   .navbar-collapse.collapse {
-    display: block !important;
+    display: block;
     height: auto !important;
     padding-bottom: 0;
     overflow: visible !important;
@@ -4416,6 +4416,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-nav > li > a {
   padding-top: 10px;
   padding-bottom: 10px;
+  padding-right: 2.5vw;
   line-height: 20px;
 }
 @media (max-width: 767px) {
@@ -6877,4 +6878,3 @@ button.close {
     display: none !important;
   }
 }
-/*# sourceMappingURL=bootstrap.css.map */
