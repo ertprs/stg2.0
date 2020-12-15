@@ -1,0 +1,6 @@
+.accordion{
+    display: flex;
+}
+.chosen{
+    width: 500px !important;
+}

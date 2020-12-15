@@ -1,74 +1,71 @@
+<link href="<?= base_url() ?>css/entrada/fracionamento-form.css" rel="stylesheet"/>
 <div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
-        <h3 class="singular"><a href="#">Fracionamento</a></h3>
-
+        <h6 class="singular ui-accordion-header ui-corner-top ui-state-default ui-accordion-header-active ui-state-active ui-accordion-icons">Fracionamento</h6>
         <div>
             <form name="form_entrada" id="form_entrada" action="<?= base_url() ?>estoque/entrada/gravarfracionamento" method="post">
-
-                <dl class="dl_desconto_lista">
-                    <!-- <fieldset> -->
-                    <dt>
-                    <label>Produto a ser Fracionado</label>
-                    </dt>
-                    <dd>
-                        <select name="produto_id" id="produto_id" class="size4 chosen-select" tabindex="1" required>
-                            <option value="">Selecione</option>
-                            <? foreach ($produtos as $value) : ?>
-                            <option value="<?= $value->estoque_produto_id; ?>"><?php echo $value->descricao; ?> - <?php echo $value->unidade; ?></option>
-                            <? endforeach; ?>
-                        </select>
-                    </dd>
-                    <dt>
-                    <label>Quantidade</label>
-                    </dt>
-                    <dd>
-                        <input type="number" name="quantidade" id="quantidade" min="0" class="texto01" required/>
-                    </dd>
-                    
-                    <dt>
-                    <label>Produto de Entrada</label>
-                    </dt>
-                    <dd>
-                        <select name="produto_entrada" id="produto_entrada" class="size4 chosen-select" tabindex="1" required data-placeholder="Selecione um Produto">
-                            <option value="">Selecione</option>
-                            <!-- <? foreach ($produtos as $value) : ?>
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div>
+                                <label>Produto a ser Fracionado</label>
+                                <select name="produto_id" id="produto_id" class="chosen form-control" required>
+                                    <option value="">Selecione</option>
+                                    <? foreach ($produtos as $value) : ?>
+                                        <option value="<?= $value->estoque_produto_id; ?>"><?php echo $value->descricao; ?> - <?php echo $value->unidade; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Quantidade</label>
+                                <input type="number" name="quantidade" id="quantidade" min="0" class="form-control" required/>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div>
+                                <label>Produto de Entrada</label>
+                                <select name="produto_entrada" id="produto_entrada" class="form-control chosen" tabindex="1" required data-placeholder="Selecione um Produto">
+                                    <option value="">Selecione</option>
+                                    <!-- <? foreach ($produtos as $value) : ?>
                             <option value="<?= $value->estoque_produto_id; ?>"><?php echo $value->descricao; ?></option>
                             <? endforeach; ?> -->
-                        </select>
-                    </dd>
-                    <dt>
-                    <label>Fornecedor</label>
-                    </dt>
-                    <dd>
-                        <input type="hidden" name="txtfornecedor" id="txtfornecedor" />
-                        <input type="text" name="txtfornecedorlabel" id="txtfornecedorlabel" class="texto10" value="<?= @$obj->_fornecedor; ?>" required/>
-                    </dd>
-                    <dt>
-                    <label>Armazem de Entrada</label>
-                    </dt>
-                    <dd>
-                        <select name="txtarmazem" id="txtarmazem" class="size4" required>
-                            <option value="">Selecione</option>
-                            <? foreach ($sub as $value) : ?>
-                                <option value="<?= $value->estoque_armazem_id; ?>"><?php echo $value->descricao; ?></option>
-                            <? endforeach; ?>
-                        </select>
-                    </dd>
-                   
-                    <dt>
-                    <label>Quantidade Entrada</label>
-                    </dt>
-                    <dd>
-                        <input type="number" name="quantidade_entrada" id="quantidade_entrada" min="0" class="texto01" required/>
-                    </dd>
-                    
-                    
-                 </dl>    
-                <hr/>
-                <button type="submit" name="btnEnviar">Enviar</button>
-                <button type="reset" name="btnLimpar">Limpar</button>
-                <button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Fornecedor</label>
+                                <input type="hidden" name="txtfornecedor" id="txtfornecedor" />
+                                <input type="text" name="txtfornecedorlabel" id="txtfornecedorlabel" class="form-control" value="<?= @$obj->_fornecedor; ?>" required/>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Armazem de Entrada</label>
+                                <select name="txtarmazem" id="txtarmazem" class="form-control" required>
+                                    <option value="">Selecione</option>
+                                    <? foreach ($sub as $value) : ?>
+                                        <option value="<?= $value->estoque_armazem_id; ?>"><?php echo $value->descricao; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Quantidade Entrada</label>
+                                <input type="number" name="quantidade_entrada" id="quantidade_entrada" min="0" class="form-control" required/>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
             </form>
+                <hr/>
+                <button class="btn btn-outline-success btn-sm" type="submit" name="btnEnviar">Enviar</button>
+                <button class="btn btn-outline-warning btn-sm" type="reset" name="btnLimpar">Limpar</button>
+                <button class="btn btn-outline-default btn-sm" type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
+
         </div>
     </div>
 </div> <!-- Final da DIV content -->

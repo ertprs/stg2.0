@@ -127,7 +127,7 @@
 
             <br>
         <div class="table-responsive">
-            <table>
+            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                 <thead>
                     <tr>
                         <th class="tabela_header" width="300px;">Nome</th>

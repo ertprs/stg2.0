@@ -2,98 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7eedec7-0120-4f34-ae50-6afdde6a3e0e" name="Default Changelist" comment="Yan">
-      <change afterPath="$PROJECT_DIR$/css/ambulatorio/laudo-lista.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/ambulatorio/laudoantigo-lista.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/ambulatorio/laudoconsulta-lista.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/ambulatorio/laudoconsultaantigo-lista.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/ambulatorio/laudodigitador-lista.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/ambulatorio/multifuncaomedico-lista.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/ambulatorio/multifuncaomedicofisioterapia-lista.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/ambulatorio/multifuncaomedicoodontologia-lista.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/ambulatorio/revisor-lista.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/cadastro/fornecedor-lista.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/cadastro/paciente-lista.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/stg.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/stg.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/css/entrada/fracionamento-form.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/css/estoque/entrada-lista.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/controllers/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/home.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/header.php.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/libraries/mensagem.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/libraries/mensagem.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/libraries/utilitario.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/libraries/utilitario.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/ambulatorio/exame_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/ambulatorio/exame_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/calendarioconsulta.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/calendarioconsulta.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioalteracaomedico.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioalteracaomedico.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioentradatipo.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioentradatipo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioinadimplencia.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/impressaorelatorioinadimplencia.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/laudo-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/laudo-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/laudoantigo-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/laudoantigo-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/laudoconsulta-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/laudoconsulta-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/laudoconsultaantigo-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/laudoconsultaantigo-lista.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/faturamentoexame.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/faturamentoexame.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/laudodigitador-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/laudodigitador-lista.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/multifuncaomedico-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/multifuncaomedico-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/multifuncaomedicoconsulta-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/multifuncaomedicoconsulta-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/multifuncaomedicofisioterapia-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/multifuncaomedicofisioterapia-lista.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/multifuncaomedicoodontologia-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/multifuncaomedicoodontologia-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/orcamento-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/orcamento-form.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/procedimentoarquivo.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/procedimentoarquivo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/relatorioalteracaomedico.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/relatorioalteracaomedico.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/relatorioentradatipo.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/relatorioentradatipo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/relatorioinadimplenciapaciente.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/relatorioinadimplenciapaciente.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/revisor-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/revisor-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/cadastros/contaspagar-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/contaspagar-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/cadastros/contasreceber-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/contasreceber-lista.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/cadastros/entrada-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/entrada-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/cadastros/fornecedor-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/fornecedor-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/cadastros/paciente-ficha.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/paciente-ficha.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/cadastros/pacientes-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/pacientes-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/cadastros/saida-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/cadastros/saida-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/emergencia/solicitacoes-paciente.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/emergencia/solicitacoes-paciente.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/estoque/entrada-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/entrada-form.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/estoque/entrada-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/entrada-lista.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/estoque/fornecedor-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/fornecedor-lista.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/estoque/fracionamento-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/fracionamento-form.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/estoque/inventario-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/inventario-form.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/estoque/inventario-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/inventario-lista.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/estoque/nota-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/nota-form.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/estoque/nota-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/nota-lista.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/estoque/pedido-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/pedido-form.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/estoque/pedido-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/pedido-lista.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/estoque/produto-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/produto-lista.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/estoque/solicitacao-lista.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/estoque/solicitacao-lista.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/footer.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/all.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/all.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/all.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/all.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/argon-design-system.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/argon-design-system.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/brands.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/brands.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/brands.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/brands.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/font-awesome.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/font-awesome.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/fontawesome.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/fontawesome.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/regular.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/regular.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/regular.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/regular.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/solid.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/solid.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/solid.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/solid.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/svg-with-js.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/svg-with-js.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/svg-with-js.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/svg-with-js.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/v4-shims.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/v4-shims.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/css/v4-shims.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/css/v4-shims.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/all.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/all.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/all.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/all.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/argon-design-system.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/argon-design-system.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/argon-design-system.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/argon-design-system.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/brands.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/brands.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/brands.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/brands.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/conflict-detection.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/conflict-detection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/conflict-detection.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/conflict-detection.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/fontawesome.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/fontawesome.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/fontawesome.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/fontawesome.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/regular.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/regular.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/regular.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/regular.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/solid.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/solid.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/solid.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/solid.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/v4-shims.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/v4-shims.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/js/v4-shims.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/js/v4-shims.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/assets/scss/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/assets/scss/_variables.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/css/bootstrap.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/css/bootstrap.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/css/form.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/css/form.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/vendor/bootstrap/css/bootstrap.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/vendor/bootstrap/css/bootstrap.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/vendor/bootstrap/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/vendor/bootstrap/css/bootstrap.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/form.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/form.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/header1.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/header1.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/paciente-ficha.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/cadastro/paciente-ficha.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/paciente-lista.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/ambulatorio/multifuncaomedico-lista.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/ambulatorio/multifuncaomedico-lista.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/ambulatorio/multifuncaomedicoodontologia-lista.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/ambulatorio/multifuncaomedicoodontologia-lista.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -222,7 +153,9 @@
       <workItem from="1607340298167" duration="15928000" />
       <workItem from="1607425492303" duration="20957000" />
       <workItem from="1607513842676" duration="13855000" />
-      <workItem from="1607598102245" duration="11216000" />
+      <workItem from="1607598102245" duration="20703000" />
+      <workItem from="1607945537686" duration="16927000" />
+      <workItem from="1608030339643" duration="20625000" />
     </task>
     <servers />
   </component>

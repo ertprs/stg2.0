@@ -117,10 +117,10 @@ if (count($_GET) > 0) {
                                 <div>
                                     <label class="tabela_title">Data Inicio</label>
                                     <? if (isset($_GET['datainicio'])) { ?>
-                                        <input type="text"  id="datainicio" alt="date" name="datainicio" class="form-control"  value="<?php echo @$_GET['datainicio']; ?>" />
+                                        <input type="date"  id="datainicio" alt="date" name="datainicio" class="form-control"  value="<?php echo @$_GET['datainicio']; ?>" />
                                     <? } else { ?>
                                         <!--                                <input type="text"  id="datainicio" alt="date" name="datainicio" class="size1"  value="<?php echo @date('01/m/Y'); ?>" /> -->
-                                        <input type="text"  id="datainicio" alt="date" name="datainicio" class="form-control"  value="<?php echo @$_GET['datainicio']; ?>" />
+                                        <input type="date"  id="datainicio" alt="date" name="datainicio" class="form-control"  value="<?php echo @$_GET['datainicio']; ?>" />
 
                                     <? } ?>
                                 </div>
@@ -134,10 +134,10 @@ if (count($_GET) > 0) {
                                     <label class="tabela_title">Data Fim</label>
 
                                     <? if (isset($_GET['datafim'])) { ?>
-                                        <input type="text"  id="datafim" alt="date" name="datafim" class="form-control"  value="<?php echo @$_GET['datafim']; ?>" />
+                                        <input type="date"  id="datafim" alt="date" name="datafim" class="form-control"  value="<?php echo @$_GET['datafim']; ?>" />
                                     <? } else { ?>
                                                                    <input type="text"  id="datafim" alt="date" name="datafim" class="form-control"  value="<?php echo @date('t/m/Y'); ?>" />
-                                        <input type="text"  id="datafim" alt="date" name="datafim" class="form-control"  value="<?php echo @$_GET['datafim']; ?>" />
+                                        <input type="date"  id="datafim" alt="date" name="datafim" class="form-control"  value="<?php echo @$_GET['datafim']; ?>" />
 
                                     <? } ?>
                                 </div>

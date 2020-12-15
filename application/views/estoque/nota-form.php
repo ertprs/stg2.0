@@ -4,46 +4,46 @@
 
         <div>
             <form name="form_nota" id="form_nota" action="<?= base_url() ?>estoque/nota/gravar" method="post">
-
-                <dl class="dl_desconto_lista">                                        
-                    <dt>
-                    <label>Nota Fiscal</label>
-                    </dt>
-                    <dd>
-                        <input type="hidden" name="txtestoque_nota_id" id="txtestoque_nota_id" value="<?= @$obj->_estoque_nota_id; ?>" />                        
-                        <input type="text" id="nota" alt="integer" class="texto04" name="nota" value="<?= @$obj->_nota_fiscal; ?>" required="" />
-                    </dd>
-                    <dt>
-                    <label>Fornecedor</label>
-                    </dt>
-                    <dd>
-                        <input type="hidden" name="txtfornecedor" id="txtfornecedor" value="<?= @$obj->_fornecedor_id; ?>" />
-                        <input type="text" name="txtfornecedorlabel" id="txtfornecedorlabel" class="texto04" value="<?= @$obj->_fornecedor; ?>" required=""/>
-                    </dd>
-                    <dt>
-                    <label>Armazem</label>
-                    </dt>
-                    <dd>
-                        <select name="txtarmazem" id="txtarmazem" class="size4">
-                            <? foreach ($sub as $value) : ?>
-                                <option value="<?= $value->estoque_armazem_id; ?>"<?
-                            if(@$obj->_armazem_id == $value->estoque_armazem_id):echo'selected';
-                            endif;?>><?php echo $value->descricao; ?></option>
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Nota Fiscal</label>
+                                <input type="hidden" name="txtestoque_nota_id" id="txtestoque_nota_id" value="<?= @$obj->_estoque_nota_id; ?>" />
+                                <input type="text" id="nota" alt="integer" class="form-control" name="nota" value="<?= @$obj->_nota_fiscal; ?>" required="" />
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div>
+                                <label>Fornecedor</label>
+                                <input type="hidden" name="txtfornecedor" id="txtfornecedor" value="<?= @$obj->_fornecedor_id; ?>" />
+                                <input type="text" name="txtfornecedorlabel" id="txtfornecedorlabel" class="form-control" value="<?= @$obj->_fornecedor; ?>" required=""/>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Armazem</label>
+                                <select name="txtarmazem" id="txtarmazem" class="form-control">
+                                    <? foreach ($sub as $value) : ?>
+                                        <option value="<?= $value->estoque_armazem_id; ?>"<?
+                                        if(@$obj->_armazem_id == $value->estoque_armazem_id):echo'selected';
+                                        endif;?>><?php echo $value->descricao; ?></option>
                                     <? endforeach; ?>
-                        </select>
-                    </dd>
-                    <dt>
-                    <label>Valor da Nota Fiscal</label>
-                    </dt>
-                    <dd>
-                        <input type="text" id="valornota" alt="decimal" class="texto02" name="valornota" value="<?= @$obj->_valor_nota; ?>" required=""/>
-                    </dd>                  
-                    
-                 </dl>    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Valor da Nota Fiscal</label>
+                                <input type="text" id="valornota" alt="decimal" class="form-control" name="valornota" value="<?= @$obj->_valor_nota; ?>" required=""/>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
                 <hr/>
-                <button type="submit" name="btnEnviar">Enviar</button>
-                <button type="reset" name="btnLimpar">Limpar</button>
-                <button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
+                <button class="btn btn-outline-success btn-sm" type="submit" name="btnEnviar">Enviar</button>
+                <button class="btn btn-outline-warning btn-sm" type="reset" name="btnLimpar">Limpar</button>
+                <button class="btn btn-outline-default btn-sm" type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
             </form>
         </div>
     </div>

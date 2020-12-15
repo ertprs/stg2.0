@@ -14,7 +14,7 @@
                         <input type="hidden" name="txtproduto" id="txtproduto" value="<?= @$obj->_produto_id; ?>" />
                         <input type="text" name="txtprodutolabel" id="txtprodutolabel" class="texto10" value="<?= @$obj->_produto; ?>" required/>
                     </dd>
-                    <dt>
+                    <dt>listarmultifuncaomedico
                     <label>Fornecedor</label>
                     </dt>
                     <dd>

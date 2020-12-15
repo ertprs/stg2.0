@@ -1,16 +1,6 @@
-body {
-    width: 100%;
-}
-
-#procedimento_chosen a {
-    width: 300px !important;
-}
-
-
 .btnsend {
     margin-top: 2.5vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
