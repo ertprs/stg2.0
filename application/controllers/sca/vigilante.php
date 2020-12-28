@@ -24,6 +24,7 @@ class Vigilante extends BaseController {
         $this->load->model('sca/vigilante_model', 'vigilante_m');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
+       
     }
 
     /**

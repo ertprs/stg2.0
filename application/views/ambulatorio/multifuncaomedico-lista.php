@@ -33,7 +33,7 @@
     <body>
         <div id="accordion">
             <h3 class="singular"><a href="#">Multifuncao Medico</a></h3>
-            <div>
+            <div>g
                 <?
                 $salas = $this->exame->listartodassalas();
                 $empresa = $this->guia->listarempresasaladeespera();
@@ -188,7 +188,7 @@
                                 </div>
                             <? } ?>
                             <div class="col-lg-2 btnsend">
-                                <button class="btn btn-outline-success" type="submit" id="enviar">Pesquisar</button>
+                                <button class="btn btn-outline-success btn-sm" type="submit" id="enviar">Pesquisar</button>
                             </div>
                         </div>
                     </fieldset>
@@ -808,11 +808,11 @@
         //                }
                         ?>
                         <tfoot>
-                            <tr>
-                                <nav class="pagination justify-content-center">
+                            <tr class="text-center pag">
+                                <th class="tabela_footer pagination-container">
                                     <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
                                     <!-- Total de registros: <?php // echo $total;             ?> -->
-                                </nav>
+                                </th>
                             </tr>
                         </tfoot>
                     </table>

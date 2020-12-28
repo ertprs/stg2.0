@@ -28,6 +28,7 @@ class Incentivo extends BaseController {
         $this->load->model('giah/servidor_model', 'servidor');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
+        
     }
 
     /**

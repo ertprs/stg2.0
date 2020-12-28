@@ -1,141 +1,163 @@
 <? $empresa_logada = $this->session->userdata('empresa_id'); ?>
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
-    <div class="clear"></div>
-    <form name="form_exametemp" id="form_exametemp" action="<?= base_url() ?>ambulatorio/exametemp/gravarpacienteencaixegeral" method="post">
-        </fieldset>
-        <fieldset>
-            <legend>Agenda Geral</legend>
-            <div>
-                <label>Data</label>
-                <input type="text"  id="data_ficha" name="data_ficha" class="size1" required />
-                <input type="hidden" name="txtpaciente_id"  value="<?= @$obj->_ambulatorio_pacientetemp_id; ?>" />
-            </div>
-            <div>
-                <label>Sala</label>
-                <select name="sala" id="sala" class="size4" required>
-                    <option value="" >Selecione</option>
-                    <? foreach ($salas as $item) : ?>
-                        <option value="<?= $item->exame_sala_id; ?>" <? if (count($salas) == 1) echo 'selected';?>>
-                            <?= $item->nome; ?>
-                        </option>
-                    <? endforeach; ?>
-                </select>
-            </div>
-            <div>
-                <label>Médico</label>
-                
-                  <?php
-                if ($this->session->userdata('perfil_id') == 4 && $this->session->userdata('medico_agenda') == 't') {
-                    ?>
-                <select name="medico" id="medico" class="size2" required>
-                   
-                    <? foreach ($medico as $item) : ?>
-                     <?php if ($item->operador_id == $this->session->userdata('operador_id')) { ?>     
-                        <option value="<?= $item->operador_id; ?>" selected><?= $item->nome; ?></option>
-                         <?php } ?>
-                    <? endforeach; ?>
-                </select>                
-                 <?php }else { ?>
-                <select name="medico" id="medico" class="size2" required>
-                    <option value="" >Selecione</option>
-                    <? foreach ($medico as $item) : ?>
-                        <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
-                    <? endforeach; ?>
-                </select>
-                
-                <?php } ?>
-            </div>
-            <div>
-                <label>Empresa</label>
-                <select name="empresa" id="empresa" class="size1">
-                <option value="">Selecione</option>
-                    <?
-                    foreach ($empresas as $value) :
-                        ?>
-                        <option value="<?= $value->empresa_id; ?>" <?
-                        if ($empresa_logada == $value->empresa_id) {
-                            echo 'selected';
-                        }
-                        ?>><?php echo $value->nome; ?></option>
-                            <? endforeach; ?>
-                </select>
-
-            </div>
-            <div>
-                <label>Horários</label>
-                <input type="text" id="horarios" class="size1" name="horarios" required/>
-            </div>
-
-            <div>
-                <label>Convênio *</label>
-                <select name="convenio1" id="convenio1" class="size4" required>
-                    <option value="">Selecione</option>
-                </select>
-            </div>
-            
-            <div>
-                <label>Procedimento *</label>
-                <select  name="procedimento1" id="procedimento1" class="size1" required>
-                    <option value="">Selecione</option>
-                </select>
-            </div>
-            <!--            <div>
-                            <label>Tipo</label>
-                            <select  name="tipo" id="tipo" class="size1" >
-                                <option value="EXAME">Exame</option>
-                                <option value="CONSULTA">Consulta</option>
+    <div class="accordion">
+        <legend class="singular"><b>Agenda Geral</b></legend>
+        <div name="form_exametemp" id="form_exametemp" action="<?= base_url() ?>ambulatorio/exametemp/gravarpacienteencaixegeral" method="post">
+            <div class="row">
+                <fieldset>
+                    <div class="col-lg-2">
+                        <div>
+                            <label>Data</label>
+                            <input type="date"  id="data_ficha" name="data_ficha" class="form-control" required />
+                            <input type="hidden" name="txtpaciente_id"  value="<?= @$obj->_ambulatorio_pacientetemp_id; ?>" />
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div>
+                            <label>Sala</label>
+                            <select name="sala" id="sala" class="form-control" required>
+                                <option value="" >Selecione</option>
+                                <? foreach ($salas as $item) : ?>
+                                    <option value="<?= $item->exame_sala_id; ?>" <? if (count($salas) == 1) echo 'selected';?>>
+                                        <?= $item->nome; ?>
+                                    </option>
+                                <? endforeach; ?>
                             </select>
-                        </div>-->
-            <div>
-                <label>Observa&ccedil;&otilde;es</label>
-                <input type="text" id="observacoes" class="size3" name="observacoes" />
-            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div>
+                            <label>Médico</label>
+
+                            <?php
+                            if ($this->session->userdata('perfil_id') == 4 && $this->session->userdata('medico_agenda') == 't') {
+                                ?>
+                                <select name="medico" id="medico" class="form-control" required>
+
+                                    <? foreach ($medico as $item) : ?>
+                                        <?php if ($item->operador_id == $this->session->userdata('operador_id')) { ?>
+                                            <option value="<?= $item->operador_id; ?>" selected><?= $item->nome; ?></option>
+                                        <?php } ?>
+                                    <? endforeach; ?>
+                                </select>
+                            <?php }else { ?>
+                                <select name="medico" id="medico" class="form-control" required>
+                                    <option value="" >Selecione</option>
+                                    <? foreach ($medico as $item) : ?>
+                                        <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div>
+                            <label>Empresa</label>
+                            <select name="empresa" id="empresa" class="form-control">
+                                <option value="">Selecione</option>
+                                <?
+                                foreach ($empresas as $value) :
+                                    ?>
+                                    <option value="<?= $value->empresa_id; ?>" <?
+                                    if ($empresa_logada == $value->empresa_id) {
+                                        echo 'selected';
+                                    }
+                                    ?>><?php echo $value->nome; ?></option>
+                                <? endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div>
+                            <label>Horários</label>
+                            <input type="text" id="horarios" class="form-control" name="horarios" required/>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div>
+                            <label>Convênio *</label>
+                            <select name="convenio1" id="convenio1" class="form-control" required>
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div>
+                            <label>Procedimento *</label>
+                            <select  name="procedimento1" id="procedimento1" class="form-control" required>
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div>
+                            <label>Observa&ccedil;&otilde;es</label>
+                            <input type="text" id="observacoes" class="form-control" name="observacoes" />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="row">
+                    <fieldset>
+                    <legend><b>Paciente</b></legend>
+                        <div class="col-lg-5">
+                            <div>
+                                <label>Nome</label>
+                                <input type="hidden" id="txtNomeid" class="form-control" name="txtNomeid" readonly="true" />
+                                <input type="text" id="txtNome" name="txtNome" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div>
+                                <label>Dt de nascimento</label>
+                                <input type="date" name="nascimento" id="nascimento" class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div>
+                                <label>End.</label>
+                                <input type="text" id="txtEnd" class="form-control" name="txtEnd" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Telefone</label>
+                                <input type="text" id="telefone" class="texto02" name="telefone"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Celular</label>
+                                <input type="text" id="celular" class="texto02" name="celular"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Whatsapp</label>
+                                <input type="text" id="whatsapp" class="texto02" name="whatsapp"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>CPF</label>
+                                <input type="text" id="txtcpf" class="texto02" name="txtcpf" alt="cpf" value=""/>
+                            </div>
+                        </div>
 
 
-        </fieldset>
-        <fieldset>
-            <legend>Paciente</legend>
-            <div>
-                <label>Nome</label>
-                <input type="hidden" id="txtNomeid" class="texto_id" name="txtNomeid" readonly="true" />
-                <input type="text" id="txtNome" name="txtNome" class="texto10"/>
-            </div>
-            <div>
-                <label>Dt de nascimento</label>
-                <input type="text" name="nascimento" id="nascimento" class="texto02"/>
-            </div>
-            <div>
 
-                <input type="hidden" name="idade" id="txtIdade" class="texto01"/>
-            </div>
-            <div>
-                <label>End.</label>
-                <input type="text" id="txtEnd" class="texto06" name="txtEnd" />
-            </div>
-            <div>
-                <label>Telefone</label>
-                <input type="text" id="telefone" class="texto02" name="telefone"/>
-            </div>
-            <div>
-                <label>Celular</label>
-                <input type="text" id="celular" class="texto02" name="celular"/>
-            </div>
 
-            <div>
-                <label>Whatsapp</label>
-                <input type="text" id="whatsapp" class="texto02" name="whatsapp"/>
+                        <div>
+                            <label>&nbsp;</label>
+                            <button type="submit" name="btnEnviar">Adicionar</button>
+                        </div>
+                    </fieldset>
+                </div>
             </div>
-            <div>
-                <label>CPF</label>
-                <input type="text" id="txtcpf" class="texto02" name="txtcpf" alt="cpf" value=""/>
-            </div>
+        </form>
+    </div>
 
-            <div>
-                <label>&nbsp;</label>
-                <button type="submit" name="btnEnviar">Adicionar</button>
-            </div>
-    </form>
-</fieldset>
 
 
 </div> <!-- Final da DIV content -->

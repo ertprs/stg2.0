@@ -141,13 +141,13 @@ function debug($object) {
 <!--    <script src="--><?//= base_url() ?><!--bootstrap/assets/js/fontawesome.js" type="text/javascript"></script>-->
     <!-- CSS Files -->
     <link href="<?= base_url() ?>bootstrap/vendor/bootstrap/css/bootstrap.css" rel="stylesheet"/>
-    <link href="<?= base_url() ?>bootstrap/assets/css/argon-design-system.css" rel="stylesheet"/>
+    <link href="<?= base_url() ?>bootstrap/assets/css/argon-design-system.css?v=1" rel="stylesheet"/>
 
     <!-- <link href="<?= base_url() ?>css/header.css" rel="stylesheet"/> -->
     <link href="<?= base_url() ?>js/jquery-ui.css" rel="stylesheet"/>
     <link href="<?= base_url() ?>js/jquery-ui.structure.css" rel="stylesheet"/>
     <link href="<?= base_url() ?>js/jquery-ui.theme.css" rel="stylesheet"/>
-    <link href="<?= base_url() ?>css/header1.css?v=2.2" rel="stylesheet"/>
+    <link href="<?= base_url() ?>css/header1.css" rel="stylesheet"/>
 
     <!--CSS DO Calendário-->
     <link href="<?= base_url() ?>bootstrap/fullcalendar/main.css" rel="stylesheet" />
@@ -240,6 +240,7 @@ function debug($object) {
 
         <ul class="navbar-nav mr-auto">
             <!-- MENUS START -->
+            <? if ($perfil_id == 1 || $perfil_id == 2 || $perfil_id == 3 || ( $perfil_marketing_p == 't' && $perfil_id == 14) || $perfil_id == 5 || ($perfil_id == 18 || $perfil_id == 20) || $perfil_id == 6 || ($perfil_id == 11 || $perfil_id == 21) || $perfil_id == 12 || $perfil_id == 10 || $perfil_id == 15 || $perfil_id == 19 || ( $financeiro_cadastro == 't' && $perfil_id == 13) || ($perfil_id == 7 && $tecnico_acesso_acesso == 't')|| ($perfil_id == 4 && $medico_agenda == 't') || $perfil_id == 24 || $perfil_id == 25 || $perfil_id == 26) { ?>
             <li class="dropdown">
                 <a class="dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" >
                     <i class="fa fa-address-book-o fa-fw"></i>Recepção</a>
@@ -248,16 +249,28 @@ function debug($object) {
                     <li class="dropdown">
                         <a class="dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
                             <i class="fa fa-edit fa-fw"></i> Rotinas <span class="fa arrow"></span></a>
-                        <ul  class="dropdown-menu">
-                            <li>
-                                <a href="<?= base_url() ?>cadastros/pacientes">Cadastro</a>
-                            </li>
-
-                            <li>
-                                <a href="<?= base_url() ?>ambulatorio/exame/listarmultifuncaoconsultacalendario">Agendamento</a>
-                            </li>
-                            <!-- <a class="dropdown-item" href="<?= base_url() ?>ambulatorio/exame/listarmultifuncaoconsulta">Agendamento</a> -->
-                        </ul>
+                        <? if (($perfil_id == 1 || $perfil_id == 2 || $perfil_id == 3 || ( $perfil_marketing_p == 't' && $perfil_id == 14) || $perfil_id == 5 || ($perfil_id == 18 || $perfil_id == 20) || $perfil_id == 6 || ($perfil_id == 11 || $perfil_id == 21) || $perfil_id == 12 || $perfil_id == 10 || ($perfil_id == 15 && $tecnico_acesso_acesso != 't') || $perfil_id == 19) || ( $financeiro_cadastro == 't' && $perfil_id == 13) || ( $medico_agenda == 't' && $perfil_id == 4)  || $perfil_id == 24 || $perfil_id == 25 || $perfil_id == 26) { ?>
+                            <?php if ($perfil_id != 4) { ?>
+                            <ul  class="dropdown-menu">
+                                <li>
+                                    <a href="<?= base_url() ?>cadastros/pacientes">Cadastro</a>
+                                </li>
+                               <?  if ($perfil_id != 4 && $perfil_id != 13 && $perfil_id != 24 || ( $perfil_marketing_p == 't' && $perfil_id == 14) || ($medico_agenda == 't' && $perfil_id == 4) ) { ?>
+                                    <? if ($geral == 't') {
+                                       if ($calendario_layout == 't') { ?>
+                                            <li>
+                                                <a href="<?= base_url() ?>ambulatorio/exame/listarmultifuncaocalendario2">Agendamento</a>
+                                            </li>
+                                       <? } else { ?>
+                                           <li>
+                                               <a href="<?= base_url() ?>ambulatorio/exame/listarmultifuncaocalendario">Agendamento</a>
+                                           </li>
+                                       <? } ?>
+                                    <? } ?>
+                                <? } ?>
+                            </ul>
+                            <? } ?>
+                        <? } ?>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -270,7 +283,7 @@ function debug($object) {
                     </li>
                 </ul>
             </li>
-
+            <? } ?>
 
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

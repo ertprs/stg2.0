@@ -330,7 +330,7 @@ class TuoTempoAPI extends Controller {
              echo json_encode($obj); 
              die();
         }   
-        $verificarProcedimentoMedico = $this->tuotempo->listarprocedimentomedico($data); 
+        $verificarProcedimentoMedico = $this->tuotempo->listarprocedimentomedico($data);  
         if(count($verificarProcedimentoMedico) == 0){
              $obj = new stdClass(); 
              $obj->result = 'ERROR';
@@ -338,11 +338,9 @@ class TuoTempoAPI extends Controller {
              echo json_encode($obj); 
              die();
         } 
-         
+        
         // var_dump($data->USER_LID); die;
-        $resposta = $this->tuotempo->agendarPaciente($data);
-        // var_dump($resposta); die;
-         
+        $resposta = $this->tuotempo->agendarPaciente($data); 
         $obj = new stdClass();
         if(count($resposta) > 0){
             $obj->result = 'OK';
@@ -1339,18 +1337,19 @@ class TuoTempoAPI extends Controller {
     function verificarquantidademedico($data){
          
         $agenda_exames_id = $data->AVAILABILITY_LID;
-        $Agenda = $this->tuotempo->listarAgenda($agenda_exames_id);
+        $Agenda = $this->tuotempo->listarAgenda($agenda_exames_id);  
         $empresa_id = $Agenda[0]->empresa_id;
+        
         $procedimento_convenio_id = $data->ACTIVITY_LID;
         $medico_id = $Agenda[0]->medico_agenda;
         $inicio = $Agenda[0]->inicio;
         $data = $Agenda[0]->data; 
           
         $procedimentos = $this->procedimentoplano->procedimentoplanolog($procedimento_convenio_id);
-        $procedimento_tuss_id = $procedimentos[0]->procedimento_tuss_id; 
-                    
+        $procedimento_tuss_id = $procedimentos[0]->procedimento_tuss_id;                    
+      
         $re =  $this->exametemp->verificarlimiteprocedimento($procedimento_tuss_id, $medico_id,$empresa_id);
-                    
+                
         $turno = ""; 
         if(strtotime($inicio) >= strtotime('08:00:00') && strtotime($inicio) <=  strtotime('12:00:00') ){
               $turno = "manha";
@@ -1361,6 +1360,7 @@ class TuoTempoAPI extends Controller {
         }   
        
         $retornos = $this->exame->listarexameshorarioretorno($data,$medico_id,$procedimento_tuss_id,$empresa_id,$turno);
+         
         $id = 0;       
         if(count($re) > 0){       
                if(count($retornos) >= $re[0]->quantidade && $re[0]->quantidade > 0){
@@ -1396,7 +1396,7 @@ class TuoTempoAPI extends Controller {
          $faixa_inicial = $faixa[0]->faixa_etaria;
          $faixa_final = $faixa[0]->faixa_etaria_final;  
          $dataFuturo2 = date("Y-m-d");
-         $dataAtual2 = $res[0]->nascimento;
+         @$dataAtual2 = $res[0]->nascimento;
          $date_time2 = new DateTime($dataAtual2);
          $diff2 = $date_time2->diff(new DateTime($dataFuturo2)); 
          $teste2 = $diff2->format('%Y'); 

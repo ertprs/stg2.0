@@ -27,6 +27,7 @@ class Contasreceber extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+       
         if ($this->session->userdata('autenticado') != true) {
             redirect(base_url() . "login/index/login004", "refresh");
         }
@@ -70,6 +71,8 @@ class Contasreceber extends BaseController {
 
     function excluir($financeiro_contasreceber_id) {
         $valida = $this->contasreceber->excluir($financeiro_contasreceber_id);
+        $this->caixa->salvarauditoriafinanceiro($financeiro_contasreceber_id,'CONTAS A RECEBER','EXCLUSÃO');
+
 	// Apaga os arquivos
         if (is_dir("./upload/contasareceber")) {
             $this->load->helper('directory');
@@ -387,12 +390,19 @@ class Contasreceber extends BaseController {
                     }
                 }
             }
-        } else {
-            $financeiro_contasreceber_id = $this->contasreceber->gravar($dia, $parcela, $devedor_id, $id_agrupador);;
+            if ($financeiro_contasreceber_id != "-1") {
+                 $this->caixa->salvarauditoriafinanceiro($financeiro_contasreceber_id,'CONTAS A RECEBER','CADASTRO');
+            } 
+
+        } else {  
+             $financeiro_contasreceber_id = $this->contasreceber->gravar($dia, $parcela, $devedor_id, $id_agrupador);
+               if ($financeiro_contasreceber_id != "-1") {
+                 $this->caixa->salvarauditoriafinanceiro($financeiro_contasreceber_id,'CONTAS A RECEBER','EDIÇÃO');
+              }
         }
         if ($financeiro_contasreceber_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar a Contas a recebr. Opera&ccedil;&atilde;o cancelada.';
-        } else {
+        } else { 
             $data['mensagem'] = 'Sucesso ao gravar a Contas a recebr.';
             $this->importararquivoNovo($financeiro_contasreceber_id);
         }
@@ -403,11 +413,18 @@ class Contasreceber extends BaseController {
         }
     }
 
-    function confirmar() {
-        $financeiro_contasreceber_id = $this->contasreceber->gravarconfirmacao();
+    function confirmar() { 
+       $listar =  $this->contasreceber->dadoscontasreceber($_POST['financeiro_contasreceber_id']);
+       if($listar[0]->recebimento_antecipado == "t"){ 
+          $financeiro_contasreceber_id = $this->contasreceber->gravarconfirmacaoantecipado();
+       }else{  
+          $financeiro_contasreceber_id = $this->contasreceber->gravarconfirmacao();
+       }
+    
         if ($financeiro_contasreceber_id == "-1") {
             $data['mensagem'] = 'Erro ao confirmar a Contas a recebr. Opera&ccedil;&atilde;o cancelada.';
         } else {
+            $this->caixa->salvarauditoriafinanceiro($financeiro_contasreceber_id,'CONTAS A RECEBER','CONFIRMAÇÃO');
             $data['mensagem'] = 'Sucesso ao confirmar a Contas a recebr.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
@@ -488,6 +505,8 @@ class Contasreceber extends BaseController {
 
 //        $config['upload_path'] = "/home/vivi/projetos/clinica/upload/consulta/" . $paciente_id . "/";
         $data['financeiro_contasreceber_id'] = $financeiro_contasreceber_id;
+         $this->caixa->salvarauditoriafinanceiro($financeiro_contasreceber_id,'CONTAS A RECEBER','ADICIONOU ARQUIVO');
+
         redirect(base_url() . "cadastros/contasreceber/anexarimagemcontasareceber/$financeiro_contasreceber_id");
 //        $this->anexarimagemcontasareceber($financeiro_contasreceber_id);
     }

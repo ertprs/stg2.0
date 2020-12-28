@@ -1417,7 +1417,11 @@ class caixa_model extends Model {
                 $_POST['mes_antigo'] = 12;
                 $ano_atual = $ano_atual - 1;
             }else{
-                $_POST['mes_antigo'] = '0'.$_POST['mes_antigo'];
+                 if($_POST['mes_antigo'] < 10){
+                  $_POST['mes_antigo'] = '0'.$_POST['mes_antigo'];
+                }else{
+                  $_POST['mes_antigo'] =  $_POST['mes_antigo'];   
+                }
             }
             $data_inicio = "$ano_atual-{$_POST['mes_antigo']}-01";
 
@@ -1673,7 +1677,11 @@ class caixa_model extends Model {
                 $_POST['mes_antigo'] = 12;
                 $ano_atual = $ano_atual - 1;
             }else{
-                $_POST['mes_antigo'] = '0'.$_POST['mes_antigo'];
+                if($_POST['mes_antigo'] < 10){
+                  $_POST['mes_antigo'] = '0'.$_POST['mes_antigo'];
+                }else{
+                  $_POST['mes_antigo'] =  $_POST['mes_antigo'];   
+                }
             }
             $data_inicio = "$ano_atual-{$_POST['mes_antigo']}-01";
 
@@ -2767,7 +2775,7 @@ class caixa_model extends Model {
                 $this->db->set('operador_cadastro', $operador_id);
                 $this->db->where('saidas_id', $_POST['saida_id']);
                 $this->db->update('tb_saidas');
-//                $saida_id = $this->db->insert_id();
+                $saida_id = $_POST['saida_id'];
                 $erro = $this->db->_error_message();
                 if (trim($erro) != "") // erro de banco
                     return -1;
@@ -3271,6 +3279,120 @@ class caixa_model extends Model {
         return $return->result();
     }
     
+    function relatorioauditoria(){
+       
+        if ($_POST['tipo'] > 0) {
+            $this->db->select('
+                            tes.descricao
+                            ');
+            $this->db->from('tb_tipo_entradas_saida tes');
+            $this->db->where('tes.ativo', 'true');
+            $this->db->where('tes.tipo_entradas_saida_id', $_POST['tipo']);
+            $return = $this->db->get()->result();
+        }
+
+        $this->db->select('af.valor,
+                            af.valor_bruto,
+                            af.chave_primaria,
+                            af.observacao,
+                            af.data,
+                            e.nome as empresa,
+                            fcd.razao_social,
+                            fe.descricao as conta,
+                            af.tipo,
+                            af.classe,
+                            fonte,
+                            af.acao,
+                            af.data_cadastro,
+                            op.nome as op_cadastro,
+                            af.ordenador,
+                            af.fonte');
+        $this->db->from('tb_auditoria_financeiro af');
+        $this->db->join('tb_forma_entradas_saida fe', 'fe.forma_entradas_saida_id = af.conta', 'left');
+        $this->db->join('tb_financeiro_credor_devedor fcd', 'fcd.financeiro_credor_devedor_id = af.credor', 'left');
+        $this->db->join('tb_empresa e', 'e.empresa_id = af.empresa_id', 'left'); 
+        $this->db->join('tb_operador op', 'op.operador_id = af.operador_cadastro', 'left'); 
+        $this->db->where('af.ativo', 'true');
+        if ($_POST['credordevedor'] != 0) {
+            $this->db->where('fcd.financeiro_credor_devedor_id ', $_POST['credordevedor']);
+        } 
+        if ($_POST['empresa'] != "") {
+            $this->db->where('af.empresa_id', $_POST['empresa']);
+        }
+        if ($_POST['tipo'] > 0) { 
+            $this->db->where('tipo', @$return[0]->descricao);
+        }
+        if ($_POST['classe'] != '') {
+            $this->db->where('af.classe', $_POST['classe']);
+        }
+        if ($_POST['conta'] != 0) {
+            $this->db->where('af.conta', $_POST['conta']);
+        }
+        $this->db->where('af.data_cadastro >=', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])))." 00:00:00");
+        $this->db->where('af.data_cadastro <=', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])))." 23:59:59");
+       
+        $this->db->orderby('af.ordenador');
+        $this->db->orderby('af.conta');
+        $this->db->orderby('af.data');
+        $this->db->orderby('fcd.razao_social');
+        $return = $this->db->get();
+        return $return->result();
+    }
+    
+    
+    function salvarauditoriafinanceiro($chave_primaria,$fonte,$acao){
+        $horario = date('Y-m-d H:i:s');
+        $operador = $this->session->userdata('operador_id');
+        $ordenador = 0;
+        if($fonte == "ENTRADA"){ 
+            $ordenador = 1;
+            $this->db->select('*');
+            $this->db->from('tb_entradas');
+            $this->db->where('entradas_id',$chave_primaria);
+            $return = $this->db->get()->result(); 
+        }elseif($fonte == "SAIDA"){
+            $ordenador = 2;
+            $this->db->select('*');
+            $this->db->from('tb_saidas');
+            $this->db->where('saidas_id',$chave_primaria);
+            $return = $this->db->get()->result(); 
+        }elseif($fonte == "CONTAS A PAGAR"){
+            $ordenador = 3;
+            $this->db->select('fc.credor as nome,fc.*');
+            $this->db->from('tb_financeiro_contaspagar fc');
+            $this->db->where('fc.financeiro_contaspagar_id',$chave_primaria);
+            $return = $this->db->get()->result(); 
+        }elseif($fonte == "CONTAS A RECEBER"){
+            $ordenador = 4;
+            $this->db->select('fc.devedor as nome,fc.*');
+            $this->db->from('tb_financeiro_contasreceber fc');
+            $this->db->where('fc.financeiro_contasreceber_id',$chave_primaria);
+            $return = $this->db->get()->result(); 
+        }
+          
+        $this->db->set('empresa_id',$return[0]->empresa_id);
+        $this->db->set('conta',$return[0]->conta);
+        $this->db->set('classe',$return[0]->classe);
+        $this->db->set('tipo',$return[0]->tipo);
+        $this->db->set('data',$return[0]->data);
+        $this->db->set('chave_primaria',$chave_primaria);
+        $this->db->set('observacao',$return[0]->observacao);
+        $this->db->set('valor',$return[0]->valor);
+        if(isset($return[0]->valor_bruto)){
+        $this->db->set('valor_bruto',$return[0]->valor_bruto);
+        }
+        $this->db->set('credor',$return[0]->nome);
+        $this->db->set('data_cadastro',$horario);
+        $this->db->set('operador_cadastro',$operador);
+        $this->db->set('fonte',$fonte);
+        $this->db->set('acao',$acao);
+        if(isset($_POST) && count($_POST) > 0){
+        $this->db->set('json', json_encode($_POST));
+        }
+        $this->db->set('ordenador',$ordenador);
+        $this->db->insert('tb_auditoria_financeiro');
+  
+    }
 }
 
 ?>

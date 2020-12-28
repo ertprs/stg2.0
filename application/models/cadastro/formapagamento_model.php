@@ -465,6 +465,12 @@ class formapagamento_model extends Model {
             } else {
                 $tcd = 'f';
             }
+            
+            if ($_POST['recebimento_antecipado'] == 'on') {
+                $this->db->set('recebimento_antecipado', 't');
+            } else {
+                $this->db->set('recebimento_antecipado', 'f');
+            }
 
             if ($_POST['arrendondamento'] == 'on') {
                 $arredondamento = 't';
@@ -534,7 +540,8 @@ class formapagamento_model extends Model {
                                taxa_juros,
                                parcelas,
                                cartao,
-                               tcd');
+                               tcd,
+                               recebimento_antecipado');
             $this->db->from('tb_forma_pagamento');
             $this->db->where("forma_pagamento_id", $forma_pagamento_id);
             $query = $this->db->get();
@@ -552,6 +559,7 @@ class formapagamento_model extends Model {
             $this->_parcela_minima = $return[0]->parcela_minima;
             $this->_cartao = $return[0]->cartao;
             $this->_tcd = $return[0]->tcd;
+            $this->_recebimento_antecipado = $return[0]->recebimento_antecipado;
         } else {
             $this->_forma_pagamento_id = null;
         }

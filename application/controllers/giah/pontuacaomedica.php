@@ -26,6 +26,7 @@ class Pontuacaomedica extends BaseController {
         $this->load->model('giah/competencia_model', 'competencia');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
+         
     }
 
     /**

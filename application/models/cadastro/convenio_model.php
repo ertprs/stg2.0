@@ -2643,18 +2643,37 @@ class Convenio_model extends Model {
       
         
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+     
+     function listardadostodos() {
+
+        $this->db->select(' c.convenio_id,
+                            c.nome,
+                            c.dinheiro,
+                            c.conta_id,
+                            c.tamanho_carteira', false);
+        $this->db->from('tb_convenio c');
+        $this->db->join('tb_convenio_empresa ce', 'ce.convenio_id = c.convenio_id', 'left');
+        // $this->db->join('tb_procedimento_convenio ce', 'ce.convenio_id = c.convenio_id', 'left');
+        $this->db->where("c.ativo", 'true');      
+       
+        $procedimento_multiempresa = $this->session->userdata('procedimento_multiempresa');
+        if ($procedimento_multiempresa != 't') {
+            $empresa_id = $this->session->userdata('empresa_id');
+            $this->db->where("ce.empresa_id", $empresa_id);
+            $this->db->where("ce.ativo", 'true');
+        } 
+        $this->db->orderby("c.nome");
+        $this->db->groupby("c.convenio_id,
+                            c.nome,
+                            c.dinheiro,
+                            c.conta_id");
+        $query = $this->db->get();
+        $return = $query->result();
+
+        return $return;
+    }
+     
+     
     
 }
 

@@ -44,7 +44,19 @@ class grupos_model extends Model {
                 $grupo_id = $_POST['txtgrupoid'];
                 $this->db->where('ambulatorio_grupo_id', $ambulatorio_grupo_id);
                 $this->db->update('tb_ambulatorio_grupo');
+                
+                if($_POST['txtNome_antigo'] != ""){
+                $this->db->where('grupo',$_POST['txtNome_antigo']);
+                $this->db->set('grupo',$_POST['txtNome']);
+                $this->db->update('tb_procedimento_tuss');
+                }
             }
+            
+            
+           
+            
+            
+            
             return $ambulatorio_grupo_id;
         } catch (Exception $exc) {
             return -1;

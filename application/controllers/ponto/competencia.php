@@ -25,6 +25,7 @@ class Competencia extends Controller {
         //$this->load->model('giah/incentivo_model', 'incentivo_m');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
+        
     }
 
     /**

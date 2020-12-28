@@ -16,11 +16,14 @@ class modelorelatorio_model extends Model {
 
     function listar($args = array()) {
         $this->db->select('ambulatorio_modelo_relatorio_id,
-                            nome');
-        $this->db->from('tb_ambulatorio_modelo_relatorio');
-        $this->db->where('ativo', 't');
+                            aml.nome,
+                            aml.nao_editavel,
+                            oo.perfil_id');
+        $this->db->from('tb_ambulatorio_modelo_relatorio aml');
+        $this->db->join('tb_operador oo', 'oo.operador_id = aml.operador_cadastro', 'left');
+        $this->db->where('aml.ativo', 't');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
-            $this->db->where('nome ilike', "%" . $args['nome'] . "%");
+            $this->db->where('aml.nome ilike', "%" . $args['nome'] . "%");
         }
         return $this->db;
     }
@@ -53,6 +56,10 @@ class modelorelatorio_model extends Model {
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
 
+            if(isset($_POST['administrador'])){
+                $this->db->set('nao_editavel', 't');
+            }
+
             if ($_POST['ambulatorio_modelo_relatorio_id'] == "") {// insert
                 $this->db->set('data_cadastro', $horario);
                 $this->db->set('operador_cadastro', $operador_id);
@@ -79,7 +86,8 @@ class modelorelatorio_model extends Model {
         if ($ambulatorio_modelo_relatorio_id != 0) {
             $this->db->select('ambulatorio_modelo_relatorio_id,
                             nome,
-                            texto');
+                            texto,
+                            nao_editavel');
             $this->db->from('tb_ambulatorio_modelo_relatorio');
             $this->db->where("ambulatorio_modelo_relatorio_id", $ambulatorio_modelo_relatorio_id);
             $query = $this->db->get();
@@ -87,6 +95,7 @@ class modelorelatorio_model extends Model {
             $this->_ambulatorio_modelo_relatorio_id = $ambulatorio_modelo_relatorio_id;
             $this->_nome = $return[0]->nome;
             $this->_texto = $return[0]->texto;
+            $this->_nao_editavel = $return[0]->nao_editavel;
         } else {
             $this->_ambulatorio_modelo_relatorio_id = null;
         }

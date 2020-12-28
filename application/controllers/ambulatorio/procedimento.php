@@ -27,6 +27,7 @@ class Procedimento extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+         
     }
 
     function index() {
@@ -37,6 +38,38 @@ class Procedimento extends BaseController {
         $data["limite_paginacao"] = $limite;
         $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
         $this->loadView('ambulatorio/procedimento-lista', $data);
+    }
+
+    function associarrps($procedimento_id){
+        $data['procedimento'] = $this->procedimento->listarprocedimentounico($procedimento_id);
+        $data['empresa'] = array();
+        $data['procedimentosrps'] = $this->procedimento->listarprocedimentosrps($procedimento_id);
+        $data['valorpercentual'] = $this->procedimento->valorpercentual($procedimento_id);
+        // echo '<pre>';
+        // print_r($data['valorpercentual']);
+        // die;
+        $this->load->View('ambulatorio/associacaorps-form', $data);
+    }
+
+    function gravarassociacaorps(){
+        $procedimento_tuss_id = $_POST['procedimento_tuss_id'];
+        if($this->procedimento->gravarassociacaorps()){
+            $data['mensagem'] = 'Sucesso ao Gravar o Procedimento.';
+        }else{
+            $data['mensagem'] = 'Ocorreu um problema ao gravar o procedimento';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "ambulatorio/procedimento/associarrps/$procedimento_tuss_id");
+    }
+
+    function excluirassociacaorps($procedimento_associacao_rps, $procedimento_tuss_id){
+        if($this->procedimento->excluirassociacaorps($procedimento_associacao_rps)){
+            $data['mensagem'] = 'Sucesso ao Excluir o Procedimento.';
+        }else{
+            $data['mensagem'] = 'Ocorreu um problema ao Excluir o procedimento';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "ambulatorio/procedimento/associarrps/$procedimento_tuss_id");
     }
 
     function log($procedimento_tuss_id) {
@@ -111,7 +144,7 @@ class Procedimento extends BaseController {
 
         $data['procedimento'] = $this->procedimento->listarprocedimentoprodutovalor($procedimento_tuss_id);
         $data['valor'] = $this->procedimento->listarprocedimentoconveniovalor($procedimento_tuss_id);
-        $data['convenio'] = $this->convenio->listardados();
+        $data['convenio'] = $this->convenio->listardadostodos();
 //        var_dump($data['valor']); die;
         $this->loadView('ambulatorio/procedimentoconveniovalor-form', $data);
     }
@@ -200,7 +233,8 @@ class Procedimento extends BaseController {
         $data['laboratorios'] = $this->laboratorio->listarlaboratorios();
         //$this->carregarView($data, 'giah/servidor-form');
         $data['medidas'] = $this->procedimento->listarmedidas();
-        $data['permissao'] = $this->empresa->listarverificacaopermisao2($this->session->userdata('empresa_id')); 
+        $data['permissao'] = $this->empresa->listarverificacaopermisao2($this->session->userdata('empresa_id'));
+        $data['descricao_material'] = $this->procedimentoplano->listardescricaomaterialtodos();
         $this->loadView('ambulatorio/procedimento-form', $data);
     }
 
@@ -408,7 +442,9 @@ class Procedimento extends BaseController {
         }
         $this->load->view('footer');
     }
-
+ 
+    
+    
 }
 
 /* End of file welcome.php */

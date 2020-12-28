@@ -287,6 +287,9 @@ class sala_model extends Model {
             if ($_POST['toten_sala_id'] > 0) {
                 $this->db->set('toten_sala_id', $_POST['toten_sala_id']);
             }
+            if ($_POST['qtde_agendamento'] > 0) {
+                $this->db->set('qtde_agendamento', $_POST['qtde_agendamento']);
+            }
 
 //            $this->db->set('nome_chamada', $_POST['txtnomechamada']);
 //            $this->db->set('tipo', $_POST['tipo']);
@@ -417,7 +420,8 @@ class sala_model extends Model {
                                 grupo, 
                                 painel_id, 
                                 toten_sala_id, 
-                                cod_cnes');
+                                cod_cnes,
+                                qtde_agendamento');
             $this->db->from('tb_exame_sala');
             $this->db->where("exame_sala_id", $exame_sala_id);
             $query = $this->db->get();
@@ -434,6 +438,7 @@ class sala_model extends Model {
             $this->_hora_fim = $return[0]->hora_fim;
             $this->_hora_inicio = $return[0]->hora_inicio;
             $this->_cod_cnes = $return[0]->cod_cnes;
+            $this->_qtde_agendamento = $return[0]->qtde_agendamento;
         } else {
             $this->_exame_sala_id = null;
         }

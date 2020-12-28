@@ -26,6 +26,7 @@ class centrocirurgico extends BaseController {
         $this->load->model('ambulatorio/motivocancelamento_model', 'motivocancelamento');
         $this->load->model('ambulatorio/modelodeclaracao_model', 'modelodeclaracao');
         $this->load->library('utilitario');
+         
     }
 
     public function index() {

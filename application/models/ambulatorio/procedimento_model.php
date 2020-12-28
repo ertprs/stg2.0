@@ -276,6 +276,84 @@ class procedimento_model extends Model {
         return $return->result();
     }
 
+    function listarprocedimentounico($procedimento_tuss_id){
+        $this->db->select('procedimento_tuss_id, nome, grupo,descricao_preparo,descricao_material,descricao_diurese');
+        $this->db->from('tb_procedimento_tuss');
+        $this->db->where('procedimento_tuss_id', $procedimento_tuss_id);
+
+        return $this->db->get()->result();
+    }
+
+    function listarprocedimentosrps($procedimento_tuss_id){
+        $this->db->select('procedimento_associacao_rps,
+                            procedimento,
+                            codtuss,
+                            sessoes,
+                            percentual,
+                            procedimento_tuss_id');
+        $this->db->from('tb_procedimento_associacao_rps');
+        $this->db->where('ativo', 't');
+        $this->db->where('procedimento_tuss_id', $procedimento_tuss_id);
+
+        return $this->db->get()->result();
+    }
+
+    function valorpercentual($procedimento_tuss_id){
+        $this->db->select("SUM(percentual) as total", false);
+        $this->db->from('tb_procedimento_associacao_rps');
+        $this->db->where('ativo', 't');
+        $this->db->where('procedimento_tuss_id', $procedimento_tuss_id);
+        $this->db->groupby('procedimento_tuss_id');
+
+        $return = $this->db->get()->result();
+        if(count($return) > 0){
+            return $return[0]->total;
+        }else{
+            return 0;
+        }
+        
+    }
+
+    function gravarassociacaorps(){
+        $procedimento_tuss_id = $_POST['procedimento_tuss_id'];
+        
+        try {
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+
+            $this->db->set('procedimento', $_POST['nomeprocedimento']);
+            $this->db->set('codtuss', $_POST['codTuss']);
+            $this->db->set('sessoes', $_POST['qtdSessoes']);
+            $this->db->set('percentual', $_POST['valorpercentual']);
+            $this->db->set('procedimento_tuss_id', $procedimento_tuss_id);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->set('data_cadastro', $horario);
+            $this->db->insert('tb_procedimento_associacao_rps');
+
+            return true;
+        } catch (Exception $exc) {
+            return false;
+        }
+    }
+
+    function excluirassociacaorps($procedimento_associacao_rps){
+        
+        try {
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+
+            $this->db->set('ativo', 'f');
+            $this->db->set('operador_atualizacao', $operador_id);
+            $this->db->set('data_atualizacao', $horario);
+            $this->db->where('procedimento_associacao_rps', $procedimento_associacao_rps);
+            $this->db->update('tb_procedimento_associacao_rps');
+
+            return true;
+        } catch (Exception $exc) {
+            return false;
+        }
+    }
+
     function verificarCodigoProcedimento($codigo, $convenio) {
         // echo '<pre>';
         // var_dump($codigo, $convenio); 
@@ -1012,10 +1090,13 @@ class procedimento_model extends Model {
         return $return->result();
     }
 
-    function listargruposatendimento() {
+    function listargruposatendimento($especialidade = 'false') {
         $this->db->select('ambulatorio_grupo_id,
                             nome');
         $this->db->from('tb_ambulatorio_grupo');
+        if($especialidade == 'true'){
+        $this->db->where("tipo NOT IN ('MEDICAMENTO', 'MATERIAL', 'CONSULTA', 'EXAME', 'CIRURGICO')");
+        }
 //        $this->db->where("tipo", 'CONSULTA');
         $this->db->orderby("nome");
         $return = $this->db->get();
@@ -1610,7 +1691,38 @@ class procedimento_model extends Model {
             }
             if ($_POST['descricao'] != '') {
                 $this->db->set('descricao_procedimento', $_POST['descricao']);
+            }else{
+                $this->db->set('descricao_procedimento', null);
             }
+            if ($_POST['descricao_preparo'] != '') {
+                $this->db->set('descricao_preparo', $_POST['descricao_preparo']);
+            }else{
+                $this->db->set('descricao_preparo', null);
+            }
+            if (count(@$_POST['descricao_material']) > 0) {
+                $this->db->set('descricao_material', json_encode($_POST['descricao_material']));
+            }else{
+                 $this->db->set('descricao_material', null);
+            } 
+            
+            if ($_POST['descricao_diurese'] != '') {
+                $this->db->set('descricao_diurese', $_POST['descricao_diurese']);
+            }else{
+                  $this->db->set('descricao_diurese', null);
+            }
+            
+            if (isset($_POST['infor_preparo'])) {
+                $this->db->set('preparo', 't'); 
+            } else {
+                $this->db->set('preparo', 'f');
+            }
+            
+            if (isset($_POST['infor_complem'])) {
+                $this->db->set('informacoes_complementares', 't'); 
+            } else {
+                $this->db->set('informacoes_complementares', 'f');
+            }
+            
             if ($_POST['laboratorio_id'] != '') {
                 $this->db->set('laboratorio_id', $_POST['laboratorio_id']);
             }
@@ -1673,12 +1785,11 @@ class procedimento_model extends Model {
                 $this->db->set('cod_classificacao', @$_POST['cod_classificacao']);
             } else { 
                 $this->db->set('cod_classificacao', null);
-            }
-            
-             if ($_POST['txtvalor_tcd'] != '') {
+            } 
+            if ($_POST['txtvalor_tcd'] != '') {
                 $this->db->set('valor_tcd', str_replace(",", ".", $_POST['txtvalor_tcd']));
-            }
-
+            } 
+            
 //
 //            if ($_POST['txtperc_promotor'] != '') {
 //                $this->db->set('valor_promotor', str_replace(",", ".", $_POST['txtperc_promotor']));
@@ -2085,7 +2196,12 @@ class procedimento_model extends Model {
                                pt.revisao, pt.sala_preparo, pt.revisao_dias,
                                pt.associacao_procedimento_tuss_id, pt.retorno_dias,
                                pt.subgrupo_id, pt.agrupador_grupo, pt.tipo_aso, pt.meta_mensal,pt.cod_servico,pt.cod_classificacao,
-                               pt.valor_tcd');
+                               pt.valor_tcd,
+                               pt.descricao_preparo,
+                               pt.descricao_material,
+                               pt.descricao_diurese,
+                               pt.informacoes_complementares,
+                               pt.preparo');
             $this->db->from('tb_procedimento_tuss pt');
             $this->db->join('tb_tuss t', 't.tuss_id = pt.tuss_id', 'left');
             $this->db->where("procedimento_tuss_id", $procedimento_tuss_id);
@@ -2132,6 +2248,11 @@ class procedimento_model extends Model {
             $this->_cod_servico = $return[0]->cod_servico;
             $this->_cod_classificacao = $return[0]->cod_classificacao;
             $this->_valor_tcd = $return[0]->valor_tcd;
+            $this->_descricao_preparo = $return[0]->descricao_preparo;
+            $this->_descricao_material = $return[0]->descricao_material;
+            $this->_descricao_diurese = $return[0]->descricao_diurese;
+            $this->_informacoes_complementares = $return[0]->informacoes_complementares;
+            $this->_preparo = $return[0]->preparo;
         } else {
             $this->_procedimento_tuss_id = null;
         }

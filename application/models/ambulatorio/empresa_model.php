@@ -105,6 +105,7 @@ class empresa_model extends Model {
         $this->db->from('tb_empresa_lembretes el');
         $this->db->join('tb_operador o', "o.operador_id = el.operador_destino");
         $this->db->where('el.empresa_id', $empresa_id);
+        $this->db->where('el.lembrete_por_medico', 'f');
 
         if (isset($args['texto']) && strlen(@$args['texto']) > 0) {
             $this->db->where('el.texto ilike', "%" . $args['texto'] . "%");
@@ -288,13 +289,15 @@ class empresa_model extends Model {
                             pp.data_cadastro,
                             pp.turno,
                             pp.observacao,
-                            o.nome as medico');
+                            o.nome as medico,
+                            os.nome as operador');
         $this->db->from('tb_paciente_solicitar_agendamento pp');
         $this->db->join('tb_paciente p', 'p.paciente_id = pp.paciente_id', 'left');
         $this->db->join('tb_procedimento_convenio pc', 'pc.procedimento_convenio_id = pp.procedimento_convenio_id', 'left');
         $this->db->join('tb_procedimento_tuss pt', 'pt.procedimento_tuss_id = pc.procedimento_tuss_id', 'left');
         $this->db->join('tb_convenio c', 'c.convenio_id = pc.convenio_id', 'left');
         $this->db->join('tb_operador o', 'o.operador_id = pp.medico_id', 'left');
+        $this->db->join('tb_operador os', 'os.operador_id = pp.operador_cadastro', 'left');
         $this->db->where('pp.ativo', 't');
         $this->db->where('pp.confirmado', 'f');
         
@@ -516,11 +519,15 @@ class empresa_model extends Model {
         return $return->result();
     }
 
-    function listarempresamunicipio() {
-        $empresa_id = $this->session->userdata('empresa_id');
-        if(!@$empresa_id > 0){
-            $empresa_id = 1;
+    function listarempresamunicipio($empresa_id = null) {
+
+        if($empresa_id == null){
+            $empresa_id = $this->session->userdata('empresa_id');
+            if(!@$empresa_id > 0){
+                $empresa_id = 1;
+            }
         }
+        
         $this->db->select('e.razao_social,
                             e.logradouro,
                             e.numero,
@@ -2961,7 +2968,93 @@ class empresa_model extends Model {
                         $this->db->set('redutor_valor_liquido', 'f');
                     }
                     
+                    if (isset($_POST['relatorio_caixa_cartao'])) {
+                        $this->db->set('relatorio_caixa_cartao', 't');
+                    } else {
+                        $this->db->set('relatorio_caixa_cartao', 'f');
+                    }
 
+                    if (isset($_POST['associacao_rps'])) {
+                        $this->db->set('associacao_rps', 't');
+                    } else {
+                        $this->db->set('associacao_rps', 'f');
+                    }
+
+                    if (isset($_POST['orcamento_preco_tcd'])) {
+                        $this->db->set('orcamento_preco_tcd', 't');
+                    } else {
+                        $this->db->set('orcamento_preco_tcd', 'f');
+                    }
+                    
+                    if (isset($_POST['perfil_faturar'])) {
+                        $this->db->set('perfil_faturar', 't');
+                    } else {
+                        $this->db->set('perfil_faturar', 'f');
+                    }
+                    
+                    if (isset($_POST['perfil_valor'])) {
+                        $this->db->set('perfil_valor', 't');
+                    } else {
+                        $this->db->set('perfil_valor', 'f');
+                    } 
+                    if (isset($_POST['perfil_sangria'])) {
+                        $this->db->set('perfil_sangria', 't');
+                    } else {
+                        $this->db->set('perfil_sangria', 'f');
+                    } 
+                    if (isset($_POST['geral_agenda'])) {
+                        $this->db->set('geral_agenda', 't');
+                    } else {
+                        $this->db->set('geral_agenda', 'f');
+                    } 
+                    if (isset($_POST['atendimento_000'])) {
+                        $this->db->set('atendimento_000', 't');
+                    } else {
+                        $this->db->set('atendimento_000', 'f');
+                    } 
+                    if (isset($_POST['agendamento_multiplo'])) {
+                        $this->db->set('agendamento_multiplo', 't');
+                    } else {
+                        $this->db->set('agendamento_multiplo', 'f');
+                    } 
+                    if (isset($_POST['internacao_faturamento'])) {
+                        $this->db->set('internacao_faturamento', 't');
+                    } else {
+                        $this->db->set('internacao_faturamento', 'f');
+                    } 
+                    
+                    if (count(@$_POST['campos_obrigatorios_atendimento']) > 0) {
+                        $this->db->set('campos_obrigatorios_atendimento', json_encode(@$_POST['campos_obrigatorios_atendimento']));
+                    } else {
+                        $this->db->set('campos_obrigatorios_atendimento', '');
+                    }
+                    if (isset($_POST['orcamento_recepcao_aparecer'])) {
+                        $this->db->set('orcamento_recepcao_aparecer', 't');
+                    } else {
+                        $this->db->set('orcamento_recepcao_aparecer', 'f');
+                    } 
+                     if (isset($_POST['preco_procedimento_recepcao'])) {
+                        $this->db->set('preco_procedimento_recepcao', 't');
+                    } else {
+                        $this->db->set('preco_procedimento_recepcao', 'f');
+                    }
+                     if (isset($_POST['ocorrencia_recepcao'])) {
+                        $this->db->set('ocorrencia_recepcao', 't');
+                    } else {
+                        $this->db->set('ocorrencia_recepcao', 'f');
+                    }
+                    if (isset($_POST['tcd_recepcao'])) {
+                        $this->db->set('tcd_recepcao', 't');
+                    } else {
+                        $this->db->set('tcd_recepcao', 'f');
+                    }
+                    
+                    if (isset($_POST['valores_procedimento_editaveis'])) {
+                        $this->db->set('valores_procedimento_editaveis', 't');
+                    } else {
+                        $this->db->set('valores_procedimento_editaveis', 'f');
+                    } 
+                    
                 }
 
 
@@ -4145,6 +4238,91 @@ class empresa_model extends Model {
                         $this->db->set('redutor_valor_liquido', 'f');
                     }
                     
+                    if (isset($_POST['relatorio_caixa_cartao'])) {
+                        $this->db->set('relatorio_caixa_cartao', 't');
+                    } else {
+                        $this->db->set('relatorio_caixa_cartao', 'f');
+                    }
+                    if (isset($_POST['associacao_rps'])) {
+                        $this->db->set('associacao_rps', 't');
+                    } else {
+                        $this->db->set('associacao_rps', 'f');
+                    }
+                    if (isset($_POST['orcamento_preco_tcd'])) {
+                        $this->db->set('orcamento_preco_tcd', 't');
+                    } else {
+                        $this->db->set('orcamento_preco_tcd', 'f');
+                    }
+                    
+                    
+                    if (isset($_POST['perfil_faturar'])) {
+                        $this->db->set('perfil_faturar', 't');
+                    } else {
+                        $this->db->set('perfil_faturar', 'f');
+                    }
+                    if (isset($_POST['perfil_valor'])) {
+                        $this->db->set('perfil_valor', 't');
+                    } else {
+                        $this->db->set('perfil_valor', 'f');
+                    } 
+                    if (isset($_POST['perfil_sangria'])) {
+                        $this->db->set('perfil_sangria', 't');
+                    } else {
+                        $this->db->set('perfil_sangria', 'f');
+                    } 
+                    if (isset($_POST['geral_agenda'])) {
+                        $this->db->set('geral_agenda', 't');
+                    } else {
+                        $this->db->set('geral_agenda', 'f');
+                    } 
+                    if (isset($_POST['atendimento_000'])) {
+                        $this->db->set('atendimento_000', 't');
+                    } else {
+                        $this->db->set('atendimento_000', 'f');
+                    } 
+                    if (isset($_POST['agendamento_multiplo'])) {
+                        $this->db->set('agendamento_multiplo', 't');
+                    } else {
+                        $this->db->set('agendamento_multiplo', 'f');
+                    } 
+                    if (isset($_POST['internacao_faturamento'])) {
+                        $this->db->set('internacao_faturamento', 't');
+                    } else {
+                        $this->db->set('internacao_faturamento', 'f');
+                    } 
+                    
+                    if (count(@$_POST['campos_obrigatorios_atendimento']) > 0) {
+                        $this->db->set('campos_obrigatorios_atendimento', json_encode(@$_POST['campos_obrigatorios_atendimento']));
+                    } else {
+                        $this->db->set('campos_obrigatorios_atendimento', '');
+                    }
+                    if (isset($_POST['orcamento_recepcao_aparecer'])) {
+                        $this->db->set('orcamento_recepcao_aparecer', 't');
+                    } else {
+                        $this->db->set('orcamento_recepcao_aparecer', 'f');
+                    }
+                    
+                    if (isset($_POST['preco_procedimento_recepcao'])) {
+                        $this->db->set('preco_procedimento_recepcao', 't');
+                    } else {
+                        $this->db->set('preco_procedimento_recepcao', 'f');
+                    }
+                    if (isset($_POST['ocorrencia_recepcao'])) {
+                        $this->db->set('ocorrencia_recepcao', 't');
+                    } else {
+                        $this->db->set('ocorrencia_recepcao', 'f');
+                    }
+                    if (isset($_POST['tcd_recepcao'])) {
+                        $this->db->set('tcd_recepcao', 't');
+                    } else {
+                        $this->db->set('tcd_recepcao', 'f');
+                    }
+                    
+                    if (isset($_POST['valores_procedimento_editaveis'])) {
+                        $this->db->set('valores_procedimento_editaveis', 't');
+                    } else {
+                        $this->db->set('valores_procedimento_editaveis', 'f');
+                    } 
                     
                 }
 
@@ -4476,7 +4654,23 @@ class empresa_model extends Model {
                                f.facebook_empresa,
                                f.instagram_empresa,
                                ep.modificar_btn_multifuncao,
-                               ep.redutor_valor_liquido
+                               ep.redutor_valor_liquido,
+                               ep.relatorio_caixa_cartao,
+                               ep.associacao_rps,
+                               ep.orcamento_preco_tcd,
+                               ep.perfil_faturar,
+                               ep.perfil_valor,
+                               ep.perfil_sangria,
+                               ep.geral_agenda,
+                               ep.atendimento_000,
+                               ep.agendamento_multiplo,
+                               ep.internacao_faturamento,
+                               ep.campos_obrigatorios_atendimento,
+                               ep.orcamento_recepcao_aparecer,
+                               ep.preco_procedimento_recepcao,
+                               ep.ocorrencia_recepcao,
+                               ep.tcd_recepcao,
+                               ep.valores_procedimento_editaveis
                                ');
             $this->db->from('tb_empresa f');
             $this->db->join('tb_municipio c', 'c.municipio_id = f.municipio_id', 'left');
@@ -4762,6 +4956,22 @@ class empresa_model extends Model {
             $this->_instagram_empresa = $return[0]->instagram_empresa;
             $this->_modificar_btn_multifuncao = $return[0]->modificar_btn_multifuncao; 
             $this->_redutor_valor_liquido = $return[0]->redutor_valor_liquido; 
+            $this->_associacao_rps = $return[0]->associacao_rps;
+            $this->_orcamento_preco_tcd = $return[0]->orcamento_preco_tcd;
+            $this->_relatorio_caixa_cartao = $return[0]->relatorio_caixa_cartao; 
+            $this->_perfil_faturar = $return[0]->perfil_faturar; 
+            $this->_perfil_valor = $return[0]->perfil_valor; 
+            $this->_perfil_sangria = $return[0]->perfil_sangria; 
+            $this->_geral_agenda = $return[0]->geral_agenda; 
+            $this->_atendimento_000 = $return[0]->atendimento_000; 
+            $this->_agendamento_multiplo = $return[0]->agendamento_multiplo;
+            $this->_internacao_faturamento = $return[0]->internacao_faturamento;
+            $this->_campos_obrigatorios_atendimento = $return[0]->campos_obrigatorios_atendimento; 
+            $this->_orcamento_recepcao_aparecer = $return[0]->orcamento_recepcao_aparecer; 
+            $this->_preco_procedimento_recepcao = $return[0]->preco_procedimento_recepcao; 
+            $this->_ocorrencia_recepcao = $return[0]->ocorrencia_recepcao; 
+            $this->_tcd_recepcao = $return[0]->tcd_recepcao;
+            $this->_valores_procedimento_editaveis = $return[0]->valores_procedimento_editaveis;
         } else {
             $this->_empresa_id = null;
         }

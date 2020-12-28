@@ -3,24 +3,30 @@
         <h3><a href="#">Gerar Relatório Operador</a></h3>
         <div>
             <form method="post" action="<?= base_url() ?>seguranca/operador/gerarelatorioemailoperador">
-                <dl>
-                    <dt>
-                        <label>Perfil</label>
-                    </dt>
-                    <dd>
-                        <select name="perfil" id="perfil" class="size3" >
-                            <option value='0' >TODOS</option>
-                            <?foreach($perfil as $item){?>
-                              <option value='<?=$item->perfil_id?>' ><?=$item->nome?></option>  
-                            <?}?>
-                            
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Perfil</label>
+                                <select name="perfil" id="perfil" class="form-control" >
+                                    <option value='0' >TODOS</option>
+                                    <?foreach($perfil as $item){?>
+                                        <option value='<?=$item->perfil_id?>' ><?=$item->nome?></option>
+                                    <?}?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>&nbsp;</label>
+                                <button class="btn btn-outline-success btn-sm" type="submit" >Pesquisar</button>
+                            </div>
 
-                        </select>
-                    </dd>
+                        </div>
 
+                    </div>
+                </fieldset>
 
-                </dl>
-                <button type="submit" >Pesquisar</button>
             </form>
 
         </div>

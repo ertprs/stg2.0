@@ -22,6 +22,7 @@ class Matricula extends Controller {
     function Matricula() {
         parent::Controller();
         $this->load->model('giah/matricula_model', 'matricula_m');
+        
     }
     /**
     * Função

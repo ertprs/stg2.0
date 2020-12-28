@@ -9,6 +9,7 @@ class triagem extends BaseController {
         $this->load->model('emergencia/triagem_model', 'triagem');
         $this->load->model('cadastro/paciente_model', 'paciente');
         $this->load->library('utilitario');
+         
     }
 
     public function index() {

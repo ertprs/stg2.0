@@ -926,6 +926,28 @@ class solicita_cirurgia_model extends BaseModel {
         return $return;
     }
 
+    function listarconveniostodosinternacao() {
+
+        $empresa_id = $this->session->userdata('empresa_id');
+
+        $this->db->select(' c.convenio_id,
+                            c.nome,
+                            c.dinheiro,
+                            c.conta_id');
+        $this->db->from('tb_convenio c');
+        $this->db->join('tb_convenio_empresa ce', 'ce.convenio_id = c.convenio_id', 'left');
+        $this->db->where('c.convenio_id IN (SELECT convenio_id FROM ponto.tb_procedimento_convenio WHERE ativo = TRUE)');
+        $this->db->where("c.ativo", 'true');
+        $this->db->where("ce.empresa_id", $empresa_id);
+        $this->db->where("ce.ativo", 'true');
+//        $this->db->where("ce.dinheiro", 'false');
+        $this->db->orderby("c.nome");
+        $query = $this->db->get();
+        $return = $query->result();
+
+        return $return;
+    }
+
     function listarconveniosdinheiro() {
 
         $empresa_id = $this->session->userdata('empresa_id');

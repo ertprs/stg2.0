@@ -31,6 +31,7 @@ class Procedimentoplano extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+       
     }
 
     function index() {
@@ -545,6 +546,7 @@ class Procedimentoplano extends BaseController {
         $data['obj'] = $obj_paciente;
         $empresa_id = $this->session->userdata('empresa_id');
         $permissoes = $this->guia->listarempresapermissoes($empresa_id);
+        $data['permissoes'] = $permissoes;
         $data['empresa'] = $this->guia->listarempresas();
         $data['convenio'] = $this->convenio->listardados();
         $data['procedimento'] = $this->procedimento->listarprocedimentos();
@@ -1517,37 +1519,45 @@ class Procedimentoplano extends BaseController {
         }
         $this->load->view('footer');
     }
-    
-    
-    
-    
      
     
-    function listarorcamentoempresa($args = array()) {
-
- 
-        $this->loadView('ambulatorio/orcamentoempresa-lista', $args);
-    
-
+    function listarorcamentoempresa($args = array()) { 
+        $this->loadView('ambulatorio/orcamentoempresa-lista', $args);  
     }
     
+    function listardescricaomaterial($args = array()) { 
+        $this->loadView('ambulatorio/descricaomaterial-lista', $args);  
+    }
     
+    function carregardescricaomaterial($descricao_material){ 
+        if($descricao_material != "0"){
+         $data['lista']= $this->procedimentoplano->carregardescricaomaterial($descricao_material);
+        } 
+        $data['descricao_material_id'] = $descricao_material;
+        $this->loadView('ambulatorio/descricaomaterial-form', $data);   
+    }
     
+    function gravardescricaomaterial(){ 
+        $descricao_material_id = $this->procedimentoplano->gravardescricaomaterial();
+         if ($procedimentoplano_tuss_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar descrição meterial.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar descrição meterial.';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+       redirect(base_url()."ambulatorio/procedimentoplano/listardescricaomaterial");
+    }
     
+    function excluirdescricaomaterial($descricao_material_id){
+        $this->procedimentoplano->excluirdescricaomaterial($descricao_material_id); 
+        redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    function gravardescricaomaterialprocedimento(){
+        
+       $this->procedimentoplano->gravardescricaomaterialprocedimento(); 
+      redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+    }
     
 
 }

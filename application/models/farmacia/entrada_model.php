@@ -35,7 +35,8 @@ class entrada_model extends Model {
                             e.quantidade,
                             e.nota_fiscal,
                             e.validade,
-                            e.transferencia');
+                            e.transferencia,
+                            e.data_compra');
         $this->db->from('tb_farmacia_entrada e');
         $this->db->join('tb_farmacia_produto p', 'p.farmacia_produto_id = e.produto_id', 'left');
         $this->db->join('tb_farmacia_fornecedor f', 'f.farmacia_fornecedor_id = e.fornecedor_id', 'left');
@@ -54,6 +55,7 @@ class entrada_model extends Model {
         if (isset($args['nota']) && strlen($args['nota']) > 0) {
             $this->db->where('e.nota_fiscal ilike', "%" . $args['nota'] . "%");
         }
+       
         return $this->db;
     }
 

@@ -69,6 +69,161 @@ class app_model extends Model {
         return $return->result();
     }
 
+    function listartodospacientes($paciente){
+        $this->db->select('paciente_id, p.nome, cpf, p.telefone, p.celular, c.nome as convenio, outro_convenio');
+        $this->db->from('tb_paciente p');
+        $this->db->join('tb_convenio c', 'p.convenio_id = c.convenio_id', 'left');
+        $this->db->where('p.ativo', 't');
+        if($paciente != ""){
+            $this->db->where('p.nome ilike', "%" . $paciente . "%");
+        }
+        $return = $this->db->get();
+
+        if($paciente != ""){
+            return $return->result();
+        }else{
+            return array();
+        }
+        
+    }
+
+    function repetirreceitapaciente($ambulatorio_laudo_id, $meses){
+        $this->db->select('data_cadastro, texto, medico_parecer1, laudo_id, tipo, assinatura, carimbo, especial, receita_id, adendo');
+        $this->db->from('tb_ambulatorio_receituario');
+        $this->db->where('ambulatorio_receituario_id', $ambulatorio_laudo_id);
+        $return = $this->db->get()->result();
+
+            $data = date('Y-m-d', strtotime($return[0]->data_cadastro .' + '. $meses. ' months'));
+            $data = $data.' 00:00:00';
+            $this->db->set('texto', $return[0]->texto);
+            $this->db->set('medico_parecer1', $return[0]->medico_parecer1);
+            $this->db->set('laudo_id', $return[0]->laudo_id);
+            $this->db->set('tipo', $return[0]->tipo);
+            $this->db->set('assinatura', $return[0]->assinatura);
+            $this->db->set('carimbo', $return[0]->carimbo);
+            $this->db->set('especial', $return[0]->especial);
+            $this->db->set('data_cadastro', $data);
+            $this->db->set('receita_id', $return[0]->receita_id);
+            $this->db->set('adendo', $return[0]->adendo);
+            $this->db->set('operador_cadastro', 0);
+            $this->db->insert('tb_ambulatorio_receituario');
+
+            $insert_id = $this->db->insert_id();
+
+        return $insert_id;
+    }
+
+
+    function repetirexamepaciente($ambulatorio_exame_id, $meses){
+        $this->db->select('data_cadastro, texto, medico_parecer1, laudo_id, tipo, assinatura, carimbo, exame_id, adendo');
+        $this->db->from('tb_ambulatorio_exame');
+        $this->db->where('ambulatorio_exame_id', $ambulatorio_exame_id);
+        $return = $this->db->get()->result();
+
+            $data = date('Y-m-d', strtotime($return[0]->data_cadastro .' + '. $meses. ' months'));
+            $data = $data.' 00:00:00';
+            $this->db->set('texto', $return[0]->texto);
+            $this->db->set('medico_parecer1', $return[0]->medico_parecer1);
+            $this->db->set('laudo_id', $return[0]->laudo_id);
+            $this->db->set('tipo', $return[0]->tipo);
+            $this->db->set('assinatura', $return[0]->assinatura);
+            $this->db->set('carimbo', $return[0]->carimbo);
+            $this->db->set('data_cadastro', $data);
+            $this->db->set('exame_id', $return[0]->exame_id);
+            $this->db->set('adendo', $return[0]->adendo);
+            $this->db->set('operador_cadastro', 0);
+            $this->db->insert('tb_ambulatorio_exame');
+
+            $insert_id = $this->db->insert_id();
+
+        return $insert_id;
+    }
+
+    function listarprescricao($paciente_id, $laudo_id){
+        $this->db->select('pt.nome as procedimento,
+                           al.texto,
+                           al.ambulatorio_laudo_id,
+                           al.data,
+                           m.nome as medico,
+                           al.exame_id,
+                           al.tipo');
+        $this->db->from('tb_ambulatorio_laudo al');
+        $this->db->join('tb_procedimento_convenio pc', 'pc.procedimento_convenio_id = al.procedimento_tuss_id', 'left');
+        $this->db->join('tb_procedimento_tuss pt', 'pt.procedimento_tuss_id = pc.procedimento_tuss_id', 'left');
+        $this->db->join('tb_operador m', 'm.operador_id = al.medico_parecer1', 'left');
+        if($paciente_id > 0){
+        $this->db->where('al.paciente_id', $paciente_id);
+        }
+        if($laudo_id > 0){
+            $this->db->where('al.ambulatorio_laudo_id', $laudo_id);
+        }
+        $this->db->orderby('al.data asc');
+
+
+        return $this->db->get()->result();
+    }
+
+    function listarreceitaatendimento($laudo_id){
+        $this->db->select('ar.ambulatorio_receituario_id,
+                           ar.texto,
+                           ar.data_cadastro,
+                           o.nome as medico,
+                           ar.especial,
+                           al.empresa_id');
+        $this->db->from('tb_ambulatorio_receituario ar');
+        $this->db->join('tb_ambulatorio_laudo al', 'al.ambulatorio_laudo_id = ar.laudo_id');
+        $this->db->join('tb_operador o', 'o.operador_id = ar.medico_parecer1', 'left');
+        $this->db->where('laudo_id', $laudo_id);
+        $this->db->orderby('ar.data_cadastro asc');
+        
+        return $this->db->get()->result();
+    }
+
+    function listarsolexamesatendimento($laudo_id){
+        $this->db->select('ar.ambulatorio_exame_id,
+                           ar.texto,
+                           ar.data_cadastro,
+                           o.nome as medico,
+                           al.empresa_id');
+        $this->db->from('tb_ambulatorio_exame ar');
+        $this->db->join('tb_ambulatorio_laudo al', 'al.ambulatorio_laudo_id = ar.laudo_id');
+        $this->db->join('tb_operador o', 'o.operador_id = ar.medico_parecer1', 'left');
+        $this->db->where('laudo_id', $laudo_id);
+        $this->db->orderby('ar.data_cadastro asc');
+        
+        return $this->db->get()->result();
+    }
+
+    function listarsolrelatorioatendimento($laudo_id){
+        $this->db->select('ar.ambulatorio_relatorio_id,
+                           ar.texto,
+                           ar.data_cadastro,
+                           o.nome as medico,
+                           al.empresa_id');
+        $this->db->from('tb_ambulatorio_relatorio ar');
+        $this->db->join('tb_ambulatorio_laudo al', 'al.ambulatorio_laudo_id = ar.laudo_id');
+        $this->db->join('tb_operador o', 'o.operador_id = ar.medico_parecer1', 'left');
+        $this->db->where('laudo_id', $laudo_id);
+        $this->db->orderby('ar.data_cadastro asc');
+        
+        return $this->db->get()->result();
+    }
+
+    function listarsolterapeuticaatendimento($laudo_id){
+        $this->db->select('ar.ambulatorio_terapeutica_id,
+                           ar.texto,
+                           ar.data_cadastro,
+                           o.nome as medico,
+                           al.empresa_id');
+        $this->db->from('tb_ambulatorio_terapeuticas ar');
+        $this->db->join('tb_ambulatorio_laudo al', 'al.ambulatorio_laudo_id = ar.laudo_id');
+        $this->db->join('tb_operador o', 'o.operador_id = ar.medico_parecer1', 'left');
+        $this->db->where('laudo_id', $laudo_id);
+        $this->db->orderby('ar.data_cadastro asc');
+        
+        return $this->db->get()->result();
+    }
+
     function listarhorariosAPP($medico_id, $data, $empresa_id) {
         
         $this->db->select('ae.agenda_exames_id as id, 
@@ -2839,6 +2994,155 @@ class app_model extends Model {
                 
         $this->db->orderby('ag.data_cadastro DESC');
 
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+
+    function listarinformaçõesinternacao($paciente_id){
+        $this->db->select('i.internacao_id,
+                            i.paciente_id,
+                            m.nome as medico,
+                            i.data_internacao,
+                            pt.nome as procedimento,
+                            il.nome as leito,
+                           ie.nome as enfermaria,
+                           iu.nome as unidade');
+        $this->db->from('tb_internacao i');
+        $this->db->join('tb_operador m', 'm.operador_id = i.medico_id', 'left');
+        $this->db->join('tb_procedimento_convenio pc', 'pc.procedimento_convenio_id = i.procedimento_convenio_id', 'left');
+        $this->db->join('tb_procedimento_tuss pt', 'pt.procedimento_tuss_id = pc.procedimento_tuss_id', 'left');
+        $this->db->join('tb_internacao_leito il', 'i.leito = il.internacao_leito_id', 'left');
+        $this->db->join('tb_internacao_enfermaria ie', 'il.enfermaria_id = ie.internacao_enfermaria_id', 'left');
+        $this->db->join('tb_internacao_unidade iu', 'ie.unidade_id = iu.internacao_unidade_id', 'left');
+        $this->db->where('i.ativo', 't');
+        $this->db->where('i.paciente_id', $paciente_id);
+
+        return $this->db->get()->result();
+
+    }
+
+    function listarevolucoesinternacao($internacao_id){
+        $this->db->select('p.nome, 
+                           ie.internacao_evolucao_id, 
+                           ie.conduta, 
+                           ie.diagnostico, 
+                           o.nome as operador,
+                           ie.data_cadastro, 
+                           p.nascimento,
+                           ie.valor,
+                           pt.nome as procedimento,
+                           ie.faturado,
+                           i.paciente_id,
+                           ie.particular');
+        $this->db->from('tb_internacao_evolucao ie');
+        $this->db->join('tb_internacao i', "i.internacao_id = ie.internacao_id", 'left');
+        $this->db->join('tb_paciente p', "i.paciente_id = p.paciente_id", 'left');
+        $this->db->join('tb_operador o', "ie.operador_cadastro = o.operador_id", 'left');
+        $this->db->join('tb_procedimento_convenio pc', "pc.procedimento_convenio_id = ie.procedimento_tuss_id", 'left');
+        $this->db->join('tb_procedimento_tuss pt', 'pt.procedimento_tuss_id = pc.procedimento_tuss_id', 'left');
+        $this->db->where("ie.internacao_id = $internacao_id");
+        $this->db->where("ie.ativo", 't');
+        $this->db->orderby("ie.internacao_evolucao_id");
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function listarunidade(){
+        $this->db->select('nome,
+                internacao_unidade_id');
+        $this->db->from('tb_internacao_unidade');
+        $this->db->where('ativo', 't');
+        $this->db->orderby('nome');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+
+    function listaenfermariaunidade($unidade) {
+
+        $this->db->select('nome,
+                           internacao_enfermaria_id,
+                           tipo,
+                           ativo');
+        $this->db->from('tb_internacao_enfermaria');
+        $this->db->where('unidade_id', $unidade);
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function listaleitounidade($internacao_enfermaria_id) {
+        $this->db->select('il.internacao_leito_id,
+                           il.nome,
+                           il.tipo,
+                           il.condicao,
+                           il.enfermaria_id,
+                           il.ativo,
+                           i.internacao_id');
+        $this->db->from('tb_internacao_leito il');
+        $this->db->join('tb_internacao i', 'i.leito = il.internacao_leito_id', 'left');
+        $this->db->where('il.excluido', 'f');
+        $this->db->where('il.condicao !=', 'Cirurgico');
+        $this->db->where('il.enfermaria_id', $internacao_enfermaria_id);
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function gravarevolucao($convenio_id, $txtdiagnostico, $internacao_id,  $procedimento_tuss_id, $valor, $operador_cadastro){
+        $horario = date("Y-m-d H:i:s");
+        $data = date('Y-m-d');
+
+        $this->db->select('dinheiro');
+        $this->db->from('tb_convenio');
+        $this->db->where('convenio_id', $convenio_id);
+        $convenio = $this->db->get()->result();
+
+        $this->db->set('diagnostico', $txtdiagnostico);
+        $this->db->set('internacao_id', $internacao_id);
+
+        $this->db->set('procedimento_tuss_id', $procedimento_tuss_id);
+        $this->db->set('convenio_id', $convenio_id);
+        $this->db->set('valor', $valor);
+        $this->db->set('data', $data);
+        // $this->db->set('empresa_id', $this->session->userdata('empresa_id'));
+        $this->db->set('particular', $convenio[0]->dinheiro);
+        $this->db->set('data_cadastro', $horario);
+        $this->db->set('operador_cadastro', $operador_cadastro);
+        $this->db->insert('tb_internacao_evolucao');
+
+        return $this->db->insert_id();
+    }
+
+    function listarconveniosevolucao($empresa_id){
+        $this->db->select(' c.convenio_id,
+                            c.nome,
+                            c.dinheiro,
+                            c.conta_id');
+        $this->db->from('tb_convenio c');
+        $this->db->join('tb_convenio_empresa ce', 'ce.convenio_id = c.convenio_id', 'left');
+        $this->db->where('c.convenio_id IN (SELECT convenio_id FROM ponto.tb_procedimento_convenio WHERE ativo = TRUE)');
+        $this->db->where("c.ativo", 'true');
+        $this->db->where("ce.empresa_id", $empresa_id);
+        $this->db->where("ce.ativo", 'true');
+        $this->db->orderby("c.nome");
+        $query = $this->db->get();
+        $return = $query->result();
+
+        return $return;
+    }
+
+    function listarprocedimentosconveniointernacao($convenio_id) {
+        $this->db->select(' pc.procedimento_convenio_id,
+                            pt.codigo,
+                            pt.nome as procedimento,
+                            pc.valortotal');
+        $this->db->from('tb_procedimento_convenio pc');
+        $this->db->join('tb_convenio c', 'c.convenio_id = pc.convenio_id', 'left');
+        $this->db->join('tb_procedimento_tuss pt', 'pt.procedimento_tuss_id = pc.procedimento_tuss_id', 'left');
+        $this->db->join('tb_ambulatorio_grupo ag', 'ag.nome = pt.grupo', 'left');
+        $this->db->where("pc.ativo", 't');
+        $this->db->where('pc.convenio_id', $convenio_id);
+        $this->db->orderby("pt.nome");
         $return = $this->db->get();
         return $return->result();
     }

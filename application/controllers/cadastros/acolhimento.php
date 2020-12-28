@@ -9,6 +9,7 @@ class acolhimento extends BaseController {
         $this->load->model('cadastro/paciente_model', 'paciente');
         $this->load->model('cadastro/acolhimento_model', 'acolhimento');
         $this->load->library('utilitario');
+         
     }
 
     public function index() {

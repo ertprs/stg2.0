@@ -21,6 +21,7 @@ class Grupoclassificacao extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+        
     }
 
     function index() {

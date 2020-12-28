@@ -22,6 +22,7 @@ class Ceatox extends BaseController
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('validation');
+         
     }
 
     /**

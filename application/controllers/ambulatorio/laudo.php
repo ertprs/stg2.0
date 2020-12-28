@@ -35,6 +35,7 @@ class Laudo extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+                                
         if ($this->session->userdata('autenticado') != true) {
             redirect(base_url() . "login/index/login004", "refresh");
         }
@@ -782,6 +783,21 @@ class Laudo extends BaseController {
         $this->load->View('ambulatorio/listareceituarioslaudo-form', $data);
     }
 
+    function adicionaratendimento000($paciente_id){
+        $resultadoguia = $this->guia->listarguia($paciente_id);
+        if ($resultadoguia == null) {
+            $ambulatorio_guia = $this->guia->gravarguiaatendimento000($paciente_id);
+        } else {
+            $ambulatorio_guia = $resultadoguia['ambulatorio_guia_id'];
+        }
+        $medico_id = $this->session->userdata('operador_id');
+        $retorno = $this->guia->gravaratendimemto000($ambulatorio_guia, $medico_id, $paciente_id);
+        $arrayInfo = explode("/", $retorno);
+        $exame_id = $arrayInfo[0];
+        $laudo_id = $arrayInfo[1];
+        redirect(base_url() . "ambulatorio/laudo/carregaranaminese/$laudo_id/$exame_id/$paciente_id/000/NULL/FALSE");
+    }
+
     function carregaranaminese($ambulatorio_laudo_id, $exame_id, $paciente_id, $procedimento_tuss_id, $messagem = null, $prontuario_adendo = FALSE) {
         $obj_laudo = new laudo_model($ambulatorio_laudo_id);
         $data['obj'] = $obj_laudo;
@@ -873,7 +889,16 @@ class Laudo extends BaseController {
         $data['exames_antigo'] = $this->laudo->listarexamesconsultaantigo($ambulatorio_laudo_id, $paciente_id, $data_exame, $prontuario_adendo);
         $data['terapeuticas_antigo'] = $this->laudo->listarterapeuticasconsultaantigo($ambulatorio_laudo_id, $paciente_id, $data_terapeutica, $prontuario_adendo);
         $data['relatorio_antigo'] = $this->laudo->listarrelatorioconsultaantigo($ambulatorio_laudo_id, $paciente_id, $data_relatorio, $prontuario_adendo);
+        $data['notasdevaloresexames'] = directory_map("./upload/geranotas/relatorios/$ambulatorio_laudo_id");
+        $data['notasdevaloresterapeuticas'] = directory_map("./upload/geranotas/terapeuticas/$ambulatorio_laudo_id");
 
+        if(!is_dir("./upload/geranotas/relatorios/$ambulatorio_laudo_id")){
+                $data['notasdevaloresexames'] = array();
+        }
+
+        if(!is_dir("./upload/geranotas/terapeuticas/$ambulatorio_laudo_id")){
+            $data['notasdevaloresterapeuticas'] = array();
+        }
 
         $data['impressao_receitas'] = $this->laudo->listarreceitasimpressoes($ambulatorio_laudo_id, $prontuario_adendo);
         $data['impressao_exames'] = $this->laudo->listarexamesimpressoes($ambulatorio_laudo_id, $prontuario_adendo);
@@ -947,10 +972,15 @@ class Laudo extends BaseController {
         $data['laudo_sigiloso'] = $data['empresapermissao'][0]->laudo_sigiloso;
         $data['integracaosollis'] = $data['empresapermissao'][0]->integracaosollis;
 
-        if($prontuario_adendo){
+        $data['empresasLista'] = $this->guia->listarempresas();
+        $data['convenio'] = $this->convenio->listardados();
+        $data['grupos'] = $this->procedimento->listargrupos();
+
+        // if($prontuario_adendo){
             // array_map('unlink', glob("./upload/novoatendimento/$ambulatorio_laudo_id/*"));
-            $this->load->View('ambulatorio/laudoconsulta-form-novo_2_adendo', $data);
-        }else{
+            // $this->load->View('ambulatorio/laudoconsulta-form-novo_2_adendo', $data);
+        // }else{
+            // die;
             if ($atendimento_dif == 't') {
                 $this->load->View('ambulatorio/laudoconsultadif-form', $data);
             } else {
@@ -962,7 +992,7 @@ class Laudo extends BaseController {
                     $this->load->View('ambulatorio/laudoconsulta-form', $data);
                 }
             }
-        }
+        // }
     }
 
 
@@ -1683,6 +1713,11 @@ class Laudo extends BaseController {
         $data['imagem_id'] = $imagem_id;
         // var_dump($imagem_id); die;
         $data['contador'] = $this->laudo->contadorimagem2($exame_id, $imagem_id);
+        if(isset($_GET['id'])){
+         $data['id'] = $_GET['id'];
+        }else{
+         $data['id'] = 0;
+        }
         $this->load->View('ambulatorio/alterarnomeimagem-form', $data);
     }
 
@@ -4368,7 +4403,7 @@ class Laudo extends BaseController {
         Não é necessário imprimi-las. Basta encaminhar o arquivo para o farmacêutico, 
         da farmácia onde irá comprar. O farmacêutico tem que abrir o arquivo em um leitor de PDF 
         e ele também tem que assina-la digitalmente. Uma vez assinada digitalmente pela farmácia, 
-        ele envia o arquivo para o site https://assinaturadigital.iti.gov.br/ e valida a mesma.';
+        ele envia o arquivo para o site https://verificador.iti.gov.br/ e valida a mesma.';
 
         if($textoadicional == null && $textoadicional != ''){
             $extra = $textoadicional;
@@ -4464,7 +4499,9 @@ class Laudo extends BaseController {
 
             
             $json_post = $this->certificadoAPI->autenticacao($ambulatorio_laudo_id, $certificado_birdID);
-
+                echo '<pre>';
+                print_r($json_post);
+                die;
 
             if(isset($json_post->access_token)){
 
@@ -4909,11 +4946,11 @@ class Laudo extends BaseController {
             $html = str_replace('xx-small', '5pt', $html);
         }
 
-                $validarcert ='<div style="border: groove; width:180px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://assinaturadigital.iti.gov.br/">validator.docusign.com</a></div>';
+                // $validarcert ='<div style="border: groove; width:200px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://verificador.iti.gov.br/">verificador.iti.gov.br</a></div>';
         
-        $validarcert .= $cabecalho;
+        // $validarcert .= $cabecalho;
 
-        $cabecalho = $validarcert;
+        // $cabecalho = $validarcert;
         // $teste_cabecalho = "$cabecalho";
         if ($sem_margins == 't') {
             pdf($html, $filename, $cabecalho, $rodape, '', 0, 0, 0);
@@ -5514,9 +5551,9 @@ class Laudo extends BaseController {
                 $data['laudo'][0]->texto = str_replace('align="right"', '', $data['laudo'][0]->texto);
                 $data['laudo'][0]->texto = str_replace('align="justify"', '', $data['laudo'][0]->texto);
                 
-                if($a == 1){
+               // if($a == 1){
                 $data['laudo'][0]->texto = '<b><font size="7">Relatório </font></b><br>'. $data['laudo'][0]->texto;
-                }
+               // }
 
                 $html2 = $this->load->view('ambulatorio/impressaosolicitacaoexamesconfiguravel', $data, true);
                 
@@ -6699,8 +6736,14 @@ class Laudo extends BaseController {
 
 //        $c = '<table><tr text-rotate="90"><th >CABEÇALHO</th></tr></table> ';
 //        $r = '<table style="margin-left:90%;margin-top:-50%;"><tr text-rotate="90"><th >RODAPE</th></tr></table> ';
-         
+
+
           if ($data['permissao'][0]->a4_receituario_especial == "t") { 
+
+            $validarcert ='<div style="border: groove; width:200px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://verificador.iti.gov.br/">verificador.iti.gov.br</a></div>';
+            $validarcert .= $cabecalho;
+            $cabecalho = $validarcert;
+
              pdf($string, 'ReceituarioEspecial.pdf', $cabecalho, $rodape);
            }else{
              pdfrespecial($string, 'ReceituarioEspecial.pdf', $cabecalho, $rodape, '', 5, 0, 4 );   
@@ -7673,7 +7716,7 @@ class Laudo extends BaseController {
             $filename = "laudo.pdf"; 
             
             $html = $this->load->view('ambulatorio/impressaoreceituarioconfiguravel', $data, true);
-            
+
             $sem_margins = $data['empresapermissoes'][0]->sem_margens_laudo;
 
             $certificado_medico = $this->guia->certificadomedico($data['laudo'][0]->medico_parecer1);
@@ -7841,7 +7884,7 @@ class Laudo extends BaseController {
         }
     }
 
-    function impressaoreceitasalvar($ambulatorio_laudo_id, $laudo_id, $sem_data) {
+    function impressaoreceitasalvar($ambulatorio_laudo_id, $laudo_id, $sem_data = null) {
         $empresa_id = $this->session->userdata('empresa_id');
         $this->load->plugin('mpdf');
         $data['laudo'] = $this->laudo->listarreceitaimpressao($ambulatorio_laudo_id, 'simples');
@@ -8003,7 +8046,7 @@ class Laudo extends BaseController {
              
             $sem_margins = $data['empresapermissoes'][0]->sem_margens_laudo;
 
-                $validarcert ='<div style="border: groove; width:180px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://assinaturadigital.iti.gov.br/">validator.docusign.com</a></div>';
+                $validarcert ='<div style="border: groove; width:200px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://verificador.iti.gov.br/">verificador.iti.gov.br</a></div>';
                 $validarcert .= $cabecalho;
                 $cabecalho = $validarcert;
 
@@ -8531,24 +8574,24 @@ class Laudo extends BaseController {
         }
     }
 
-    function impressaoTomada($ambulatorio_laudo_id) {
+    function impressaoTomada($paciente_id, $ambulatorio_laudo_id) {
        
         $this->load->plugin('mpdf');
         $empresa_id = $this->session->userdata('empresa_id');
-        $data['laudo'] = $this->laudo->listarTomadaimpressao($ambulatorio_laudo_id);
+        $data['laudo'] = $this->laudo->listarTomadaimpressao($paciente_id, $ambulatorio_laudo_id);
 
         // echo '<pre>';
         // print_r($data['laudo']);
         // die;
 
-        $laudo_horario = $this->laudo->listarTomadaimpressaohorario($ambulatorio_laudo_id);
+        $laudo_horario = $this->laudo->listarTomadaimpressaohorario($paciente_id, $ambulatorio_laudo_id);
 
         // echo '<pre>';
         // print_r($laudo_horario);
         //  die;
 
         foreach($laudo_horario as $itens){
-            $medicamentos_linha = $this->laudo->listarTomadaimpressaomedicamento($ambulatorio_laudo_id, $itens->horario, $itens->horario_texto, $itens->texto);
+            $medicamentos_linha = $this->laudo->listarTomadaimpressaomedicamento($paciente_id, $ambulatorio_laudo_id, $itens->horario, $itens->horario_texto, $itens->texto);
             
             // echo '<pre>';
             // print_r($medicamentos_linha);
@@ -8950,7 +8993,7 @@ class Laudo extends BaseController {
             $this->load->View('ambulatorio/impressaoreceituario', $data);
         }
     }
-    function impressaosolicitarexamesalvar($ambulatorio_laudo_id, $laudo_id, $sem_data) {
+    function impressaosolicitarexamesalvar($ambulatorio_laudo_id, $laudo_id, $sem_data = null) {
 
         $this->load->plugin('mpdf');
         $data['laudo'] = $this->laudo->listarexameimpressao($ambulatorio_laudo_id);
@@ -9081,9 +9124,9 @@ class Laudo extends BaseController {
             $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
             $sem_margins = $data['empresapermissoes'][0]->sem_margens_laudo;
             
-            $validarcert ='<div style="border: groove; width:180px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://assinaturadigital.iti.gov.br/">validator.docusign.com</a></div>';
-            $validarcert .= $cabecalho;
-            $cabecalho = $validarcert;
+            // $validarcert ='<div style="border: groove; width:200px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://verificador.iti.gov.br/">verificador.iti.gov.br</a></div>';
+            // $validarcert .= $cabecalho;
+            // $cabecalho = $validarcert;
 
             if ($sem_margins == 't') {
                 pdfreceitassalvas($html, $filename, $cabecalho, $rodape, '', 0, 0, 0, $laudo_id);
@@ -9396,7 +9439,45 @@ class Laudo extends BaseController {
         }
     }
 
-    function impressaoteraupeticasalvar($ambulatorio_laudo_id, $laudo_id, $sem_data) {
+    function gerarnotadevaloresterapeuticas($terapeutica_id, $laudo_id){
+        $this->load->plugin('mpdf');
+        $laudo = $this->laudo->listarteraupeticaimpressao($terapeutica_id);
+        $data['procedimentos'] = $this->laudo->listarprocedimentosmodeloterapeutica($laudo[0]->terapeuticas_id, $laudo[0]->convenio_id);
+
+        $nome_modelo = str_replace(' ', '_', $data['procedimentos'][0]->modelo);
+
+        if (file_exists('./upload/geranotas/terapeuticas/' . $laudo_id . '/' . $nome_modelo .'.pdf')) {    
+            unlink('./upload/geranotas/terapeuticas/' . $laudo_id . '/' . $nome_modelo .'.pdf');           
+        } 
+
+        if(count($data['procedimentos']) > 0){
+        $html = $this->load->view('ambulatorio/gerarnotadevaloresterapeuticas', $data, true);
+        $cabecalho = '';
+        $rodape = '';
+        pdfgerarnotas($html, $data['procedimentos'][0]->modelo, $cabecalho, $rodape, '', 9, 0, 15, $laudo_id, 'terapeuticas');
+        }
+    }
+
+    function gerarnotadevaloressolexames($exames_id, $laudo_id){
+        $this->load->plugin('mpdf');
+        $laudo = $this->laudo->listarexameimpressao($exames_id);
+        $data['procedimentos'] = $this->laudo->listarprocedimentosmodelorelatorio($laudo[0]->exame_id, $laudo[0]->convenio_id);
+
+        $nome_modelo = str_replace(' ', '_', $data['procedimentos'][0]->modelo);
+
+        if (file_exists('./upload/geranotas/relatorios/' . $laudo_id . '/' . $nome_modelo .'.pdf')) {    
+            unlink('./upload/geranotas/relatorios/' . $laudo_id . '/' . $nome_modelo .'.pdf');           
+        } 
+
+        if(count($data['procedimentos']) > 0){
+        $html = $this->load->view('ambulatorio/gerarnotadevaloresterapeuticas', $data, true);
+        $cabecalho = '';
+        $rodape = '';
+        pdfgerarnotas($html, $data['procedimentos'][0]->modelo, $cabecalho, $rodape, '', 9, 0, 15, $laudo_id, 'relatorios');
+        }
+    }
+
+    function impressaoteraupeticasalvar($ambulatorio_laudo_id, $laudo_id, $sem_data = null) {
 
         $this->load->plugin('mpdf');
         $data['laudo'] = $this->laudo->listarteraupeticaimpressao($ambulatorio_laudo_id);
@@ -9523,9 +9604,9 @@ class Laudo extends BaseController {
             $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
             $sem_margins = $data['empresapermissoes'][0]->sem_margens_laudo;
 
-            $validarcert ='<div style="border: groove; width:180px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://assinaturadigital.iti.gov.br/">validator.docusign.com</a></div>';
-            $validarcert .= $cabecalho;
-            $cabecalho = $validarcert;
+            // $validarcert ='<div style="border: groove; width:200px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://verificador.iti.gov.br/">verificador.iti.gov.br</a></div>';
+            // $validarcert .= $cabecalho;
+            // $cabecalho = $validarcert;
 
             if ($sem_margins == 't') {
                 pdfreceitassalvas($html, $filename, $cabecalho, $rodape, '', 0, 0, 0, $laudo_id);
@@ -9838,7 +9919,7 @@ class Laudo extends BaseController {
         }
     }
 
-    function impressaorelatoriosalvar($ambulatorio_laudo_id, $laudo_id, $sem_data) {
+    function impressaorelatoriosalvar($ambulatorio_laudo_id, $laudo_id, $sem_data = null) {
 
         $this->load->plugin('mpdf');
         $data['laudo'] = $this->laudo->listarrelatorioimpressao($ambulatorio_laudo_id);
@@ -9965,9 +10046,9 @@ class Laudo extends BaseController {
             $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
             $sem_margins = $data['empresapermissoes'][0]->sem_margens_laudo;
 
-            $validarcert ='<div style="border: groove; width:180px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://assinaturadigital.iti.gov.br/">validator.docusign.com</a></div>';
-            $validarcert .= $cabecalho;
-            $cabecalho = $validarcert;
+            // $validarcert ='<div style="border: groove; width:200px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://verificador.iti.gov.br/">verificador.iti.gov.br</a></div>';
+            // $validarcert .= $cabecalho;
+            // $cabecalho = $validarcert;
             
             if ($sem_margins == 't') {
                 pdfreceitassalvas($html, $filename, $cabecalho, $rodape, '', 0, 0, 0, $laudo_id);
@@ -10326,7 +10407,7 @@ class Laudo extends BaseController {
     function impressaoreceitaespecial($ambulatorio_laudo_id,$receituario=NULL) {
         @$certificado_medico = $this->guia->certificadomedico($data['laudo'][0]->medico_parecer1);
         $empresapermissao = $this->guia->listarempresasaladepermissao();
-
+        $data['empresapermissoes'] = $empresapermissao;
         $empresa_id = $this->session->userdata('empresa_id');
         $this->load->plugin('mpdf');
         $empresa = $this->session->userdata('empresa_id');
@@ -10565,6 +10646,10 @@ class Laudo extends BaseController {
         }
 
         if ($permissao[0]->a4_receituario_especial == "t") { 
+            $validarcert ='<div style="border: groove; width:200px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://verificador.iti.gov.br/">verificador.iti.gov.br</a></div>';
+            $validarcert .= $cabecalho;
+            $cabecalho = $validarcert;
+            
            $html = $this->load->View('ambulatorio/impressaoreceituarioespecialA4', $data,true);
            pdfreceitassalvas($html, $filename, $cabecalho, $rodape, '', 5, 0, 4, $laudo_id); 
 
@@ -11037,7 +11122,7 @@ class Laudo extends BaseController {
         }
 
         $tipo_xml = $this->laudo->listarempresatipoxml(); //verifica qual tipo de xml que a empresa usa.
-        if ($tipo_xml[0]->nome == 'TIPO 1') { // se o tipo xml for SLINE (início).
+        if (@$tipo_xml[0]->nome == 'TIPO 1') { // se o tipo xml for SLINE (início).
             $corpo = "";
             $paciente_dif = "";
             foreach ($listarexame as $item) {
@@ -11141,9 +11226,14 @@ class Laudo extends BaseController {
             foreach ($listarexame as $item) {
 
                 if (!is_dir($origem . '/' . $convenio)) {
-                    mkdir($origem . '/' . $convenio);
-                    chmod($origem . '/' . $convenio, 0777);
-                }
+                        mkdir($origem . '/' . $convenio);
+                        chmod($origem . '/' . $convenio, 0777);
+                 }
+
+                 if (!is_dir($origem . '/' . $convenio."/".$item->paciente_id)) {
+                    mkdir($origem . '/' . $convenio."/".$item->paciente_id);
+                    chmod($origem . '/' . $convenio."/".$item->paciente_id, 0777);
+                 }
 
                 $cabecalho = "<?xml version='1.0' encoding='iso-8859-1'?>
                             <NAJA>
@@ -11159,18 +11249,19 @@ class Laudo extends BaseController {
                                             <NJ_Accessionnumber>" . $item->wkl_accnumber . "</NJ_Accessionnumber>                            
                                             <NJ_NomeExame>" . $item->wkl_procstep_descr . "</NJ_NomeExame>
                                         </NJ_Exame>";
-                $texto = $texto . $value->texto_laudo;
+                $texto = $texto . $item->texto_laudo;
 
                 $rodape = "</NJ_Detalhes>
                        </NAJA>";
 
-                $nome = "./upload/laudo/" . $convenio . "/" . $item->paciente_id . ".xml";
+                $nome = "./upload/laudo/" . $convenio . "/" . $item->paciente_id ."/". $item->paciente_id . ".xml";
                 $xml = $cabecalho . $corpo . $rodape;
                 $fp = fopen($nome, "w+");
                 fwrite($fp, $xml . "\n");
                 fclose($fp);
 
-                $nome = "./upload/laudo/" . $convenio . "/" . $item->paciente_id . ".rtf";
+                $nome = "./upload/laudo/" . $convenio . "/" . $item->paciente_id ."/". $item->paciente_id . ".rtf";
+
                 $rtf = $texto;
                 $fp = fopen($nome, "w+");
                 fwrite($fp, $rtf . "\n");
@@ -11589,6 +11680,7 @@ class Laudo extends BaseController {
     }
 
     function impressaooit($ambulatorio_laudo_id) {
+        $data['obj'] = Array();
         $verifica = $this->laudooit->contadorlaudo($ambulatorio_laudo_id);
         if ($verifica == 0) {
             $ambulatorio_laudooit_id = $this->laudooit->inserirlaudo($ambulatorio_laudo_id);
@@ -12140,28 +12232,48 @@ class Laudo extends BaseController {
                  }
             }
 
+            if(isset($_POST['receita_renovavel'])){
+               foreach($_POST['receita_renovavel'] as $id_receita){
+                   $this->laudo->receitarenovavel($id_receita);
+               }
+            }
+
+            $alertarrecepcao = 'no';
+            $tiposmodelos = array();
             if(isset($_POST['s_exames_imprimir'])){
+                $alertarrecepcao = 'yes';
+                $tiposmodelos[] = 'Solicitações de Exames';
                 $this->laudo->gravarimpressoes($_POST['s_exames_imprimir'], 'EXAMES', $ambulatorio_laudo_id, $adendo);
                 
                 foreach($_POST['s_exames_imprimir'] as $imprimir){
                        $this->impressaosolicitarexamesalvar($imprimir, $ambulatorio_laudo_id, @$_POST['sem_data_e']);
+                       $this->gerarnotadevaloressolexames($imprimir, $ambulatorio_laudo_id);
                 }
             }
 
             if(isset($_POST['terapeuticas_imprimir'])){
+                $alertarrecepcao = 'yes';
+                $tiposmodelos[] = 'Terapeuticas';
                 $this->laudo->gravarimpressoes($_POST['terapeuticas_imprimir'], 'TERAPEUTICAS', $ambulatorio_laudo_id, $adendo);
                 
                 foreach($_POST['terapeuticas_imprimir'] as $imprimir){
                     $this->impressaoteraupeticasalvar($imprimir, $ambulatorio_laudo_id, @$_POST['sem_data_e']);
+                    $this->gerarnotadevaloresterapeuticas($imprimir, $ambulatorio_laudo_id);
                 }
             }
 
             if(isset($_POST['relatorio_imprimir'])){
+                $alertarrecepcao = 'yes';
+                $tiposmodelos[] = 'Relatórios';
                 $this->laudo->gravarimpressoes($_POST['relatorio_imprimir'], 'RELATORIOS', $ambulatorio_laudo_id, $adendo);
                 
                 foreach($_POST['relatorio_imprimir'] as $imprimir){
                     $this->impressaorelatoriosalvar($imprimir, $ambulatorio_laudo_id, @$_POST['sem_data_e']);
                 }
+            }
+
+            if($alertarrecepcao == 'yes'){
+                $this->laudo->alertarrecepcao($ambulatorio_laudo_id, $tiposmodelos);
             }
 
             if(isset($_POST['receita_antiga_imprimir'])){
@@ -12223,6 +12335,68 @@ class Laudo extends BaseController {
 
                 $this->laudo->gravarimpressoes_antigo($arrayreceita, 'RELATORIOS', $ambulatorio_laudo_id, $adendo);
             }
+        }
+
+        if(isset($_POST['btncondutasanterior'])){
+            if(isset($_POST['receita_antiga_imprimir_2'])){
+                $arrayreceita = [];
+               foreach($_POST['receita_antiga_imprimir_2'] as $imprimir){
+
+                    $receita_nova = $this->laudo->replicarreceitaatual($imprimir);
+                    $id_receita = $this->laudo->gravarreceituarioatendimentoantigo($ambulatorio_laudo_id, $receita_nova, $adendo);
+
+
+                    if($receita_nova[0]->especial == 't'){
+                       $this->impressaoreceitaespecialsalvar($id_receita, 'true', $ambulatorio_laudo_id);
+                    }else{
+                        $this->impressaoreceitasalvar($id_receita, $ambulatorio_laudo_id);
+                    }
+                    $arrayreceita[] = $id_receita;
+                }
+                $this->laudo->gravarimpressoes_antigo($arrayreceita, 'RECEITAS', $ambulatorio_laudo_id, $adendo);
+               //  die('morreu');
+           }
+
+           if(isset($_POST['s_exames_antiga_imprimir_2'])){
+               $arrayreceita = [];
+               foreach($_POST['s_exames_antiga_imprimir_2'] as $imprimir){
+                       $exames_nova = $this->laudo->replicarexameatual($imprimir);
+                       $id_exames = $this->laudo->gravarexamesatendimentoantigo($ambulatorio_laudo_id, $exames_nova, $adendo);
+
+                      $this->impressaosolicitarexamesalvar($id_exames, $ambulatorio_laudo_id);
+                   $arrayreceita[] = $id_exames;
+               }
+
+               $this->laudo->gravarimpressoes_antigo($arrayreceita, 'EXAMES', $ambulatorio_laudo_id, $adendo);
+           }
+
+           if(isset($_POST['terapeuticas_antiga_imprimir_2'])){
+               $arrayreceita = [];
+               foreach($_POST['terapeuticas_antiga_imprimir_2'] as $imprimir){
+                   $terapeuticas_nova = $this->laudo->replicarterapeuticaatual($imprimir);
+                   $id_terapeuticas = $this->laudo->gravarterapeuticasatendimentoantigo($ambulatorio_laudo_id, $terapeuticas_nova, $adendo);
+
+                   $this->impressaoteraupeticasalvar($id_terapeuticas, $ambulatorio_laudo_id);
+
+                   $arrayreceita[] = $id_terapeuticas;
+               }
+
+               $this->laudo->gravarimpressoes_antigo($arrayreceita, 'TERAPEUTICAS', $ambulatorio_laudo_id, $adendo);
+           }
+
+           if(isset($_POST['relatorio_antiga_imprimir_2'])){
+               $arrayreceita = [];
+               
+               foreach($_POST['relatorio_antiga_imprimir_2'] as $imprimir){
+                   $relatorios_nova = $this->laudo->replicarrelatorioatual($imprimir);
+                   $id_relatorio = $this->laudo->gravarrelatorioatendimentoantigo($ambulatorio_laudo_id, $relatorios_nova, $adendo);
+
+                   $this->impressaorelatoriosalvar($id_relatorio, $ambulatorio_laudo_id);
+                   $arrayreceita[] = $id_relatorio;
+               }
+
+               $this->laudo->gravarimpressoes_antigo($arrayreceita, 'RELATORIOS', $ambulatorio_laudo_id, $adendo);
+           }
         }
         
         $evolucao = '';
@@ -12471,7 +12645,7 @@ class Laudo extends BaseController {
 
 
     if(isset($_POST['btnmedicamentostomadas'])){
-        $tomadas = $this->laudo->buscartomadaslancadas($ambulatorio_laudo_id);
+        $tomadas = $this->laudo->buscartomadaslancadas($ambulatorio_laudo_id, $_POST['paciente_id']);
         $medicamento = '';
         foreach($tomadas as $simples){
             $total_mes = $simples->qtd * 30;
@@ -12484,7 +12658,7 @@ class Laudo extends BaseController {
             $this->laudo->gravarreceituarioatendimento($ambulatorio_laudo_id, $medicamento, NULL, -10);
         }
 
-        $tomadas_especial = $this->laudo->buscartomadaslancadasespecial($ambulatorio_laudo_id);
+        $tomadas_especial = $this->laudo->buscartomadaslancadasespecial($ambulatorio_laudo_id, $_POST['paciente_id']);
         $medicamento_especial = '';
         if(count($tomadas_especial) > 0 ){
             // $medicamento_especial .= 'Uso oral <br>';
@@ -12555,12 +12729,18 @@ class Laudo extends BaseController {
             $this->laudo->impressaorelatoriosalvar($receita_id, $_POST['laudo_id']); 
                                 
         }
-                                
-        if($adendo){ 
-            $this->laudo->gravaranaminese_adendo($ambulatorio_laudo_id, $exame_id, $procedimento_tuss_id, $evolucao);
-        }else{                  
+        
+        if($procedimento_tuss_id > 0){
+            if($adendo){ 
+                $this->laudo->gravaranaminese_adendo($ambulatorio_laudo_id, $exame_id, $procedimento_tuss_id, $evolucao);
+            }else{                  
+                $this->laudo->gravaranaminese($ambulatorio_laudo_id, $exame_id, $procedimento_tuss_id, $evolucao);
+            }
+        }else{
             $this->laudo->gravaranaminese($ambulatorio_laudo_id, $exame_id, $procedimento_tuss_id, $evolucao);
         }
+        
+        // die;
                                 
         
         $empresaPermissoes = $this->login->listarEmpresa();
@@ -12661,16 +12841,27 @@ class Laudo extends BaseController {
         $data['ambulatorio_laudo_id'] = $ambulatorio_laudo_id;
         $data['paciente_id'] = $paciente_id;
         $data['procedimento_tuss_id'] = $procedimento_tuss_id;
-
-        $this->session->set_flashdata('message', $data['mensagem']);
-        if($empresaPermissoes[0]->atendimento_medico == 'f' || isset($_POST['btnFinalizar']) || isset($_POST['btnFechar'])){
-            redirect(base_url() . "ambulatorio/exame/listarmultifuncaomedicogeral");
-                                
+        
+        $prefixo = '';
+        if(isset($_POST['btnAtivarprecriscao'])){
+            $prefixo = '#tabs-5';
+        }
+        if(isset($_POST['btnmedicamentostomadas'])){
+            $prefixo = '#tabsTomada';
+        }
+        // die;
+         @$this->session->set_flashdata('message', $data['mensagem']); 
+        if($empresaPermissoes[0]->atendimento_medico == 'f' || isset($_POST['btnFinalizar']) || isset($_POST['btnFechar'])){ 
+                redirect(base_url() . "seguranca/operador/pesquisarrecepcao");           
         }else{
-            if($adendo){
-                redirect(base_url() . "ambulatorio/laudo/carregaranaminese/$ambulatorio_laudo_id/$exame_id/$paciente_id/$procedimento_tuss_id/NULL/TRUE");
+            if($procedimento_tuss_id > 0){
+                if($adendo){
+                    echo "<script> window.location='".base_url()."ambulatorio/laudo/carregaranaminese/".$ambulatorio_laudo_id."/".$exame_id."/".$paciente_id."/".$procedimento_tuss_id."/NULL/TRUE".$prefixo."';</script>";
+                }else{
+                     echo "<script> window.location='".base_url()."ambulatorio/laudo/carregaranaminese/".$ambulatorio_laudo_id."/".$exame_id."/".$paciente_id."/".$procedimento_tuss_id."".$prefixo."';</script>";
+                 }
             }else{
-                redirect(base_url() . "ambulatorio/laudo/carregaranaminese/$ambulatorio_laudo_id/$exame_id/$paciente_id/$procedimento_tuss_id");
+                echo "<script> window.location='".base_url()."ambulatorio/laudo/carregaranaminese/".$ambulatorio_laudo_id."/".$exame_id."/".$paciente_id."/".$procedimento_tuss_id."".$prefixo."';</script>";
             }
         }
     }
@@ -13011,9 +13202,21 @@ class Laudo extends BaseController {
         $this->load->View('ambulatorio/alterapacienteemail1', $data);
     }
 
+    function alterardataarquivo($arquivos_anexados_id){
+        $data['arquivos'] = $this->laudo->arquivosinfo($arquivos_anexados_id);
+        $this->load->View('ambulatorio/alterardataarquivo', $data);
+    }
+
     function salvaralteracaoemail($paciente_id) {
 
         $this->laudo->salvaralteracaoemail($paciente_id);
+
+        redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+    }
+
+    function salvardataarquivo($arquivos_anexados_id) {
+
+        $this->laudo->salvardataarquivo($arquivos_anexados_id);
 
         redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
     }
@@ -14528,7 +14731,7 @@ class Laudo extends BaseController {
         $receita = $this->imprimirReceitaTodos2novo($ambulatorio_laudo_id, $receitas);
         $html .= $receita;
 
-        $validarcert ='<div style="border: groove; width:180px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://assinaturadigital.iti.gov.br/">validator.docusign.com</a></div>';
+        $validarcert ='<div style="border: groove; width:200px; text-align: center; margin: 0pt 0pt 0pt 350pt;">Validar Certificado: <br> <a target="_blank" href="https://verificador.iti.gov.br/">verificador.iti.gov.br</a></div>';
         
         $validarcert .= $cabecalho;
 

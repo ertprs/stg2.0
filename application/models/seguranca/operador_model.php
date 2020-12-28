@@ -1431,6 +1431,7 @@ class Operador_model extends BaseModel {
 
     function gravarsenhahorario($array) {
         try {
+            if(count($array) > 0){
             foreach ($array as $key => $value) {
                 $this->db->select('sh.senha_horario_id');
                 $this->db->from('tb_senha_horario sh');
@@ -1442,6 +1443,7 @@ class Operador_model extends BaseModel {
                     $this->db->set('data', date("Y-m-d H:i:s"));
                     $this->db->insert('tb_senha_horario');
                 }
+            }
             }
         } catch (Exception $ex) {
             return false;
@@ -2987,5 +2989,18 @@ function listarmedicoempresa($empresa=null) {
         return $return->result();
     }
     
+    
+    function autenticarusuario(){
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->select('usuario');
+        $this->db->from('tb_operador');
+        $this->db->where('operador_id',$operador_id);
+        $this->db->where('senha',md5($_POST['senha']));
+        $this->db->where('perfil_id',1);
+        return $this->db->get()->result();
+         
+    }
+    
+ 
     
 }

@@ -18,9 +18,9 @@
 
             <td>  
                 <div class="bt_link_new">
-                    <button class="btn btn-outline-primary btn-round btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/agenda/medicoagenda');">
+                    <a class="btn btn-outline-primary btn-round btn-sm" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/agenda/medicoagenda');">
                         Bloquear Agenda
-                    </button>
+                    </a>
                 </div>
             </td>
         </tr>

@@ -1,33 +1,14 @@
-<head>
-    <title>STG - SISTEMA DE GESTAO DE CLINICAS v1.0</title>
-    <meta http-equiv="Content-Style-Type" content="text/css" />
-    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-    <!-- Reset de CSS para garantir o funcionamento do layout em todos os brownsers -->
-    <link href="<?= base_url() ?>css/reset.css" rel="stylesheet" type="text/css" />
+<link href="<?= base_url() ?>bootstrap/vendor/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+<link href="<?= base_url() ?>bootstrap/assets/css/argon-design-system.css?v=1" rel="stylesheet"/>
+<script  src="<?= base_url() ?>bootstrap/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
-    <link href="<?= base_url() ?>css/estilo.css" rel="stylesheet" type="text/css" />
-    <link href="<?= base_url() ?>css/batepapo.css" rel="stylesheet" type="text/css" />
-
-    <link href="<?= base_url() ?>css/form.css" rel="stylesheet" type="text/css" />
-    <link href="<?= base_url() ?>js/fullcalendar/fullcalendar.css" rel="stylesheet" />
-    <link href="<?= base_url() ?>js/fullcalendar/lib/cupertino/jquery-ui.min.css" rel="stylesheet" />
-
-        <!--<link href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css" />-->
-        <!--<link href="<?= base_url() ?>css/jquery-treeview.css" rel="stylesheet" type="text/css" />-->
-        <!--<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.4.2.min.js" ></script>-->
-    <script type="text/javascript" src="<?= base_url() ?>js/fullcalendar/lib/jquery.min.js"></script>
-    <script type="text/javascript" src="<?= base_url() ?>js/fullcalendar/lib/jquery-ui.min.js"></script>
-    <!--<script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.8.5.custom.min.js" ></script>-->
- 
-<!--<link href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css" />-->
-    <!--Scripts necessários para o calendário-->
-
-    <script type="text/javascript" src="<?= base_url() ?>js/fullcalendar/lib/moment.min.js"></script>
-    <script src="<?= base_url() ?>js/fullcalendar/locale/pt-br.js" type="text/javascript" charset="utf-8"></script>
-    <script src="<?= base_url() ?>js/fullcalendar/fullcalendar.js" type="text/javascript" charset="utf-8"></script>
-    <script src="<?= base_url() ?>js/fullcalendar/scheduler.js" type="text/javascript" charset="utf-8"></script>
-</head>
-<!--<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="pt-BR" >-->
+<link href="<?= base_url() ?>bootstrap/fullcalendar/main.css" rel='stylesheet'/>
+<script src="<?= base_url() ?>bootstrap/fullcalendar/main.js"></script>
+<script src="<?= base_url() ?>bootstrap/fullcalendar/locales/pt-br.js"></script>
+<script src="<?= base_url() ?>bootstrap/fullcalendar/interaction/main.min.js"></script>
+<script src="<?= base_url() ?>bootstrap/fullcalendar/timegrid/main.js"></script>
+<link src="<?= base_url() ?>bootstrap/fullcalendar/timegrid/main.min.css"/>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="pt-BR">
 <?
 
 if (@$_GET['data'] != '' && date("Y-m-d", strtotime(str_replace('/', '-', @$_GET['data']))) == '1969-12-31') {
@@ -39,7 +20,6 @@ if($this->session->userdata('medico_agenda')){
 }else{
     $medico_agenda_sessao = 'f';
 }
-
 
 if(isset($_GET['medico']) && (@$_GET['medico'] != '' || @$_GET['medico'] != NULL)){
     $id_medico_por_get = $_GET['medico'];
@@ -55,158 +35,10 @@ $perfil_id = $this->session->userdata('perfil_id');
 <div class="content">
 
 
-
-    <style>
-        #sidebar-wrapper{
-            z-index: 100;
-            position: fixed;
-            margin-top: 50px;
-            margin-left: 37%;
-            list-style-type: none; /* retira o marcador de listas*/ 
-            overflow-y: scroll;
-            overflow-x: auto;
-            /*height: 900px;*/
-            /*width: 500px;*/
-            max-height: 900px;
-
-        }
-
-        #sidebar-wrapper ul {
-            padding:0px;
-            margin:0px;
-            background-color: #ebf7f9;
-            list-style:none;
-            margin-bottom: 30px;
-
-        }
-        #sidebar-wrapper ul li a {
-            color: #ff004a;
-            border: 20px;
-            text-decoration: none;
-            /*padding: 3px;*/
-            /*border: 2px solid #00BDFF;*/ 
-            margin-bottom: 20px;
-        }
-
-        #botaosalaesconder {
-            border: 1px solid #8399f6
-        }
-        #botaosala {
-            border: 1px solid #8399f6;
-            width: 80pt;   
-        }
-        .vermelho{
-            color: red;
-        }
-
-        tr.corcinza td{
-            color:gray;
-        }
-
-
-/* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 10000; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal-content {
-  position: relative;
-  position: relative;
-  background-color: #fefefe;
-  margin: auto;
-  padding: 0;
-  border: 1px solid #888;
-  width: 50%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-  -webkit-animation-name: animatetop;
-  -webkit-animation-duration: 0.4s;
-  animation-name: animatetop;
-  animation-duration: 0.4s
-}
-
-/* Add Animation */
-@-webkit-keyframes animatetop {
-  from {top:-300px; opacity:0} 
-  to {top:0; opacity:1}
-}
-
-@keyframes animatetop {
-  from {top:-300px; opacity:0}
-  to {top:0; opacity:1}
-}
-
-/* The Close Button */
-.close {
-  color: white;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.modal-header {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  /* background-color: #0066b8; */
-  color: white;
-}
-
-.modal-body {padding: 2px 16px;}
-
-.modal-footer {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  /* background-color: #0066b8; */
-  color: white;
-}
-
-h2{
-  display: block;
-  font-size: 20px;
-  margin-top: 0.67em;
-  margin-bottom: 0.67em;
-  margin-left: 0;
-  margin-right: 0;
-  font-weight: bold;
-}
-
-.tablemodal{
-  /* display: block; */
-  font-size: 17px;
-  margin-top: 0.67em;
-  margin-bottom: 0.67em;
-  margin-left: 0;
-  margin-right: 0;
-  font-weight: bold;
-}
-
-.titulo_table{
-    font-size: 15px;
-    font-weight: bold; 
-}
-
-    </style>
     <div id="sala-de-espera" style="display: none;">
 
         <div id="sidebar-wrapper" class="sidebarteste">
-            <div style="margin-left: 35%;">
+            <div>
                 <button id="botaosalaesconder">Esconder</button>
             </div>
             <div>
@@ -253,60 +85,6 @@ h2{
             </div>
         </div>
     </div>
-    <style>
-
-        body {
-            /*margin: 40px 10px;*/
-            padding: 0;
-            font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-            background-color: white;
-        }
-        .content{
-            margin-left: 0px;
-        }
-
-        .bt_link_new_pequeno{
-            background: url(<?=base_url()?>css/images/bg_buttons.png);
-            width: 28px;
-            height: 28px;
-            border: 1px solid;
-            border-top-color: #eee;
-            border-right-color: #ccc;
-            border-bottom-color: #ccc;
-            border-left-color: #eee;
-            -moz-border-radius:4px;
-            margin-bottom: 4px;
-        }
-
-        .bt_link_new_pequeno a {
-            display:block;
-            width:150px;
-            height:5px;
-            padding:5px 5px 5px 5px;
-            color: #900;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .bt_link_new_pequeno a:hover {
-            color: #f00;
-        }
-
-        .singular table div.bt_link_new .btnTexto {color: #2779aa; }
-        .singular table div.bt_link_new .btnTexto:hover{ color: red; font-weight: bolder;}
-
-        .singular table div.bt_link_new_pequeno .btnTexto2 {color: red; }
-        .singular table div.bt_link_new_pequeno .btnTexto2:hover{ color: #2779aa; font-weight: bolder;}
-
-        .singular table div.bt_link_new .btnTexto2 {color: red; }
-        .singular table div.bt_link_new .btnTexto2:hover{ color: #2779aa; font-weight: bolder;}
-
-        .vermelho{
-            color: red;
-        }
-        /*#pop{display:none;position:absolute;top:50%;left:50%;margin-left:-150px;margin-top:-100px;padding:10px;width:300px;height:200px;border:1px solid #d0d0d0}*/
-
-    </style>
 
     <?
         if($integrar_google == 't'){
@@ -330,60 +108,42 @@ h2{
     ?>
 
     <div id="accordion">
-        <h3 class="singular">
+
             <table>
                 <tr>
-                    <th>
-                        Multifuncao Geral Recep&ccedil;&atilde;o
-                    </th>
-                    <th>  
-                        <? if (($perfil_id == 1 || $operador_id == 1) || $empresapermissoes[0]->btn_encaixe == 'f') { ?>
-                        <div class="bt_link_new">
-                            <a id='btnEnaixe' class="btnTexto" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/novopacienteencaixegeral');">
+                    <td>
+                        <div class="btn_link_new">
+                            <a onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/novopacienteencaixegeral');">
                                 Encaixar Paciente
                             </a>
                         </div>
+                        <? if (($perfil_id == 1 || $operador_id == 1) || $empresapermissoes[0]->btn_encaixe == 'f') { ?>
+                        <div class="bt_link_new">
+                            <button class="btn btn-outline-default btn-sm" id='btnEnaixe' class="btnTexto" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/novopacienteencaixegeral');">
+                                Encaixar Paciente
+                            </button>
+                        </div>
                         <? } ?>
-                    </th>
+
                     <? if($integrar_google == 't'){ ?>
-                    <th>
+
                     <div class="bt_link_new">
                             <?if($logado_no_google == 0){?>
-                                <a onclick="javascript:window.location.href = '<?=$loginUrl?>' " class="btnTexto">
+                                <button  onclick="javascript:window.location.href = '<?=$loginUrl?>' " class="btn btn-outline-default btn-sm">
                                     Sicronizar com Google
-                                </a>
+                                </button>
                             <?}else{?>
-                                <a class="btnTexto2" href=''>
+                                <button class="btn btn-outline-default btn-sm" href=''>
                                     Sicronizado Google
-                                </a> 
+                                </button>
                             <?}?>
                         </div>
-                    </th>
-
-                    <?if($logado_no_google != 0){?>
-                        <!-- <th>
-                            <div class="bt_link_new_pequeno">
-                                <a id='btnEnaixe' title="Importar Agenda do Dia Anterior" class="btnTexto2" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exame/importaragendagoogles');">
-                                   @
-                                </a>
-                            </div>
-                        </th> -->
-                    <?}?>
-
+                    </td>
 
                     <? } ?>
-<!--                    <th>
-                        <div class="bt_link_new">
-                            <a class="btnTexto" onclick="javascript:window.open('<?= base_url() ?>ambulatorio/exametemp/novohorarioencaixegeral');">
-                                Encaixar Horario
-                            </a>
-                        </div>
-                    </th>-->
-                </tr>
-
 
             </table>
-        </h3>
+
         <div>
             <?
             $medicos = $this->operador_m->listarmedicos();
@@ -426,526 +186,392 @@ h2{
                 $tipoagenda = 0;
             }
             ?>
-            <table>
-                <thead>
-                <form method="get" action="<?= base_url() ?>ambulatorio/exame/listarmultifuncaocalendario2">
-
-                    <tr>
-                        <th>
-                            <div class="panel panel-default">
-                                <div class="panel-heading ">
-                                    <!--                                Calendário-->
-                                </div>
-                                <div class="row" style="width: 100%; ">
-                                    <div class="col-lg-12">
-
-
-
-                                        <!-- /.panel-heading -->
-                                        <div class="panel-body">
-                                            <div class="table-responsive">
-                                                <div id='calendar'></div>
-                                            </div>
-                                            <!-- /.table-responsive -->
-                                        </div>
-                                        <!-- /.panel-body -->
-                                    </div>
-                                    <!-- /.panel -->
-                                </div>
-                            </div> 
-                        </th>
-                        <th onclick="filtrolivre()" style="width: 150px;">
-                          
-                        </th>
-                        <th>
-                            <div style="border: 1pt dotted #444; border-radius: 10pt;">
-
-                                <table border="1" style="border">
-                                    <tr>
-                                        <th class="tabela_title">Grupo</th>
-                                        <th class="tabela_title">Empresa</th>
-
-                                    </tr>
-                                    <tr>
-                                        <th class="tabela_title">
-                                            <select name="grupo" id="grupo" class="size2" >
-                                                <option value='' >TODOS</option>
-                                                <? foreach ($grupos as $grupo) { ?>                                
-                                                    <option value='<?= $grupo->nome ?>' <?
-                                                    if (@$_GET['grupo'] == $grupo->nome):echo 'selected';
-                                                    endif;
-                                                    ?>><?= $grupo->nome ?></option>
-                                                        <? } ?>
-                                            </select>
-
-                                        </th>
-                                        <th class="tabela_title">
-                                            <select name="empresa" id="empresa" class="size2">
-                                                <option value="">TODOS</option>
-                                                <?
-                                                $selected = false;
-                                                foreach ($empresas as $value) :
-                                                    ?>
-                                                    <option value="<?= $value->empresa_id; ?>" <?
-                                                    if ($empresa_atual == $value->empresa_id) {
-                                                        echo 'selected';
-                                                        $selected = true;
-                                                    } else {
-                                                        if ($empresa_logada == $value->empresa_id && $selected == false) {
-                                                            // echo 'selected';
-                                                            // $selected = true;
-                                                        }
-                                                    }
-                                                    ?>><?php echo $value->nome; ?></option>
-                                                        <? endforeach; ?>
-                                            </select>
-
-                                        </th>
-
-                                    </tr>
-                                </table>
-
-                                <table border="1">
-                                    <tr>
-                                        <?php if($empresapermissoes[0]->filtrar_agenda_2 == "t"){?>
-                                           <th class="tabela_title">Tipo Especialidade</th>
-                                        <?php }else{?> 
-                                          <th class="tabela_title">Sala</th>
-                                        <?php }?>
-                                          <th class="tabela_title">Procedimento</th>
-                                         
-                                    </tr>
-                                    <tr>
-                                         <?php if($empresapermissoes[0]->filtrar_agenda_2 == "t"){?>
-                                           <th class="tabela_title">
-                                             <input type="hidden" id="medicoget" value="<?= ($this->session->userdata('perfil_id') == 4) ? $this->session->userdata('operador_id') : @$_GET['medico']  ?>">
-                                            <select name="tipoagenda" id="tipoagenda" class="size2">
-                                                <!--<option value=""></option>-->
-                                                <option value="">TODOS</option>
-                                                <? foreach ($tipo_consulta as $value) : ?>
-                                                    <option value="<?= $value->ambulatorio_tipo_consulta_id; ?>" <?
-                                                    if (@$_GET['tipoagenda'] == $value->ambulatorio_tipo_consulta_id):echo 'selected';
-                                                    endif;
-                                                    ?>>  <?php echo $value->descricao; ?>
-                                                    </option>
-                                                <? endforeach; ?>
-                                            </select>
-                                           </th> 
-                                        
-                                         <?php }else{?>
-                                          <th class="tabela_title">
-                                                <select name="sala" id="sala" class="size2">
-                                                    <option value="">TODOS</option>
-                                                    <? foreach ($salas as $value) : ?>
-                                                        <option value="<?= $value->exame_sala_id; ?>" <?
-                                                        if (@$_GET['sala'] == $value->exame_sala_id):echo 'selected';
-                                                        endif;
-                                                        ?>><?php echo $value->nome; ?></option>
-                                                            <? endforeach; ?>
-                                                </select>
-
-                                            </th>
-                                         <?php }?>
-                                        
-                                        <th class="tabela_title">
-                                            <select name="procedimento" id="procedimento" class="size2" >
-                                                <option value=''>TODOS</option>                                                
-                                                <?php
-                                                foreach ($procedimento as $item) {
-                                                    ?>
-                                                    <option value ="<?php echo $item->procedimento_tuss_id; ?>" <?
-                                                    if (@$_GET['procedimento'] == $item->procedimento_tuss_id):echo 'selected';
-                                                    endif;
-                                                    ?>>
-                                                                <?php echo $item->nome; ?>
-                                                    </option>
-
-                                                <? } ?> 
-
-                                            </select>
-
-                                        </th>
-                                        <? if ($empresapermissoes[0]->filtrar_agenda == 't') { ?>
-
-                                        <? } ?>
-                                    </tr>    
-                                </table>
-                                <? if ($empresapermissoes[0]->filtrar_agenda == 't') { ?>
-                                    <table border="1">
-                                        <tr>
-                                            <th class="tabela_title">Situação</th>
-                                            <th class="tabela_title">Status</th>
-
-                                        </tr>                                    
-                                        <tr>
-                                            <th class="tabela_title">
-                                                <select name="situacao" id="situacao" class="size2">
-                                                    <option value=""></option>
-
-                                                    <option value="BLOQUEADO" <?
-                                                    if (@$_GET['situacao'] == "BLOQUEADO") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>BLOQUEADO</option>
-
-                                                    <option value="FALTOU" <?
-                                                    if (@$_GET['situacao'] == "FALTOU") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>FALTOU</option>
-                                                    <option value="OK" <?
-                                                    if (@$_GET['situacao'] == "OK") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>OCUPADO</option>
-                                                    <option value="LIVRE" <?
-                                                    if (@$_GET['situacao'] == "LIVRE") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>VAGO</option>
-                                                </select>
-
-                                            </th>
-                                            <th class="tabela_title">
-                                                <select name="status" id="status" class="size2">
-                                                    <option value=""></option>
-                                                    <option value="AGENDADO" <?
-                                                    if (@$_GET['status'] == "AGENDADO") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>AGENDADO</option>
-                                                    <option value="AGUARDANDO" <?
-                                                    if (@$_GET['status'] == "AGUARDANDO") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>AGUARDANDO</option>
-                                                    <option value="ATENDIDO" <?
-                                                    if (@$_GET['status'] == "ATENDIDO") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>ATENDIDO</option>
-
-                                                    <option value="ESPERA" <?
-                                                    if (@$_GET['status'] == "ESPERA") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>ESPERA</option>
-
-                                                </select>
-
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th class="tabela_title">Convênio</th>                                            
-                                        </tr>
-                                        <tr>
-                                            <th class="tabela_title">
-                                                <select name="convenio" id="convenio" class="size2">
-                                                    <option value="">TODOS</option>
-                                                    <? foreach ($convenio as $value) : ?>
-                                                        <option value="<?= $value->convenio_id; ?>" <?
-                                                        if (@$_GET['convenio'] == $value->convenio_id):echo 'selected';
-                                                        endif;
-                                                        ?>><?php echo $value->nome; ?></option>
-                                                            <? endforeach; ?>
-                                                </select>
-
-                                            </th> 
-                                        </tr>
-                                    </table>
-                                <? } ?>
+            <form method="get" action="<?= base_url() ?>ambulatorio/exame/listarmultifuncaocalendario2">
+                <fieldset>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Grupo</label>
+                                <select name="grupo" id="grupo" class="form-control" >
+                                    <option value='' >TODOS</option>
+                                    <? foreach ($grupos as $grupo) { ?>
+                                        <option value='<?= $grupo->nome ?>' <?
+                                        if (@$_GET['grupo'] == $grupo->nome):echo 'selected';
+                                        endif;
+                                        ?>><?= $grupo->nome ?></option>
+                                    <? } ?>
+                                </select>
                             </div>
-
-                            <div style="border: 1pt dotted #444; border-radius: 10pt;">
-                                <table border="1">
-                                    <tr>
-                                         <?php if($empresapermissoes[0]->filtrar_agenda_2 != "t"){?>
-                                           <th class="tabela_title">Tipo Agenda</th>
-                                         <?php } ?>  
-                                           <th class="tabela_title" colspan="2">Medico</th>
-                                         <?php if($empresapermissoes[0]->filtrar_agenda_2 == "t"){?>
-                                           <th class="tabela_title">Status</th>
-                                         <?php }?>
-
-                                    </tr>
-                                    <tr>
-                                   <?php if($empresapermissoes[0]->filtrar_agenda_2 != "t"){?>
-                                        <th class="tabela_title">
-                                             <input type="hidden" id="medicoget" value="<?= ($this->session->userdata('perfil_id') == 4) ? $this->session->userdata('operador_id') : @$_GET['medico']  ?>">
-                                            <select name="tipoagenda" id="tipoagenda" class="size2">
-                                                <!--<option value=""></option>-->
-                                                <option value="">TODOS</option>
-                                                <? foreach ($tipo_consulta as $value) : ?>
-                                                    <option value="<?= $value->ambulatorio_tipo_consulta_id; ?>" <?
-                                                    if (@$_GET['tipoagenda'] == $value->ambulatorio_tipo_consulta_id):echo 'selected';
-                                                    endif;
-                                                    ?>>
-                                                                <?
-                                                                //                                                if (@$_GET['especialidade'] == $value->cbo_ocupacao_id):
-                                                                //                                                    echo '<script>carregaMedicoEspecialidade();</script>';
-                                                                //                                                endif;
-                                                                ?>
-                                                                <?php echo $value->descricao; ?>
-                                                    </option>
-                                                <? endforeach; ?>
-                                            </select>
-                                        </th>
-                                   <?php }?>
-
-
-                                        <th class="tabela_title" colspan="2">
-                                            <?php
-                                            if ($this->session->userdata('perfil_id') == 4 && $medico_agenda_sessao == 't') {
-                                                ?>
-                                                <select name="medico" id="medico" class="size2">
-                                                    <option value=""> </option>
-                                                    <? foreach ($medicos as $value) : ?>
-                                                        <?php if ($value->operador_id == $this->session->userdata('operador_id')) { ?>
-                                                            <option value="<?= $value->operador_id; ?>" selected >
-
-                                                                <?php echo $value->nome . ' - CRM: ' . $value->conselho; ?>
-
-                                                            </option>
-                                                        <?php } ?>
-                                                    <? endforeach; ?>
-
-                                                </select>
-                                            <?php } else { ?>
-                                                <select name="medico" id="medico" class="size2">
-                                                    <option value=""> </option>
-                                                    <? foreach ($medicos as $value) : ?>
-                                                        <option value="<?= $value->operador_id; ?>"<?
-                                                if (@$_GET['medico'] == $value->operador_id):echo 'selected';
-                                                endif;
-                                                        ?>>
-
-                                                            <?php echo $value->nome . ' - CRM: ' . $value->conselho; ?>
-
-
-                                                        </option>
-                                                    <? endforeach; ?>
-
-                                                </select>
-
-                                            <?php } ?>
-                                        </th>
-                                        <?php if($empresapermissoes[0]->filtrar_agenda_2 == "t"){  ?>  
-                                            <th class="tabela_title">
-                                                <select name="status" id="status" class="size2">
-                                                    <option value=""></option>
-                                                    <option value="AGENDADO" <?
-                                                    if (@$_GET['status'] == "AGENDADO") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>AGENDADO</option>
-                                                    <option value="AGUARDANDO" <?
-                                                    if (@$_GET['status'] == "AGUARDANDO") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>AGUARDANDO</option>
-                                                    <option value="ATENDIDO" <?
-                                                    if (@$_GET['status'] == "ATENDIDO") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>ATENDIDO</option>
-
-                                                    <option value="ESPERA" <?
-                                                    if (@$_GET['status'] == "ESPERA") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>ESPERA</option>
-
-                                                </select>
-
-                                            </th>
-                                        <? } ?>  
-                                        
-                                        
-                                        
-
-                                    </tr> 
-
-                                </table>
-                                
-                                     <?php if($empresapermissoes[0]->filtrar_agenda_2 == "t"){  ?>  
-                                        <table>
-                                            <tr>
-                                              <th class="tabela_title">Convênio</th> 
-                                              <th class="tabela_title">Situação</th>
-                                            </tr>
-                                            <tr>
-                                              <th class="tabela_title">
-                                                        <select name="convenio" id="convenio" class="size2">
-                                                            <option value="">TODOS</option>
-                                                            <? foreach ($convenio as $value) : ?>
-                                                                <option value="<?= $value->convenio_id; ?>" <?
-                                                                if (@$_GET['convenio'] == $value->convenio_id):echo 'selected';
-                                                                endif;
-                                                                ?>><?php echo $value->nome; ?></option>
-                                                                    <? endforeach; ?>
-                                                        </select> 
-                                                    </th> 
-                                                    <th class="tabela_title">
-                                                <select name="situacao" id="situacao" class="size2">
-                                                    <option value=""></option>
-
-                                                    <option value="BLOQUEADO" <?
-                                                    if (@$_GET['situacao'] == "BLOQUEADO") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>BLOQUEADO</option>
-
-                                                    <option value="FALTOU" <?
-                                                    if (@$_GET['situacao'] == "FALTOU") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>FALTOU</option>
-                                                    <option value="OK" <?
-                                                    if (@$_GET['situacao'] == "OK") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>OCUPADO</option>
-                                                    <option value="LIVRE" <?
-                                                    if (@$_GET['situacao'] == "LIVRE") {
-                                                        echo 'selected';
-                                                    }
-                                                    ?>>VAGO</option>
-                                                </select>
-
-                                            </th>
-                                            </tr>  
-                                        </table>
-                                     <?php }?>
-                                
-                                <table border="1">
-                                    <tr>
-                                        <td  colspan="1" class="tabela_title">Procurar por Mini-Curriculo</td><br>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <select name="curriculos" id="curriculos" class="texto08  chosen-select" size="2" tabindex="1" data-placeholder="Selecione">
-                                            <option value="">TODOS</option>
-                                             <? foreach ($minicurriculos as $item) { ?>                                
-                                                    <option value='<?= $item->operador_id ?>' <?
-                                                   if(@$_GET['curriculos'] == $item->operador_id){ echo 'selected'; }
-                                                    ?>><?= $item->curriculo ?></option>
-                                                        <? } ?>
-                                        </select>
-                                        </td> <td>&nbsp;</td>
-                                    </tr>
-                                </table>
-                                <br>
-                            </div>
-                            
-                            
-                            
-                            
-                           
-                            <table border="1" >
-                                <tr>
-
-                                    <th colspan="2" class="tabela_title">Nome</th>
-                                </tr>
-
-                                <tr>
-
-                                    <th colspan="2" class="tabela_title">
-                                        <input type="text" name="nome" id="nome" class="texto08 bestupper" value="<?php echo @$_GET['nome']; ?>" />
-                                        <? if (@$_GET['data'] != '') { ?>
-                                            <input type="hidden" name="data" id="data" class="texto04 bestupper" value="<?php echo date("Y-m-d", strtotime(str_replace('/', '-', @$_GET['data']))); ?>" />
-                                        <? } else { ?>
-                                            <input type="hidden" name="data" id="data" class="texto04 bestupper" value="" />
-                                        <? } ?>
-                                    </th>
-                                </tr>
-                                 
-                                <?php if( $empresapermissoes[0]->filtrar_agenda_2 == 't'){?> 
-                                    <tr>
-                                        <td colspan="3">
-                                            <table>
-                                                <tr>
-                                                     <th  class="tabela_title">Telefone</th>
-                                                     <th  class="tabela_title">Cpf</th>
-                                                     <th  class="tabela_title">Nascimento</th>
-                                                </tr>
-                                                <tr> 
-                                                     <th  class="tabela_title"><input type="text" name="txtTelefone" id="txtTelefone" class="texto02 bestupper" value="<?= @$_GET['txtTelefone']; ?>" /></th>
-                                                     <th  class="tabela_title"><input type="text" name="txtCpf" id="txtCpf" class="texto02 bestupper"  value="<?= @$_GET['txtCpf']; ?>"/></th>
-                                                     <th  class="tabela_title"><input type="text" name="txtNascimento" id="txtNascimento" class="texto02 bestupper" value="<?= @$_GET['txtNascimento']; ?>" /></th>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr> 
-                                <?php }?>
-                                
-                                
-                                <? if ($empresapermissoes[0]->filtrar_agenda == 't' ||  $empresapermissoes[0]->filtrar_agenda_2 == 't') { ?>
-                                    <tr>
-
-                                        <th colspan="2" class="tabela_title">Observação</th>
-                                    </tr>
-
-                                    <tr>
-
-                                        <th colspan="2" class="tabela_title">
-                                            <input type="text" name="observacao" class="texto08 bestupper" value="<?php echo @$_GET['observacao']; ?>" />                                       
-                                        </th>
-                                    </tr>
-                                <? } ?>
-                                    
-                             
-                                
-                                <tr>
-                                    <th colspan="1" class="tabela_title">
-                                        <button type="submit" id="enviar">Pesquisar</button>
-                                    </th>
-                                    <!--                               O FORM FECHA AQUI-->     </form>
-                                    <th colspan="1" class="tabela_title">
-                                        <button id="botaosala">S/ de Espera</button>
-                                    </th>
-                                </tr>
-                                
-                              
-                            </table>
-
-                        </th>
-
-
-                    </tr>
-
-                    <!--</form>-->
-                    <tr>
-
-                    </tr>
-                    </thead>
-
-            </table> 
-            <!-- Comentei essa parte só pra publicar -->
-            <table>
-                <tr>
-                    <? if (($perfil_id == 1 || $operador_id == 1) || $empresapermissoes[0]->btn_encaixe == 'f') { ?>
-                    <th style="padding-left:88%" class="tabela_title">
-                        <button value="encaixar" id="encaixar">Encaixar Horário</button>
-                    </th>
-                    <? } ?>
-                </tr>
-            </table> 
-
-            <table>
-                <tr>
-                    <td colspan="2">
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-<!--                    <td rowspan="2"> 
-                    </td>-->
-<!--                    <td>
-                        <div style="width: 10px;">
 
                         </div>
-                    </td>-->
+                        <div class="col-lg-2">
+                            <div>
+                                <?php if($empresapermissoes[0]->filtrar_agenda_2 == "t") { ?>
+                                    <label>Tipo Especialidade</label>
+                                    <input type="hidden" id="medicoget" value="<?= ($this->session->userdata('perfil_id') == 4) ? $this->session->userdata('operador_id') : @$_GET['medico']  ?>">
+                                    <select name="tipoagenda" id="tipoagenda" class="form-control">
+                                        <!--<option value=""></option>-->
+                                        <option value="">TODOS</option>
+                                        <? foreach ($tipo_consulta as $value) : ?>
+                                            <option value="<?= $value->ambulatorio_tipo_consulta_id; ?>" <?
+                                            if (@$_GET['tipoagenda'] == $value->ambulatorio_tipo_consulta_id):echo 'selected';
+                                            endif;
+                                            ?>>  <?php echo $value->descricao; ?>
+                                            </option>
+                                        <? endforeach; ?>
+                                    </select>
+                                <?php }else{?>
+                                    <label>Sala</label>
+                                    <select name="sala" id="sala" class="form-control">
+                                        <option value="">TODOS</option>
+                                        <? foreach ($salas as $value) : ?>
+                                            <option value="<?= $value->exame_sala_id; ?>" <?
+                                            if (@$_GET['sala'] == $value->exame_sala_id):echo 'selected';
+                                            endif;
+                                            ?>><?php echo $value->nome; ?></option>
+                                        <? endforeach; ?>
+                                    </select>
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Empresa</label>
+                                <select name="empresa" id="empresa" class="form-control">
+                                    <option value="">TODOS</option>
+                                    <?
+                                    $selected = false;
+                                    foreach ($empresas as $value) :
+                                        ?>
+                                        <option value="<?= $value->empresa_id; ?>" <?
+                                        if ($empresa_atual == $value->empresa_id) {
+                                            echo 'selected';
+                                            $selected = true;
+                                        } else {
+                                            if ($empresa_logada == $value->empresa_id && $selected == false) {
+                                                // echo 'selected';
+                                                // $selected = true;
+                                            }
+                                        }
+                                        ?>><?php echo $value->nome; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div>
+                                <label>Procedimento</label>
+                                <select name="procedimento" id="procedimento" class="form-control" >
+                                    <option value=''>TODOS</option>
+                                    <?php
+                                    foreach ($procedimento as $item) {
+                                        ?>
+                                        <option value ="<?php echo $item->procedimento_tuss_id; ?>" <?
+                                        if (@$_GET['procedimento'] == $item->procedimento_tuss_id):echo 'selected';
+                                        endif;
+                                        ?>>
+                                            <?php echo $item->nome; ?>
+                                        </option>
+
+                                    <? } ?>
+
+                                </select>
+                            </div>
+                        </div>
+                        <? if ($empresapermissoes[0]->filtrar_agenda == 't') { ?>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Situação</label>
+                                <select name="situacao" id="situacao" class="size2">
+                                    <option value=""></option>
+
+                                    <option value="BLOQUEADO" <?
+                                    if (@$_GET['situacao'] == "BLOQUEADO") {
+                                        echo 'selected';
+                                    }
+                                    ?>>BLOQUEADO</option>
+
+                                    <option value="FALTOU" <?
+                                    if (@$_GET['situacao'] == "FALTOU") {
+                                        echo 'selected';
+                                    }
+                                    ?>>FALTOU</option>
+                                    <option value="OK" <?
+                                    if (@$_GET['situacao'] == "OK") {
+                                        echo 'selected';
+                                    }
+                                    ?>>OCUPADO</option>
+                                    <option value="LIVRE" <?
+                                    if (@$_GET['situacao'] == "LIVRE") {
+                                        echo 'selected';
+                                    }
+                                    ?>>VAGO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Status</label>
+                                <select name="status" id="status" class="size2">
+                                    <option value=""></option>
+                                    <option value="AGENDADO" <?
+                                    if (@$_GET['status'] == "AGENDADO") {
+                                        echo 'selected';
+                                    }
+                                    ?>>AGENDADO</option>
+                                    <option value="AGUARDANDO" <?
+                                    if (@$_GET['status'] == "AGUARDANDO") {
+                                        echo 'selected';
+                                    }
+                                    ?>>AGUARDANDO</option>
+                                    <option value="ATENDIDO" <?
+                                    if (@$_GET['status'] == "ATENDIDO") {
+                                        echo 'selected';
+                                    }
+                                    ?>>ATENDIDO</option>
+
+                                    <option value="ESPERA" <?
+                                    if (@$_GET['status'] == "ESPERA") {
+                                        echo 'selected';
+                                    }
+                                    ?>>ESPERA</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Convênio</label>
+                            <select name="convenio" id="convenio" class="size2">
+                                <option value="">TODOS</option>
+                                <? foreach ($convenio as $value) : ?>
+                                    <option value="<?= $value->convenio_id; ?>" <?
+                                    if (@$_GET['convenio'] == $value->convenio_id):echo 'selected';
+                                    endif;
+                                    ?>><?php echo $value->nome; ?></option>
+                                <? endforeach; ?>
+                            </select>
+                        </div>
+                        <? } ?>
+                        <?php if($empresapermissoes[0]->filtrar_agenda_2 != "t"){?>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Tipo Agenda</label>
+                                <input type="hidden" id="medicoget" value="<?= ($this->session->userdata('perfil_id') == 4) ? $this->session->userdata('operador_id') : @$_GET['medico']  ?>">
+                                <select name="tipoagenda" id="tipoagenda" class="form-control">
+                                    <!--<option value=""></option>-->
+                                    <option value="">TODOS</option>
+                                    <? foreach ($tipo_consulta as $value) : ?>
+                                        <option value="<?= $value->ambulatorio_tipo_consulta_id; ?>" <?
+                                        if (@$_GET['tipoagenda'] == $value->ambulatorio_tipo_consulta_id):echo 'selected';
+                                        endif;
+                                        ?>>
+                                            <?
+                                            //                                                if (@$_GET['especialidade'] == $value->cbo_ocupacao_id):
+                                            //                                                    echo '<script>carregaMedicoEspecialidade();</script>';
+                                            //                                                endif;
+                                            ?>
+                                            <?php echo $value->descricao; ?>
+                                        </option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <? } ?>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Médico</label>
+                                <?php if ($this->session->userdata('perfil_id') == 4 && $medico_agenda_sessao == 't') { ?>
+                                    <select name="medico" id="medico" class="form-control">
+                                        <option value=""> </option>
+                                        <? foreach ($medicos as $value) : ?>
+                                            <?php if ($value->operador_id == $this->session->userdata('operador_id')) { ?>
+                                                <option value="<?= $value->operador_id; ?>" selected >
+
+                                                    <?php echo $value->nome . ' - CRM: ' . $value->conselho; ?>
+
+                                                </option>
+                                            <?php } ?>
+                                        <? endforeach; ?>
+
+                                    </select>
+                                <?php } else { ?>
+                                    <select name="medico" id="medico" class="form-control">
+                                        <option value=""> </option>
+                                        <? foreach ($medicos as $value) : ?>
+                                            <option value="<?= $value->operador_id; ?>"<?
+                                            if (@$_GET['medico'] == $value->operador_id):echo 'selected';
+                                            endif;
+                                            ?>>
+
+                                                <?php echo $value->nome . ' - CRM: ' . $value->conselho; ?>
+
+
+                                            </option>
+                                        <? endforeach; ?>
+
+                                    </select>
+
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <?php if($empresapermissoes[0]->filtrar_agenda_2 == "t"){?>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Status</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value=""></option>
+                                    <option value="AGENDADO" <?
+                                    if (@$_GET['status'] == "AGENDADO") {
+                                        echo 'selected';
+                                    }
+                                    ?>>AGENDADO</option>
+                                    <option value="AGUARDANDO" <?
+                                    if (@$_GET['status'] == "AGUARDANDO") {
+                                        echo 'selected';
+                                    }
+                                    ?>>AGUARDANDO</option>
+                                    <option value="ATENDIDO" <?
+                                    if (@$_GET['status'] == "ATENDIDO") {
+                                        echo 'selected';
+                                    }
+                                    ?>>ATENDIDO</option>
+
+                                    <option value="ESPERA" <?
+                                    if (@$_GET['status'] == "ESPERA") {
+                                        echo 'selected';
+                                    }
+                                    ?>>ESPERA</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <? } ?>
+                        <?php if($empresapermissoes[0]->filtrar_agenda_2 == "t") {  ?>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Convênio</label>
+                                <select name="convenio" id="convenio" class="form-control">
+                                    <option value="">TODOS</option>
+                                    <? foreach ($convenio as $value) : ?>
+                                        <option value="<?= $value->convenio_id; ?>" <?
+                                        if (@$_GET['convenio'] == $value->convenio_id):echo 'selected';
+                                        endif;
+                                        ?>><?php echo $value->nome; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Situação</label>
+                                <select name="situacao" id="situacao" class="form-control">
+                                    <option value=""></option>
+
+                                    <option value="BLOQUEADO" <?
+                                    if (@$_GET['situacao'] == "BLOQUEADO") {
+                                        echo 'selected';
+                                    }
+                                    ?>>BLOQUEADO</option>
+
+                                    <option value="FALTOU" <?
+                                    if (@$_GET['situacao'] == "FALTOU") {
+                                        echo 'selected';
+                                    }
+                                    ?>>FALTOU</option>
+                                    <option value="OK" <?
+                                    if (@$_GET['situacao'] == "OK") {
+                                        echo 'selected';
+                                    }
+                                    ?>>OCUPADO</option>
+                                    <option value="LIVRE" <?
+                                    if (@$_GET['situacao'] == "LIVRE") {
+                                        echo 'selected';
+                                    }
+                                    ?>>VAGO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <? } ?>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Procurar por Mini-Curriculo</label>
+                                <select name="curriculos" id="curriculos" class=" form-control chosen-select" data-placeholder="Selecione">
+                                    <option value="">TODOS</option>
+                                    <? foreach ($minicurriculos as $item) { ?>
+                                        <option value='<?= $item->operador_id ?>' <?
+                                        if(@$_GET['curriculos'] == $item->operador_id){ echo 'selected'; }
+                                        ?>><?= $item->curriculo ?></option>
+                                    <? } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Nome</label>
+                                <input type="text" name="nome" id="nome" class="form-control bestupper" value="<?php echo @$_GET['nome']; ?>" />
+                                <? if (@$_GET['data'] != '') { ?>
+                                    <input type="hidden" name="data" id="data" class="form-control bestupper" value="<?php echo date("Y-m-d", strtotime(str_replace('/', '-', @$_GET['data']))); ?>" />
+                                <? } else { ?>
+                                    <input type="hidden" name="data" id="data" class="form-control bestupper" value="" />
+                                <? } ?>
+                            </div>
+                        </div>
+                        <?php if( $empresapermissoes[0]->filtrar_agenda_2 == 't'){?>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Telefone</label>
+                                <input type="text" name="txtTelefone" id="txtTelefone" class="form-control bestupper" value="<?= @$_GET['txtTelefone']; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Cpf</label>
+                                <input type="text" name="txtCpf" id="txtCpf" class="form-control bestupper"  value="<?= @$_GET['txtCpf']; ?>"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div>
+                                <label>Nascimento</label>
+                                <input type="text" name="txtNascimento" id="txtNascimento" class="function bestupper" value="<?= @$_GET['txtNascimento']; ?>"/>
+                            </div>
+                        </div>
+
+                        <? } ?>
+                        <? if ($empresapermissoes[0]->filtrar_agenda == 't' ||  $empresapermissoes[0]->filtrar_agenda_2 == 't') { ?>
+                            <div class="col-lg-4">
+                                <label>Observação</label>
+                                <input type="text" name="observacao" class="texto08 bestupper form-control" value="<?php echo @$_GET['observacao']; ?>" />
+                            </div>
+                        <? } ?>
+
+
+
+
+
+
+                    </div>
+                    <br>
+                    <div class="btn-group-sm">
+                        <button class="btn btn-outline-default" type="submit" id="enviar">Pesquisar</button>
+                        <button class="btn btn-outline-default" id="botaosala">S/ de Espera</button>
+                        <? if (($perfil_id == 1 || $operador_id == 1) || $empresapermissoes[0]->btn_encaixe == 'f') { ?>
+                            <button class="btn btn-outline-default" value="encaixar" id="encaixar">Encaixar Horário</button>
+                        <? } ?>
+                    </div>
+                </fieldset>
+
+            </form>
+
+<!--            <div id='calendar'></div>-->
+
+
+                <div class="calendar">
+                    <div id="calendar"></div>
+                </div>
+            <br><br>
+            <table>
+                <tr>
                     <td>
                         <table>
                             <thead>
@@ -1015,7 +641,7 @@ h2{
                             <td colspan="2" class="<?php echo $estilo_linha; ?>"><button type="submit" id="enviar">Encaixar</button></td>
                             <td colspan="2" class="<?php echo $estilo_linha; ?>"></td>
                         </tr>
-                    </form>
+
                     <?php
 //                        var_dump($item->situacaoexame);
 //                        die;
@@ -1434,6 +1060,148 @@ h2{
         </div>
     </div>
 </div>
+<div class="modal fade" id="agendamentoModal" tabindex="-1" role="dialog" aria-labelledby="agendamentoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-primary">
+                <h5 class="modal-title" id="agendamentoModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row divError">
+                    <div class="col">
+                        <div class="alert alert-danger">
+                            <strong>Opa!</strong> Tem um problema com os dados inseridos.<br>
+                            <ul class="ulError">
+                                <li class="liError">aaaa</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <strong>Paciente:</strong>
+                            <input type="text" name="paciente" id="paciente" value="" class="form-control @error('paciente') is-invalid @enderror" placeholder="Paciente">
+                            <input type="hidden" name="paciente_id" id="paciente_id" value="" class="">
+
+
+                            <input type="hidden" name="id" id="id" value="" class="">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong>Início:</strong>
+                        <div class="form-group">
+                            <input type="datetime-local" name="start" id="start" value="" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong>Fim:</strong>
+                        <div class="form-group">
+                            <input type="datetime-local" name="end" id="end" value="" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <strong>Médico:</strong>
+                            <select name="medico_id" id="medico_id" class="form-control">
+                                <option value="">Selecione</option>
+                                @foreach ($medicos as $item)
+                                <option value="{{ $item->id }}" >{{ $item->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <strong>Sala:</strong>
+                            <select name="sala_id" id="sala_id" class="form-control">
+                                <option value="">Selecione</option>
+                                @foreach ($salas as $item)
+                                <option value="{{ $item->id }}" >{{ $item->nome}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <strong>Plano:</strong>
+                            <select name="plano_id" id="plano_id" class="form-control">
+                                <option value="">Selecione</option>
+                                @foreach ($planos as $item)
+                                <option value="{{ $item->id }}" >{{ $item->nome}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <strong>Procedimento:</strong>
+                            <select name="procedimento_id" id="procedimento_id" class="form-control">
+                                <option value="">Selecione</option>
+                                @foreach ($procedimentos as $item)
+                                <option value="{{ $item->id }}" >{{ $item->nome_abr}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <strong>Ordenador:</strong>
+                            <select name="prioridade" id="prioridade" class="form-control">
+                                <option value="">Selecione</option>
+                                <option value="1">Normal</option>
+                                <option value="2">Prioridade</option>
+                                <option value="3">Emergência</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary adicionarModal" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-success adicionarModal"  onclick="newEvent();">Agendar</button>
+
+
+                <button type="button" class="btn btn-secondary editarModal" data-dismiss="modal">Fechar</button>
+                {{-- <button type="button" class="btn btn-info editarModal" onclick="historicoAtendimento();">Histórico</button> --}}
+                <a id="botaoAtender" target="_blank" href="" class="editarModalAtendimento"><button type="button" class="btn btn-primary " onclick="editarAtendimento();">Atender</button></a>
+                <button type="button" class="btn btn-success editarModal" onclick="editarEventoModal();">Salvar</button>
+                <button type="button" class="btn btn-danger editarModal" data-dismiss="modal" onclick="deleteEvent()">Excluir</button>
+
+            </div>
+            <form id="editar_atendimento" action="{{ route('atendimento.create')}}" method="GET" target="_blank">
+                {{-- <a class="btn btn-info" href="{{ route('sala.show',$item->id) }}">Show</a> --}}
+                <input type="hidden" name="id_atender" id="id_atender" value="" class="">
+            </form>
+
+            <form id="historico_atendimento" action="{{ route('historicoAtendimento')}}" method="GET" target="_blank">
+                {{-- <a class="btn btn-info" href="{{ route('sala.show',$item->id) }}">Show</a> --}}
+                <input type="hidden" name="paciente_h_id" id="paciente_h_id" value="" class="">
+            </form>
+        </div>
+    </div>
+</div>
 <?
 if (@$_GET['data'] != '') {
     $data = date("Y-m-d", strtotime(str_replace('/', '-', $_GET['data'])));
@@ -1458,10 +1226,343 @@ $feriado = $this->agenda->listarferiadosagenda();
 <script type="text/javascript" src="<?= base_url() ?>js/chosen/chosen.jquery.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/prism.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/init.js"></script>
-<style>
-</style>
 <script>
-    
+    function abrirModal(info){
+        $('.divError').hide();
+        $('.liError').remove();
+        $('.editarModal').hide();
+        $('.editarModalAtendimento').hide();
+
+        $('.adicionarModal').show();
+        var titulo = 'Agendar';
+        var dataInicio = info.start.toLocaleDateString('pt-BR');
+        var dataFim = info.end.toLocaleDateString('pt-BR');
+        var horaInicio = info.start.toLocaleTimeString('pt-BR');
+        var horaFim = info.end.toLocaleTimeString('pt-BR');
+        var isoStart = new Date(info.start.getTime() - (info.start.getTimezoneOffset() * 60000)).toISOString().slice(0,16);
+        var isoEnd = new Date(info.end.getTime() - (info.end.getTimezoneOffset() * 60000)).toISOString().slice(0,16);
+        if(dataInicio == dataFim){
+            titulo = dataInicio + ' : ' + horaInicio + ' - ' + horaFim;
+        }else{
+            titulo = dataInicio + ' - ' + dataFim;
+        }
+        $('#agendamentoModal').modal();
+        $('#agendamentoModalLabel').text(titulo);
+        $('#start').val(isoStart);
+        $('#end').val(isoEnd);
+        // console.log(info);
+        // console.log(info.end.toISOString().slice(0,16));
+    }
+
+    $('#agendamentoModal').on('hidden.bs.modal', function () {
+        $('#agendamentoModalLabel').text('Agendar');
+        $('#start').val('');
+        $('#end').val('');
+        $('#paciente').val('');
+        $('#paciente_id').val('');
+        $('#sala_id').val('');
+        $('#medico_id').val('');
+        $('#plano_id').val('');
+        $('#procedimento_id').val('');
+        $('#id').val('');
+        $('#prioridade').val('');
+        // $('#color').val('#3490dc');
+    });
+
+    function moveEvent(info){
+
+        var dataInicio = info.event.start.toLocaleDateString('pt-BR');
+        var dataFim = info.event.end.toLocaleDateString('pt-BR');
+        var horaInicio = info.event.start.toLocaleTimeString('pt-BR');
+        var horaFim = info.event.end.toLocaleTimeString('pt-BR');
+        var id = info.event.id;
+
+        let route = "{{route('moveEvent')}}";
+        let data = {
+            _token: $('input[name=_token]').val(),
+            start: dataInicio + ' ' + horaInicio,
+            end: dataFim + ' ' + horaFim,
+            id: id
+        }
+        sendRequest(route, data, 'POST');
+    }
+
+    function updateEvent(info){
+
+        var dataInicio = info.event.start.toLocaleDateString('pt-BR');
+        var dataFim = info.event.end.toLocaleDateString('pt-BR');
+        var horaInicio = info.event.start.toLocaleTimeString('pt-BR');
+        var horaFim = info.event.end.toLocaleTimeString('pt-BR');
+        var id = info.event.id;
+
+        let route = "{{route('updateEvent')}}";
+        let data = {
+            _token: $('input[name=_token]').val(),
+            start: dataInicio + ' ' + horaInicio,
+            end: dataFim + ' ' + horaFim,
+            id: id
+        }
+        sendRequest(route, data, 'POST');
+    }
+
+    function deleteEvent(){
+        let route = "{{route('deleteEvent')}}";
+        let data = {
+            _token: $('input[name=_token]').val(),
+            id: $('#id').val()
+        }
+        swal({
+            title: "Tem certeza?",
+            text: 'Você está prestes a excluir um agendamento',
+            icon: "warning",
+            buttons: {
+                cancel: {
+                    text: "Cancelar",
+                    value: false,
+                    visible: true,
+                    className: "",
+                    closeModal: true,
+                },
+                confirm: {
+                    text: "Sim",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: true
+                }
+            },
+            dangerMode: true,
+        })
+            .then((deletar) => {
+                if (deletar) {
+                    sendRequest(route, data, 'POST');
+                }
+            });
+    }
+
+    function newEvent(){
+        let route = "{{route('agendamento.store')}}";
+        let data = {
+            _token: $('input[name=_token]').val(),
+            start: $('#start').val(),
+            end: $('#end').val(),
+            paciente: $('#paciente').val(),
+            paciente_id: $('#paciente_id').val(),
+            sala_id: $('#sala_id').val(),
+            medico_id: $('#medico_id').val(),
+            plano_id: $('#plano_id').val(),
+            procedimento_id: $('#procedimento_id').val(),
+            id: $('#id').val(),
+            // color: $('#color').val(),
+            prioridade: $('#prioridade').val(),
+        }
+        sendRequest(route, data, 'POST');
+    }
+
+    function editarEventoModal(){
+        let route = "{{route('updateEvent')}}";
+        let data = {
+            _token: $('input[name=_token]').val(),
+            start: $('#start').val(),
+            end: $('#end').val(),
+            paciente: $('#paciente').val(),
+            paciente_id: $('#paciente_id').val(),
+            title: $('#paciente').val(),
+            nome: $('#paciente').val(),
+            sala_id: $('#sala_id').val(),
+            medico_id: $('#medico_id').val(),
+            plano_id: $('#plano_id').val(),
+            procedimento_id: $('#procedimento_id').val(),
+            id: $('#id').val(),
+            // color: $('#color').val(),
+            prioridade: $('#prioridade').val(),
+        }
+        sendRequest(route, data, 'POST');
+    }
+
+
+    function abrirEvento(info){
+        $('.divError').hide();
+        $('.liError').remove();
+        $('.editarModal').show();
+
+        var title = info.event.title
+        console.log(title.length);
+        if(title.length > 4){
+            $('.editarModalAtendimento').show();
+        }else{
+            $('.editarModalAtendimento').hide();
+        }
+
+        $('.adicionarModal').hide();
+        var id = info.event.id;
+
+        let route = "{{route('getEvent')}}";
+        let data = {
+            _token: $('input[name=_token]').val(),
+            id: id
+        }
+        sendRequest(route, data, 'GET');
+    }
+
+    function alterarModal(info){
+        var start = new Date(info.start);
+        var end = new Date(info.end);
+        var isoStart = new Date(start.getTime() - (start.getTimezoneOffset() * 60000)).toISOString().slice(0,16);
+        var isoEnd = new Date(end.getTime() - (end.getTimezoneOffset() * 60000)).toISOString().slice(0,16);
+        var dataInicio = start.toLocaleDateString('pt-BR');
+        var dataFim = end.toLocaleDateString('pt-BR');
+        var horaInicio = start.toLocaleTimeString('pt-BR');
+        var horaFim = end.toLocaleTimeString('pt-BR');
+        if(dataInicio == dataFim){
+            titulo = dataInicio + ' : ' + horaInicio + ' - ' + horaFim;
+        }else{
+            titulo = dataInicio + ' - ' + dataFim;
+        }
+
+        var url = '{{ route("atendimento.edit", ":id")}}';
+        url = url.replace(':id', info.id);
+        $('#botaoAtender').attr("href", url);
+        $('#agendamentoModalLabel').text(titulo);
+        $('#start').val(isoStart);
+        $('#end').val(isoEnd);
+        $('#paciente').val(info.title);
+        $('#paciente_id').val(info.paciente_id);
+        $('#sala_id').val(info.sala_id);
+        $('#medico_id').val(info.medico_id);
+        $('#plano_id').val(info.plano_id);
+        $('#procedimento_id').val(info.procedimento_id);
+        $('#id').val(info.id);
+        $("#id_atender").val(info.id);
+        $("#paciente_h_id").val(info.paciente_id);
+        // $('#color').val(info.color);
+        $('#prioridade').val(info.prioridade);
+        $('#agendamentoModal').modal();
+    }
+</script>
+<script>
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            selectable: true,
+            editable: true,
+            weekNumbers: false,
+            buttonIcons: false,
+            locale: 'pt-br',
+            dayMaxEvents: true, // allow "more" link when too many events
+            slotMinTime: '06:00:00',
+            showNonCurrentDates: false,
+            headerToolbar : {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+            initialView: 'timeGridWeek',
+            events:"<? echo base_url() ?>ambulatorio/exame/listarmultifuncaoconsulta",
+            eventColor: '#b5baff',
+            nowIndicator: true,
+            select: function(info) {
+                // console.log(info);
+                abrirModal(info);
+            },
+            dayCellContent: function (selectionInfo, cell) {
+
+            },
+            eventDrop: function(info) {
+                // alert(info.event.title + " was dropped on " + info.event.start.toISOString());
+                swal({
+                    title: "Tem certeza?",
+                    text: 'Você está prestes a mover um agendamento',
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            value: false,
+                            visible: true,
+                            className: "",
+                            closeModal: true,
+                        },
+                        confirm: {
+                            text: "Sim",
+                            value: true,
+                            visible: true,
+                            className: "",
+                            closeModal: true
+                        }
+                    },
+                    // dangerMode: true,
+                })
+                    .then((mover) => {
+                        if (!mover) {
+                            info.revert();
+                        }else{
+                            moveEvent(info);
+                        }
+                    });
+            },
+            eventResize: function(info) {
+                // alert(info.event.title + " was dropped on " + info.event.start.toISOString());
+                swal({
+                    title: "Tem certeza?",
+                    text: 'Você está prestes a alterar um agendamento',
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            value: false,
+                            visible: true,
+                            className: "",
+                            closeModal: true,
+                        },
+                        confirm: {
+                            text: "Sim",
+                            value: true,
+                            visible: true,
+                            className: "",
+                            closeModal: true
+                        }
+                    },
+                    // dangerMode: true,
+                })
+                    .then((mover) => {
+                        if (!mover) {
+                            info.revert();
+                        }else{
+                            moveEvent(info);
+                        }
+                    });
+            },
+
+            eventClick: function(info) {
+                info.jsEvent.preventDefault(); // don't let the browser navigate
+                info.dayEl.style.backgroundColor = 'lightblue';
+                if (info.event.url) {
+                    window.open(info.event.url);
+                }
+            },
+            eventSources: [
+
+                {
+                    url: '<?= base_url() ?>autocomplete/listarhorarioscalendario',
+                    type: 'POST',
+                    error: function () {
+                        alert('there was an error while fetching events!');
+                    }
+
+                }
+
+
+            ]
+
+
+        });
+        calendar.render();
+    });
+
 function filtrolivre(){ 
     $("#data").val("");
      location.reload();
@@ -1550,97 +1651,7 @@ $(".chosen-select").chosen({width: "95%"});
                                                 var paciente = '';
                                             }
 //    alert('<?= $sala_atual ?>');
-                                            $('#calendar').fullCalendar({
-                                                header: {
-                                                    left: 'prev,next',
-                                                    center: 'title',
-                                                    right: 'today'
-                                                },
-                                                height: 400,
-//        theme: true,
-                                                dayRender: function (date, cell) {
-                                                    var data_escolhida = $('#data').val();
-                                                    var today = moment(new Date()).format('YYYY-MM-DD');
-                                                    var check = moment(date).format('YYYY-MM-DD');
 
-
-<?
-if (count($feriado) > 0) {
-    foreach ($feriado as $item) {
-        ?>
-                                                            var feriado = date.format('<?= date($item->data) ?>');
-                                                            var data2 = date.format('DD/MM');
-                                                            //                                alert(data2);
-                                                            //                                alert(feriado);
-
-                                                            if (data2 == feriado) {
-                                                                cell.css("background-color", "#FF9999");
-                                                            }
-        <?
-    }
-}
-?>
-
-
-                                                    if (data_escolhida == check && data_escolhida != today) {
-                                                        cell.css("background-color", "#BCD2EE");
-                                                    }
-
-                                                },
-                                                dayClick: function (date, cell) {
-                                                    var data = date.format();
-                                                    var data2 = date.format('DD/MM');
-//            cell.css("background-color", "#BCD2EE");                                                   
-                                                    window.open('<?= base_url() ?>ambulatorio/exame/listarmultifuncaocalendario2?empresa=' + $('#empresa').val() + '&tipoagenda=' + $('#tipoagenda').val() + '&sala=' + $('#sala').val() + '&grupo=' + $('#grupo').val() + '&procedimento=' + $('#procedimento').val() + '&especialidade=&medico=' + $('#medico').val() + '&situacao=&data=' + moment(data).format('DD%2FMM%2FYYYY') + '&nome=' + paciente + '', '_self');
-
-
-
-                                                },
-//        eventDragStop: function (date, jsEvent, view) {
-////            alert(date.format());
-//        },
-//        navLinks: true,
-                                                showNonCurrentDates: false,
-//            weekends: false,
-
-//                navLinks: true, // can click day/week names to navigate views
-                                                defaultDate: '<?= $data ?>',
-                                                locale: 'pt-br',
-                                                editable: false,
-                                                eventLimit: false, // allow "more" link when too many events
-                                                schedulerLicenseKey: 'CC-Attribution-Commercial-NoDerivatives',
-//            events: '<?= base_url() ?>autocomplete/listarhorarioscalendario',
-
-                                                eventSources: [
-                                                    // your event source
-
-                                                    {
-                                                        url: '<?= base_url() ?>autocomplete/listarhorarioscalendario',
-                                                        type: 'POST',
-                                                        data: {
-                                                            medico: <?=$id_medico_por_get?>,
-                                                            nome: $('#nome').val(),
-                                                            tipoagenda: $('#tipoagenda').val(),
-                                                            empresa: $('#empresa').val(),
-                                                            procedimento: $('#procedimento').val(),
-                                                            sala: sala_atual,
-                                                            grupo: $('#grupo').val(),
-                                                            paciente: paciente,
-                                                            minicurriculo_id: $('#curriculos').val()
-                                                          
-                                                        },
-                                                        error: function (data) {
-//                    alert(data);
-console.log(data);
-                                                        }
-
-                                                    }
-
-                                                    // any other sources...
-
-                                                ]
-
-                                            });
 
                                             $(function () {
                                                 $('#grupo').change(function () {

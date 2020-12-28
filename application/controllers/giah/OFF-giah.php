@@ -8,6 +8,7 @@ class Giah extends Controller {
         $this->load->model('giah/servidor_model', 'servidor');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
+        
     }
 
     function index($mensagem=null) {

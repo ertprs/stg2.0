@@ -23,6 +23,7 @@ class Modeloterapeuticas extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+        
     }
 
     function index() {
@@ -33,6 +34,40 @@ class Modeloterapeuticas extends BaseController {
 
         $this->loadView('ambulatorio/modeloterapeuticas-lista', $args);
 
+    }
+
+    function carregarprocedimentos($terapeutica_id){
+        $data['terapeuticas'] = $this->modeloterapeuticas->modeloterapeutica($terapeutica_id);
+        $data['procedimentos'] = $this->procedimento->listarprocedimentos();
+        $data['procedimentoscadastrado'] = $this->modeloterapeuticas->carregarprocedimentosmodelo($terapeutica_id);
+
+        $this->loadView('ambulatorio/modeloterapeuticaprocedimentos-form', $data);
+    }
+
+    function gravarprocedimentomodelo(){
+        $verificar = $this->modeloterapeuticas->gravarprocedimentomodelo();
+
+        if($verificar > 0){
+            $mensagem = 'Sucesso ao Gravar o Procedimento';
+        }else{
+            $mensagem = 'Erro ao Gravar o Procedimento. Procedimento Já cadastrado.';
+        }
+
+        $terapeutica_id = $_POST['terapeutica_id'];
+        $this->session->set_flashdata('message', $mensagem);
+        redirect(base_url() . "ambulatorio/modeloterapeuticas/carregarprocedimentos/$terapeutica_id");
+    }
+
+    function excluirprocedimentomodelo($solicitar_exames_procedimentos_id, $terapeutica_id){
+        $verificar = $this->modeloterapeuticas->excluirprocedimentomodelo($solicitar_exames_procedimentos_id);
+
+        if($verificar > 0){
+            $mensagem = 'Sucesso ao Excluir o Procedimento';
+        }else{
+            $mensagem = 'Erro ao Excluir o Procedimento.';
+        }
+        $this->session->set_flashdata('message', $mensagem);
+        redirect(base_url() . "ambulatorio/modeloterapeuticas/carregarprocedimentos/$terapeutica_id");
     }
 
     function pesquisar2($args = array()) {

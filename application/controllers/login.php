@@ -176,11 +176,11 @@ class Login extends Controller {
             }
 
             if ( ($this->login->autenticar($usuario, $senha, $empresa)) && ($this->session->userdata('autenticado') == true) ) {
-
-                $valuecalculado = 0;
+                
+                $valuecalculado = 0;                
                 setcookie("TestCookie", $valuecalculado);
                 redirect(base_url() . "home", "refresh");
-
+                
             } else {
                 $data['mensagem'] = $this->mensagem->getMensagem('login002');
                 $this->carregarView($data);

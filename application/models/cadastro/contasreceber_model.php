@@ -222,6 +222,13 @@ class contasreceber_model extends Model {
                 $this->db->set('data_cadastro', $horario);
                 $this->db->set('operador_cadastro', $operador_id);
                 $this->db->insert('tb_financeiro_contasreceber');
+                $financeiro_contasreceber = $this->db->insert_id();
+                if($referencia_pagamento_antecipado == 0){
+                $referencia_pagamento_antecipado = $financeiro_contasreceber;
+                }
+                $this->db->set('referencia_pagamento_antecipado', $referencia_pagamento_antecipado);
+                $this->db->where('financeiro_contasreceber_id',$financeiro_contasreceber);
+                $this->db->update('tb_financeiro_contasreceber');
                 
                 $periodoAnterior = date("Y-m-d", strtotime("-1 month", strtotime($_GET['periodo_aquisicao'])));;
                 
@@ -511,7 +518,7 @@ class contasreceber_model extends Model {
 
 
 
-            return $entradas_id;
+            return $financeiro_contasreceber_id;
         } catch (Exception $exc) {
             return -1;
         }
@@ -686,11 +693,158 @@ class contasreceber_model extends Model {
                             fc.classe,
                             fc.data,
                             cd.razao_social,
-                            fc.tipo_numero");
+                            fc.tipo_numero,
+                            fc.forma_pagamento_id,
+                            fc.data_inicio, 
+                            fp.recebimento_antecipado,
+                            fc.referencia_pagamento_antecipado");
         $this->db->from('tb_financeiro_contasreceber fc');   
         $this->db->join('tb_forma_entradas_saida fe', 'fe.forma_entradas_saida_id = fc.conta', 'left');
         $this->db->join('tb_financeiro_credor_devedor cd', 'cd.financeiro_credor_devedor_id = fc.devedor', 'left');
+        $this->db->join('tb_forma_pagamento fp','fp.forma_pagamento_id = fc.forma_pagamento_id','left');
         $this->db->where('financeiro_contasreceber_id',$financeiro_contasreceber_id);
+        return $this->db->get()->result();
+        
+    }
+    
+     function gravarconfirmacaoantecipado() {
+        try {
+            $this->load->helper('directory');
+            
+            $lista =  $this->dadoscontasreceber($_POST['financeiro_contasreceber_id']);
+            $referencia_pagamento_antecipado = $lista[0]->referencia_pagamento_antecipado;
+            if($referencia_pagamento_antecipado != ""){
+               $pagamentos_antecipados = $this->listarpagamentoatencipados($referencia_pagamento_antecipado);
+            }else{
+               $pagamentos_antecipados =  Array();  
+            }
+             
+           date_default_timezone_set('America/Fortaleza'); 
+           $financeiro_contasreceber_id = -1;
+           $i=0;
+            
+      foreach($pagamentos_antecipados as $item){
+            if($i == 0 && $item->financeiro_contasreceber_id == $_POST['financeiro_contasreceber_id']){
+               $valor_entrada = str_replace(",", ".", str_replace(".", "", $_POST['valor']));
+               $i++;
+            }else{
+                if($item->valor_bruto == ""){ 
+                    $valor_entrada = $item->valor; 
+                }else{
+                   $valor_entrada = $item->valor_bruto;
+                }
+            }  
+            $incio = $item->data;    
+              
+            $financeiro_contasreceber_id = $item->financeiro_contasreceber_id;
+            /* inicia o mapeamento no banco */ 
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+            $this->db->set('valor', $valor_entrada);
+            $this->db->set('valor_bruto',  $valor_entrada);
+            $this->db->set('contas_receber_id', $item->financeiro_contasreceber_id);
+            $this->db->set('data', $item->data);
+            if ($item->financeiro_credor_devedor_id != '') {
+                $this->db->set('nome', $item->financeiro_credor_devedor_id);
+            }
+            $this->db->set('tipo', $item->tipo);
+            $this->db->set('classe', $item->classe);
+            $this->db->set('conta', $item->forma_entradas_saida_id);
+            $this->db->set('observacao',  $item->observacao);
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+            $empresa_id = $this->session->userdata('empresa_id');
+            $this->db->set('empresa_id', $empresa_id);
+            $this->db->insert('tb_entradas');
+            $entrada_id = $this->db->insert_id(); 
+            if  (!is_dir("./upload/entrada")) {
+                mkdir("./upload/entrada");
+                chmod("./upload/entrada", 0777);
+            } 
+            if (!is_dir("./upload/entrada/$entrada_id")) {
+                mkdir("./upload/entrada/$entrada_id");
+                $destino = "./upload/entrada/$entrada_id";
+                chmod($destino, 0777);
+            }              
+            //// copiando e colando arquivos para o manter entrada
+            $pastaOrigem = "./upload/contasareceber/".$financeiro_contasreceber_id."/";
+            $pastaDestino = "./upload/entrada/".$entrada_id."/";            
+            $arquivo_pasta = directory_map("./upload/contasareceber/$financeiro_contasreceber_id/");
+            if ($arquivo_pasta != false) {
+             sort($arquivo_pasta);
+            }            
+            if ($arquivo_pasta != false):
+                    foreach ($arquivo_pasta as $value) :                  
+                       $this->copiarecolararquivos($pastaOrigem,$pastaDestino,$value);                 
+                    endforeach;             
+            endif;            
+            /////////////////////////////////////////            
+            $erro = $this->db->_error_message();
+            if (trim($erro) != "") // erro de banco
+                return -1;
+            else
+                $valor = $valor_entrada;
+            
+            if ($item->financeiro_credor_devedor_id != '') {
+                $this->db->set('nome', $item->financeiro_credor_devedor_id);
+            }
+            $this->db->set('valor', $valor);
+            $this->db->set('entrada_id', $entrada_id);
+            $this->db->set('conta', $item->forma_entradas_saida_id);
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('data', $item->data);
+            $this->db->set('empresa_id', $empresa_id);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->insert('tb_saldo');
+
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+            $this->db->set('entrada_id', $entrada_id);
+            $this->db->set('ativo', 'f');
+            $this->db->set('observacao', $item->observacao);
+            $this->db->set('data_atualizacao', $horario);
+            $this->db->set('operador_atualizacao', $operador_id);
+            $this->db->where('financeiro_contasreceber_id', $financeiro_contasreceber_id);
+            $this->db->update('tb_financeiro_contasreceber');
+            
+            }
+ 
+
+            return $financeiro_contasreceber_id;
+        } catch (Exception $exc) {
+            return -1;
+        }
+    }
+    
+    function listarpagamentoatencipados($referencia_pagamento_antecipado){
+           $this->db->select("fc.financeiro_contasreceber_id,
+                            fc.valor,
+                            fc.devedor,
+                            fc.parcela,
+                            fc.numero_parcela,
+                            fc.observacao,
+                            fe.descricao as conta,
+                            fc.tipo,
+                            fc.valor_bruto,
+                            fc.classe,
+                            fc.data,
+                            cd.razao_social,
+                            fc.tipo_numero,
+                            fc.forma_pagamento_id,
+                            fc.data_inicio, 
+                            fp.recebimento_antecipado,
+                            fc.referencia_pagamento_antecipado,
+                            cd.financeiro_credor_devedor_id,
+                            fc.tipo,
+                            fc.tipo_numero,
+                            fe.forma_entradas_saida_id
+                            ");
+        $this->db->from('tb_financeiro_contasreceber fc');   
+        $this->db->join('tb_forma_entradas_saida fe', 'fe.forma_entradas_saida_id = fc.conta', 'left');
+        $this->db->join('tb_financeiro_credor_devedor cd', 'cd.financeiro_credor_devedor_id = fc.devedor', 'left');
+        $this->db->join('tb_forma_pagamento fp','fp.forma_pagamento_id = fc.forma_pagamento_id','left');
+        $this->db->where('referencia_pagamento_antecipado',$referencia_pagamento_antecipado);
+        $this->db->where('fc.ativo', 't');
         return $this->db->get()->result();
         
     }

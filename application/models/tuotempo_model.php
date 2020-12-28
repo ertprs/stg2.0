@@ -907,26 +907,53 @@ class tuotempo_model extends Model {
        return $this->db->get()->result(); 
     }
     
-   function listarprocedimentomedico($data){
-       
-       $agenda_exames_id = $data->AVAILABILITY_LID;
-       $Agenda = $this->tuotempo->listarAgenda($agenda_exames_id);
-       $medico_id = $Agenda[0]->medico_agenda;
-       $empresa_id = $Agenda[0]->empresa_id;  
-       $procedimento_convenio_id = $data->ACTIVITY_LID;
+   function listarprocedimentomedico($data){ 
+        $agenda_exames_id = $data->AVAILABILITY_LID;
+        $Agenda = $this->tuotempo->listarAgenda($agenda_exames_id);
+        $medico_id = $Agenda[0]->medico_agenda;
+        $empresa_id = $Agenda[0]->empresa_id;  
+        $procedimento_convenio_id = $data->ACTIVITY_LID;
+        if($empresa_id != ""){
+          $empresa = $this->tuotempo->listarempresapermissoes($empresa_id);
+        }else{
+          $empresa = $this->tuotempo->listarempresapermissoes(1);
+        } 
         
-       $this->db->select('cop.procedimento_convenio_id');
-       $this->db->from('tb_convenio_operador_procedimento cop');
-       $this->db->join('tb_procedimento_convenio pc2','pc2.procedimento_convenio_id = cop.procedimento_convenio_id','left');
-       $this->db->join('tb_convenio c2','c2.convenio_id = pc2.convenio_id','left');
-       $this->db->join('tb_convenio_empresa ce2','ce2.convenio_id = c2.convenio_id','left');
-       $this->db->join('tb_procedimento_tuss pt2','pt2.procedimento_tuss_id = pc2.procedimento_tuss_id','left');
-       $this->db->where('pc2.procedimento_convenio_id',$procedimento_convenio_id);
-       $this->db->where('cop.operador',$medico_id);
-       $this->db->where('cop.empresa_id',$empresa_id);
-       $this->db->where('cop.ativo','t');
-       return $this->db->get()->result(); 
+        $this->db->select(' pc.procedimento_convenio_id,
+                            pt.codigo,
+                            pt.nome as procedimento');
+        $this->db->from('tb_procedimento_convenio pc');
+        $this->db->join('tb_convenio c', 'c.convenio_id = pc.convenio_id', 'left');
+        $this->db->join('tb_procedimento_tuss pt', 'pt.procedimento_tuss_id = pc.procedimento_tuss_id', 'left');
+        $this->db->join('tb_ambulatorio_grupo ag', 'ag.nome = pt.grupo'); 
+       
+        if ($empresa[0]->procedimento_excecao == "t") {
+             $this->db->where("pc.procedimento_convenio_id NOT IN (
+                                 SELECT cop.procedimento_convenio_id FROM ponto.tb_convenio_operador_procedimento cop
+                                 INNER JOIN ponto.tb_procedimento_convenio pc2 ON pc2.procedimento_convenio_id = cop.procedimento_convenio_id
+                                 INNER JOIN ponto.tb_convenio c2 ON c2.convenio_id = pc2.convenio_id
+                                 INNER JOIN ponto.tb_procedimento_tuss pt2 ON pt2.procedimento_tuss_id = pc2.procedimento_tuss_id
+                                 WHERE pc2.procedimento_convenio_id = {$procedimento_convenio_id}
+                                 AND cop.empresa_id = {$empresa_id}
+                                 AND cop.operador = {$medico_id} 
+                                 AND cop.ativo = 't'
+                             )");
+        } else {
+             $this->db->where("pc.procedimento_convenio_id IN (
+                                 SELECT cop.procedimento_convenio_id FROM ponto.tb_convenio_operador_procedimento cop
+                                 INNER JOIN ponto.tb_procedimento_convenio pc2 ON pc2.procedimento_convenio_id = cop.procedimento_convenio_id
+                                 INNER JOIN ponto.tb_convenio c2 ON c2.convenio_id = pc2.convenio_id
+                                 INNER JOIN ponto.tb_procedimento_tuss pt2 ON pt2.procedimento_tuss_id = pc2.procedimento_tuss_id
+                                 WHERE pc2.procedimento_convenio_id = {$procedimento_convenio_id}
+                                 AND cop.empresa_id = {$empresa_id}
+                                 AND cop.operador = {$medico_id}     
+                                 AND cop.ativo = 't'
+                             )");
+        } 
+       $this->db->where("pc.ativo", 't'); 
          
+        return $this->db->get()->result();  
+       
     }
 
 }

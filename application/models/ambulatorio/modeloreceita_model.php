@@ -20,9 +20,12 @@ class modeloreceita_model extends Model {
                             medico_id,
                             o.nome as medico,
                             texto,
-                            carregar_automaticamente');
+                            carregar_automaticamente,
+                            aml.nao_editavel,
+                            oo.perfil_id');
         $this->db->from('tb_ambulatorio_modelo_receita aml');
         $this->db->join('tb_operador o', 'o.operador_id = aml.medico_id', 'left');
+        $this->db->join('tb_operador oo', 'oo.operador_id = aml.operador_cadastro', 'left');
         $this->db->where('aml.ativo', 't');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
             $this->db->where('aml.nome ilike', "%" . $args['nome'] . "%");
@@ -85,6 +88,10 @@ class modeloreceita_model extends Model {
             $this->db->set('texto', $_POST['receita']);
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
+
+            if(isset($_POST['administrador'])){
+                $this->db->set('nao_editavel', 't');
+            }
 
             if ($_POST['ambulatorio_modelo_receita_id'] == "") {// insert
                 $this->db->set('data_cadastro', $horario);
@@ -223,7 +230,8 @@ class modeloreceita_model extends Model {
                             aml.nome,
                             medico_id,
                             o.nome as medico,
-                            aml.texto');
+                            aml.texto,
+                            aml.nao_editavel');
             $this->db->from('tb_ambulatorio_modelo_receita aml');
             $this->db->join('tb_operador o', 'o.operador_id = aml.medico_id', 'left');
             $this->db->where("ambulatorio_modelo_receita_id", $ambulatorio_modelo_receita_id);
@@ -233,6 +241,7 @@ class modeloreceita_model extends Model {
             $this->_nome = $return[0]->nome;
             $this->_medico_id = $return[0]->medico_id;
             $this->_texto = $return[0]->texto;
+            $this->_nao_editavel = $return[0]->nao_editavel;
         } else {
             $this->_ambulatorio_modelo_receita_id = null;
         }

@@ -24,6 +24,7 @@ class Eco extends BaseController
         $this->load->library('utilitario');
         $this->load->library('validation');
         $this->load->library('image_lib');
+         
     }
 
     /**

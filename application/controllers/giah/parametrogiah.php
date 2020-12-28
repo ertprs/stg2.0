@@ -26,6 +26,7 @@ class Parametrogiah extends Controller {
         $this->load->library('mensagem');
         $this->load->library('validation');
         $this->load->library('utilitario');
+        
     }
     /**
      * Função

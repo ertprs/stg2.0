@@ -20,6 +20,7 @@ class Provento extends Controller {
         $this->load->helper('download');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
+         
     }
 
     function index() {

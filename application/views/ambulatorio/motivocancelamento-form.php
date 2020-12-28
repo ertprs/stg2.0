@@ -1,22 +1,21 @@
 <div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
-        <h3 class="singular"><a href="#">Cadastro de Motivo cancelamento</a></h3>
+        <h3 class="singular"><a href="#">Cadastro de Motivo Cancelamento</a></h3>
         <div>
             <form name="form_sala" id="form_sala" action="<?= base_url() ?>ambulatorio/motivocancelamento/gravar" method="post">
-
-                <dl class="dl_desconto_lista">
-                    <dt>
-                    <label>Nome</label>
-                    </dt>
-                    <dd>
-                        <input type="hidden" name="txtambulatoriomotivocancelamentoid" class="texto10" value="<?= @$obj->_ambulatorio_cancelamento_id; ?>" />
-                        <input type="text" name="txtNome" class="texto10" value="<?= @$obj->_descricao; ?>" />
-                    </dd>
-                </dl>    
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Nome</label>
+                            <input type="hidden" name="txtambulatoriomotivocancelamentoid" class="texto10" value="<?= @$obj->_ambulatorio_cancelamento_id; ?>" />
+                            <input type="text" name="txtNome" class="form-control" value="<?= @$obj->_descricao; ?>" />
+                        </div>
+                    </div>
+                </fieldset>
                 <hr/>
-                <button type="submit" name="btnEnviar">Enviar</button>
-                <button type="reset" name="btnLimpar">Limpar</button>
-                <button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
+                <button class="btn btn-outline-success btn-sm" type="submit" name="btnEnviar">Enviar</button>
+                <button class="btn btn-outline-warning btn-sm" type="reset" name="btnLimpar">Limpar</button>
+                <button class="btn btn-outline-default btn-sm" type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
             </form>
         </div>
     </div>

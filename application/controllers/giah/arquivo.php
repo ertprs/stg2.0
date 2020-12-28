@@ -26,6 +26,7 @@ class Arquivo extends Controller {
 //            $this->load->model('login_model', 'login');
         $this->load->model('giah/provento_model', 'provento');
         $this->load->library('utilitario');
+        
     }
 
     /**

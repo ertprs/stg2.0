@@ -24,7 +24,7 @@ class Agenda extends BaseController {
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
-        $this->load->library('validation');
+        $this->load->library('validation'); 
     }
 
     function index() {
@@ -436,10 +436,7 @@ class Agenda extends BaseController {
         $data['grupos'] = $this->agenda->listargrupos();
         $data['agenda'] = $this->agenda->listaragendainformacoes($agenda_id);
         $this->loadView('ambulatorio/horarioagendamodelo2-form', $data);
-        
                         
-                        
-        
     }
     
     function gravarhorarioagenda() {

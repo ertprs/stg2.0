@@ -26,6 +26,7 @@ class Desconto extends Controller {
         $this->load->model('giah/competencia_model', 'competencia');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
+         
     }
 
     /**

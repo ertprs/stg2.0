@@ -23,6 +23,7 @@ class Modelosolicitarexames extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+        
     }
 
     function index() {
@@ -34,6 +35,40 @@ class Modelosolicitarexames extends BaseController {
         $this->loadView('ambulatorio/modelosolicitarexames-lista', $args);
 
 //            $this->carregarView($data);
+    }
+
+    function carregarprocedimentos($exame_modelosolicitarexames_id){
+        $data['solexames'] = $this->modelosolicitarexames->modelosolicitacao($exame_modelosolicitarexames_id);
+        $data['procedimentos'] = $this->procedimento->listarprocedimentos();
+        $data['procedimentoscadastrado'] = $this->modelosolicitarexames->carregarprocedimentosmodelo($exame_modelosolicitarexames_id);
+
+        $this->loadView('ambulatorio/modeloexamesprocedimentos-form', $data);
+    }
+
+    function gravarprocedimentomodelo(){
+        $verificar = $this->modelosolicitarexames->gravarprocedimentomodelo();
+
+        if($verificar > 0){
+            $mensagem = 'Sucesso ao Gravar o Procedimento';
+        }else{
+            $mensagem = 'Erro ao Gravar o Procedimento. Procedimento Já cadastrado.';
+        }
+
+        $exames_id = $_POST['exames_id'];
+        $this->session->set_flashdata('message', $mensagem);
+        redirect(base_url() . "ambulatorio/modelosolicitarexames/carregarprocedimentos/$exames_id");
+    }
+
+    function excluirprocedimentomodelo($solicitar_exames_procedimentos_id, $exames_id){
+        $verificar = $this->modelosolicitarexames->excluirprocedimentomodelo($solicitar_exames_procedimentos_id);
+
+        if($verificar > 0){
+            $mensagem = 'Sucesso ao Excluir o Procedimento';
+        }else{
+            $mensagem = 'Erro ao Excluir o Procedimento.';
+        }
+        $this->session->set_flashdata('message', $mensagem);
+        redirect(base_url() . "ambulatorio/modelosolicitarexames/carregarprocedimentos/$exames_id");
     }
 
     function pesquisar2($args = array()) {

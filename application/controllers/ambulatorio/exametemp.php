@@ -41,6 +41,7 @@ class Exametemp extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+        
     }
 
     function index() {
@@ -232,7 +233,7 @@ class Exametemp extends BaseController {
         $data['exames'] = $this->exametemp->listaragendatotalpacientegeral($pacientetemp_id);
         $data['consultasanteriores'] = $this->exametemp->listarprocedimentosanterior($pacientetemp_id);
         $data['consultaanteriorcontador'] = $this->exametemp->listarprocedimentoanteriorcontador($pacientetemp_id);
-
+        $data['empresa'] = $this->guia->listarempresa2();
 
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('ambulatorio/examepacientetempgeral-form', $data);
@@ -252,7 +253,12 @@ class Exametemp extends BaseController {
 //        die();
         $data['examesanteriores'] = $this->exametemp->listarexameanterior($pacientetemp_id);
         $data['salas'] = $this->exame->listartodassalasexames();
+//        echo "<pre>";
+//        print_r($data['salas']);
+//        die();
         $data['grupos'] = $this->procedimento->listargrupos();
+        $data['empresa'] = $this->guia->listarempresa2();
+
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('ambulatorio/examepacientetemp-form', $data);
     }
@@ -270,7 +276,7 @@ class Exametemp extends BaseController {
         $data['exames'] = $this->exametemp->listaragendatotalpacienteconsulta($pacientetemp_id);
         $data['consultasanteriores'] = $this->exametemp->listarconsultaanterior($pacientetemp_id);
         $data['consultaanteriorcontador'] = $this->exametemp->listarconsultaanteriorcontador($pacientetemp_id);
-
+        $data['empresa'] = $this->guia->listarempresa2();
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('ambulatorio/consultapacientetemp-form', $data);
     }
@@ -287,7 +293,7 @@ class Exametemp extends BaseController {
         $data['exames'] = $this->exametemp->listaragendatotalpacientefisioterapia($pacientetemp_id);
         $data['consultasanteriores'] = $this->exametemp->listarespecialidadeanterior($pacientetemp_id);
         $data['consultaanteriorcontador'] = $this->exametemp->listarconsultaanteriorcontador($pacientetemp_id);
-
+        $data['empresa'] = $this->guia->listarempresa2();
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('ambulatorio/fisioterapiapacientetemp-form', $data);
     }
@@ -325,7 +331,7 @@ class Exametemp extends BaseController {
         $data['exames'] = $this->exametemp->listaragendatotalpacientefisioterapiareangedar($agenda_exames_id);
         $data['consultasanteriores'] = $this->exametemp->listarespecialidadeanterior($pacientetemp_id);
         $data['consultaanteriorcontador'] = $this->exametemp->listarconsultaanteriorcontador($pacientetemp_id);
-
+        $data['empresa'] = $this->guia->listarempresa2();
         //$this->carregarView($data, 'giah/servidor-form');
         
         $this->loadView('ambulatorio/reagendarfisioterapiapacientetemp-form', $data);
@@ -347,6 +353,7 @@ class Exametemp extends BaseController {
         $data['consultasanteriores'] = $this->exametemp->listarespecialidadeanterior($pacientetemp_id);
         $data['consultaanteriorcontador'] = $this->exametemp->listarconsultaanteriorcontador($pacientetemp_id);
         //$this->carregarView($data, 'giah/servidor-form');
+         $data['empresa'] = $this->guia->listarempresa2();
         $this->loadView('ambulatorio/reagendarexamepacientetemp-form', $data);
     }
 
@@ -365,7 +372,7 @@ class Exametemp extends BaseController {
         $data['exames'] = $this->exametemp->listaragendatotalpacientefisioterapiareangedar($agenda_exames_id);
         $data['consultasanteriores'] = $this->exametemp->listarespecialidadeanterior($pacientetemp_id);
         $data['consultaanteriorcontador'] = $this->exametemp->listarconsultaanteriorcontador($pacientetemp_id);
-
+        $data['empresa'] = $this->guia->listarempresa2();
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('ambulatorio/reagendarconsultapacientetemp-form', $data);
     }
@@ -385,6 +392,7 @@ class Exametemp extends BaseController {
         $data['exames'] = $this->exametemp->listaragendatotalpacientefisioterapiareangedar($agenda_exames_id);
         $data['consultasanteriores'] = $this->exametemp->listarespecialidadeanterior($pacientetemp_id);
         $data['consultaanteriorcontador'] = $this->exametemp->listarconsultaanteriorcontador($pacientetemp_id);
+        $data['empresa'] = $this->guia->listarempresa2();
 
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('ambulatorio/reagendargeralpacientetemp-form', $data);
@@ -754,8 +762,11 @@ class Exametemp extends BaseController {
         $permissoes = $this->guia->listarempresapermissoes();
         $data['empresapermissoes'] = $permissoes[0]->setores;
         $data['email_obrigatorio'] = $permissoes[0]->email_obrigatorio;
+        $data['agendamento_multiplo'] = $permissoes[0]->agendamento_multiplo;
+        $infosala = $this->guia->infosala($agenda_exames_id);
+        $data['qtde_agendamentos'] = $infosala[0]->qtde_agendamento;
 // echo '<pre>';
-// print_r($data['empresapermissoes']);
+// print_r($data['qtde_agendamentos']);
 // die; 
 //        $horainicio = $data['exames'][0]->inicio;
 //        $horafim = $data['exames'][0]->fim;
@@ -772,6 +783,23 @@ class Exametemp extends BaseController {
 //        } else {
         $this->loadView('ambulatorio/examepacientegeral-form', $data);
 //        }
+    }
+
+    function carregarexamegeralespecialidade($agenda_exames_id, $medico_id) {
+        $data['medico'] = $medico_id;
+        $data['agenda_exames_id'] = $agenda_exames_id;
+        $data['convenio'] = $this->procedimentoplano->listarconveniomedico($medico_id);
+        $data['exames'] = $this->exametemp->listaragendasexamepaciente($agenda_exames_id);
+        $data['grupos'] = $this->procedimento->listargruposatendimento('true');
+        $data['origem'] = $this->sala->listarorigem();
+        $data['setor'] = $this->guia->listarsetores();
+        $permissoes = $this->guia->listarempresapermissoes();
+        $data['empresapermissoes'] = $permissoes[0]->setores;
+        $data['email_obrigatorio'] = $permissoes[0]->email_obrigatorio;
+        $data['consultas'] = $this->exametemp->listaragendasconsultapaciente($agenda_exames_id);
+
+        $this->loadView('ambulatorio/examepacientegeralespecialidade-form', $data);
+
     }
 
     function carregarexamegeralpacienteSelecionado($agenda_exames_id, $medico_id, $paciente_id) {
@@ -883,17 +911,16 @@ class Exametemp extends BaseController {
                 $mensagem = 'Existe Pacientes na Solicitacao de Agendamento.';
                 $this->session->set_userdata('message', $mensagem);
                 }
-            }
+        }
 
-            if($this->session->userdata('google_calendar_access_token')){
-                if($googleId != 0){
-                $this->googlecalendar->DeletarAgenda('primary', $googleId);
-                }
-
-            }
+        if($this->session->userdata('google_calendar_access_token')){
+            if($googleId != 0){
+            $this->googlecalendar->DeletarAgenda('primary', $googleId);
+            } 
+        }
 
         
-        // $this->exametemp->salvaragendamentoexcluidomotivo($agenda_exames_id, $tipo, $encaixe);
+         $this->exametemp->salvaragendamentoexcluidomotivo($agenda_exames_id, $tipo, $encaixe);
         // var_dump($encaixe); die;
         $this->exametemp->excluirexametempagendamento($agenda_exames_id, $encaixe);
 
@@ -1096,7 +1123,8 @@ class Exametemp extends BaseController {
             $this->session->set_flashdata('message', $data['mensagem']);
             redirect(base_url() . "ambulatorio/exametemp/carregarexame/$agenda_id");
         } else {
-            $paciente_id = $this->exametemp->gravarpacienteexames($agenda_exames_id, $empresa);
+            $tipo = $this->exametemp->tipomultifuncaogeral($_POST['procedimento1']); 
+            $paciente_id = $this->exametemp->gravarpacienteexames($agenda_exames_id,$tipo[0]->tipo, $empresa);
             $return = $this->exametemp->gravarcadastrowhatsapp($agenda_exames_id);
             if ($paciente_id != 0) {
                 redirect(base_url() . "ambulatorio/exametemp/carregarpacientetemp/$paciente_id");
@@ -1109,11 +1137,212 @@ class Exametemp extends BaseController {
     }
 
     function gravarpacienteexametempgeral($agenda_exames_id, $empresa = null) {
+
+        // $p = 1; 
+        // print_r($_POST['procedimento'.$p]);
         // echo '<pre>';
         // print_r($_POST);
-        // die;
+        // die;  
         $medico = $_POST['medico'];
 
+        if (trim($_POST['txtNome']) == "") {
+            $data['mensagem'] = 'Erro ao marcar consulta é obrigatorio nome do Paciente.';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "ambulatorio/exametemp/carregarexamegeral/$agenda_exames_id");
+        }else {
+            $tipo = $this->exametemp->tipomultifuncaogeral($_POST['procedimento1']);
+            $paciente_id = $this->exametemp->gravarpacienteexames($agenda_exames_id, $tipo[0]->tipo, $empresa);
+
+            if($paciente_id == -10){
+                $mensagem = 'O Paciente já está Marcado no mesmo Horario e Dia';
+                $this->session->set_flashdata('message', $mensagem);
+                redirect(base_url() . "ambulatorio/exametemp/carregarexamegeral/$agenda_exames_id/$medico");
+            }
+
+            if($paciente_id == -20){
+                $mensagem = 'Essa sala atingiu o Limite de Pacientes no mesmo Horario';
+                $this->session->set_flashdata('message', $mensagem);
+                redirect(base_url() . "ambulatorio/exametemp/carregarexamegeral/$agenda_exames_id/$medico");
+            }
+
+            $return = $this->exametemp->gravarcadastrowhatsapp($agenda_exames_id);
+            if ($paciente_id != 0) {
+
+                if($this->session->userdata('google_calendar_access_token')){
+                $dadospaciente = $this->guia->dadospaciente($_POST['txtNomeid']);
+                $dadosmedico = $this->guia->dadosmedico($_POST['medico']);
+                $dadosprocedimento = $this->guia->dadosprocedimento($_POST['procedimento1']);
+                $dadosempresa = $this->guia->listarempresapermissoes();
+
+                $_POST['data'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['data_agendamento'])));
+                $_POST['description'] = 'Médico: '.$dadosmedico[0]->nome.'<br>Procedimento: '.$dadosprocedimento[0]->nome.'<br>Observação: '.$_POST['observacoes'];
+                
+                if($dadospaciente[0]->cns != ''){
+                    $qtdemail = 2;
+                    $event = array(
+                        'summary'     => $dadospaciente[0]->nome,
+                        'start'       => $_POST['data'].'T'.$_POST['inicio'].'-03:00',
+                        'end'         => $_POST['data'].'T'.$_POST['fim'].'-03:00',
+                        'description' => $_POST['description'],
+                        'email' => $dadosmedico[0]->email,
+                        'email2' => $dadospaciente[0]->cns,
+                        'colorid' => $dadosmedico[0]->coragenda,
+                        'localizacao' => $dadosempresa[0]->logradouro.' '.$dadosempresa[0]->numero.' - '.$dadosempresa[0]->bairro.' - '.$dadosempresa[0]->municipio,
+            
+                    );
+
+                }else{
+                $qtdemail = 1;
+                $event = array(
+                    'summary'     => $dadospaciente[0]->nome,
+                    'start'       => $_POST['data'].'T'.$_POST['inicio'].'-03:00',
+                    'end'         => $_POST['data'].'T'.$_POST['fim'].'-03:00',
+                    'description' => $_POST['description'],
+                    'email' => $dadosmedico[0]->email,
+                    'colorid' => $dadosmedico[0]->coragenda,
+                    'localizacao' => $dadosempresa[0]->logradouro.' '.$dadosempresa[0]->numero.' - '.$dadosempresa[0]->bairro.' - '.$dadosempresa[0]->municipio,
+        
+                );
+            }
+        
+                $foo = $this->googlecalendar->addEvent('primary', $event, $qtdemail);
+        
+                  if ($foo->status == 'confirmed') {
+                        $data['message'] = 'Evento Adicionado com Sucesso';
+                        $this->session->set_userdata('message', $data['message']);
+
+                        $this->exametemp->confirmaragendagoogle($agenda_exames_id);
+                  }
+                }
+
+
+                if(isset($_POST['txtEmail']) && @$_POST['txtEmail'] != ''){
+                $procedimento = $this->guia->pegaridprocedimento($_POST['procedimento1']);
+                $empresaInfo = $this->guia->listarempresa();
+                $pacienteInfo = $this->guia->listarpaciente($paciente_id);
+
+                    $horario = date('H:i');
+                    if($horario >= '06:00' && $horario <= '12:00'){
+                        $tempo = 'Bom Dia';
+                    }elseif($horario >= '12:01' && $horario <= '18:00'){
+                        $tempo = 'Boa Tarde';
+                    }else{
+                        $tempo = 'Boa Noite';
+                    }
+
+                    $data_agendamento = date("d/m/Y", strtotime(str_replace('-', '/', $_POST['data_agendamento'])));
+                    $dadosmedico = $this->guia->dadosmedico($_POST['medico']);
+
+                    $mensagememail = $tempo.' Sr(a). '.$pacienteInfo[0]->nome.' <br><br>
+                    Observamos que você foi agendado na '.$empresaInfo[0]->nome .' na data de '.$data_agendamento.' para o Dr(a).'.$dadosmedico[0]->nome.'
+                    No Procedimento '.$procedimento[0]->nome.' <br>
+                    Abaixo está um link para que você possa finalizar seu cadastro na Clínica. <br><br>
+
+                    '.$empresaInfo[0]->endereco_externo_base.'cadastros/pacientes/completarcadastro/'.$paciente_id.'/'.$empresaInfo[0]->empresa_id.'
+
+                    <br><br><spam>Agradecemos a sua preferência! <br><u>E-mail Gerado Automaticamente, favor não responder o mesmo.</u></spam>
+                    ';
+
+                     $this->load->library('email');
+                        $config['protocol'] = 'smtp';
+                        $config['smtp_host'] = 'ssl://smtp.gmail.com';
+                        $config['smtp_port'] = '465';
+                        $config['smtp_user'] = 'stgsaude@gmail.com';
+                        $config['smtp_pass'] = 'saude@stg*1202';
+                        $config['validate'] = TRUE;
+                        $config['mailtype'] = 'html';
+                        $config['charset'] = 'utf-8';
+                        $config['newline'] = "\r\n";
+
+                        $this->email->initialize($config);
+                        if (@$empresaInfo[0]->email != '') {
+                            $this->email->from($empresaInfo[0]->email, $empresaInfo[0]->nome);
+                        } else {
+                            $this->email->from('stgsaude@gmail.com', $empresaInfo[0]->nome);
+                        }
+
+                        $this->email->message($mensagememail);
+
+                        $this->email->to($_POST['txtEmail']);  
+                        $this->email->subject("Completar Cadastro");
+
+                        if ($this->email->send()) {
+                            //$data['message'] = 'Email Enviado com Sucesso';
+                        }else{
+                           // print($this->email->erro());
+                            //die;
+                        }
+                    }
+
+                // if(isset($_POST['btnEnviarArquivo'])){
+                //     $procedimento = $this->guia->pegaridprocedimento($_POST['procedimento1']);
+                //     $idprocedimento = $procedimento[0]->procedimento_tuss_id;
+                //     $empresaInfo = $this->guia->listarempresa();
+
+
+                //     $this->load->helper('directory');
+                //     $arquivo_pasta = directory_map("./upload/arquivoprocedimento/$idprocedimento/");
+                    
+                //     $horario = date('H:i');
+                //     if($horario >= '06:00' && $horario <= '12:00'){
+                //         $tempo = 'Bom Dia';
+                //     }elseif($horario >= '12:01' && $horario <= '18:00'){
+                //         $tempo = 'Boa Tarde';
+                //     }else{
+                //         $tempo = 'Boa Noite';
+                //     }
+
+                //     $mensagememail = $tempo.' Sr(a). '.$_POST['txtNome'].' <br><br>
+                //                     Segue abaixo em Anexo os arquivos para a Preparação do Exame';
+
+                //     $this->load->library('email');
+
+                //     $config['protocol'] = 'smtp';
+                //     $config['smtp_host'] = 'ssl://smtp.gmail.com';
+                //     $config['smtp_port'] = '465';
+                //     $config['smtp_user'] = 'stgsaude@gmail.com';
+                //     $config['smtp_pass'] = 'saude@stg*1202';
+                //     $config['validate'] = TRUE;
+                //     $config['mailtype'] = 'html';
+                //     $config['charset'] = 'utf-8';
+                //     $config['newline'] = "\r\n";
+
+                //     $this->email->initialize($config);
+                //     if (@$empresaInfo[0]->email != '') {
+                //         $this->email->from($empresaInfo[0]->email, $empresaInfo[0]->nome);
+                //     } else {
+                //         $this->email->from('stgsaude@gmail.com', $empresaInfo[0]->nome);
+                //     }
+                //     $this->email->to($_POST['txtEmail']); 
+                //     $this->email->subject("Preparo de Exames");
+                //     foreach($arquivo_pasta as $value){
+                //         $this->email->attach('./upload/arquivoprocedimento/'.$idprocedimento.'/'.$value);
+                //     }
+                //     $this->email->message($mensagememail);
+
+                //     if ($this->email->send()) {
+                //         $data['message'] = 'Email Enviado com Sucesso';
+                //     }else{
+                //         print($this->email->erro());
+                //         die;
+                //     }
+                // }
+
+                redirect(base_url() . "ambulatorio/exametemp/carregarpacientetempgeral/$paciente_id");
+            } else {
+                $data['mensagem'] = 'Erro ao marcar exame o horario esta oculpado.';
+                $this->session->set_flashdata('message', $data['mensagem']);
+                redirect(base_url() . "ambulatorio/exame/listarmultifuncaogeral");
+            }
+        }
+    }
+
+
+    function gravarpacienteexametempgeralespecialidade($agenda_exames_id, $empresa = null) {
+        $medico = $_POST['medico'];
+        $especialidade = false;
+
+        if($especialidade){
         if (trim($_POST['txtNome']) == "") {
             $data['mensagem'] = 'Erro ao marcar consulta é obrigatorio nome do Paciente.';
             $this->session->set_flashdata('message', $data['mensagem']);
@@ -1178,65 +1407,82 @@ class Exametemp extends BaseController {
                   }
                 }
 
-                // if(isset($_POST['btnEnviarArquivo'])){
-                //     $procedimento = $this->guia->pegaridprocedimento($_POST['procedimento1']);
-                //     $idprocedimento = $procedimento[0]->procedimento_tuss_id;
-                //     $empresaInfo = $this->guia->listarempresa();
-
-
-                //     $this->load->helper('directory');
-                //     $arquivo_pasta = directory_map("./upload/arquivoprocedimento/$idprocedimento/");
-                    
-                //     $horario = date('H:i');
-                //     if($horario >= '06:00' && $horario <= '12:00'){
-                //         $tempo = 'Bom Dia';
-                //     }elseif($horario >= '12:01' && $horario <= '18:00'){
-                //         $tempo = 'Boa Tarde';
-                //     }else{
-                //         $tempo = 'Boa Noite';
-                //     }
-
-                //     $mensagememail = $tempo.' Sr(a). '.$_POST['txtNome'].' <br><br>
-                //                     Segue abaixo em Anexo os arquivos para a Preparação do Exame';
-
-                //     $this->load->library('email');
-
-                //     $config['protocol'] = 'smtp';
-                //     $config['smtp_host'] = 'ssl://smtp.gmail.com';
-                //     $config['smtp_port'] = '465';
-                //     $config['smtp_user'] = 'stgsaude@gmail.com';
-                //     $config['smtp_pass'] = 'saude@stg*1202';
-                //     $config['validate'] = TRUE;
-                //     $config['mailtype'] = 'html';
-                //     $config['charset'] = 'utf-8';
-                //     $config['newline'] = "\r\n";
-
-                //     $this->email->initialize($config);
-                //     if (@$empresaInfo[0]->email != '') {
-                //         $this->email->from($empresaInfo[0]->email, $empresaInfo[0]->nome);
-                //     } else {
-                //         $this->email->from('stgsaude@gmail.com', $empresaInfo[0]->nome);
-                //     }
-                //     $this->email->to($_POST['txtEmail']); 
-                //     $this->email->subject("Preparo de Exames");
-                //     foreach($arquivo_pasta as $value){
-                //         $this->email->attach('./upload/arquivoprocedimento/'.$idprocedimento.'/'.$value);
-                //     }
-                //     $this->email->message($mensagememail);
-
-                //     if ($this->email->send()) {
-                //         $data['message'] = 'Email Enviado com Sucesso';
-                //     }else{
-                //         print($this->email->erro());
-                //         die;
-                //     }
-                // }
-
                 redirect(base_url() . "ambulatorio/exametemp/carregarpacientetempgeral/$paciente_id");
             } else {
                 $data['mensagem'] = 'Erro ao marcar exame o horario esta oculpado.';
                 $this->session->set_flashdata('message', $data['mensagem']);
                 redirect(base_url() . "ambulatorio/exame/listarmultifuncaogeral");
+            }
+        }
+
+        }
+        
+        else{
+            $medico_id = $medico;
+            if (trim($_POST['txtNome']) == "") {
+                $data['mensagem'] = 'Erro ao marcar consulta é obrigatorio nome do Paciente.';
+                $this->session->set_flashdata('message', $data['mensagem']);
+                redirect(base_url() . "ambulatorio/exametemp/carregarexamegeral/$agenda_exames_id");
+            }else{
+            $_POST['txtNomeid'] = $this->exametemp->crianovopacientegeralespecialidade();
+            $_POST['horarios'] = array_filter($_POST['horarios']);
+            $agrupador = $this->exametemp->agrupadorfisioterapia();
+            $agenda_escolhida = array();
+            $x = 1;
+            foreach ($_POST['horarios'] as $item) {
+                $agenda_escolhida [$x] = $item;
+                $x++;
+            }
+            // echo '<pre>';
+            // print_r(count($_POST['dia']));
+            // die;
+            $data['medico'] = $this->exametemp->listarmedicoconsulta();
+
+            if (count($_POST['dia']) > 0 && $_POST['sessao'] > 0) {
+                $contador_sessao = $this->exametemp->gravarpacientefisioterapiapersonalizada($_POST['horarios'], $_POST['sessao'], $agrupador);
+            }
+
+            $c = 1;
+            $semana = 1;
+
+            for ($i = $contador_sessao; $i <= $_POST['sessao']; $i++) {
+
+                $agenda_selecionada = $this->exametemp->listaagendafisioterapiapersonalizada($agenda_escolhida[$c], $semana);
+
+                if ($agenda_selecionada != false) {
+                    $this->exametemp->gravarpacientefisioterapiapersonalizadasessao($agenda_selecionada[0]->agenda_exames_id, $_POST['sessao'], $contador_sessao, $agrupador);
+                } else {
+
+                    $agenda_inexistente = $this->exametemp->listaagendafisioterapiapersonalizadaerro($agenda_escolhida[$c], $semana);
+//                    var_dump($agenda_inexistente); die;
+                    $medico = $agenda_inexistente[0]->medico;
+                    $hora = $agenda_inexistente[0]->inicio;
+
+                    $data = date("d/m/Y", strtotime($agenda_inexistente[0]->data));
+                    $mensagem = "Horário de $medico em $data as $hora não existe ou está ocupado";
+//                    echo $mensagem; die;
+                    $this->session->set_flashdata('message', $mensagem);
+
+                    foreach ($agenda_escolhida as $item) {
+                        $excluir = $this->exametemp->excluirfisioterapiatemp($item);
+                    }
+
+                    redirect(base_url() . "ambulatorio/exametemp/carregarexamegeralespecialidade/$agenda_escolhida[1]/$medico_id");
+                }
+
+
+                if ($c == count($_POST['horarios'])) {
+                    $c = 0;
+                    $semana ++;
+                }
+                $c++;
+                $contador_sessao++;
+            }
+            $return = $this->exametemp->gravarcadastrowhatsapp($agenda_selecionada[0]->agenda_exames_id);
+            $paciente_id = $_POST['txtNomeid'];
+            $data['mensagem'] = 'Sucesso ao realizar agendamento';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "ambulatorio/exametemp/carregarpacientetempgeral/$paciente_id");
             }
         }
     }
@@ -1330,7 +1576,9 @@ class Exametemp extends BaseController {
                 $agenda_escolhida [$x] = $item;
                 $x++;
             }
-
+            // echo '<pre>';
+            // print_r(count($_POST['dia']));
+            // die;
             $data['medico'] = $this->exametemp->listarmedicoconsulta();
 
             if (count($_POST['dia']) > 0 && $_POST['sessao'] > 0) {
@@ -2014,6 +2262,20 @@ class Exametemp extends BaseController {
 
     function listartarefasmedico($args = array()) {
         $this->loadView('ambulatorio/tarefamedico-lista', $args);
+    }
+
+    function tarefasanexadas($tarefa_medico_id, $paciente_id) {
+
+        $this->load->helper('directory');
+        $data['arquivo_pasta'] = directory_map("./upload/arquivostarefa/$paciente_id/$tarefa_medico_id");
+        if ($data['arquivo_pasta'] != false) {
+            sort($data['arquivo_pasta']);
+        }else{
+            $data['arquivo_pasta'] = array();
+        }
+        $data['paciente_id'] = $paciente_id;
+        $data['tarefa_medico_id'] = $tarefa_medico_id;
+        $this->loadView('ambulatorio/tarefasanexadas', $data);
     }
 
     function visualizartarefamedic($tarefa_medico_id, $paciente_id = NULL) {
@@ -2850,6 +3112,36 @@ class Exametemp extends BaseController {
         $data['permissoes'] = $this->guia->listarempresapermissoes();  
         $this->loadView('ambulatorio/carregartcd-lista', $data); 
     }
+
+    function alterartermoTCD($paciente_id){
+        $data['termotcd'] = $this->exametemp->termotcdmanual();
+        $data['paciente_id'] = $paciente_id;
+        $this->load->View('ambulatorio/alterartermotcd-form', $data);
+    }
+
+    function gravartermotcdmanual($paciente_id){
+        if($this->exametemp->gravartermotcdmanual()){
+            $data['mensagem'] = 'Termo TCD alterado com Sucesso';
+        }else{
+            $data['mensagem'] = 'Falha ao alterar o Termo TCD';
+        }
+
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "ambulatorio/exametemp/listartcd/$paciente_id");
+
+    }
+
+    function listarimpressoesRPS($paciente_id, $paciente_tcd_id){
+        $data['paciente_id'] = $paciente_id;
+        $data['paciente_tcd_id'] = $paciente_tcd_id;
+
+        $this->guia->listaregravarRPSantigo($paciente_tcd_id);
+        // $data['listarrps'] = $this->guia->listaprocedimentosRPS($paciente_tcd_id);
+        // echo '<pre>';
+        // print_r($data['listarrps']);
+        // die;
+        $this->loadView('ambulatorio/carregarrps-lista', $data); 
+    }
     
     function imprimirtcd($orcamento_id, $paciente_id,$paciente_tcd_id){
         $this->load->plugin('mpdf'); 
@@ -2875,6 +3167,35 @@ class Exametemp extends BaseController {
 
         // $data['procedimentos'] = $this->exametemp->listarprocedimentosorcamentotcd($orcamento_id); 
         //  $this->load->View('ambulatorio/impressaotcd',$data);
+            
+    }
+
+    function imprimirtcd2($procedimento_tuss_id, $paciente_id,$paciente_tcd_id, $procedimento_convevenio_id){
+        $this->load->plugin('mpdf'); 
+        $filename = "Serviço RPS";
+        $cabecalho = '';
+        $rodape = ''; 
+        $data['empresa'] = $this->guia->listarempresapermissoes();
+        $data['paciente'] = $this->guia->listarpaciente($paciente_id);
+        $data['total'] = $this->exametemp->valortcdprocedimento($procedimento_tuss_id);
+        $data['procedimentos'] = $this->exametemp->listarprocedimentosrpsnovo($procedimento_tuss_id);
+        $data['numerofixorps'] = $this->exametemp->numerofixorps($paciente_tcd_id, $paciente_id, $procedimento_tuss_id);
+        if(count($data['procedimentos']) > 0){
+
+        }else{
+            $data['procedimentos'] = $this->exametemp->listarprocedimentossemadicional($procedimento_tuss_id);
+        }
+
+        if(count($data['numerofixorps']) > 0){
+            $data['numeronota'] = $data['numerofixorps'][0]->numero_rps;
+        }else{
+            $data['numeronota'] = $this->guia->numeronotarps($paciente_tcd_id, $paciente_id, $procedimento_tuss_id);  
+        }
+
+        $html =  $this->load->View('ambulatorio/servicorps',$data,true);
+        
+
+        pdf($html, $filename, '', $rodape, '', 0,0,5);
             
     }
     
@@ -2924,12 +3245,13 @@ class Exametemp extends BaseController {
        }  
        $data['empresas'] = $this->guia->listarempresapermissoes();
        $data['pacientes'] = $this->guia->listarpaciente($paciente_id);
-
+       $data['termotcdmanual'] = $this->exametemp->termotcdmanual();
 
     //    echo '<pre>';
     //    print_r($data['pacientes']);
     //    die;
-       $html =  $this->load->View('ambulatorio/impressaotermotcd',$data,true);
+       $html = $this->load->View('ambulatorio/impressaotermotcdconfiguravel',$data,true);
+    //    $html =  $this->load->View('ambulatorio/impressaotermotcd',$data,true);
         
        pdf($html, $filename, $cabecalho, $rodape, ''); 
     }

@@ -19,6 +19,7 @@ class pacientes extends BaseController {
         $this->load->library('mensagem');
         $this->load->library('pagination');
         $this->load->library('validation');
+         
     }
 
     public function index() {
@@ -180,6 +181,7 @@ class pacientes extends BaseController {
             $ambulatorio_guia_id = $this->guia->gravarguia($paciente_id);
         }
         $teste = $this->exametemp->autorizarpacientetemp($paciente_id, $ambulatorio_guia_id);
+        
         if (@$teste["cod"] == -1) {
             if (@$teste['message'] == 'pending') {
                 $messagem = "O paciente possui pendência no sistema de fidelidade.";
@@ -399,6 +401,10 @@ class pacientes extends BaseController {
         if(isset($_GET['orcamento']) && $_GET['orcamento'] != ""){
             $data['ambulatorio_orcamento_id'] = $_GET['orcamento']; 
         }
+
+        // echo '<pre>';
+        // print_r($data['exames']);
+        // die;
         $this->loadView('ambulatorio/procedimentoautorizaratendimento-form', $data);
     }
 
@@ -430,6 +436,19 @@ class pacientes extends BaseController {
         $data['agendado'] = $agendado;
         $this->loadView('cadastros/paciente-ficha', $data);
     }
+
+    function completarcadastro($paciente_id, $empresa_id){
+        $obj_paciente = new paciente_model($paciente_id);
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoes($empresa_id);
+        $data['ocupacao_mae'] = $data['empresapermissoes'][0]->ocupacao_mae;
+        $data['obj'] = $obj_paciente;
+        $data['idade'] = 1;
+        $data['empresa_id'] = $empresa_id;
+
+        $this->load->View('cadastros/completarcadastropaciente-ficha', $data);
+    }
+
+
 
     function carregarcirurgico($paciente_id, $agendado = NULL) {
         //essa variavel agendado serve para verificar se esta vindo da multifunção
@@ -626,6 +645,71 @@ class pacientes extends BaseController {
             redirect(base_url() . "emergencia/filaacolhimento/novo/$paciente_id", $data);
         }
         
+    }
+
+    function gravarautocadastro(){
+        if(isset($_POST['idade2'])){
+            $_POST['idade2'] = str_replace(' ano(s)', '', $_POST['idade2']);
+        }else{
+            $_POST['idade2'] = 0; 
+        }
+
+        if ($_POST['nascimento'] != '') {
+            $nascimento = str_replace('/', '-', $_POST['nascimento']);
+ 
+            $data_valida = $this->utilitario->validateDate($nascimento);
+            if (!$data_valida) {
+                $_POST['nascimento'] = '';
+            }
+ 
+        }
+
+        $_POST['nascimento'] = date("Y-m-d", strtotime(str_replace("/", "-", $_POST['nascimento'])));
+
+        if ($_POST['cpf'] != "" && $_POST['cpf'] != "000.000.000-00") {
+            if ($this->utilitario->validaCPF($_POST['cpf'])) {
+                $contadorcpf = $this->paciente->contadorcpf2();
+                if (@$_POST['cpf_responsavel'] == 'on') {
+                    $contadorcpf = 0;
+                }// Caso esteja marcado como CPF responsável, ele deixa cadastrar.
+
+                if ($contadorcpf > 0) {
+                    $data['mensagem'] = 'CPF do paciente já cadastrado';
+                    $this->session->set_flashdata('message', $data['mensagem']);
+                    if(isset($_POST['desativado']) && $_POST['desativado'] == "true"){
+                      redirect(base_url() . "cadastros/pacientes/pesquisardesativado", $data);
+                    }
+                    redirect(base_url() . "cadastros/pacientes", $data);
+                }
+            } else {
+                $data['mensagem'] = 'Erro ao gravar paciente. CPF inválido';
+                $this->session->set_flashdata('message', $data['mensagem']);
+                if(isset($_POST['desativado']) && $_POST['desativado'] == "true"){
+                      redirect(base_url() . "cadastros/pacientes/pesquisardesativado", $data);
+                }
+                redirect(base_url() . "cadastros/pacientes", $data);
+            }
+//            var_dump($contadorcpf); die;
+        } else {
+            $contadorcpf = 0;
+        }
+
+        if ($contadorcpf == 0) {
+            if ($paciente_id = $this->paciente->gravar()) {
+                $data['mensagem'] = 'Dados Salvo com sucesso';
+            } else {
+                $data['mensagem'] = 'Erro ao gravar seus Dados';
+            }
+            $paciente_id = $_POST['paciente_id'];
+            $empresa_id = $_POST['id_empresa_id'];
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "cadastros/pacientes/completarcadastro/$paciente_id/$empresa_id", $data);
+        }else{
+            $data['mensagem'] = 'CPF inválido';
+            $this->session->set_flashdata('message', $data['mensagem']);
+        }
+
+
     }
 
 

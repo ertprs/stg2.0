@@ -3,20 +3,19 @@
         <h3 class="singular"><a href="#">Cadastro Grupo Médico</a></h3>
         <div>
             <form name="form_grupomedico" id="form_grupomedico" action="<?= base_url() ?>cadastros/grupomedico/gravar" method="post">
-
-                <dl class="dl_desconto_lista">
-                    <dt>
-                    <label>Nome</label>
-                    </dt>
-                    <dd>
-                        <input type="hidden" name="grupomedicoid" class="texto10" value="<?= @$obj->_operador_grupo_id; ?>" />
-                        <input type="text" name="txtNome" class="texto10" value="<?= @$obj->_nome; ?>" />
-                    </dd>
-                </dl>    
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Nome</label>
+                            <input type="hidden" name="grupomedicoid" class="texto10" value="<?= @$obj->_operador_grupo_id; ?>" />
+                            <input type="text" name="txtNome" class="form-control" value="<?= @$obj->_nome; ?>" />
+                        </div>
+                    </div>
+                </fieldset>
                 <hr/>
-                <button type="submit" name="btnEnviar">Enviar</button>
-                <button type="reset" name="btnLimpar">Limpar</button>
-                <button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
+                <button class="btn btn-outline-success btn-sm" type="submit" name="btnEnviar">Enviar</button>
+                <button class="btn btn-outline-warning btn-sm" type="reset" name="btnLimpar">Limpar</button>
+                <button class="btn btn-outline-primary btn-sm" type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
             </form>
         </div>
     </div>

@@ -177,6 +177,564 @@ class AppAPI extends Controller {
         echo json_encode($obj); 
     }
 
+    function listar_pacientes(){
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: content-type");
+
+        if(isset($_GET['paciente'])){
+            $paciente = $_GET['paciente'];
+        }else{
+            $paciente = '';
+        }
+        // echo $paciente;
+
+        $resposta = $this->app->listartodospacientes($paciente);  
+
+        // echo '<pre>';
+        // print_r($resposta);
+        // die;
+
+        $obj = new stdClass();
+        if(count($resposta) > 0){
+            $obj->status = 200;
+            $obj->data = $resposta;
+        }else{
+            $obj->status = 404;
+            $obj->data = [];
+        }
+
+        echo json_encode($obj); 
+    }
+
+
+    function repetir_receita(){
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: content-type");
+
+        if(isset($_GET['id_receita'])){
+            $id_receita = $_GET['id_receita'];
+        }else{
+            $id_receita = 0;
+        }
+
+        if(isset($_GET['qtd'])){
+            $qtd_receita = $_GET['qtd'];
+        }else{
+            $qtd_receita = 0;
+        }
+
+
+        $obj = new stdClass();
+        if($id_receita > 0 && $qtd_receita > 0){
+
+            for($i = 1; $i <= $qtd_receita; $i++){
+                $resposta = $this->app->repetirreceitapaciente($id_receita, $i); 
+
+                $receitas[] = $resposta;
+            }
+
+
+            $obj->status = 200;
+            $obj->data = $receitas;
+
+        }else{
+            $obj->status = 404;
+            $obj->data = ['Id da receita ou Qtd da Receita não pode ser nulo ou igual a 0'];
+        }
+
+
+        echo json_encode($obj); 
+    }
+
+
+    function repetir_sol_exames(){
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: content-type");
+
+        if(isset($_GET['id_exame'])){
+            $id_exame = $_GET['id_exame'];
+        }else{
+            $id_exame = 0;
+        }
+
+        if(isset($_GET['qtd'])){
+            $qtd_exame = $_GET['qtd'];
+        }else{
+            $qtd_exame = 0;
+        }
+
+
+        $obj = new stdClass();
+        if($id_exame > 0 && $qtd_exame > 0){
+
+            for($i = 1; $i <= $qtd_exame; $i++){
+                $resposta = $this->app->repetirexamepaciente($id_exame, $i); 
+
+                $exames[] = $resposta;
+            }
+
+            $obj->status = 200;
+            $obj->data = $exames;
+
+        }else{
+            $obj->status = 404;
+            $obj->data = ['Id da Solicitação de exames ou Qtd não pode ser nulo ou igual a 0'];
+        }
+
+
+        echo json_encode($obj); 
+    }
+
+    function buscar_prescricao(){
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: content-type");
+        if(isset($_GET['laudo_id'])){
+            $laudo_id = $_GET['laudo_id'];
+        }else{
+            $laudo_id = 0;
+        }
+
+        $obj = new stdClass();
+        if($laudo_id > 0){
+            $prescricoes = $this->app->listarprescricao(0, $laudo_id);
+
+
+            $resposta = [];
+            foreach($prescricoes as $item){
+
+                // $item->texto = trim(strip_tags($item->texto, '<p><br>'));
+
+                // $item->texto = trim(strip_tags($item->texto));
+
+                $item->texto = str_replace('&nbsp;', '', $item->texto);
+                $item->texto = str_replace('&Aacute;', 'Á', $item->texto);
+                $item->texto = str_replace('&aacute;', 'á', $item->texto);
+                $item->texto = str_replace('&Acirc;', 'Â', $item->texto);
+                $item->texto = str_replace('&acirc;', 'â', $item->texto);
+                $item->texto = str_replace('&Agrave;', 'À', $item->texto);
+                $item->texto = str_replace('&agrave;', 'à', $item->texto);
+                $item->texto = str_replace('&Atilde;', 'Ã', $item->texto);
+                $item->texto = str_replace('&atilde;', 'ã', $item->texto);
+                $item->texto = str_replace('&Eacute;', 'É', $item->texto);
+                $item->texto = str_replace('&eacute;', 'é', $item->texto);
+                $item->texto = str_replace('&Ecirc;', 'Ê', $item->texto);
+                $item->texto = str_replace('&ecirc;', 'ê', $item->texto);
+                $item->texto = str_replace('&Egrave;', 'È', $item->texto);
+                $item->texto = str_replace('&egrave;', 'è', $item->texto);
+                $item->texto = str_replace('&Iacute;', 'Í', $item->texto);
+                $item->texto = str_replace('&iacute;', 'í', $item->texto);
+                $item->texto = str_replace('&Oacute;', 'Ó', $item->texto);
+                $item->texto = str_replace('&oacute;', 'ó', $item->texto);
+                $item->texto = str_replace('&Ocirc;', 'Ô', $item->texto);
+                $item->texto = str_replace('&ocirc;', 'ô', $item->texto);
+                $item->texto = str_replace('&Otilde;', 'Õ', $item->texto);
+                $item->texto = str_replace('&otilde;', 'õ', $item->texto);
+                $item->texto = str_replace('&Uacute;', 'Ú', $item->texto);
+                $item->texto = str_replace('&uacute;', 'ú', $item->texto);
+                $item->texto = str_replace('&Ccedil;', 'Ç', $item->texto);
+                $item->texto = str_replace('&ccedil;', 'ç', $item->texto);
+
+
+                // $item->texto = str_replace('&nbsp;', '', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Aacute;', 'Á', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&aacute;', 'á', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Acirc;', 'Â', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&acirc;', 'â', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Agrave;', 'À', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&agrave;', 'à', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Atilde;', 'Ã', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&atilde;', 'ã', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Eacute;', 'É', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&eacute;', 'é', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Ecirc;', 'Ê', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&ecirc;', 'ê', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Egrave;', 'È', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&egrave;', 'è', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Iacute;', 'Í', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&iacute;', 'í', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Oacute;', 'Ó', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&oacute;', 'ó', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Ocirc;', 'Ô', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&ocirc;', 'ô', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Otilde;', 'Õ', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&otilde;', 'õ', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Uacute;', 'Ú', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&uacute;', 'ú', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Ccedil;', 'Ç', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&ccedil;', 'ç', trim(strip_tags($item->texto)));
+
+
+                // $arraygeral['procedimento'] = $item->procedimento;
+                // $arraygeral['laudo_id'] = $item->ambulatorio_laudo_id;
+                $resposta[] = $item->texto;
+                // $arraygeral['medico'] = $item->medico;
+                // $arraygeral['data'] = $item->data;
+            }
+
+
+            if(count($resposta) > 0){
+                $obj->status = 200;
+                $obj->data = $resposta;
+            }else{
+                $obj->status = 404;
+                $obj->data = [];
+            }
+
+        }else{
+            $obj->status = 404;
+            $obj->data = ['Laudo ID não pode ser nulo'];
+        }
+
+
+         echo json_encode($obj); 
+    }
+
+    function listar_atendimentos_paciente(){
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: content-type");
+
+        if(isset($_GET['paciente_id'])){
+            $paciente_id = $_GET['paciente_id'];
+        }else{
+            $paciente_id = 0;
+        }
+
+        if(isset($_GET['laudo_id'])){
+            $laudo_id = $_GET['laudo_id'];
+        }else{
+            $laudo_id = 0;
+        }
+     
+        $obj = new stdClass();
+        if($paciente_id > 0){
+            $prescricoes = $this->app->listarprescricao($paciente_id, $laudo_id);
+
+
+            $resposta = [];
+            foreach($prescricoes as $item){
+
+                // $item->texto = trim(strip_tags($item->texto, '<p><br>'));
+
+                // $item->texto = str_replace('&nbsp;', '', $item->texto);
+                // $item->texto = str_replace('&Aacute;', 'Á', $item->texto);
+                // $item->texto = str_replace('&aacute;', 'á', $item->texto);
+                // $item->texto = str_replace('&Acirc;', 'Â', $item->texto);
+                // $item->texto = str_replace('&acirc;', 'â', $item->texto);
+                // $item->texto = str_replace('&Agrave;', 'À', $item->texto);
+                // $item->texto = str_replace('&agrave;', 'à', $item->texto);
+                // $item->texto = str_replace('&Atilde;', 'Ã', $item->texto);
+                // $item->texto = str_replace('&atilde;', 'ã', $item->texto);
+                // $item->texto = str_replace('&Eacute;', 'É', $item->texto);
+                // $item->texto = str_replace('&eacute;', 'é', $item->texto);
+                // $item->texto = str_replace('&Ecirc;', 'Ê', $item->texto);
+                // $item->texto = str_replace('&ecirc;', 'ê', $item->texto);
+                // $item->texto = str_replace('&Egrave;', 'È', $item->texto);
+                // $item->texto = str_replace('&egrave;', 'è', $item->texto);
+                // $item->texto = str_replace('&Iacute;', 'Í', $item->texto);
+                // $item->texto = str_replace('&iacute;', 'í', $item->texto);
+                // $item->texto = str_replace('&Oacute;', 'Ó', $item->texto);
+                // $item->texto = str_replace('&oacute;', 'ó', $item->texto);
+                // $item->texto = str_replace('&Ocirc;', 'Ô', $item->texto);
+                // $item->texto = str_replace('&ocirc;', 'ô', $item->texto);
+                // $item->texto = str_replace('&Otilde;', 'Õ', $item->texto);
+                // $item->texto = str_replace('&otilde;', 'õ', $item->texto);
+                // $item->texto = str_replace('&Uacute;', 'Ú', $item->texto);
+                // $item->texto = str_replace('&uacute;', 'ú', $item->texto);
+                // $item->texto = str_replace('&Ccedil;', 'Ç', $item->texto);
+                // $item->texto = str_replace('&ccedil;', 'ç', $item->texto);
+
+
+                // $item->texto = str_replace('&nbsp;', '', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Aacute;', 'Á', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&aacute;', 'á', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Acirc;', 'Â', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&acirc;', 'â', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Agrave;', 'À', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&agrave;', 'à', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Atilde;', 'Ã', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&atilde;', 'ã', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Eacute;', 'É', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&eacute;', 'é', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Ecirc;', 'Ê', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&ecirc;', 'ê', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Egrave;', 'È', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&egrave;', 'è', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Iacute;', 'Í', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&iacute;', 'í', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Oacute;', 'Ó', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&oacute;', 'ó', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Ocirc;', 'Ô', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&ocirc;', 'ô', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Otilde;', 'Õ', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&otilde;', 'õ', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Uacute;', 'Ú', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&uacute;', 'ú', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&Ccedil;', 'Ç', trim(strip_tags($item->texto)));
+                // $item->texto = str_replace('&ccedil;', 'ç', trim(strip_tags($item->texto)));
+
+
+                $arraygeral['procedimento'] = $item->procedimento;
+                $arraygeral['laudo_id'] = $item->ambulatorio_laudo_id;
+                // $arraygeral['prescricao'] = $item->texto;
+                $arraygeral['medico'] = $item->medico;
+                $arraygeral['data'] = $item->data;
+                if($item->tipo == 'EXAME'){
+                    $arraygeral['url'] = base_url()."ambulatorio/laudoapp/impressaolaudo/".$item->ambulatorio_laudo_id."/".$item->exame_id;
+                }else{
+                    $arraygeral['url'] = null;
+                }
+
+
+                $resposta[] = $arraygeral;
+                unset ($arraygeral);
+            }
+
+
+            if(count($resposta) > 0){
+                $obj->status = 200;
+                $obj->data = $resposta;
+            }else{
+                $obj->status = 404;
+                $obj->data = [];
+            }
+
+        }else{
+            $obj->status = 404;
+            $obj->data = ['Paciente não pode ser nulo'];
+        }
+
+
+         echo json_encode($obj); 
+        
+    }
+
+    function detalhar_consulta(){
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: content-type");
+
+        if(isset($_GET['laudo_id'])){
+            $laudo_id = $_GET['laudo_id'];
+        }else{
+            $laudo_id = 0;
+        }
+
+
+        $obj = new stdClass();
+        if($laudo_id > 0){
+
+            // $receitas = $this->app->listarreceitaatendimento($laudo_id);
+            // $receitaporlinha = '';
+            // foreach($receitas as $receita){
+            //     $arrayreceita['id_receita'] = $receita->ambulatorio_receituario_id;
+            //     $receita->texto = trim(strip_tags($receita->texto));
+            //     $receita->texto = $this->formatartexto($receita->texto);
+            //     $arrayreceita['texto_receita'] = $receita->texto;
+            //     $arrayreceita['data_cadastro'] = $receita->data_cadastro;
+            //     $arrayreceita['medico'] = $receita->medico;
+            //     $arrayreceita['especial'] = $receita->especial;
+            //     if($receita->especial == 't'){
+            //         $arrayreceita['url'] = base_url().'ambulatorio/laudoapp/impressaoreceitaespecial/'.$receita->ambulatorio_receituario_id.'/'.$receita->empresa_id.'/true';
+            //     }else{
+            //         $arrayreceita['url'] = base_url().'ambulatorio/laudoapp/impressaoreceita/'.$receita->ambulatorio_receituario_id.'/'.$receita->empresa_id;
+            //     }
+
+            //     $receitaporlinha[] = $arrayreceita;
+            // }
+
+            // $arraygeral['receitas'] = $receitaporlinha;
+
+            // $solexames = $this->app->listarsolexamesatendimento($laudo_id);
+            // $solexamesporlinha = '';
+            // foreach($solexames as $exames){
+            //     $arrayexame['id_exame'] = $exames->ambulatorio_exame_id;
+            //     $exames->texto = trim(strip_tags($exames->texto));
+            //     $exames->texto = $this->formatartexto($exames->texto);
+            //     $arrayexame['texto_exame'] = $exames->texto;
+            //     $arrayexame['data_cadastro'] = $exames->data_cadastro;
+            //     $arrayexame['medico'] = $exames->medico;
+            //     $arrayexame['url'] = base_url().'ambulatorio/laudoapp/impressaosolicitarexame/'.$exames->ambulatorio_exame_id.'/'.$exames->empresa_id;
+
+            //     $solexamesporlinha[] = $arrayexame;
+            // }
+
+            // $arraygeral['sol_exames'] = $solexamesporlinha;
+
+            $relatorios = $this->app->listarsolrelatorioatendimento($laudo_id);
+                $relatorioporlinha = '';
+                foreach($relatorios as $relatorio){
+                    // $arrayrelatorio['id_relatorio'] = $relatorio->ambulatorio_relatorio_id;
+
+                    // $relatorio->texto = trim(strip_tags($relatorio->texto));
+                    // $relatorio->texto = $this->formatartexto($relatorio->texto);
+                    // $arrayrelatorio['texto_relatorio'] = $relatorio->texto;
+                    // $arrayrelatorio['data_cadastro'] = $relatorio->data_cadastro;
+                    // $arrayrelatorio['medico'] = $relatorio->medico;
+                    $arrayrelatorio['url'] = base_url().'ambulatorio/laudoapp/impressaorelatorio/'.$relatorio->ambulatorio_relatorio_id.'/'.$relatorio->empresa_id;
+
+                    $relatorioporlinha[] = $arrayrelatorio;
+                }
+
+                $arraygeral['relatorios'] = $relatorioporlinha;
+
+                $terapeuticas = $this->app->listarsolterapeuticaatendimento($laudo_id);
+                $terapeuticaporlinha = '';
+                foreach($terapeuticas as $terapeutica){
+                    // $arrayterapeutica['id_terapeutica'] = $terapeutica->ambulatorio_terapeutica_id;
+
+                    // $terapeutica->texto = trim(strip_tags($terapeutica->texto));
+                    // $terapeutica->texto = $this->formatartexto($terapeutica->texto);
+                    // $arrayterapeutica['texto_terapeutica'] = $terapeutica->texto;
+                    // $arrayterapeutica['data_cadastro'] = $terapeutica->data_cadastro;
+                    // $arrayterapeutica['medico'] = $terapeutica->medico;
+                    $arrayterapeutica['url'] = base_url().'ambulatorio/laudoapp/impressaoteraupetica/'.$terapeutica->ambulatorio_terapeutica_id.'/'.$terapeutica->empresa_id;
+
+                    $terapeuticaporlinha[] = $arrayterapeutica;
+                }
+
+                $arraygeral['terapeuticas'] = $terapeuticaporlinha;
+
+                $resposta[] = $arraygeral;
+
+                    if(count($resposta) > 0){
+                        $obj->status = 200;
+                        $obj->data = $resposta;
+                    }else{
+                        $obj->status = 404;
+                        $obj->data = [];
+                    }
+        }else{
+            $obj->status = 404;
+            $obj->data = ['Laudo ID não pode ser nulo ou Igual a Zero'];
+        }
+
+        echo json_encode($obj); 
+    }
+
+    function detalhes_receitas(){
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: content-type");
+
+        if(isset($_GET['laudo_id'])){
+            $laudo_id = $_GET['laudo_id'];
+        }else{
+            $laudo_id = 0;
+        }
+
+
+        $obj = new stdClass();
+        if($laudo_id > 0){
+            $receitas = $this->app->listarreceitaatendimento($laudo_id);
+            foreach($receitas as $receita){
+                $arrayreceita['id_receita'] = $receita->ambulatorio_receituario_id;
+                $receita->texto = trim(strip_tags($receita->texto));
+                $receita->texto = $this->formatartexto($receita->texto);
+                $arrayreceita['texto_receita'] = $receita->texto;
+                $arrayreceita['data_cadastro'] = $receita->data_cadastro;
+                $arrayreceita['medico'] = $receita->medico;
+                $arrayreceita['especial'] = $receita->especial;
+                if($receita->especial == 't'){
+                    $arrayreceita['url'] = base_url().'ambulatorio/laudoapp/impressaoreceitaespecial/'.$receita->ambulatorio_receituario_id.'/'.$receita->empresa_id.'/true';
+                }else{
+                    $arrayreceita['url'] = base_url().'ambulatorio/laudoapp/impressaoreceita/'.$receita->ambulatorio_receituario_id.'/'.$receita->empresa_id;
+                }
+
+                $resposta[] = $arrayreceita;
+            }
+
+            if(count($resposta) > 0){
+                $obj->status = 200;
+                $obj->data = $resposta;
+            }else{
+                $obj->status = 404;
+                $obj->data = [];
+            }
+            
+        }else{
+            $obj->status = 404;
+            $obj->data = ['Laudo ID não pode ser nulo ou Igual a Zero'];
+        }
+
+        echo json_encode($obj); 
+
+    }
+
+
+    function detalhes_solicitacoes(){
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: content-type");
+
+        if(isset($_GET['laudo_id'])){
+            $laudo_id = $_GET['laudo_id'];
+        }else{
+            $laudo_id = 0;
+        }
+
+
+        $obj = new stdClass();
+        if($laudo_id > 0){
+
+            $solexames = $this->app->listarsolexamesatendimento($laudo_id);
+            foreach($solexames as $exames){
+                $arrayexame['id_exame'] = $exames->ambulatorio_exame_id;
+                $exames->texto = trim(strip_tags($exames->texto));
+                $exames->texto = $this->formatartexto($exames->texto);
+                $arrayexame['texto_exame'] = $exames->texto;
+                $arrayexame['data_cadastro'] = $exames->data_cadastro;
+                $arrayexame['medico'] = $exames->medico;
+                $arrayexame['url'] = base_url().'ambulatorio/laudoapp/impressaosolicitarexame/'.$exames->ambulatorio_exame_id.'/'.$exames->empresa_id;
+
+                $resposta[] = $arrayexame;
+            }
+
+            if(count($resposta) > 0){
+                $obj->status = 200;
+                $obj->data = $resposta;
+            }else{
+                $obj->status = 404;
+                $obj->data = [];
+            }
+            
+        }else{
+            $obj->status = 404;
+            $obj->data = ['Laudo ID não pode ser nulo ou Igual a Zero'];
+        }
+
+        echo json_encode($obj); 
+
+    }
+
+    function formatartexto($texto){
+                $texto = str_replace('&nbsp;', '', $texto);
+                $texto = str_replace('&Aacute;', 'Á', $texto);
+                $texto = str_replace('&aacute;', 'á', $texto);
+                $texto = str_replace('&Acirc;', 'Â', $texto);
+                $texto = str_replace('&acirc;', 'â', $texto);
+                $texto = str_replace('&Agrave;', 'À', $texto);
+                $texto = str_replace('&agrave;', 'à', $texto);
+                $texto = str_replace('&Atilde;', 'Ã', $texto);
+                $texto = str_replace('&atilde;', 'ã', $texto);
+                $texto = str_replace('&Eacute;', 'É', $texto);
+                $texto = str_replace('&eacute;', 'é', $texto);
+                $texto = str_replace('&Ecirc;', 'Ê', $texto);
+                $texto = str_replace('&ecirc;', 'ê', $texto);
+                $texto = str_replace('&Egrave;', 'È', $texto);
+                $texto = str_replace('&egrave;', 'è', $texto);
+                $texto = str_replace('&Iacute;', 'Í', $texto);
+                $texto = str_replace('&iacute;', 'í', $texto);
+                $texto = str_replace('&Oacute;', 'Ó', $texto);
+                $texto = str_replace('&oacute;', 'ó', $texto);
+                $texto = str_replace('&Ocirc;', 'Ô', $texto);
+                $texto = str_replace('&ocirc;', 'ô', $texto);
+                $texto = str_replace('&Otilde;', 'Õ', $texto);
+                $texto = str_replace('&otilde;', 'õ', $texto);
+                $texto = str_replace('&Uacute;', 'Ú', $texto);
+                $texto = str_replace('&uacute;', 'ú', $texto);
+                $texto = str_replace('&Ccedil;', 'Ç', $texto);
+                $texto = str_replace('&ccedil;', 'ç', $texto);
+
+        return $texto;
+    }
+
     function paciente_historico(){
         header('Access-Control-Allow-Origin: *');
         header("Access-Control-Allow-Headers: content-type");
@@ -191,7 +749,35 @@ class AppAPI extends Controller {
         
         foreach ($resposta as $key => $value) {
             $resposta[$key]->descricao = str_replace('&nbsp;', '', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Aacute;', 'Á', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&aacute;', 'á', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Acirc;', 'Â', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&acirc;', 'â', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Agrave;', 'À', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&agrave;', 'à', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Atilde;', 'Ã', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&atilde;', 'ã', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Eacute;', 'É', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&eacute;', 'é', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Ecirc;', 'Ê', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&ecirc;', 'ê', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Egrave;', 'È', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&egrave;', 'è', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Iacute;', 'Í', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&iacute;', 'í', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Oacute;', 'Ó', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&oacute;', 'ó', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Ocirc;', 'Ô', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&ocirc;', 'ô', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Otilde;', 'Õ', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&otilde;', 'õ', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Uacute;', 'Ú', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&uacute;', 'ú', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&Ccedil;', 'Ç', trim(strip_tags($value->descricao)));
+            $resposta[$key]->descricao = str_replace('&ccedil;', 'ç', trim(strip_tags($value->descricao)));
+
         }
+        // echo '<pre>';
         // var_dump($resposta); 
         // die;
 
@@ -206,7 +792,7 @@ class AppAPI extends Controller {
         // echo '<pre>';
         // var_dump($obj); 
         // die;
-
+        // echo '<pre>';
         echo json_encode($obj); 
     }
 
@@ -1911,6 +2497,281 @@ class AppAPI extends Controller {
 
         echo json_encode($obj); 
     }
-     
+
+
+    // INTERNAÇÃO
+
+        function listarinternacaopaciente(){
+            header('Access-Control-Allow-Origin: *');
+            header("Access-Control-Allow-Headers: content-type");
+
+            if(isset($_GET['paciente_id'])){
+                $paciente_id = $_GET['paciente_id'];
+            }else{
+                $paciente_id = 0;
+            }
+
+            $obj = new stdClass();
+
+            if($paciente_id > 0){
+            
+            $internacao = $this->app->listarinformaçõesinternacao($paciente_id);
+            
+
+            foreach($internacao as $item){
+                $array['internacao_id'] = $item->internacao_id;
+                $array['paciente_id'] = $item->paciente_id;
+                $array['medico'] = $item->medico;
+                $array['data_internacao'] = $item->data_internacao;
+                $array['procedimento'] = $item->procedimento;
+                $array['leito'] = $item->leito;
+                $array['enfermaria'] = $item->enfermaria;
+                $array['unidade'] = $item->unidade;
+
+                $resposta[] = $array;
+            }
+                if(count($resposta) > 0){
+                    $obj->status = 200;
+                    $obj->data = $resposta;
+                }else{
+                    $obj->status = 404;
+                    $obj->data = [];
+                }
+
+            }else{
+                $obj->status = 404;
+                $obj->data = ['Paciente não pode ser nulo'];
+            }
+
+            echo json_encode($obj);
+
+        }    
+        
+        
+        function listar_evolucoes_internacao(){
+            header('Access-Control-Allow-Origin: *');
+            header("Access-Control-Allow-Headers: content-type");
+
+
+            if(isset($_GET['internacao_id'])){
+                $internacao_id = $_GET['internacao_id'];
+            }else{
+                $internacao_id = 0;
+            }
+
+            $obj = new stdClass();
+
+            if($internacao_id > 0){
+                $evolucao = $this->app->listarevolucoesinternacao($internacao_id);
+
+                $resposta = [];
+                foreach($evolucao as $item){
+                    $arrayevolucao['medico'] = $item->operador;
+                    $arrayevolucao['data_cadastro'] = $item->data_cadastro;
+                    $arrayevolucao['procedimento'] = $item->procedimento;
+                    $arrayevolucao['internacao_evolucao_id'] = $item->internacao_evolucao_id;
+
+                    $resposta[] = $arrayevolucao;
+                }
+
+                if(count($resposta) > 0){
+                    $obj->status = 200;
+                    $obj->data = $resposta;
+                }else{
+                    $obj->status = 404;
+                    $obj->data = [];
+                }
+
+            }else{
+                $obj->status = 404;
+                $obj->data = ['Internação Id não pode ser nulo'];
+            }
+
+            echo json_encode($obj);
+        }
+
+
+        function listarunidades(){
+            header('Access-Control-Allow-Origin: *');
+            header("Access-Control-Allow-Headers: content-type");
+
+            $unidades = $this->app->listarunidade();
+            $resposta = [];
+
+            foreach($unidades as $item){
+                $arrayunidade['nome'] = $item->nome;
+                $arrayunidade['internacao_unidade_id'] = $item->internacao_unidade_id;
+
+                $resposta[] = $arrayunidade;
+            }
+
+            $obj = new stdClass();
+            if(count($resposta) > 0){
+                $obj->status = 200;
+                $obj->data = $resposta;
+            }else{
+                $obj->status = 404;
+                $obj->data = [];
+            }
+
+            echo json_encode($obj);
+        }
+
+
+        function listaenfermariaunidade(){
+            header('Access-Control-Allow-Origin: *');
+            header("Access-Control-Allow-Headers: content-type");
+
+            if(isset($_GET['internacao_unidade_id'])){
+                $unidade = $_GET['internacao_unidade_id'];
+            }else{
+                $unidade = 0;
+            }
+
+            $obj = new stdClass();
+            if($unidade > 0){
+
+                $enfermaria = $this->app->listaenfermariaunidade($unidade);
+                $resposta = [];
+    
+                foreach($enfermaria as $item){
+                    $arrayunidade['nome'] = $item->nome;
+                    $arrayunidade['internacao_enfermaria_id'] = $item->internacao_enfermaria_id;
+                    $arrayunidade['tipo'] = $item->nome;
+                    $arrayunidade['ativo'] = $item->nome;
+
+                    $leitos = $this->app->listaleitounidade($item->internacao_enfermaria_id);
+
+                    foreach($leitos as $value){
+                        $arrayleito['internacao_leito_id'] = $value->internacao_leito_id;
+                        $arrayleito['nome'] = $value->nome;
+                        $arrayleito['tipo'] = $value->tipo;
+                        $arrayleito['condicao'] = $value->condicao;
+                        $arrayleito['enfermaria_id'] = $value->enfermaria_id;
+                        $arrayleito['ativo'] = $value->ativo;
+                        $arrayleito['internacao_id'] = $value->internacao_id;
+
+                        $arrayunidade['leitos'] = $arrayleito;
+                    }
+    
+                    $resposta[] = $arrayunidade;
+                }
+
+                if(count($resposta) > 0){
+                    $obj->status = 200;
+                    $obj->data = $resposta;
+                }else{
+                    $obj->status = 404;
+                    $obj->data = [];
+                }
+            }else{
+                $obj->status = 404;
+                $obj->data = ['Unidade não pode ser nulo'];
+            }
+
+            echo json_encode($obj);
+        }
+
+
+        function gravarevolucao(){
+            header('Access-Control-Allow-Origin: *');
+            header("Access-Control-Allow-Headers: content-type");
+
+            $json_post = json_decode(file_get_contents("php://input"));
+
+            $convenio_id = $json_post->convenio_id;
+            $txtdiagnostico = $json_post->txtdiagnostico;
+            $internacao_id = $json_post->internacao_id;
+            $procedimento_tuss_id = $json_post->procedimento_tuss_id;
+            $valor = $json_post->valor;
+            $operador_cadastro = $json_post->operador_cadastro;
+
+            $retorn = $this->app->gravarevolucao($convenio_id, $txtdiagnostico, $internacao_id,  $procedimento_tuss_id, $valor, $operador_cadastro);
+
+
+            if($retorn > 0){
+                $obj->status = 200;
+                $obj->data = ['Evolução Cadastrada com Sucesso'];
+            }else{
+                $obj->status = 404;
+                $obj->data = [];
+            }
+
+            echo json_encode($obj);
+        }
+
+        function listarconvenios(){
+            header('Access-Control-Allow-Origin: *');
+            header("Access-Control-Allow-Headers: content-type");
+
+            if(isset($_GET['empresa_id'])){
+                $empresa_id = $_GET['empresa_id'];
+            }else{
+                $empresa_id = 0;
+            }
+
+            $obj = new stdClass();
+            if($empresa_id > 0){
+                $convenio = $this->app->listarconveniosevolucao($empresa_id);
+
+                foreach($convenio as $item){
+                    $arrayconvenio['nome'] = $item->nome;
+                    $arrayconvenio['convenio_id'] = $item->convenio_id;
+                    $resposta[] = $arrayconvenio;
+                }
+
+                if(count($resposta) > 0){
+                    $obj->status = 200;
+                    $obj->data = $resposta;
+                }else{
+                    $obj->status = 404;
+                    $obj->data = [];
+                }
+            }else{
+                $obj->status = 404;
+                $obj->data = ['Empresa Id não pode ser nulo'];
+            }
+
+            echo json_encode($obj);
+        }
+
+        function listarprocedimentosconveniointernacao(){
+            header('Access-Control-Allow-Origin: *');
+            header("Access-Control-Allow-Headers: content-type");
+
+            if(isset($_GET['convenio_id'])){
+                $convenio_id = $_GET['convenio_id'];
+            }else{
+                $convenio_id = 0;
+            }
+
+            $obj = new stdClass();
+            if($convenio_id > 0){
+                $procedimentos = $this->app->listarprocedimentosconveniointernacao($convenio_id);
+
+                foreach($procedimentos as $item){
+                    $arrayconvenio['procedimento_convenio_id'] = $item->procedimento_convenio_id;
+                    $arrayconvenio['codigo'] = $item->codigo;
+                    $arrayconvenio['procedimento'] = $item->procedimento;
+                    $arrayconvenio['valor'] = $item->valortotal;
+                    $resposta[] = $arrayconvenio;
+                }
+
+                if(count($resposta) > 0){
+                    $obj->status = 200;
+                    $obj->data = $resposta;
+                }else{
+                    $obj->status = 404;
+                    $obj->data = [];
+                }
+            }else{
+                $obj->status = 404;
+                $obj->data = ['Convenio não pode ser nulo'];
+            }
+
+            echo json_encode($obj);
+        }
+
+
    
 }

@@ -21,6 +21,7 @@ class Entrada extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+         echo "<script type='text/javascript'>setTimeout(function () {  alert('Sessão Expirada');  window.location = '".base_url()."login/sair';  }, 1800*1000);</script>";
     }
 
     function index() {

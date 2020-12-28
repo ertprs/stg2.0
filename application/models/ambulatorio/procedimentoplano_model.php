@@ -7422,9 +7422,97 @@ class procedimentoplano_model extends Model {
            $this->db->join('tb_empresa ep','ep.empresa_id = lp.empresa_id','left'); 
            $this->db->where('lp.operador_id',$medico_id);
            $this->db->where('lp.ativo','t'); 
-           return $this->db->get()->result();
+           return $this->db->get()->result(); 
+    }
+    
+    
+    function listardescricaomaterial($args = array()) {
+        $this->db->select('nome,descricao_material_id');
+        $this->db->from('tb_descricao_material dm'); 
+        $this->db->where("dm.ativo", 't'); 
+        if (@$args['nome'] != '') {  
+            $this->db->where('dm.nome ilike', $args['nome'] . "%");
+        } 
+        return $this->db;
+    }
+    
+    function carregardescricaomaterial($descricao_material){
+        $this->db->select('');
+        $this->db->from('tb_descricao_material');
+        $this->db->where('descricao_material_id',$descricao_material);
+        $this->db->where('ativo','t');
+        return $this->db->get()->result();
         
     }
+    
+    function gravardescricaomaterial(){
+        $horario = date('Y-m-d H:i:s');
+        $operador = $this->session->userdata('operador_id');
+        
+        try { 
+
+            if($_POST['txtdescraomaterialid'] == "0"){ 
+                 $this->db->set('nome',$_POST['txtNome']);
+                 $this->db->set('operador_cadastro',$operador);
+                 $this->db->set('data_cadastro',$horario);  
+                 $this->db->insert('tb_descricao_material');
+                 return $this->db->insert_id();
+            }else{
+                 $this->db->set('nome',$_POST['txtNome']);
+                 $this->db->set('operador_atualizacao',$operador);
+                 $this->db->set('data_atualizacao',$horario);  
+                 $this->db->where('descricao_material_id',$_POST['txtdescraomaterialid']);
+                 $this->db->update('tb_descricao_material');
+                 return $_POST['txtdescraomaterialid'];
+            }
+
+       } catch (Exception $exc) {
+            return -1;
+      }
+        
+    }
+    
+    function excluirdescricaomaterial($descricao_material_id){ 
+        try {  
+            $this->db->set('ativo','f');
+            $this->db->set('operador_atualizacao',$operador);
+            $this->db->set('data_atualizacao',$horario);  
+            $this->db->where('descricao_material_id',$descricao_material_id);
+            $this->db->update('tb_descricao_material');
+            return $descricao_material_id; 
+       } catch (Exception $exc) {
+            return -1;
+      }
+    }
+    
+    function listardescricaomaterialtodos($args = array()) {
+        $this->db->select('nome,descricao_material_id');
+        $this->db->from('tb_descricao_material dm'); 
+        $this->db->where("dm.ativo", 't');  
+        return $this->db->get()->result();
+    }
+    
+    function gravardescricaomaterialprocedimento(){
+        $horario = date('Y-m-d H:i:s');
+        $operador = $this->session->userdata('operador_id');
+         if(isset($_POST['agenda_exames_id']) && $_POST['agenda_exames_id'] > 0){
+            $this->db->set('operador_inforcomplementares',$operador);
+            $this->db->set('data_inforcomplementares',$horario);
+            if($_POST['descricao_material'] != ""){
+            $this->db->set('descricao_material_id',$_POST['descricao_material']);
+            }else{
+              $this->db->set('descricao_material_id',null);   
+            }
+            if($_POST['descricao_diurese'] != ""){
+            $this->db->set('descricao_diurese',$_POST['descricao_diurese']);
+            }else{
+            $this->db->set('descricao_diurese',null);
+            }
+            $this->db->where('agenda_exames_id',$_POST['agenda_exames_id']);
+            $this->db->update('tb_agenda_exames');
+         }
+    }
+    
 
 }
 

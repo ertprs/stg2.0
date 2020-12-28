@@ -2,11 +2,10 @@
     <meta charset="utf-8">
 </head>
 <div > <!-- Inicio da DIV content -->
-    <div class="bt_link_voltar">
-        <a href="<?= base_url() ?>ambulatorio/modelodeclaracao">
+    <a class="btn btn-outline-default btn-sm" href="<?= base_url() ?>ambulatorio/modelodeclaracao">
             Voltar
         </a>
-    </div>
+
     <div>
         <h3 class="singular">Cadastro Modelo Declaração</h3>
         <div>

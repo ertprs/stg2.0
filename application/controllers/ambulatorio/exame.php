@@ -35,6 +35,7 @@ class Exame extends BaseController {
         $this->load->model('cadastro/convenio_model', 'convenio');
         $this->load->model('cadastro/formapagamento_model', 'formapagamento');
         $this->load->model('ambulatorio/exametemp_model', 'exametemp');
+        $this->load->model('cadastro/classe_model', 'classe');
 
         $this->load->library('googleplus');
         $this->load->model('calendario/googlecalendar_model', 'googlecalendar');
@@ -45,6 +46,7 @@ class Exame extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+                    
 //        if ($this->session->userdata('autenticado') != true) {
 //            redirect(base_url() . "login/index/login004", "refresh");
 //        }
@@ -201,8 +203,8 @@ class Exame extends BaseController {
             $data['setor_string'] = $setor_string;
 
 
-        //    var_dump($data['setores']); die;
-//        var_dump($data['senhas']); die;    
+//          var_dump($data['setores']); die;
+//          var_dump($data['senhas']); die;    
             if (!preg_match('/\:8099/', $endereco)) {
                 @$senhas_busca = file_get_contents("$endereco/painel-api/api/painel/senhas");
                 $data['senhas'] = json_decode($senhas_busca);
@@ -571,6 +573,10 @@ class Exame extends BaseController {
 
             // Busca os horarios que essa sala vai estar em uso (ou agendada)
             $result = $this->exame->listarusosala($_GET['sala']);
+//            echo "<pre>";
+//            print_r($result);
+//            
+//            die();
             $retornoJSON = array();
             $dias = array();
 
@@ -734,25 +740,40 @@ class Exame extends BaseController {
         $data['txtdata_inicio'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
         $data['txtdata_fim'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         $data['empresa'] = $this->guia->listarempresa($_POST['empresa']);
-        $data['relatorio'] = $this->exame->relatoriorecepcaoagenda();
+        if($_POST['modelorealatorio'] == '3'){
+         $data['relatorio'] = $this->exame->relatoriorecepcaoagendaconsolidado();
+        }elseif($_POST['modelorealatorio'] == '4'){ 
+           $data['relatorio'] = $this->exame->relatorioproducaoagenda();    
+        }elseif($_POST['modelorealatorio'] == '5'){ 
+           $data['relatorio'] = $this->exame->relatorioproducaoagenda2();
+           
+//           echo '<pre>'
+//           print_r($data['relatorio']);
+//           die();
+        }else{
+           $data['relatorio'] = $this->exame->relatoriorecepcaoagenda();   
+        }
         $data['operador'] = $this->operador_m->listaroperadorarray(@$_POST['operador']);
 
         // echo '<pre>';
         // var_dump($data['relatorio']); die;
-        
-        
+                    
         if ($_POST['tipoRelatorio'] == '2') {
             $this->load->View('ambulatorio/impressaorelatoriomedicoagendaexamefaltou', $data);
         } else {            
             if ($_POST['modelorealatorio'] == '0') { 
                 $this->load->View('ambulatorio/impressaorelatoriomedicoagendatodos2', $data);
+            }elseif($_POST['modelorealatorio'] == '3'){
+                  $this->load->View('ambulatorio/impressaorelatoriomedicoagendatodos3', $data); 
+            }elseif($_POST['modelorealatorio'] == '4'){
+                  $this->load->View('ambulatorio/impressaorelatorioproducaoagenda', $data); 
+            }elseif($_POST['modelorealatorio'] == '5'){
+                  $this->load->View('ambulatorio/impressaorelatorioproducaoagenda2', $data); 
             }else{
                 $this->load->View('ambulatorio/impressaorelatoriomedicoagendatodos', $data);
             }            
         }
-        
-        
-        
+                    
     }
 
     function gerarelatoriomapadecalor() {
@@ -1155,8 +1176,13 @@ class Exame extends BaseController {
     }
 
     function listarmultifuncaomedicogeral($args = array()) { 
-//        $this->loadView('ambulatorio/multifuncaomedicogeral-lista', $args);modelo antigo comentei caso queiram de volta
-          $this->load->View('ambulatorio/multifuncaomedicogeralnovo-lista', $args);
+          $empresa_id = $this->session->userdata('empresa_id');
+          $permissoes =   $this->exame->permisoesempresa($empresa_id); 
+          if($permissoes[0]->geral_agenda == "t"){
+             $this->load->View('ambulatorio/multifuncaomedicogeralnovo-lista', $args);
+          }else{
+             $this->loadView('ambulatorio/multifuncaomedicogeral-lista', $args); 
+          } 
     }
 
 //    function multifuncaomedicointegracao() {
@@ -4272,6 +4298,14 @@ class Exame extends BaseController {
     }
 
     function gravargeralmodelo2($datainicial_intervalo, $datafinal_intervalo, $agenda_id, $medico_id, $qtd_horas_dia) {
+
+        $grupotipo = $this->exame->listargrupotipo($_POST['tipo_agenda_id']);
+
+
+        // echo $grupotipo;
+        // echo '<pre>';
+        // print_r($_POST);
+        // die;
         //        var_dump($datainicial_intervalo, $datafinal_intervalo, $agenda_id, $sala_id, $medico_id);
         //        die;
         //        $agenda_id = $_POST['txthorario'];
@@ -4284,6 +4318,10 @@ class Exame extends BaseController {
         $tipo = $this->agenda->listartiposala();
         $tipo = $tipo[0]->tipo;
 
+
+        if($grupotipo == 'ESPECIALIDADE'){
+            $tipo = 'FISIOTERAPIA';
+        }
 
         $horarioagenda = $this->agenda->listarhorarioagendacriacaogeralmodelo2($agenda_id, $medico_id, $datainicial, $datafinal, $tipo);
 //                 echo '<pre>';
@@ -12687,18 +12725,44 @@ $nome = "./upload/cr_cirurgico/" . $convenio . "/" . $zero . $b . "_" . $lotee .
        $this->load->View('ambulatorio/historicoaparelho',$data);
     }
     
-    
+    function trocarpacienteconsulta($agenda_exames_id){
+        $data['paciente'] = $this->exame->listarpacienteagenda($agenda_exames_id);
+        $this->load->View('ambulatorio/trocarpaciente-form', $data);
+    }
      function trocarprocedimentoconsulta($agenda_exames_id) {
         $data['agenda_exames_id'] = $agenda_exames_id;
+        $data['paciente'] = $this->exame->listarpacienteagenda($agenda_exames_id);
         $data['consulta'] = $this->exame->listarsalaagenda($agenda_exames_id); 
         $data['convenios'] = $this->guia->listarconvenios();    
         $data['grupos'] = $this->procedimento->listargrupos();
         $this->load->View('ambulatorio/trocarprocedimento-form', $data);
     }
-                    
+    
+    
+    function gravartrocarpaciente(){ 
+        $paciente =  $this->exame->gravartrocarnomepaciente();
+         if($paciente != "-1"){
+             $mensagem = "Sucesso ao trocar Nome do Paciente";
+         }else{
+             $mensagem = "Erro ao trocar procedimento";
+         }
+         echo "<html>
+                      <meta charset='UTF-8'>
+          <script type='text/javascript'> 
+          alert('$mensagem');
+          window.onunload = fechaEstaAtualizaAntiga;
+          function fechaEstaAtualizaAntiga() {
+              window.opener.location.reload();
+              }
+          window.close();
+              </script>
+              </html>";
+      }
+
+
     function gravartrocarprocedimento(){
       $verificar =  $this->exame->gravartrocarprocedimento();  
-
+      $paciente =  $this->exame->gravartrocarnomepaciente();
        if($verificar != "-1"){
            $mensagem = "Sucesso ao trocar procedimento";
        }else{

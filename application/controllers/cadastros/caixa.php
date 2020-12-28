@@ -30,6 +30,7 @@ class Caixa extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+        
         if ($this->session->userdata('autenticado') != true) {
             redirect(base_url() . "login/index/login004", "refresh");
         }
@@ -160,9 +161,11 @@ class Caixa extends BaseController {
 //        }
 //        var_dump($_POST);die;
         $caixa_id = $this->caixa->gravarentrada();
+        
         if ($caixa_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar entrada. Opera&ccedil;&atilde;o cancelada.';
         } else {
+            $this->caixa->salvarauditoriafinanceiro($caixa_id,'ENTRADA','CADASTRO');
             $data['mensagem'] = 'Sucesso ao gravar a entrada.';
             $this->importararquivoNovoEntrada($caixa_id);
 
@@ -246,10 +249,15 @@ class Caixa extends BaseController {
     }
 
     function gravarsaida() {
-        $caixa_id = $this->caixa->gravarsaida();
+        $caixa_id = $this->caixa->gravarsaida(); 
+          if (isset($_POST['saida_id']) && $_POST['saida_id'] == "") {
+             $this->caixa->salvarauditoriafinanceiro($caixa_id,'SAIDA','CADASTRO');
+          }else{
+             $this->caixa->salvarauditoriafinanceiro($caixa_id,'SAIDA','EDIÇÃO'); 
+          }
         if ($caixa_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar a Saida. Opera&ccedil;&atilde;o cancelada.';
-        } else {
+        } else { 
             $data['mensagem'] = 'Sucesso ao gravar a Saida.';
             $this->importararquivoNovoSaida($caixa_id);
         }
@@ -308,6 +316,7 @@ class Caixa extends BaseController {
 
     function excluirentrada($entrada) {
         $this->caixa->excluirentrada($entrada);
+        $this->caixa->salvarauditoriafinanceiro($entrada,'ENTRADA','EXCLUSÃO');
         // Apaga os arquivos
         if (is_dir("./upload/entrada")) {
             $this->load->helper('directory');
@@ -325,6 +334,7 @@ class Caixa extends BaseController {
 
     function excluirsaida($saida) {
         $this->caixa->excluirsaida($saida);
+        $this->caixa->salvarauditoriafinanceiro($saida,'SAIDA','EXCLUSÃO',2);
         // Apaga os arquivos
         if (is_dir("./upload/saida")) {
             $this->load->helper('directory');
@@ -592,7 +602,7 @@ class Caixa extends BaseController {
         $data['relatorio_entrada'] = $this->caixa->relatoriofluxocaixaentrada();
         // $data['caixa_saldo'] = $this->caixa->relatoriocaixa_saldo();
         $data['relatorio_saida'] = $this->caixa->relatoriofluxocaixasaida();
-        // $data['saldo_anterior'] = $this->caixa->relatoriofluxocaixasaldoanterior();
+        $data['saldo_anterior'] = $this->caixa->relatoriofluxocaixasaldoanterior();
         $data['relatorio_saldo_entrada'] = $this->caixa->relatoriofluxocaixasaldoanteriorcompleto_entradas();
         $data['relatorio_saldo_saida'] = $this->caixa->relatoriofluxocaixasaldoanteriorcompleto_saidas();
 
@@ -1009,13 +1019,13 @@ class Caixa extends BaseController {
                 $html = $cabecalho . $corpo;
             }
 
-
-//                    var_dump($html);
-//            die;
+ 
             $tiporelatorio = 'relatorioentrada';
             $email_id = $this->caixa->gravaremailmensagem($html);
             $this->formrelatorioemail($email_id, $tiporelatorio);
         }
+        
+        
     }
 
     function relatorioentradagrupo() {
@@ -1414,6 +1424,9 @@ class Caixa extends BaseController {
         }
 
         $data['entradas_id'] = $entradas_id;
+        if(isset($_FILES['arquivos']) && count($_FILES['arquivos']['name']) > 0){
+         $this->caixa->salvarauditoriafinanceiro($entradas_id,'ENTRADA','ADICIONOU ARQUIVO');
+        }
         redirect(base_url() . "cadastros/caixa/anexarimagementrada/$entradas_id/");
     }
 
@@ -1474,6 +1487,9 @@ class Caixa extends BaseController {
         }
 
         $data['saidas_id'] = $saidas_id;
+        if(isset($_FILES['arquivos']) && count($_FILES['arquivos']['name']) > 0){
+         $this->caixa->salvarauditoriafinanceiro($saidas_id,'SAIDA','ADICIONOU ARQUIVO');
+        }
         redirect(base_url() . "cadastros/caixa/anexarimagemsaida/$saidas_id");
 //        $this->anexarimagemsaida($saidas_id);
     }
@@ -1656,6 +1672,36 @@ class Caixa extends BaseController {
             $this->formrelatorioemail($email_id, $tiporelatorio);
         }
     }
+    
+     function relatorioauditoria() {
+        $data['operadores'] = $this->operador->listartecnicos();
+        $data['empresa'] = $this->guia->listarempresas(); 
+        $data['conta'] = $this->forma->listarforma();
+        $data['credordevedor'] = $this->caixa->listarcredordevedor();
+        $data['tipo'] = $this->tipo->listartipo(); 
+         $this->loadView('ambulatorio/relatorioauditoria', $data); 
+      
+    }
+    function gerarelatorioauditoria(){
+        $data['txtdata_inicio'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+        $data['txtdata_fim'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
+        $data['credordevedor'] = $this->caixa->buscarcredordevedor($_POST['credordevedor']);
+        $data['tipo'] = $this->tipo->buscartipo($_POST['tipo']);
+        $data['classe'] = $this->classe->buscarclasserelatorio($_POST['classe']);
+        $data['forma'] = $this->forma->buscarforma($_POST['conta']); 
+        $data['relatorio'] = $this->caixa->relatorioauditoria(); 
+        if ($_POST['email'] == "NAO") { 
+            $this->load->View('cadastros/impressaorelatorioauditoria', $data);
+        } elseif ($_POST['email'] == "SIM") {
+            $html=   $this->load->View('cadastros/impressaorelatorioauditoria', $data,true);
+            $tiporelatorio = 'relatorioauditoria';
+            $email_id = $this->caixa->gravaremailmensagem($html);
+            $this->formrelatorioemail($email_id, $tiporelatorio);
+        }
+      
+    }
+    
+    
 }
 
 /* End of file welcome.php */

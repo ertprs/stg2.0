@@ -100,6 +100,9 @@ class classe_model extends Model {
             $this->_farmacia_classe_id = null;
         }
     }
+    
+    
+
 
 }
 

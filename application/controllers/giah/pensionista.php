@@ -25,6 +25,7 @@ class Pensionista extends Controller {
         $this->load->model('giah/pensionista_model', 'pensionista');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
+         
     }
 
     /**

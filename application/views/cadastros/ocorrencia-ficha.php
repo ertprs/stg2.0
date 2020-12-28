@@ -1,41 +1,60 @@
  
-<div class="content ficha_ceatox"> <!-- Inicio da DIV content --> 
-        <form name="form_exametemp" id="form_exametemp" action="<?= base_url() ?>ambulatorio/empresa/gravarimpressaocabecalho" method="post">     
-            <fieldset>
-                <legend>Adicionar Campo</legend>
-                <label>Nome da Ocorrência</label>
-                <input type="text" name="nomeTemplate" id="nomeTemplate" class="texto04" value="<?=@$template[0]->nome_template;?>" maxlength="200" /> 
-                <input type="hidden" name="idTemplate" id="idTemplate" class="texto04" value="<?=@$template[0]->template_ocorrencia_id?>" />
-                <label>Nome do campo</label>
-                <input type="text" name="nomeCampo" id="nomeCampo" class="texto04" value=""/>
-                <label>Tipo</label>
-                <select name="tipoCampo" id="tipoCampo">
-                    <option value="">Selecione</option>
-                    <option value="textoCurto">Texto Curto</option>
-                    <option value="textoLongo">Texto Longo</option> 
-                    <option value="textoNumero">Númerico</option>
-                    <option value="textoDecimal">Númerico Decimal</option>
-                    <option value="select">Selecionar de Lista</option> 
-                    <option value="checkbox">Verdadeiro Ou Falso (Caixa de checagem)</option>
-                    <option value="textoTelefone">Telefone</option>
-                </select>
-                <div style="width: 100%">
-                    <hr/>
-                    <button type="button" id="adicionar" onclick="adicionarCampo();" name="adicionar">Adicionar</button>
-                    <!-- <button type="button" id="console" onclick="teste();" name="console">Testar</button> -->
-                </div>
+<div class="content"> <!-- Inicio da DIV content -->
+    <div class="accordion">
+        <h6 class="singular ui-state-active">Adicionar Campo</h6>
+        <div>
+            <form name="form_exametemp" id="form_exametemp" action="<?= base_url() ?>ambulatorio/empresa/gravarimpressaocabecalho" method="post">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Nome da Ocorrência</label>
+                                <input type="text" name="nomeTemplate" id="nomeTemplate" class="form-control" value="<?=@$template[0]->nome_template;?>" maxlength="200" />
+                                <input type="hidden" name="idTemplate" id="idTemplate" class="form-control" value="<?=@$template[0]->template_ocorrencia_id?>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Nome do campo</label>
+                                <input type="text" name="nomeCampo" id="nomeCampo" class="form-control" value=""/>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Tipo</label>
+                                <select name="tipoCampo" id="tipoCampo" class="form-control">
+                                    <option value="">Selecione</option>
+                                    <option value="textoCurto">Texto Curto</option>
+                                    <option value="textoLongo">Texto Longo</option>
+                                    <option value="textoNumero">Númerico</option>
+                                    <option value="textoDecimal">Númerico Decimal</option>
+                                    <option value="select">Selecionar de Lista</option>
+                                    <option value="checkbox">Verdadeiro Ou Falso (Caixa de checagem)</option>
+                                    <option value="textoTelefone">Telefone</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <button class="btn btn-outline-success btn-sm" type="button" id="adicionar" onclick="adicionarCampo();" name="adicionar">Adicionar</button>
+                </fieldset>
+                <fieldset>
+                    <legend>Campos</legend>
+                    <div id="camposDiv">
 
-            </fieldset>
-            <fieldset>
-                <legend>Campos</legend>
-                <div id="camposDiv"> 
-                    
-                </div> 
-            </fieldset>
-            <fieldset>
-                <legend>Salvar</legend>
-                <button type="button" id="salvar" onclick="salvarTemplate();" name="salvar">Salvar</button> 
-            </fieldset> 
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Salvar</legend>
+                    <button class="btn btn-outline-success btn-sm" type="button" id="salvar" onclick="salvarTemplate();" name="salvar">Salvar</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+
+
+
         </form>
     <!--</div>  Final da DIV content -->
 </div> <!-- Final da DIV content -->

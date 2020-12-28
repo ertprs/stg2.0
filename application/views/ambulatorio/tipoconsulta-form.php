@@ -3,34 +3,32 @@
         <h3 class="singular"><a href="#">Cadastro de Tipo Agenda</a></h3>
         <div>
             <form name="form_sala" id="form_sala" action="<?= base_url() ?>ambulatorio/tipoconsulta/gravar" method="post">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Nome</label>
+                            <input type="hidden" name="tipo_consulta_id" class="form-control" value="<?= @$obj->_ambulatorio_tipo_consulta_id; ?>" />
+                            <input type="text" name="txtNome" class="form-control" value="<?= @$obj->_descricao; ?>" />
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Grupo</label>
+                            <select name="grupo" id="grupo" class="form-control" >
+                                <option value='' >Selecione</option>
+                                <? foreach ($grupos as $grupo) { ?>
+                                    <option value='<?= $grupo->nome ?>' <?
+                                    if (@$obj->_grupo == $grupo->nome):echo 'selected';
+                                    endif;
+                                    ?>><?= $grupo->nome ?></option>
+                                <? } ?>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
 
-                <dl class="dl_desconto_lista">
-                    <dt>
-                    <label>Nome</label>
-                    </dt>
-                    <dd>
-                        <input type="hidden" name="tipo_consulta_id" class="texto10" value="<?= @$obj->_ambulatorio_tipo_consulta_id; ?>" />
-                        <input type="text" name="txtNome" class="texto10" value="<?= @$obj->_descricao; ?>" />
-                    </dd>
-                    <dt>
-                        <label>Grupo</label>
-                    </dt>
-                    <dd>
-                        <select name="grupo" id="grupo" class="size2" >
-                            <option value='' >Selecione</option>
-                            <? foreach ($grupos as $grupo) { ?>                                
-                                <option value='<?= $grupo->nome ?>' <?
-                                if (@$obj->_grupo == $grupo->nome):echo 'selected';
-                                endif;
-                                ?>><?= $grupo->nome ?></option>
-                                    <? } ?>
-                        </select>
-                    </dd>
-                </dl>    
                 <hr/>
-                <button type="submit" name="btnEnviar">Enviar</button>
-                <button type="reset" name="btnLimpar">Limpar</button>
-                <button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
+                <button class="btn btn-outline-success btn-sm" type="submit" name="btnEnviar">Enviar</button>
+                <button class="btn btn-outline-warning btn-sm" type="reset" name="btnLimpar">Limpar</button>
+                <button class="btn btn-outline-default btn-sm" type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
             </form>
         </div>
     </div>

@@ -214,7 +214,7 @@ class Home extends BaseController {
 
         $this->load->view('header', $data);
         $this->load->view('home');
-//        $this->load->view('footer');
+        $this->load->view('footer');
         
         if ($this->session->userdata('perfil_id') == 22) {
             

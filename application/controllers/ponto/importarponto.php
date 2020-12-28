@@ -24,6 +24,7 @@ class Importarponto extends BaseController {
         $this->load->model('ponto/importarponto_model', 'importarponto');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
+        
     }
 
     /**

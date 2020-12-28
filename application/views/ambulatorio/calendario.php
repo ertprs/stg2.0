@@ -1,5 +1,5 @@
 <head>
-    <title>STG - SISTEMA DE GESTAO DE CLINICAS v1.0</title>
+    <title>STG - SISTEMA DE GESTAO DE CLINICAS v2.0</title>
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <!-- Reset de CSS para garantir o funcionamento do layout em todos os brownsers -->

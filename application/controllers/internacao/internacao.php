@@ -7,6 +7,7 @@ class internacao extends BaseController {
     function __construct() {
         parent::__construct();
         $this->load->model('emergencia/solicita_acolhimento_model', 'acolhimento');
+        $this->load->model('cadastro/formapagamento_model', 'formapagamento');
         $this->load->model('cadastro/paciente_model', 'paciente');
         $this->load->model('cadastro/convenio_model', 'convenio');
         $this->load->model('farmacia/produto_model', 'produto_m');
@@ -23,6 +24,7 @@ class internacao extends BaseController {
         $this->load->model('centrocirurgico/solicita_cirurgia_model', 'solicitacirurgia_m');
         $this->load->model('centrocirurgico/centrocirurgico_model', 'centrocirurgico_m');
         $this->load->library('utilitario');
+         
     }
 
     public function index() {
@@ -439,6 +441,7 @@ class internacao extends BaseController {
     function mostraenfermarialeito($unidade) {
         $data['enfermaria'] = $this->unidade_m->listaenfermariaunidade($unidade);
         $data['leitos'] = $this->unidade_m->listaleitounidade();
+
         $this->loadView('internacao/mostraenfermarialeito', $data);
     }
 
@@ -533,21 +536,21 @@ class internacao extends BaseController {
         // tamanho
         /////////////////////////////// CABECALHO
 
-        $cabecalho64_img = explode('src="', $cabecalho_file);
-        $cabecalho64 = explode('alt=""', $cabecalho64_img[1]);
-        $cabecalho64[1] = str_replace('/>', '', $cabecalho64[1]);
+        @$cabecalho64_img = explode('src="', $cabecalho_file);
+        @$cabecalho64 = explode('alt=""', $cabecalho64_img[1]);
+        @$cabecalho64[1] = str_replace('/>', '', $cabecalho64[1]);
         // $cabecalho_size = getimagesizefromstring($cabecalho64[0]);
         $arquivo_salvo = $this->base64_to_jpeg($cabecalho64[0], "img/cabecalhoInt.jpg");
-        $cabecalho_info = getimagesize('img/cabecalhoInt.jpg');
+        @ $cabecalho_info = getimagesize('img/cabecalhoInt.jpg');
 
         ///////////////////////////////// RODAPE
 
-        $rodape64_img = explode('src="', $rodape);
-        $rodape64 = explode('alt=""', $rodape64_img[1]);
-        $rodape64[1] = str_replace('/>', '', $rodape64[1]);
+        @$rodape64_img = explode('src="', $rodape);
+        @$rodape64 = explode('alt=""', $rodape64_img[1]);
+        @$rodape64[1] = str_replace('/>', '', $rodape64[1]);
         // $rodape_size = getimagesizefromstring($rodape64[0]);
-        $arquivo_salvo = $this->base64_to_jpeg($rodape64[0], "img/rodapeInt.jpg");
-        $rodape_info = getimagesize('img/rodapeInt.jpg');
+        @$arquivo_salvo = $this->base64_to_jpeg($rodape64[0], "img/rodapeInt.jpg");
+        @ $rodape_info = getimagesize('img/rodapeInt.jpg');
 
         ////////////////////////////////////////
         // É count - 1 no indice porque a primeira evolucao nesse listar é a ultima. Tá em ordem decrescente
@@ -566,7 +569,9 @@ class internacao extends BaseController {
             $rodape = "<p>$div_branco_r</p>";
         }
         // echo '<pre>';
-        // var_dump($rodape); die;
+        // echo $html;
+        // die;
+        //var_dump($rodape); die;
         pdf($html, $filename, $cabecalho_file, $rodape);
     }
 
@@ -580,7 +585,7 @@ class internacao extends BaseController {
         $data = explode(',', $base64_string);
 
         // we could add validation here with ensuring count( $data ) > 1
-        fwrite($ifp, base64_decode($data[1]));
+        @fwrite($ifp, base64_decode($data[1]));
 
         // clean up the file resource
         fclose($ifp);
@@ -756,12 +761,165 @@ class internacao extends BaseController {
 
     function evolucaointernacao($internacao_id) {
         $data['internacao_id'] = $internacao_id;
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
+        $data['convenios'] = $this->solicitacirurgia_m->listarconveniostodosinternacao();
         $this->loadView('internacao/evolucaointernacao', $data);
+    }
+
+    function faturarmodelo2internacao($internacao_id, $paciente_id) {
+        $data['forma_pagamento'] = $this->guia->formadepagamentoprocedimentomodelo2(0);
+        $data['forma_cadastrada'] = $this->internacao_m->agendaExamesFormasPagamentoInternacao($internacao_id);
+        $data['forma_cadastrada_evolucao'] = $this->internacao_m->agendaExamesFormasPagamentoInternacaoEvolucao2($internacao_id);
+        $data['exame'] = $this->internacao_m->listarinternacaopagamento($internacao_id);
+        $data['internacao_id'] = $internacao_id;
+        $data['paciente_id'] = $paciente_id;
+        $data['valor'] = 0.00;
+        $data['evolucoes'] = $this->internacao_m->listarevolucoes($internacao_id);
+        // echo '<pre>';
+        // print_r($data['forma_cadastrada_evolucao']);
+        // die;
+
+        $this->load->View('internacao/faturarmodelo2internacao-form', $data);
+    }
+
+    function faturarmodelo2internacaoevolucao($internacao_evolucao_id, $internacao_id, $paciente_id) {
+        $data['forma_pagamento'] = $this->guia->formadepagamentoprocedimentomodelo2(0);
+        $data['forma_cadastrada'] = $this->internacao_m->agendaExamesFormasPagamentoInternacaoEvolucao($internacao_evolucao_id);
+        $data['exame'] = $this->internacao_m->listarinternacaoevolucaopagamento($internacao_evolucao_id);
+        $data['internacao_evolucao_id'] = $internacao_evolucao_id;
+        $data['internacao_id'] = $internacao_id;
+        $data['paciente_id'] = $paciente_id;
+        $data['valor'] = 0.00;
+
+        // echo '<pre>';
+        // print_r($data['forma_cadastrada']);
+        // die;
+
+        $this->load->View('internacao/faturarmodelo2internacaoevolucao-form', $data);
+    }
+
+    function gravarfaturadomodelo2internacaoevolucao($internacao_evolucao_id, $internacacao_id, $paciente_id) {
+
+
+        $resulta = $_POST['valorajuste1'];
+        $ambulatorio_guia_id = $this->internacao_m->gravarfaturamentomodelo2internacaoevolucao($internacacao_id);
+
+        // if(isset($_POST['quitacao'])){
+        //     $this->guia->confirmartcdpagamento($paciente_tcd_id);
+        // }
+
+        $forma_cadastrada = $this->internacao_m->agendaExamesFormasPagamentoInternacaoEvolucao($internacao_evolucao_id);
+
+        if($forma_cadastrada[0]->valor_restante == 0.00){
+            $this->internacao_m->confirmarinternacaoevolucaopagamento($internacao_evolucao_id);
+        }
+
+
+        if ($ambulatorio_guia_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar pagamento. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar pagamento.';
+        }
+
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "internacao/internacao/faturarmodelo2internacaoevolucao/$internacao_evolucao_id/$internacacao_id/$paciente_id", $data);
+
+    }
+
+
+    function gravarfaturadomodelo2internacao($internacacao_id, $paciente_id) {
+
+
+        $resulta = $_POST['valorajuste1'];
+        // $ambulatorio_guia_id = $this->internacao_m->gravarfaturamentomodelo2internacao($internacacao_id);
+        $ambulatorio_guia_id = $this->internacao_m->gravarprocedimentosfaturarmodelo2internacao($internacacao_id);
+
+        // if(isset($_POST['quitacao'])){
+        //     $this->guia->confirmartcdpagamento($paciente_tcd_id);
+        // }
+
+        // $forma_cadastrada = $this->internacao_m->agendaExamesFormasPagamentoInternacao($internacacao_id);
+
+        //if($forma_cadastrada[0]->valor_restante == 0.00){
+         //   $this->internacao_m->confirmarinternacaopagamento($internacacao_id);
+        //}
+
+
+        if ($ambulatorio_guia_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar pagamento. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar pagamento.';
+        }
+
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "internacao/internacao/faturarmodelo2internacao/$internacacao_id/$paciente_id", $data);
+    }
+
+
+    function apagarfaturarprocedimentosinternacao($forma_pagamento_id, $internacao_id, $data_pag, $paciente_id){
+
+        $ambulatorio_guia_id = $this->internacao_m->apagarfaturarprocedimentosinternacao($forma_pagamento_id, $internacao_id, $data_pag);
+        
+        if ($ambulatorio_guia_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar pagamento. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao excluir pagamento.';
+        }
+
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "internacao/internacao/faturarmodelo2internacao/$internacao_id/$paciente_id", $data);
+    
+    }
+
+
+    function apagarfaturarprocedimentosinternacaoevolucao($forma_pagamento_id, $internacao_id, $data_pag, $paciente_id){
+
+        $ambulatorio_guia_id = $this->internacao_m->apagarfaturarprocedimentosinternacaoevolucao($forma_pagamento_id, $internacao_id, $data_pag);
+        
+        if ($ambulatorio_guia_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar pagamento. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao excluir pagamento.';
+        }
+
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "internacao/internacao/faturarmodelo2internacao/$internacao_id/$paciente_id", $data);
+    
+    }
+
+    function apagarfaturarmodelo2internacao($internacao_faturar_id, $internacao_id, $paciente_id) {
+        
+        $ambulatorio_guia_id = $this->internacao_m->apagarfaturarmodelo2internacao($internacao_faturar_id, $internacao_id);
+
+        if ($ambulatorio_guia_id == "-1") {
+            $data['mensagem'] = 'Erro ao excluir pagamento.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao excluir pagamento.';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "internacao/internacao/faturarmodelo2internacao/$internacao_id/$paciente_id", $data);
+    }
+
+    function apagarfaturarmodelo2internacaoevolucao($internacao_evolucao_faturar_id, $internacao_evolucao_id, $internacao_id, $paciente_id) {
+        
+        $ambulatorio_guia_id = $this->internacao_m->apagarfaturarmodelo2internacaoevolucao($internacao_evolucao_faturar_id, $internacao_evolucao_id);
+
+        if ($ambulatorio_guia_id == "-1") {
+            $data['mensagem'] = 'Erro ao excluir pagamento.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao excluir pagamento.';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "internacao/internacao/faturarmodelo2internacaoevolucao/$internacao_evolucao_id/$internacao_id/$paciente_id", $data);
     }
 
     function listarevolucaointernacao($internacao_id) {
         $data['lista'] = $this->internacao_m->listarevolucoes($internacao_id);
+        if(count($data['lista']) > 0){
+           $data['paciente_id'] = $data['lista'][0]->paciente_id; 
+        }
         $data['internacao_id'] = $internacao_id;
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
         $this->loadView('internacao/evolucaointernacao-lista', $data);
     }
 
@@ -782,6 +940,10 @@ class internacao extends BaseController {
     function editarevolucaointernacao($internacao_evolucao_id, $internacao_id) {
         $data['lista'] = $this->internacao_m->editarevolucaointernacao($internacao_evolucao_id);
 //        var_dump( $data['lista']); die;
+        // echo '<pre>';
+        // print_r($data['lista']);
+        // die;
+        $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
         $data['internacao_id'] = $internacao_id;
         $data['internacao_evolucao_id'] = $internacao_evolucao_id;
         $this->loadView('internacao/evolucaointernacaoeditar', $data);
@@ -874,6 +1036,9 @@ class internacao extends BaseController {
     }
 
     function gravarevolucaointernacao($internacao_id) {
+        // echo '<pre>';
+        // print_r($_POST);
+        // die;
         $_POST["internacao_id"] = $internacao_id;
         $data["internacao_id"] = $internacao_id;
         $this->internacao_m->gravarevolucaointernacao();
@@ -965,6 +1130,45 @@ class internacao extends BaseController {
             $this->session->set_flashdata('message', $data['mensagem']);
             redirect(base_url() . "internacao/internacao/retornarinternacao/$internacao_id");
         }
+    }
+
+    function relatoriocaixainternacao() {
+        $data['operadores'] = $this->operador_m->listartecnicos();
+        $data['empresa'] = $this->guia->listarempresas();
+        $data['medicos'] = $this->operador_m->listarmedicostodos();
+//        $data['grupos'] = $this->procedimento->listargrupos();
+//        $data['procedimentos'] = $this->procedimento->listarprocedimentos();
+//        $data['grupomedico'] = $this->grupomedico->listargrupomedicos();
+        $this->loadView('internacao/relatoriocaixainternacao', $data);
+    }
+
+    function gerarelatoriocaixainternacao(){
+        $data['operador'] = $this->operador_m->listaroperador($_POST['operador']);
+        $data['medico'] = $this->operador_m->listaroperador($_POST['medico']);
+        $data['txtdata_inicio'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+        $data['txtdata_fim'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
+        $data['empresa'] = $this->guia->listarempresa($_POST['empresa']);
+        $data['relatorio'] = $this->internacao_m->relatoriocaixainternacao();
+        $data['paciente_evolucoes'] = $this->internacao_m->relatoriocaixainternacaoevolucao(0);
+        $data['formapagamento'] = $this->formapagamento->listarformanaocredito();
+
+        $this->load->View('internacao/impressaorelatoriocaixainternacao', $data);
+    }
+
+    function fecharcaixainternacao(){
+            //    echo '<pre>';
+            //    print_r($_POST); die;
+            $caixa = $this->internacao_m->fecharcaixainternacao();
+
+            if ($caixa == "-1") {
+                $data['mensagem'] = 'Erro ao fechar caixa. Opera&ccedil;&atilde;o cancelada.';
+            } elseif ($caixa == 10) {
+                $data['mensagem'] = 'Erro ao fechar caixa. Forma de pagamento não configurada corretamente.';
+            } else {
+                $data['mensagem'] = 'Sucesso ao fechar caixa.';
+            }
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "internacao/internacao/relatoriocaixainternacao", $data);
     }
 
     function gravarinternacaonutricao($paciente_id) {

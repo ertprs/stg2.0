@@ -1,6 +1,6 @@
 <div class="content"> <!-- Inicio da DIV content -->
     <div class="bt_link_voltar">
-        <a href="<?= base_url() ?>ambulatorio/agenda">
+        <a class="btn btn-outline-primary btn-sm" href="<?= base_url() ?>ambulatorio/agenda">
             Voltar
         </a>
     </div>
@@ -8,48 +8,44 @@
         <h3 class="singular"><a href="#">Cadastro de Horario</a></h3>
         <div>
             <form name="form_horariostipo" id="form_horariostipo" action="<?= base_url() ?>ambulatorio/agenda/gravarmodelo2" method="post">
-
-                <dl class="dl_desconto_lista">
-                    <dt>
-                        <label>Nome*</label>
-                    </dt>
-                    <dd>
-                        <input type="hidden" name="txthorariostipoID" value="<?= @$obj->_agenda_id; ?>" />
-                        <input type="text" name="txtNome" class="texto10 bestupper" value="<?= @$obj->_nome; ?>" required/>
-                    </dd>
-
-                    <dt>
-                        <label>Medico *</label>
-                    </dt>
-                    
-                    <dd>
-                        <select name="medico_id" id="txtmedico" class="size4" required>
-                            <option value="">Selecione</option>
-                            <? foreach ($medico as $item) : ?>
-                                <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
-                            <? endforeach; ?>
-                        </select>
-                    </dd>
-                    
-                    <dt>
-                        <label>Tipo Agenda *</label>
-                    </dt>
-                    <dd>
-                        
-                        <select name="tipo_agenda" id="tipo_agenda" class="size4" required>
-                            <option value="">Selecione</option>
-                            <? foreach ($tipo as $item) : ?>
-                                <option value="<?= $item->ambulatorio_tipo_consulta_id; ?>"><?= $item->descricao; ?></option>
-                            <? endforeach; ?>
-                        </select>
-                    </dd>
-                    
-                </dl>    
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Nome*</label>
+                                <input type="hidden" name="txthorariostipoID" value="<?= @$obj->_agenda_id; ?>" />
+                                <input type="text" name="txtNome" class="texto10 bestupper form-control" value="<?= @$obj->_nome; ?>" required/>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Medico *</label>
+                                <select name="medico_id" id="txtmedico" class="form-control" required>
+                                    <option value="">Selecione</option>
+                                    <? foreach ($medico as $item) : ?>
+                                        <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div>
+                                <label>Tipo Agenda *</label>
+                                <select name="tipo_agenda" id="tipo_agenda" class="form-control" required>
+                                    <option value="">Selecione</option>
+                                    <? foreach ($tipo as $item) : ?>
+                                        <option value="<?= $item->ambulatorio_tipo_consulta_id; ?>"><?= $item->descricao; ?></option>
+                                    <? endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
 
                 <hr/>
-                <button type="submit" name="btnEnviar">Enviar</button>
-                <button type="reset" name="btnLimpar">Limpar</button>
-                <button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
+                <button class="btn btn-outline-success btn-sm" type="submit" name="btnEnviar">Enviar</button>
+                <button class="btn btn-outline-warning btn-sm" type="reset" name="btnLimpar">Limpar</button>
+                <button class="btn btn-outline-default btn-sm" type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
             </form>
         </div>
     </div>

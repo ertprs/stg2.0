@@ -2319,7 +2319,9 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
                             sc.solicitacao_cirurgia_id,
                             sc.operatorio,
                             ae.data_faturamento,
-                            ae.data_cadastro');
+                            ae.data_cadastro,
+                            spc.ativo as pativo,
+                            spc.solicitacao_cirurgia_procedimento_id');
         $this->db->from('tb_agenda_exames ae');
         $this->db->join('tb_paciente p', 'p.paciente_id = ae.paciente_id', 'left');
         $this->db->join('tb_procedimento_convenio pc', 'pc.procedimento_convenio_id = ae.procedimento_tuss_id', 'left');
@@ -2337,8 +2339,7 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
         $this->db->join('tb_forma_pagamento f4', 'f4.forma_pagamento_id = ae.forma_pagamento4', 'left');
         $this->db->join('tb_operador o', 'o.operador_id = ae.operador_autorizacao', 'left');
         $this->db->join('tb_operador o2', 'o2.operador_id = aee.operador_responsavel', 'left');
-        $this->db->join('tb_operador_grupo_medico ogm', 'ae.medico_consulta_id = ogm.operador_id', 'left');
- 
+        $this->db->join('tb_operador_grupo_medico ogm', 'ae.medico_consulta_id = ogm.operador_id', 'left'); 
         $this->db->join('tb_operador op', 'op.operador_id = ae.operador_faturamento', 'left');
  
         $this->db->where('aee.funcao', 0);
@@ -2370,6 +2371,7 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
  
         $this->db->orderby('ae.data');
         $this->db->orderby('p.nome');
+        $this->db->groupby('ae.agenda_exames_id,pt.grupo,c.nome,c.dinheiro,pc.valortotal,p.nome,pt.nome,o.nome,o2.nome,e.exames_id,op.nome,f.nome,f2.nome,f3.nome,f4.nome,pt.descricao,pt.codigo,sc.solicitacao_cirurgia_id,spc.ativo,spc.solicitacao_cirurgia_procedimento_id');
         $return = $this->db->get();
         return $return->result();
     }
@@ -2390,7 +2392,7 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
         
         
         
-        $observacao = "Periodo de " . date("d/m/Y", strtotime(str_replace("/", "-", $_POST['data1']))) . " a " . date("d/m/Y", strtotime(str_replace("/", "-", $_POST['data2'])));
+        $observacao = "Caixa Periodo de " . date("d/m/Y", strtotime(str_replace("/", "-", $_POST['data1']))) . " a " . date("d/m/Y", strtotime(str_replace("/", "-", $_POST['data2'])));
         $data = date("Y-m-d");
         $data30 = date('Y-m-d', strtotime("+30 days", strtotime($data_cauculo)));
         $data4 = date('Y-m-d', strtotime("+4 days", strtotime($data_cauculo)));
@@ -2451,6 +2453,7 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
                     $this->db->set('empresa_id', $empresa_id);
                     $this->db->set('tipo','CAIXA');
                     $this->db->set('operador_cadastro', $operador_id);
+                     $this->db->set('data_inicio',$data_inicio);
                     $this->db->insert('tb_entradas');
                     $entradas_id = $this->db->insert_id();
 
@@ -2463,10 +2466,10 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
                     $this->db->set('empresa_id', $empresa_id);
                     $this->db->set('data_cadastro', $horario);
                     $this->db->set('operador_cadastro', $operador_id);
+                     $this->db->set('data_inicio',$data_inicio);
                     $this->db->insert('tb_saldo');
                 } else {
-
-
+ 
 //                    echo $classe, ' => ';
                     // Primeiro caso de Cartão
                     if (isset($value->dia_receber) && $value->dia_receber > 0) {
@@ -2543,6 +2546,7 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
                                 $this->db->set('observacao', $observacao);
                                 $this->db->set('data_cadastro', $horario);
                                 $this->db->set('operador_cadastro', $operador_id);
+                                $this->db->set('forma_pagamento_id', $value->forma_pagamento_id);
                                 $this->db->insert('tb_financeiro_contasreceber_temp');
 
                                 $data_receber_p = date("Y-m-d", strtotime("+$tempo_receber days", strtotime($data_atual)));
@@ -2550,7 +2554,7 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
                             $valor_n_parcelado = $valor_n_parcelado - $valor + $valor_parcelado;
                         }
 
-
+                        $referencia_pagamento_antecipado = 0;
                         $receber_temp = $this->burcarcontasrecebertemp();
                         foreach ($receber_temp as $temp) {
                             $receber_temp2 = $this->burcarcontasrecebertemp2($temp->data);
@@ -2565,8 +2569,19 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
                             $this->db->set('data_cadastro', $receber_temp2[0]->data_cadastro);
                             $this->db->set('operador_cadastro', $receber_temp2[0]->operador_cadastro);
                             $this->db->set('empresa_id', $empresa_id);
+                            $this->db->set('tipo','CAIXA');
+                            $this->db->set('data_inicio',$data_inicio);
+                            $this->db->set('forma_pagamento_id', $receber_temp2[0]->forma_pagamento_id);  
 //                            var_dump($empresa_id); die;
                             $this->db->insert('tb_financeiro_contasreceber');
+                            $financeiro_contasreceber = $this->db->insert_id();
+                            if($referencia_pagamento_antecipado == 0){
+                            $referencia_pagamento_antecipado = $financeiro_contasreceber;
+                            }
+                            $this->db->set('referencia_pagamento_antecipado', $referencia_pagamento_antecipado);
+                            $this->db->where('financeiro_contasreceber_id',$financeiro_contasreceber);
+                            $this->db->update('tb_financeiro_contasreceber');
+                            
                         }
                         $this->db->set('ativo', 'f');
                         $this->db->update('tb_financeiro_contasreceber_temp');
@@ -2575,6 +2590,7 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
 
                             $valor_n_parcelado = $valor_total;
                             $agenda_exames_id = $this->relatoriocaixaformacirurgico($value->forma_pagamento_id);
+                            
                             foreach ($agenda_exames_id as $item) {
                                 if ($item->forma_pagamento == $value->forma_pagamento_id) {
                                     $parcelas = $item->parcelas1;
@@ -2629,6 +2645,7 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
                                     $this->db->set('observacao', $observacao);
                                     $this->db->set('data_cadastro', $horario);
                                     $this->db->set('operador_cadastro', $operador_id);
+                                    $this->db->set('forma_pagamento_id', $value->forma_pagamento_id);
                                     $this->db->insert('tb_financeiro_contasreceber_temp');
 
                                     $data_receber_p = date("Y-m-d", strtotime("+$tempo_receber days", strtotime($data_atual)));
@@ -2637,7 +2654,7 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
                             }
 
                             $receber_temp = $this->burcarcontasrecebertemp();
-
+                            $referencia_pagamento_antecipado = 0;
                             foreach ($receber_temp as $temp) {
                                 $receber_temp2 = $this->burcarcontasrecebertemp2($temp->data);
                                 $this->db->set('valor', $receber_temp2[0]->valor);
@@ -2652,7 +2669,17 @@ INSERT INTO ponto.tb_centrocirurgico_percentual_outros(leito_enfermaria, leito_a
                                 $this->db->set('empresa_id', $empresa_id);
 //                                                            var_dump($empresa_id); die;
                                 $this->db->set('operador_cadastro', $receber_temp2[0]->operador_cadastro);
+                                $this->db->set('tipo','CAIXA');
+                                $this->db->set('data_inicio',$data_inicio);
+                                $this->db->set('forma_pagamento_id', $receber_temp2[0]->forma_pagamento_id);
                                 $this->db->insert('tb_financeiro_contasreceber');
+                                $financeiro_contasreceber = $this->db->insert_id();
+                                if($referencia_pagamento_antecipado == 0){
+                                $referencia_pagamento_antecipado = $financeiro_contasreceber;
+                                }
+                                $this->db->set('referencia_pagamento_antecipado', $referencia_pagamento_antecipado);
+                                $this->db->where('financeiro_contasreceber_id',$financeiro_contasreceber);
+                                $this->db->update('tb_financeiro_contasreceber');
                             }
 //                            
 //                            $valor_n_parcelado = $valor_total;
@@ -2839,7 +2866,8 @@ ORDER BY ae.agenda_exames_id)";
                            operador_cadastro,
                            entrada_id,
                            conta,
-                           classe');
+                           classe,
+                           forma_pagamento_id');
         $this->db->from('tb_financeiro_contasreceber_temp');
         $this->db->where('data', $data);
         $this->db->where('ativo', 't');
@@ -2851,6 +2879,7 @@ ORDER BY ae.agenda_exames_id)";
         $this->db->groupby('entrada_id');
         $this->db->groupby('conta');
         $this->db->groupby('classe');
+        $this->db->groupby('forma_pagamento_id');
         $return = $this->db->get();
         return $return->result();
     }
@@ -3797,6 +3826,8 @@ ORDER BY ae.agenda_exames_id)";
 //        $this->db->orderby('pc.convenio_id');
         $this->db->orderby('ae.data');
         $this->db->orderby('sc.internacao_id');
+        
+        $this->db->groupby('ae.agenda_exames_id,pt.grupo,c.nome,c.dinheiro,pc.valortotal,p.nome,pt.nome,o.nome,o2.nome,e.exames_id,op.nome,f.nome,f2.nome,f3.nome,f4.nome,pt.descricao,pt.codigo,sc.solicitacao_cirurgia_id');
         $return = $this->db->get();
         return $return->result();
     }
@@ -4033,7 +4064,7 @@ ORDER BY ae.agenda_exames_id)";
                 $pagamento = $returno[0]->pagamento;
                 $pagamentodata = substr($data, 0, 7) . "-" . $returno[0]->entrega;
         
-              // var_dump($pagamentodata);
+               // var_dump($pagamentodata);
                //die;
                 $data_inicio_observacao = date('d/m/Y', strtotime($data_inicio));
                 $data_fim_observacao = date('d/m/Y', strtotime($data_fim));
@@ -4114,6 +4145,7 @@ ORDER BY ae.agenda_exames_id)";
                     $this->db->set('data_cadastro', $horario);
                     $this->db->set('empresa_id', $empresa_id);
                     $this->db->set('operador_cadastro', $operador_id);
+                    $this->db->set('data_inicio',$data_inicio);
                     $this->db->insert('tb_financeiro_contasreceber');  
                     }else{
                        $financeiro = -1; 
@@ -4252,6 +4284,7 @@ ORDER BY ae.agenda_exames_id)";
                     $this->db->set('empresa_id', $empresa_id);
                     $this->db->set('operador_cadastro', $operador_id);
                     $this->db->set('tipo','CAIXA');
+                    $this->db->set('data_inicio',$data_inicio);
                     $this->db->insert('tb_entradas');
                     $entradas_id = $this->db->insert_id();
 
@@ -4264,6 +4297,7 @@ ORDER BY ae.agenda_exames_id)";
                     $this->db->set('empresa_id', $empresa_id);
                     $this->db->set('data_cadastro', $horario);
                     $this->db->set('operador_cadastro', $operador_id);
+                     $this->db->set('data_inicio',$data_inicio);
                     $this->db->insert('tb_saldo');
                     
                 } else { 
@@ -4284,7 +4318,7 @@ ORDER BY ae.agenda_exames_id)";
                         }
 
                         $valor_n_parcelado = $valor_total;
-                        $agenda_exames_id = $this->relatoriocaixaforma($value->forma_pagamento_id);
+                        $agenda_exames_id = $this->relatoriocaixaformainternacao($value->forma_pagamento_id);
                         // Pega o valor da agenda exames com essa forma de pagamento
                         foreach ($agenda_exames_id as $item) {
                             // A partir daqui vai rodar um foreach com os pagamentos no relatório de caixa e verificar as parcelas de cada um
@@ -4343,6 +4377,7 @@ ORDER BY ae.agenda_exames_id)";
                                 $this->db->set('observacao', $observacao);
                                 $this->db->set('data_cadastro', $horario);
                                 $this->db->set('operador_cadastro', $operador_id);
+                                $this->db->set('forma_pagamento_id', $value->forma_pagamento_id);
                                 $this->db->insert('tb_financeiro_contasreceber_temp');
 
                                 $data_receber_p = date("Y-m-d", strtotime("+$tempo_receber days", strtotime($data_atual)));
@@ -4350,7 +4385,7 @@ ORDER BY ae.agenda_exames_id)";
                             $valor_n_parcelado = $valor_n_parcelado - $valor + $valor_parcelado;
                         }
 
-
+                        $referencia_pagamento_antecipado = 0;
                         $receber_temp = $this->burcarcontasrecebertemp();
                         foreach ($receber_temp as $temp) {
                             $receber_temp2 = $this->burcarcontasrecebertemp2($temp->data);
@@ -4365,8 +4400,18 @@ ORDER BY ae.agenda_exames_id)";
                             $this->db->set('data_cadastro', $receber_temp2[0]->data_cadastro);
                             $this->db->set('operador_cadastro', $receber_temp2[0]->operador_cadastro);
                             $this->db->set('empresa_id', $empresa_id);
+                            $this->db->set('tipo','CAIXA');
+                            $this->db->set('data_inicio',$data_inicio);
+                            $this->db->set('forma_pagamento_id', $receber_temp2[0]->forma_pagamento_id); 
 //                            var_dump($empresa_id); die;
                             $this->db->insert('tb_financeiro_contasreceber');
+                            $financeiro_contasreceber = $this->db->insert_id();
+                            if($referencia_pagamento_antecipado == 0){
+                            $referencia_pagamento_antecipado = $financeiro_contasreceber;
+                            }
+                            $this->db->set('referencia_pagamento_antecipado', $referencia_pagamento_antecipado);
+                            $this->db->where('financeiro_contasreceber_id',$financeiro_contasreceber);
+                            $this->db->update('tb_financeiro_contasreceber');
                         }
                         $this->db->set('ativo', 'f');
                         $this->db->update('tb_financeiro_contasreceber_temp');
@@ -4374,7 +4419,8 @@ ORDER BY ae.agenda_exames_id)";
                         if (isset($value->tempo_receber) && $value->tempo_receber > 0) {
 
                             $valor_n_parcelado = $valor_total;
-                            $agenda_exames_id = $this->relatoriocaixaforma($value->forma_pagamento_id);
+                            $agenda_exames_id = $this->relatoriocaixaformainternacao($value->forma_pagamento_id);
+                              
                             foreach ($agenda_exames_id as $item) {
                                 if ($item->forma_pagamento == $value->forma_pagamento_id) {
                                     $parcelas = $item->parcelas1;
@@ -4429,6 +4475,7 @@ ORDER BY ae.agenda_exames_id)";
                                     $this->db->set('observacao', $observacao);
                                     $this->db->set('data_cadastro', $horario);
                                     $this->db->set('operador_cadastro', $operador_id);
+                                    $this->db->set('forma_pagamento_id', $value->forma_pagamento_id);
                                     $this->db->insert('tb_financeiro_contasreceber_temp');
 
                                     $data_receber_p = date("Y-m-d", strtotime("+$tempo_receber days", strtotime($data_atual)));
@@ -4437,7 +4484,7 @@ ORDER BY ae.agenda_exames_id)";
                             }
 
                             $receber_temp = $this->burcarcontasrecebertemp();
-
+                            $referencia_pagamento_antecipado = 0;
                             foreach ($receber_temp as $temp) {
                                 $receber_temp2 = $this->burcarcontasrecebertemp2($temp->data);
                                 $this->db->set('valor', $receber_temp2[0]->valor);
@@ -4451,9 +4498,19 @@ ORDER BY ae.agenda_exames_id)";
                                 $this->db->set('data_cadastro', $receber_temp2[0]->data_cadastro);
                                 $this->db->set('empresa_id', $empresa_id); 
                                 $this->db->set('operador_cadastro', $receber_temp2[0]->operador_cadastro);
+                                $this->db->set('tipo','CAIXA');
+                                $this->db->set('data_inicio',$data_inicio);
+                                $this->db->set('forma_pagamento_id', $receber_temp2[0]->forma_pagamento_id);
                                 $this->db->insert('tb_financeiro_contasreceber');
-                            } 
- 
+                                
+                                $financeiro_contasreceber = $this->db->insert_id();
+                                if($referencia_pagamento_antecipado == 0){
+                                $referencia_pagamento_antecipado = $financeiro_contasreceber;
+                                }
+                                $this->db->set('referencia_pagamento_antecipado', $referencia_pagamento_antecipado);
+                                $this->db->where('financeiro_contasreceber_id',$financeiro_contasreceber);
+                                $this->db->update('tb_financeiro_contasreceber');
+                            }  
                             $this->db->set('ativo', 'f');
                             $this->db->update('tb_financeiro_contasreceber_temp');
                         }
@@ -4679,9 +4736,50 @@ ORDER BY ae.agenda_exames_id)";
 //        $this->db->where("ae.data >=", date("Y-m-d", strtotime(str_replace('/', '-', $_POST['data1'])))); 
 //        $this->db->where("ae.data <=", date("Y-m-d", strtotime(str_replace('/', '-', $_POST['data2']))));
 
-        $this->db->where("(CASE WHEN ae.faturado = 'true' THEN ae.data_faturamento >= '$data_inicial 00:00:00' ELSE ae.data_faturar >= '$data_inicial' END)");
-        $this->db->where("(CASE WHEN ae.faturado = 'true' THEN ae.data_faturamento <= '$data_fim 23:59:59' ELSE ae.data_faturar <= '$data_fim' END)");
-        
+//        $this->db->where("(CASE WHEN ae.faturado = 'true' THEN ae.data_faturamento >= '$data_inicial 00:00:00' ELSE ae.data_faturar >= '$data_inicial' END)");
+//        $this->db->where("(CASE WHEN ae.faturado = 'true' THEN ae.data_faturamento <= '$data_fim 23:59:59' ELSE ae.data_faturar <= '$data_fim' END)");
+        $this->db->where("ae.data_cadastro >=", date("Y-m-d", strtotime(str_replace('/', '-', $_POST['data1'])))." 00:00:00"); 
+        $this->db->where("ae.data_cadastro <=", date("Y-m-d", strtotime(str_replace('/', '-', $_POST['data2'])))." 23:59:59");
+       
+        $this->db->where('c.dinheiro', 't');
+        if (isset($_POST['empresa'])) {
+            $this->db->where('ae.empresa_id', $_POST['empresa']);
+        } 
+        $return = $this->db->get();
+        return $return->result();
+    }
+     
+    
+     function relatoriocaixaformainternacao($formapagamento_id) { 
+        $this->db->select('ae.agenda_exames_id,
+                            ae.valor1,
+                            ae.parcelas1,
+                            ae.forma_pagamento,
+                            ae.valor2,
+                            ae.parcelas2,
+                            ae.forma_pagamento2,
+                            ae.valor3,
+                            ae.parcelas3,
+                            ae.forma_pagamento3,
+                            ae.valor4,
+                            ae.parcelas4,
+                            ae.forma_pagamento4');
+        $this->db->from('tb_agenda_exames ae');
+        $this->db->join('tb_procedimento_convenio pc', 'pc.procedimento_convenio_id = ae.procedimento_tuss_id', 'left');
+        $this->db->join('tb_convenio c', 'c.convenio_id = pc.convenio_id', 'left'); 
+        $this->db->join('tb_solicitacao_cirurgia_procedimento spc', 'spc.agenda_exames_id = ae.agenda_exames_id', 'left');
+        $this->db->join('tb_solicitacao_cirurgia sc', 'sc.solicitacao_cirurgia_id = spc.solicitacao_cirurgia_id', 'left');  
+        $this->db->where("(ae.forma_pagamento  = $formapagamento_id OR ae.forma_pagamento2 = $formapagamento_id OR 
+                           ae.forma_pagamento3 = $formapagamento_id OR ae.forma_pagamento4 = $formapagamento_id)");
+        $this->db->where('ae.cancelada', 'false');
+        $this->db->where('ae.confirmado', 'true');
+        $this->db->where('ae.financeiro', 'f');
+//        $this->db->where('pt.home_care', 'f');
+        $this->db->where("ae.data >=", date("Y-m-d", strtotime(str_replace('/', '-', $_POST['data1']))));
+        $this->db->where("ae.data <=", date("Y-m-d", strtotime(str_replace('/', '-', $_POST['data2']))));
+        $this->db->where("(sc.excluido = 'f' or sc.excluido is null)");
+        $this->db->where("(sc.operatorio = 'INTERNACAO' or sc.operatorio is null)");
+        $this->db->where("(sc.internacao_id is not null)");
         $this->db->where('c.dinheiro', 't');
         if (isset($_POST['empresa'])) {
             $this->db->where('ae.empresa_id', $_POST['empresa']);

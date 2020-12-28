@@ -28,6 +28,7 @@ class Contaspagar extends BaseController {
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');
+        
         if ($this->session->userdata('autenticado') != true) {
             redirect(base_url() . "login/index/login004", "refresh");
         }
@@ -272,6 +273,7 @@ class Contaspagar extends BaseController {
 
     function excluir($financeiro_contaspagar_id) {
         $valida = $this->contaspagar->excluir($financeiro_contaspagar_id);
+         $this->caixa->salvarauditoriafinanceiro($financeiro_contaspagar_id,'CONTAS A PAGAR','EXCLUSÃO');
         // Apaga os arquivos
         if (is_dir("./upload/contasapagar")) {
             $this->load->helper('directory');
@@ -461,13 +463,21 @@ class Contaspagar extends BaseController {
                     }
                 }
             }
+            
+             if ($financeiro_contaspagar_id != "-1") {
+                 $this->caixa->salvarauditoriafinanceiro($financeiro_contaspagar_id,'CONTAS A PAGAR','CADASTRO');
+              }
         } 
         else {
             $financeiro_contaspagar_id = $this->contaspagar->gravar($dia, $parcela, $credor_id, $id_agrupador);
+             if ($financeiro_contaspagar_id != "-1") {
+                 $this->caixa->salvarauditoriafinanceiro($financeiro_contaspagar_id,'CONTAS A PAGAR','EDIÇÃO');
+            }
         }
         if ($financeiro_contaspagar_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar a Contas a pagar. Opera&ccedil;&atilde;o cancelada.';
         } else {
+           
             $data['mensagem'] = 'Sucesso ao gravar a Contas a pagar.';
             $this->importararquivoNovo($financeiro_contaspagar_id);
         }
@@ -771,6 +781,7 @@ class Contaspagar extends BaseController {
     function confirmar($financeiro_contaspagar_id) {
 //        var_dump($_POST['conta']);
 //        die;
+        $this->caixa->salvarauditoriafinanceiro($financeiro_contaspagar_id,'CONTAS A PAGAR','CONFIRMAÇÃO');
         if ($_POST['conta_id'] == '') {
             $data['mensagem'] = 'Associe uma conta a este pagamento';
             $this->session->set_flashdata('message', $data['mensagem']);
@@ -787,6 +798,8 @@ class Contaspagar extends BaseController {
         } else {
             $data['mensagem'] = 'Sucesso ao confirmar a Contas a pagar.';
         }
+         
+
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/contaspagar");
     }
@@ -864,8 +877,9 @@ class Contaspagar extends BaseController {
                 $data = array('upload_data' => $this->upload->data());
             }
         }
-
+ 
         $data['financeiro_contaspagar_id'] = $financeiro_contaspagar_id;
+        $this->caixa->salvarauditoriafinanceiro($financeiro_contaspagar_id,'CONTAS A PAGAR','ADICIONOU ARQUIVO');
         redirect(base_url() . "cadastros/contaspagar/anexarimagemcontasapagar/$financeiro_contaspagar_id");
     }
 
