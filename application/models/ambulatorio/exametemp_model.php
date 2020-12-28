@@ -12094,6 +12094,16 @@ class exametemp_model extends Model {
             $this->db->where('ptcd.valor > 0');
             return $this->db; 
         }
+
+        function listartcd2($paciente_id){ 
+            $this->db->select('ptcd.paciente_tcd_id, p.nome,ptcd.valor,ptcd.data,ptcd.paciente_id,ptcd.observacao,ptcd.orcamento_id,ptcd.paciente_tcd_id,ptcd.confirmado, ptcd.guia_id_modelo2');
+            $this->db->from('tb_paciente_tcd ptcd');
+            $this->db->join('tb_paciente p','p.paciente_id = ptcd.paciente_id','left');
+            $this->db->where('ptcd.paciente_id',$paciente_id);
+            $this->db->where('ptcd.ativo','t'); 
+            $this->db->where('ptcd.valor > 0');
+            return $this->db->get()->result(); 
+        }
     
        function listarprocedimentosorcamentotcd($orcamento_id) {
             $horario = date("Y-m-d");
@@ -12216,6 +12226,17 @@ class exametemp_model extends Model {
         $this->db->where('ptcd.ativo','t'); 
         $this->db->where('ptcd.valor < 0');
         return $this->db; 
+    }
+
+    function listartcdusados2($paciente_id){ 
+        $this->db->select('p.nome,ptcd.valor,ptcd.data,ptcd.paciente_id,ptcd.observacao,ptcd.orcamento_id,ptcd.paciente_tcd_id,ptcd.data_cadastro,op.nome as operador_cadastro,ptcd.agenda_exames_id');
+        $this->db->from('tb_paciente_tcd ptcd');
+        $this->db->join('tb_paciente p','p.paciente_id = ptcd.paciente_id','left');
+        $this->db->join('tb_operador op','op.operador_id = ptcd.operador_cadastro');
+        $this->db->where('ptcd.paciente_id',$paciente_id);
+        $this->db->where('ptcd.ativo','t'); 
+        $this->db->where('ptcd.valor < 0');
+        return $this->db->get()->result(); 
     }
     
     function confirmartcd($paciente_tcd_id){

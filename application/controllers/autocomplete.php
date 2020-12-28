@@ -1809,6 +1809,74 @@ class Autocomplete extends Controller {
 //        }
     }
 
+
+    function listarhorarioscalendario2() {
+        //echo $_POST['custom_param1'];
+        if (isset($_POST['medico']) || isset($_POST['especialidade'])) {
+            $result = $this->exametemp->listarhorarioscalendariovago($_POST['medico'],$_POST['especialidade']);
+        } else {
+            $result = $this->exametemp->listarhorarioscalendariovago();
+        }
+
+        $var = Array();
+        $i = 0;
+        //$result2 = $this->exametemp->listarhorarioscalendarioocupado();
+
+        foreach ($result as $item) {
+            $i++;
+            $retorno['id'] = $i;
+            if ($item->situacao == 'LIVRE') {
+                $retorno['title'] = 'H: Vagos: ' . $item->contagem;
+            } else {
+                $retorno['title'] = 'H: Ocupados: ' . $item->contagem;
+            }
+
+            $retorno['start'] = $item->data;
+            $retorno['end'] = $item->data;
+            if ($item->situacao == 'LIVRE') {
+                $retorno['color'] = '#92DBC7';
+            } else {
+                $retorno['color'] = '#36C4D0';
+            }
+            $situacao = $item->situacao;
+            if(isset($item->medico)) {
+              $medico = $item->medico;
+                
+            }else{
+                $medico = null;
+            }
+            if(isset($item->especialidade)) {
+              $especialidade = $item->especialidade;
+                
+            }else{
+                $especialidade = null;
+            }
+
+            $dia = date("d", strtotime($item->data));
+            $mes = date("m", strtotime($item->data));
+            $ano = date("Y", strtotime($item->data));
+            
+            //$medico = $item->medico;
+                
+              $retorno['url'] = "../../ambulatorio/exame/listarmultifuncaomedicoconsulta?empresa=&especialidade=$especialidade&medico=$medico&situacao=$situacao&data=$dia%2F$mes%2F$ano&nome=";
+
+
+            $var[] = $retorno;
+        }
+        echo json_encode($var);
+
+            //        foreach ($result2 as $value) {
+            //            $retorno['title'] =  'H: Ocupados: ' . $value->contagem_ocupado;
+            //            $retorno['start'] = $value->data;
+            //            $retorno['end'] = $value->data;
+            //            $retorno['color'] = '#0E9AA7';
+            //            $dia = date("d", strtotime($item->data));
+            //            $mes = date("m", strtotime($item->data));
+            //            $ano = date("Y", strtotime($item->data));
+            //            $retorno['url'] = "../../ambulatorio/exame/listarmultifuncaoconsulta?empresa=&especialidade=&medico=&situacao=OK&data=$dia%2F$mes%2F$ano&nome=";
+            //            $var[] = $retorno;
+        }
+
     function listarhorarioscalendariopaciente() {
 //            echo $_POST['custom_param1'];
         if (count($_POST) > 0) {
