@@ -158,8 +158,9 @@ $valores_recepcao = @$empresapermissoes[0]->valores_recepcao;
                         <?
                     }
                     ?>
+                    
                         <div class="table-responsive">
-                            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <table width="100%" class="table table-hover">
                                 <tr>
 
                                     <th class="tabela_header">Nome</th>
@@ -190,6 +191,9 @@ $valores_recepcao = @$empresapermissoes[0]->valores_recepcao;
                                         <?php
                                         $lista = $this->paciente->listar($_GET)->orderby('nome')->limit($limit, $pagina)->get()->result();
                                         $estilo_linha = "tabela_content01";
+                                        // echo '<pre>';
+                                        // print_r($lista);
+                                        // die;
                                         foreach ($lista as $item) {
                                             ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
                                             if ($item->celular == "") {
@@ -200,7 +204,7 @@ $valores_recepcao = @$empresapermissoes[0]->valores_recepcao;
                                             ?>
                                             <tr>
 
-                                                <td class="<?php echo $estilo_linha; ?>" colspan="2"><?php echo $item->nome; ?></td>
+                                                <td class="<?php echo $estilo_linha; ?>" colspan="1"><?php echo $item->nome; ?></td>
                                                 <? if ($filtro_exame == 't') { ?>
                                                     <td class="<?php echo $estilo_linha; ?>"></td>
                                                 <? } ?>

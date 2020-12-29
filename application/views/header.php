@@ -195,6 +195,9 @@ function debug($object) {
     <link href="<?= base_url() ?>bootstrap/fullcalendar-scheduler/main.css" rel='stylesheet'/>
     <script src="<?= base_url() ?>bootstrap/fullcalendar-scheduler/main.js"></script>
     <script src="<?= base_url() ?>bootstrap/fullcalendar/locales/pt-br.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="<?= base_url() ?>bootstrap/DataTables/datatables.min.css"/>
+    <script type="text/javascript" src="<?= base_url() ?>bootstrap/DataTables/datatables.min.js"></script>
 
 
     <script>

@@ -108,11 +108,13 @@
                 <a href="<?= base_url() ?>ambulatorio/guia/acompanhamento/<?= $paciente_id ?>">Acompanhamento</a>
             <? } ?>
             <? if ($internacao == 't' && $perfil_id != 24) { ?>
-                <a href="<?= base_url() ?>internacao/internacao/novointernacao/<?= $paciente_id ?>">Internação</a>
-
+                <a class="dropdown-item" href="<?= base_url() ?>internacao/internacao/novointernacao/<?= $paciente_id ?>">Internação</a>
             <? } ?>
-            <? if ($especialidade == 't' && $perfil_id != 24) { ?>
-                <a href="<?= base_url() ?>ambulatorio/exame/autorizarsessaofisioterapia/<?= $paciente_id ?>">Sessao Especialidade</a>
+            <? if ($internacao == 't' && $perfil_id != 24) { ?>
+                <a class="dropdown-item" href="<?= base_url() ?>internacao/internacao/novosolicitacaointernacao/<?= $paciente_id ?>">Sol.Internação</a>
+            <? } ?>
+            <? if (($geral == 't' || $especialidade == 't') && $perfil_id != 24) { ?>
+                <a class="dropdown-item" href="<?= base_url() ?>ambulatorio/exame/autorizarsessaofisioterapia/<?= $paciente_id ?>">Sessao Especialidade</a>
             <? } ?>
 
 
@@ -180,6 +182,10 @@
                 <a class="dropdown-item" href="<?= base_url() ?>ambulatorio/exametemp/excluirpaciente/<?= $paciente_id ?>">Excluir</a>
             <? } ?>
             <a class="dropdown-item" href="<?= base_url() ?>cadastros/pacientes/anexarimagem/<?= $paciente_id ?>">Arquivos</a>
+
+            <? if (@$empresaPermissoes[0]->tarefa_medico == 't' && ($perfil_id == 1 || $perfil_id == 2 || $perfil_id == 3 || ( $perfil_marketing_p == 't' && $perfil_id == 14) || $perfil_id == 5 || ($perfil_id == 18 || $perfil_id == 20) || $perfil_id == 6 || ($perfil_id == 11 || $perfil_id == 21) || $perfil_id == 12 || $perfil_id == 10 || $perfil_id == 15 || $perfil_id == 19 || ( $financeiro_cadastro == 't' && $perfil_id == 13) || ($perfil_id == 7 && @$empresaPermissoes[0]->tecnico_acesso_acesso == 't')) && $perfil_id != 24) { ?>
+                <a  class="dropdown-item" href="<?= base_url() ?>ambulatorio/exametemp/listartarefas/<?= $paciente_id ?>">Tarefas</a>
+            <? } ?>
             <a class="dropdown-item" onclick="javascript: return confirm('Você realmente deseja desativar o paciente? Essa ação é irreversível!!');" href="<?= base_url() ?>cadastros/pacientes/desativarpaciente/<?= $paciente_id ?>">Desativar</a>
         </div>
     </div>
@@ -233,11 +239,11 @@
                 <tr>
                     <? if ($internacao == 't' && $perfil_id != 24) { ?>
 
-                        <td width="100px;"><div class="bt_link_new"><a href="<?= base_url() ?>internacao/internacao/novosolicitacaointernacao/<?= $paciente_id ?>">Sol.Internação</a></div></td>
+                        <!-- <td width="100px;"><div class="bt_link_new"><a class="dropdown-item" href="<?= base_url() ?>internacao/internacao/novosolicitacaointernacao/<?= $paciente_id ?>">Sol.Internação</a></div></td> -->
                     <? } ?>
 
                     <? if (@$empresaPermissoes[0]->tarefa_medico == 't' && ($perfil_id == 1 || $perfil_id == 2 || $perfil_id == 3 || ( $perfil_marketing_p == 't' && $perfil_id == 14) || $perfil_id == 5 || ($perfil_id == 18 || $perfil_id == 20) || $perfil_id == 6 || ($perfil_id == 11 || $perfil_id == 21) || $perfil_id == 12 || $perfil_id == 10 || $perfil_id == 15 || $perfil_id == 19 || ( $financeiro_cadastro == 't' && $perfil_id == 13) || ($perfil_id == 7 && @$empresaPermissoes[0]->tecnico_acesso_acesso == 't')) && $perfil_id != 24) { ?>
-                        <td width="100px;"><div class="bt_link_new"><a  href="<?= base_url() ?>ambulatorio/exametemp/listartarefas/<?= $paciente_id ?>">Tarefas</a></div></td>    
+                        <!-- <td width="100px;"><div class="bt_link_new"><a  class="dropdown-item" href="<?= base_url() ?>ambulatorio/exametemp/listartarefas/<?= $paciente_id ?>">Tarefas</a></div></td>     -->
                     <? } ?>
                 </tr>
                 
