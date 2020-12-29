@@ -160,7 +160,7 @@ $valores_recepcao = @$empresapermissoes[0]->valores_recepcao;
                     ?>
                     
                         <div class="table-responsive">
-                            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <table width="100%" class="table table-hover">
                                 <tr>
 
                                     <th class="tabela_header">Nome</th>
