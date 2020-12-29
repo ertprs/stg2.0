@@ -1,3 +1,4 @@
+
 <?php
 
 require_once APPPATH . 'controllers/base/BaseController.php';
@@ -11,6 +12,7 @@ require_once APPPATH . 'controllers/base/BaseController.php';
  * @package Model
  * @subpackage GIAH
  */
+
 class Exame extends BaseController {
 
     function Exame() {

@@ -1,67 +1,85 @@
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
     <div class="clear"></div>
     <form name="form_exametemp" id="form_exametemp" action="<?= base_url() ?>ambulatorio/exametemp/gravarhorarioexameencaixegeral" method="post">
-        </fieldset>
         <fieldset>
+        <legend>Manter Exames</legend>
+            <div class="row">
+                <div class="col-lg-2">
+                    <div>
+                        <label>Data</label>
+                        <input type="date"  id="data_ficha" name="data_ficha" class="form-control"  required/>
+                        <input type="hidden" name="txtpaciente_id"  value="<?= @$obj->_ambulatorio_pacientetemp_id; ?>" />
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div>
+                        <label>Sala</label>
+                        <select name="sala" id="sala" class="form-control">
+                            <option value="" >Selecione</option>
+                            <? foreach ($salas as $item) : ?>
+                                <option value="<?= $item->exame_sala_id; ?>" <? if (count($salas) == 1) echo 'selected'; ?>>
+                                    <?= $item->nome; ?>
+                                </option>
+                            <? endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div>
+                        <label>Medico</label>
 
-            <legend>Manter Exames</legend>
-            <div>
-                <label>Data</label>
-                <input type="text"  id="data_ficha" name="data_ficha" class="size1"  required/>
-                <input type="hidden" name="txtpaciente_id"  value="<?= @$obj->_ambulatorio_pacientetemp_id; ?>" />
+                        <?php
+                        if ($this->session->userdata('perfil_id') == 4 && $this->session->userdata('medico_agenda') == 't') {
+                            ?>
+                            <select name="medico" id="exame" class="form-control" required>
+                                <? foreach ($medico as $item) : ?>
+                                    <?php if ($item->operador_id == $this->session->userdata('operador_id')) { ?>
+                                        <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
+                                    <?php } ?>
+                                <? endforeach; ?>
+                            </select>
+                        <?php } else { ?>
+                            <select name="medico" id="exame" class="form-control" required>
+                                <option value="" >Selecione</option>
+                                <? foreach ($medico as $item) : ?>
+                                    <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
+                                <? endforeach; ?>
+                            </select>
+                        <?php } ?>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div>
+                        <label>Tipo</label>
+                        <select  name="tipo" id="tipo" class="form-control" >
+                            <option value="EXAME">Exame</option>
+                            <option value="CONSULTA">Consulta</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div>
+                        <label>Horarios</label>
+                        <input type="text" id="horarios" alt="time" class="form-control" name="horarios" required/>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div>
+                        <label>Observa&ccedil;&otilde;es</label>
+                        <input type="text" id="observacoes" class="form-control" name="observacoes" />
+                    </div>
+                </div>
             </div>
-            <div>
-                <label>Sala</label>
-                <select name="sala" id="sala" class="size4">
-                    <option value="" >Selecione</option>
-                    <? foreach ($salas as $item) : ?>
-                        <option value="<?= $item->exame_sala_id; ?>" <? if (count($salas) == 1) echo 'selected'; ?>>
-                            <?= $item->nome; ?>
-                        </option>
-                    <? endforeach; ?>
-                </select>
-            </div>
-            <div>
-                <label>Medico</label>
-
-                <?php
-                if ($this->session->userdata('perfil_id') == 4 && $this->session->userdata('medico_agenda') == 't') {
-                    ?>  
-                    <select name="medico" id="exame" class="size2" required>                     
-                        <? foreach ($medico as $item) : ?>
-                            <?php if ($item->operador_id == $this->session->userdata('operador_id')) { ?>
-                                <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
-                            <?php } ?>
-                        <? endforeach; ?>
-                    </select>
-                <?php } else { ?>  
-                    <select name="medico" id="exame" class="size2" required>
-                        <option value="" >Selecione</option>
-                        <? foreach ($medico as $item) : ?>
-                            <option value="<?= $item->operador_id; ?>"><?= $item->nome; ?></option>
-                        <? endforeach; ?>
-                    </select>
-                <?php } ?> 
-            </div>
-            <div>
-                <label>Tipo</label>
-                <select  name="tipo" id="tipo" class="size1" >
-                    <option value="EXAME">Exame</option>
-                    <option value="CONSULTA">Consulta</option>
-                </select>
-            </div>
-            <div>
-                <label>Horarios</label>
-                <input type="text" id="horarios" alt="time" class="size1" name="horarios" required/>
-            </div>
-            <div>
-                <label>Observa&ccedil;&otilde;es</label>
-                <input type="text" id="observacoes" class="size3" name="observacoes" />
-            </div>
+        </fieldset>
+        <br>
+        <fieldset>
             <div>
                 <label>&nbsp;</label>
-                <button type="submit" name="btnEnviar">Adicionar</button>
+                <button class="btn btn-outline-success btn-sm" type="submit" name="btnEnviar">Adicionar</button>
             </div>
+        </fieldset>
+
+
     </form>
 </fieldset>
 

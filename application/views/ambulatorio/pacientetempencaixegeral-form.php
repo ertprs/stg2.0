@@ -123,37 +123,37 @@
                         <div class="col-lg-2">
                             <div>
                                 <label>Telefone</label>
-                                <input type="text" id="telefone" class="texto02" name="telefone"/>
+                                <input type="text" id="telefone" class="form-control" name="telefone"/>
                             </div>
                         </div>
                         <div class="col-lg-2">
                             <div>
                                 <label>Celular</label>
-                                <input type="text" id="celular" class="texto02" name="celular"/>
+                                <input type="text" id="celular" class="form-control" name="celular"/>
                             </div>
                         </div>
                         <div class="col-lg-2">
                             <div>
                                 <label>Whatsapp</label>
-                                <input type="text" id="whatsapp" class="texto02" name="whatsapp"/>
+                                <input type="text" id="whatsapp" class="form-control" name="whatsapp"/>
                             </div>
                         </div>
                         <div class="col-lg-2">
                             <div>
                                 <label>CPF</label>
-                                <input type="text" id="txtcpf" class="texto02" name="txtcpf" alt="cpf" value=""/>
+                                <input type="text" id="txtcpf" class="form-control" name="txtcpf" alt="cpf" value=""/>
                             </div>
                         </div>
-
-
-
-
-                        <div>
-                            <label>&nbsp;</label>
-                            <button type="submit" name="btnEnviar">Adicionar</button>
-                        </div>
                     </fieldset>
+
                 </div>
+                <br><br>
+                <fieldset>
+                    <div>
+                        <label>&nbsp;</label>
+                        <button class="btn btn-outline-success btn-sm" type="submit" name="btnEnviar">Adicionar</button>
+                    </div>
+                </fieldset>
             </div>
         </form>
     </div>

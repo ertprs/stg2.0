@@ -1,99 +1,119 @@
 <div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
-        <h3 class="singular"><a href="#">Bloqueio / Altera&ccedil;&otilde;s</a></h3>
+        <label>Bloqueio / Altera&ccedil;&otilde;s</label>
         <div>
             <form name="form_medicoagenda" id="form_medicoagenda" action="<?= base_url() ?>ambulatorio/agenda/gravarmedicogeral" method="post">
-
-                <dl class="dl_desconto_lista">
-                    <dt>
-                        <label>A&ccedil;&atilde;o</label>
-                    </dt>
-                    <dd>
-                        <select name="txtacao" size="1" class="texto03" id="teste"  >
-                            <option value="Bloquear">Bloquear</option>
-                            <option value="Alterarmedico">Alterar medico</option>
-                            <option value="Excluir">Excluir hor&aacute;rios</option>
-                        </select>
-                    </dd>
-                    <dt>
-                        <label>Medico</label>
-                    </dt>
-                    <dd>
-                        <?
-                        $operador_id = $this->session->userdata('operador_id');
-                        $perfil_id = $this->session->userdata('perfil_id');
-                        ?>
-                        <select name="medico" id="medico" class="size2">
-                            <option value=""></option>
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <label>A&ccedil;&atilde;o</label>
+                            <select name="txtacao" size="1" class="form-control" id="teste"  >
+                                <option value="Bloquear">Bloquear</option>
+                                <option value="Alterarmedico">Alterar medico</option>
+                                <option value="Excluir">Excluir hor&aacute;rios</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Medico</label>
                             <?
-                            foreach ($medicos as $value) {
-                                if (($value->operador_id == $operador_id && $perfil_id == 4) || $perfil_id != 4) {
-                                    ?>
-                                    <option value="<?= $value->operador_id; ?>"><?php echo $value->nome; ?></option>
-                                    <?
-                                }
-                            }
+                            $operador_id = $this->session->userdata('operador_id');
+                            $perfil_id = $this->session->userdata('perfil_id');
                             ?>
-                        </select>
-                    </dd>
-                    <dt>
-                        <label>Salas</label>
-                    </dt>
-                    <dd>
-                        <select name="sala" id="sala" class="size2">
-                            <option value=""></option>
-                            <? foreach ($salas as $value) : ?>
-                                <option value="<?= $value->exame_sala_id; ?>"><?php echo $value->nome; ?></option>
-                            <? endforeach; ?>
-                        </select>
-                    </dd>
-                    <dt>
-                        <label>Data inicio</label>
-                    </dt>
-                    <dd>
-                        <input type="text"  id="datainicio" name="datainicio" class="size1"/>
-                    </dd>
-                    <dt>
-                        <label>Data fim</label>
-                    </dt>
-                    <dd>
-                        <input type="text"  id="datafim" name="datafim" class="size1"/>
-                    </dd>
-                    <dt>
-                        <label>Hora inicio</label>
-                    </dt>
-                    <dd>
-                        <input type="text" alt="time" id="horainicio" name="horainicio" class="size1"/>
-                    </dd>
-                    <dt>
-                        <label>Hora fim</label>
-                    </dt>
-                    <dd>
-                        <input type="text" alt="time" id="horafim" name="horafim" class="size1"/>
-                    </dd>
-                    <dt>
-                        <label>Observacao</label>
-                    </dt>
-                    <dd>
-                        <textarea type="text" name="txtobservacao" cols="55" class="texto12"></textarea>
-                    </dd>
-                    <br>
-                    <div id="chk_desc_inss">
-                        <input type="checkbox" name="txtsegunda" /><label>Segunda</label>
-                        <input type="checkbox" name="txtterca" /><label>Terca</label>
-                        <input type="checkbox" name="txtquarta" /><label>Quarta</label>
-                        <input type="checkbox" name="txtquinta" /><label>Quinta</label>
-                        <input type="checkbox" name="txtsexta" /><label>Sexta</label>
-                        <input type="checkbox" name="txtsabado" /><label>Sabado</label>
-                        <input type="checkbox" name="txtdomingo" /><label>Domingo</label>
+                            <select name="medico" id="medico" class="form-control">
+                                <option value=""></option>
+                                <?
+                                foreach ($medicos as $value) {
+                                    if (($value->operador_id == $operador_id && $perfil_id == 4) || $perfil_id != 4) {
+                                        ?>
+                                        <option value="<?= $value->operador_id; ?>"><?php echo $value->nome; ?></option>
+                                        <?
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Salas</label>
+                            <select name="sala" id="sala" class="form-control">
+                                <option value=""></option>
+                                <? foreach ($salas as $value) : ?>
+                                    <option value="<?= $value->exame_sala_id; ?>"><?php echo $value->nome; ?></option>
+                                <? endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Data inicio</label>
+                            <input type="text"  id="datainicio" name="datainicio" class="form-control"/>
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Data fim</label>
+                            <input type="text"  id="datafim" name="datafim" class="form-control"/>
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Hora inicio</label>
+                            <input type="text" alt="time" id="horainicio" name="horainicio" class="form-control"/>
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Hora fim</label>
+                            <input type="text" alt="time" id="horafim" name="horafim" class="form-control"/>
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Observacao</label>
+                            <textarea type="text" name="txtobservacao" cols="55" class="form-control"></textarea>
+                        </div>
+                        <br>
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input class="custom-control-input" id="customCheck1" type="checkbox" name="txtsegunda">
+                                    <label class="custom-control-label" for="customCheck1">
+                                        <span>Segunda-feira &nbsp;</span>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input class="custom-control-input" id="customCheck2" type="checkbox" name="txtterca">
+                                    <label class="custom-control-label" for="customCheck2">
+                                        <span>Terça-feira &nbsp;</span>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input class="custom-control-input" id="customCheck3" type="checkbox" name="txtquarta">
+                                    <label class="custom-control-label" for="customCheck3">
+                                        <span>Quarta-Feira &nbsp;</span>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input class="custom-control-input" id="customCheck4" type="checkbox" name="txtquinta">
+                                    <label class="custom-control-label" for="customCheck4">
+                                        <span>Quinta-feira &nbsp;</span>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input class="custom-control-input" id="customCheck5" type="checkbox" name="txtsexta">
+                                    <label class="custom-control-label" for="customCheck5">
+                                        <span>Sexta-feira &nbsp;</span>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input class="custom-control-input" id="customCheck6" type="checkbox" name="txtsabado">
+                                    <label class="custom-control-label" for="customCheck6">
+                                        <span>Sabado &nbsp;</span>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input class="custom-control-input" id="customCheck7" type="checkbox" name="txtdomingo">
+                                    <label class="custom-control-label" for="customCheck7">
+                                        <span>Domingo &nbsp;</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                </dl>    
-
-                <hr/>
-                <button type="submit" name="btnEnviar">Enviar</button>
-                <button type="reset" name="btnLimpar">Limpar</button>
-                <button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
+                </fieldset>
+            <hr/>
+                <button class="btn btn-outline-default btn-sm" type="submit" name="btnEnviar">Enviar</button>
+                <button class="btn btn-outline-default btn-sm" type="reset" name="btnLimpar">Limpar</button>
+                <button class="btn btn-outline-default btn-sm" type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
             </form>
         </div>
     </div>

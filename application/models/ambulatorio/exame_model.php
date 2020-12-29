@@ -7089,7 +7089,7 @@ class exame_model extends Model {
         return $this->db;
     }
 
-    function listarmultifuncao2consulta($args = array(), $ordem_chegada, $ordenacao_situacao = 't') {
+    function listarmultifuncao2consulta($args = array(), $ordem_chegada = 'null', $ordenacao_situacao = 't') {
         $teste = empty($args);
         $operador_id = $this->session->userdata('operador_id');
         $perfil_id = $this->session->userdata('perfil_id');
