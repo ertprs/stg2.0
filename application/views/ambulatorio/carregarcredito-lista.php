@@ -70,13 +70,11 @@ $perfil_id = $this->session->userdata('perfil_id');
         $("#accordion").accordion();
     });
     function confirmarEstorno(credito_id, paciente_id) {
-//        alert('<?= base_url() ?>ambulatorio/exametemp/excluircredito/'+credito_id+'/'+paciente_id+'?justificativa=');
         var resposta = prompt("Informe o motivo do estorno.");
         if (resposta == null || resposta == "") {
             return false;
         } else {
             window.open('<?= base_url() ?>ambulatorio/exametemp/excluircredito/' + credito_id + '/' + paciente_id + '?justificativa=' + resposta, '_self');
-//            alert(resposta);
         }
     }
 
