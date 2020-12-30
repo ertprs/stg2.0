@@ -1716,6 +1716,7 @@ class Autocomplete extends Controller {
     
 
     function listarhorarioscalendario() {
+
 //            echo $_POST['custom_param1'];
         if (count($_POST) > 0) {
             $result = $this->exametemp->listarhorarioscalendariovago($_POST['medico'], null, $_POST['empresa'], $_POST['sala'], $_POST['grupo'], $_POST['tipoagenda'], @$_POST['procedimento'], @$_POST['minicurriculo_id'],@$_POST['nome']);
@@ -1728,7 +1729,9 @@ class Autocomplete extends Controller {
         $var = Array();
         $i = 0;
 //            $result2 = $this->exametemp->listarhorarioscalendarioocupado();
-
+        //echo '<pre>';
+       // print_r('morreu');
+        //die;
         foreach ($result as $item) {
             $i++;
             $retorno['id'] = $i;
@@ -1738,8 +1741,9 @@ class Autocomplete extends Controller {
                 $retorno['title'] = 'M: ' . $item->contagem;
             }
 
-            $retorno['start'] = $item->data;
-            $retorno['end'] = $item->data;
+            $retorno['start'] = $item->data. "T" .$item->inicio;
+            $retorno['end'] = $item->data. "T" .$item->fim;
+
             if ($item->situacao == 'LIVRE') {
                 $retorno['color'] = '#62C462';
             } else {
@@ -1751,29 +1755,58 @@ class Autocomplete extends Controller {
             } else {
                 $medico = null;
             }
-            if ($_POST['tipoagenda']) {
+            if (isset($_POST['tipoagenda'])) {
                 $tipoagenda = $_POST['tipoagenda'];
             } else {
                 $tipoagenda = null;
             }
-            if ($_POST['paciente'] != '') {
-                $nome = $_POST['paciente'];
-            } else {
+            if(isset($_POST['paciente'])){
+                if ($_POST['paciente'] != '') {
+                    $nome = $_POST['paciente'];
+                } else {
+                    $nome = null;
+                }
+            }else{
                 $nome = null;
             }
-            if (@$_POST['procedimento'] != '') {
-                $procedimento = $_POST['procedimento'];
-            } else {
+
+            if(isset($_POST['procedimento'])){
+                if ($_POST['procedimento'] != '') {
+                    $procedimento = $_POST['procedimento'];
+                } else {
+                    $procedimento = null;
+                }
+            }else{
                 $procedimento = null;
             }
-            if (@$_POST['minicurriculo_id'] != '') {
-                $curriculos = $_POST['minicurriculo_id'];
-            } else {
+
+            if(isset($_POST['minicurriculo_id'])){
+                if ($_POST['minicurriculo_id'] != '') {
+                    $curriculos = $_POST['minicurriculo_id'];
+                } else {
+                    $curriculos = null;
+                }
+            }else{
                 $curriculos = null;
             }
-            $sala = $_POST['sala'];
-            $grupo = $_POST['grupo'];
-            $empresa_link = $_POST['empresa'];
+
+            if(isset($_POST['sala'])){
+                $sala = $_POST['sala'];
+            }else{
+                $sala = null;
+            }
+
+            if(isset($_POST['grupo'])){
+                $grupo = $_POST['grupo'];
+            }else{
+                $grupo = null;
+            }
+
+            if(isset($_POST['empresa'])){
+                $empresa_link = $_POST['empresa'];
+            }else{
+                $empresa_link = null;
+            }
 
             $dia = date("d", strtotime($item->data));
             $mes = date("m", strtotime($item->data));

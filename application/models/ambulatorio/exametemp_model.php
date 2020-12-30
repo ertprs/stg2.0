@@ -869,9 +869,9 @@ class exametemp_model extends Model {
         $data_futuro = date('Y-m-d', strtotime("+1 year", strtotime($data)));
         $empresa_atual = $this->session->userdata('empresa_id');
         if ($medico != '') {
-            $this->db->select('ae.data, count(ae.data) as contagem, ae.situacao, ae.medico_agenda as medico');
+            $this->db->select('ae.data, count(ae.data) as contagem, ae.situacao, ae.medico_agenda as medico, ae.inicio, ae.fim');
         } else {
-            $this->db->select('ae.data, count(ae.data) as contagem, ae.situacao');
+            $this->db->select('ae.data, count(ae.data) as contagem, ae.situacao, ae.inicio, ae.fim');
         }
         $this->db->from('tb_agenda_exames ae');
         $this->db->join('tb_procedimento_convenio pc', 'pc.procedimento_convenio_id = ae.procedimento_tuss_id', 'left');
@@ -917,9 +917,9 @@ class exametemp_model extends Model {
         }
         if ($medico != '') {
             $this->db->where("ae.medico_agenda", $medico);
-            $this->db->groupby("ae.data, ae.situacao, ae.medico_agenda");
+            $this->db->groupby("ae.data, ae.situacao, ae.medico_agenda, ae.inicio, ae.fim");
         } else {
-            $this->db->groupby("ae.data, ae.situacao");
+            $this->db->groupby("ae.data, ae.situacao, ae.inicio, ae.fim");
         }
         if ($nome != '' ) { 
             $this->db->where('p.nome ilike', "%" . $nome . "%");
@@ -929,7 +929,10 @@ class exametemp_model extends Model {
             $this->db->where('o.operador_id', $this->session->userdata('operador_id'));
 //            $this->db->where('ae.situacao', 'LIVRE');
         }
-        
+        $this->db->where("ae.data >", "2020-12-01");
+        //$this->db->where("ae.paciente_id is not null");
+        //$this->db->where("ae.medico_agenda", 4761);
+       $this->db->limit(3000);
         $return = $this->db->get();
         return $return->result();
     }
