@@ -3143,6 +3143,12 @@ class Exametemp extends BaseController {
         echo json_encode($tcd_info);
     }
 
+    function infoinadimplecia(){
+        $paciente_inadimplencia_id = $_POST['paciente_inadimplencia_id'];
+        $tcd_info = $this->exametemp->listarinadimplenciaunico($paciente_inadimplencia_id);
+        echo json_encode($tcd_info);
+    }
+
     function listarimpressoesRPS($paciente_id, $paciente_tcd_id){
         $data['paciente_id'] = $paciente_id;
         $data['paciente_tcd_id'] = $paciente_tcd_id;

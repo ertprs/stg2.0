@@ -280,6 +280,68 @@ class exametemp_model extends Model {
         return $this->db;
     }
 
+    function listarinadimplencia2($paciente_id) {
+
+        $this->db->select('pcr.paciente_inadimplencia_id,
+                           pcr.paciente_id,
+                           pcr.procedimento_convenio_id,
+                           ae.agenda_exames_id,
+                           pcr.guia_id,
+                           pcr.valor,
+                           pcr.data,
+                           pcr.faturado,
+                           c.nome as convenio,
+                           p.nome as paciente,
+                           pt.nome as procedimento,
+                           pcr.observacaoinadimplencia');
+        $this->db->from('tb_paciente_inadimplencia pcr');
+        $this->db->join('tb_paciente p', 'p.paciente_id = pcr.paciente_id', 'left');
+        $this->db->join('tb_agenda_exames ae', 'ae.agenda_exames_id = pcr.agenda_exames_id', 'left');
+        $this->db->join('tb_procedimento_convenio pc', 'pc.procedimento_convenio_id = pcr.procedimento_convenio_id', 'left');
+        $this->db->join('tb_procedimento_tuss pt', 'pt.procedimento_tuss_id = pc.procedimento_tuss_id', 'left');
+        $this->db->join('tb_convenio c', 'c.convenio_id = pc.convenio_id', 'left');
+        $this->db->where('pcr.ativo', 'true');
+        $this->db->where('pcr.faturado', 'f');
+        $this->db->where('pcr.cancelamento', 'false');
+        $this->db->where('pcr.valor > 0');
+        $this->db->where('pcr.paciente_id', $paciente_id);
+//        $this->db->where('pcr.procedimento_convenio_id IS NOT NULL');
+        $empresa_id = $this->session->userdata('empresa_id');
+        $this->db->where('pcr.empresa_id', $empresa_id);
+        return $this->db->get()->result();
+    }
+
+    function listarinadimplenciaunico($paciente_inadimplencia_id) {
+
+        $this->db->select('pcr.paciente_inadimplencia_id,
+                           pcr.paciente_id,
+                           pcr.procedimento_convenio_id,
+                           ae.agenda_exames_id,
+                           pcr.guia_id,
+                           pcr.valor,
+                           pcr.data,
+                           pcr.faturado,
+                           c.nome as convenio,
+                           p.nome as paciente,
+                           pt.nome as procedimento,
+                           pcr.observacaoinadimplencia');
+        $this->db->from('tb_paciente_inadimplencia pcr');
+        $this->db->join('tb_paciente p', 'p.paciente_id = pcr.paciente_id', 'left');
+        $this->db->join('tb_agenda_exames ae', 'ae.agenda_exames_id = pcr.agenda_exames_id', 'left');
+        $this->db->join('tb_procedimento_convenio pc', 'pc.procedimento_convenio_id = pcr.procedimento_convenio_id', 'left');
+        $this->db->join('tb_procedimento_tuss pt', 'pt.procedimento_tuss_id = pc.procedimento_tuss_id', 'left');
+        $this->db->join('tb_convenio c', 'c.convenio_id = pc.convenio_id', 'left');
+        $this->db->where('pcr.ativo', 'true');
+        $this->db->where('pcr.faturado', 'f');
+        $this->db->where('pcr.cancelamento', 'false');
+        $this->db->where('pcr.valor > 0');
+        $this->db->where('pcr.paciente_inadimplencia_id', $paciente_inadimplencia_id);
+//        $this->db->where('pcr.procedimento_convenio_id IS NOT NULL');
+        $empresa_id = $this->session->userdata('empresa_id');
+        $this->db->where('pcr.empresa_id', $empresa_id);
+        return $this->db->get()->result();
+    }
+
     function listarinadimplenciautocomplete($paciente_id) {
 
         $this->db->select('pcr.paciente_inadimplencia_id');

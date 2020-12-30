@@ -3,168 +3,159 @@ $perfil_id = $this->session->userdata('perfil_id');
 ?>
 <div class="content"> <!-- Inicio da DIV content -->
     <div class="bt_link_new">
-        <a href="<?php echo base_url() ?>ambulatorio/exametemp/carregarinadimplencia/<?= $paciente_id ?>">
+        <a class="btn btn-outline-danger btn-round btn-sm" href="<?php echo base_url() ?>ambulatorio/exametemp/carregarinadimplencia/<?= $paciente_id ?>">
             Nova Inadimplência
         </a>
     </div>
     <div id="accordion">
         <h3 class="singular"><a href="#">Manter Inadimplência</a></h3>
-        <div>
-            <table> 
-                    <form method="get" action="<?= base_url() ?>ambulatorio/exametemp/listarinadimplencia/<?= $paciente_id ?>">
-                        <tr>
-                            <th class="tabela_title">Procedimento</th>
-                            <th class="tabela_title">Convênio</th>
-                            <th class="tabela_title"></th>
-                        </tr>
-                        <tr>
-                            <th class="tabela_title">
-                                <input type="text" name="procedimento" value="<?php echo @$_GET['procedimento']; ?>" />
-                            </th>
-                            <th class="tabela_title">
-                                <input type="text" name="convenio" value="<?php echo @$_GET['convenio']; ?>" />
-                            </th>
-                            <th class="tabela_title">
-                                <button type="submit" id="enviar">Pesquisar</button>
-                            </th>
-                        </tr>
-                    </form>
-            </table>
-            <table>
-                <tr>
-                    <th class="tabela_header">Paciente</th>
-                    <th class="tabela_header">Data</th>
-                    
-                    <? if(@$permissoes[0]->associa_credito_procedimento == 't') {?>
-                        <th class="tabela_header">Procedimento</th>
-                        <th class="tabela_header">Convênio</th>
-                    <? } ?>
-                        
-                    <th class="tabela_header">Valor (R$)</th>
-                       <th class="tabela_header">Observação</th>
-                    <th class="tabela_header" width="70px;" colspan="3"><center>Detalhes</center></th>
-                </tr>
+
+
+
+            <table id="example" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Data</th>  
+                        <th>Valor (R$)</th> 
+                        <th>Procedimento</th>
+                        <th>Convênio</th>
+                        <th>Observação</th>
+                        <th><center>Detalhes</center></th>
+                    </tr>
                 </thead>
-                <?php
-                $url = $this->utilitario->build_query_params(current_url(), $_GET);
-                $consulta = $this->exametemp->listarinadimplencia($paciente_id);
-                $total = $consulta->count_all_results();
-                $limit = 10;
-                isset($_GET['per_page']) ? $pagina = $_GET['per_page'] : $pagina = 0;
-
-                if ($total > 0) {
-                    ?>
-                    <tbody>
-                        <?php
-                        $lista = $this->exametemp->listarinadimplencia($paciente_id)->orderby('pt.nome, c.nome')->limit($limit, $pagina)->get()->result();
-                        $estilo_linha = "tabela_content01"; 
-                        foreach ($lista as $item) {
-                            ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
-                            ?>
-                            <tr>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->paciente; ?></td>
-                                <td class="<?php echo $estilo_linha; ?>"><?= date("d/m/Y", strtotime($item->data)); ?></td>
-                                
-                                <? if(@$permissoes[0]->associa_credito_procedimento == 't') {?>
-                                    <td class="<?php echo $estilo_linha; ?>"><?= $item->procedimento; ?></td>
-                                    <td class="<?php echo $estilo_linha; ?>"><?= $item->convenio; ?></td>
-                                <? } ?>
-                                <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor, 2, ",", ""); ?></td>
-                                  <td class="<?php echo $estilo_linha; ?>"><?= @$item->observacaoinadimplencia; ?></td>
-                              
-                                <?//$gerente_recepcao_top_saude = $this->session->userdata('gerente_recepcao_top_saude');?>
-                                <?if($item->agenda_exames_id == '' && $perfil_id == 1 || ($gerente_recepcao_top_saude && $perfil_id == 5)){?>
-                                    <td class="<?php echo $estilo_linha; ?>" width="50px;"><div class="bt_link">
-                                        <a onclick="javascript: return confirm('Deseja realmente excluir esse item?');" href="<?= base_url() ?>ambulatorio/exametemp/excluirinadimplencia/<?= $item->paciente_inadimplencia_id ?>/<?= $paciente_id ?>">Excluir</a></div>
-                                    </td> 
-                                <?}?>
-                                
-                                <? if ($item->faturado == 'f') { ?>
-                                    
-                                    <?if($item->agenda_exames_id != ''){?>
-                                        <td class="<?php echo $estilo_linha; ?>" width="50px;"><div class="bt_link">
-                                            <a target="_blank" href="<?= base_url() ?>ambulatorio/guia/faturarmodelo2/<?= $item->agenda_exames_id ?>/<?= $item->procedimento_convenio_id?>/<?= $item->guia_id?>">Faturar</a></div>
-                                        </td>  
-                                    <?}else{?>
-                                        <td class="<?php echo $estilo_linha; ?>" width="50px;"><div class="bt_link">
-                                            <a target="_blank" href="<?= base_url() ?>ambulatorio/exametemp/faturarinadimplencia/<?= $item->paciente_inadimplencia_id ?>/<?= $paciente_id ?>">Faturar</a></div>
-                                        </td>  
-                                    <?} ?>
-                                    
-                                     
-                                <? } else { ?>
-                                    <td class="<?php echo $estilo_linha; ?>" width="50px;">
-                                            Faturado
-                                    </td>  
-
-                                <? } ?>
-                               
- 
-                            </tr>
-                        <? } ?>
-                        <tr id="tot">
-                            <td class="<?php echo $estilo_linha; ?>" id="textovalortotal" colspan="2">
-                                <span id="spantotal"> Saldo:</span> 
-                            </td>
-                            <td class="<?php echo $estilo_linha; ?>" colspan="3">
-                                <span id="spantotal">
-                                    R$ <?= number_format($valortotal[0]->saldo, 2, ',', '') ?>
-                                </span>
-                            </td>
-                            <td class="<?php echo $estilo_linha; ?>" id="textovalortotal" colspan="3">
-<!--                                <div class="bt_link" style="float: right">
-                                    <a href="<?= base_url() ?>ambulatorio/exametemp/gerasaldocredito/<?= $paciente_id ?>">Saldo</a>
-                                </div>-->
-                            </td>
-                        </tr>
-
-                    </tbody>
-                <? } ?>
                 <tfoot>
                     <tr>
-                        <th class="tabela_footer" colspan="8">
-                            <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
-                            Total de registros: <?php echo $total; ?>
-                        </th>
+                        <th colspan="7" style="text-align:center">Saldo: R$ <?= number_format($valortotal[0]->saldo, 2, ',', '') ?></th>
                     </tr>
                 </tfoot>
             </table>
-        </div>
     </div>
 
 </div> <!-- Final da DIV content -->
+
+
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog modal-dialog-centered" role="document" id="removemodal">
+    
+  </div>
+</div>
+
+
 <script type="text/javascript">
 
     $(function () {
         $("#accordion").accordion();
     });
-    function confirmarEstorno(credito_id, paciente_id){
-//        alert('<?= base_url() ?>ambulatorio/exametemp/excluircredito/'+credito_id+'/'+paciente_id+'?justificativa=');
-        var resposta = prompt("Informe o motivo do estorno.");
-        if(resposta == null || resposta == ""){
-            return false;
-        }
-        else {
-            window.open('<?= base_url() ?>ambulatorio/exametemp/excluircredito/'+credito_id+'/'+paciente_id+'?justificativa='+resposta, '_self');
-//            alert(resposta);
+
+    function confirmarEstorno(paciente_inadimplencia_id, paciente_id) {
+        if (window.confirm("Deseja realmente excluir esse item?")) {
+            window.open("sair.html", "Obrigado pela visita!");
+            // window.open('<?= base_url()?>ambulatorio/exametemp/excluirinadimplencia/'+paciente_inadimplencia_id+'/'+paciente_id+'', '_self');
         }
     }
+
+    function abrirModal(paciente_inadimplencia_id, paciente_id, agenda_exames_id, procedimento_convenio_id, guia_id, faturado){
+        $("#removemodal").remove();
+
+        var nome = '';
+        var data = '';
+        var valor = '';
+        var procedimento = '';
+        var convenio = '';
+        var observacao = '';
+
+        var faturar = ''
+        var excluir = '';
+
+        if(faturado == 0){
+            if(agenda_exames_id != ''){
+                faturar = '<a class="btn btn-outline-warning btn-round btn-sm"  href="#" onclick="faturarinadimplencia('+agenda_exames_id+', '+procedimento_convenio_id+', '+guia_id+')">Faturar</a>';
+            }else{
+                faturar = '<a class="btn btn-outline-warning btn-round btn-sm"  href="#" onclick="faturarinadimplencia2('+paciente_inadimplencia_id+', '+paciente_id+')">Faturar</a>';
+            }
+        }else{
+            faturar = '<a class="btn btn-outline-warning btn-round btn-sm" href="#">Faturado</a>';
+        }
+
+        perfil_id = <?=$perfil_id?>;
+        gerente_recepcao_top_saude = '<?=$gerente_recepcao_top_saude?>';
+
+        if(agenda_exames_id == '' && perfil_id == 1 || (gerente_recepcao_top_saude == 't' && perfil_id == 5)){
+            excluir = '<a class="btn btn-outline-warning btn-round btn-sm"  href="#" onclick="confirmarEstorno('+paciente_inadimplencia_id+','+paciente_id+')">Excluir</a>';
+        }
+
+        $.ajax({
+            type: "POST",
+            data: {
+                paciente_inadimplencia_id: paciente_inadimplencia_id
+                },
+            url: "<?= base_url() ?>ambulatorio/exametemp/infoinadimplecia/",
+            dataType: 'json',
+            async: false,
+                success: function (i) {
+                    nome = i[0].paciente;
+                    data = i[0].data;
+                    valor = i[0].valor;
+                    procedimento = i[0].procedimento;
+                    convenio = i[0].convenio;
+                    observacao = i[0].observacaoinadimplencia;
+                },
+                error: function (i) {
+                    alert('Erro ao Carregar Informações');
+                }    
+            });
+
+        $("#myModal").append(
+                    '<div class="modal-dialog modal-dialog-centered" role="document" id="removemodal">'+
+                        '<div class="modal-content">'+
+                            '<div class="modal-header">'+
+                                '<h5 class="modal-title" id="exampleModalLongTitle">Ações</h5>'+
+                                '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+                                '<span aria-hidden="true">&times;</span>'+
+                                '</button>'+
+                            '</div>'+
+                            '<div class="modal-body">'+
+                            '<b>Paciente:</b> '+nome+'<br>'+
+                            '<b>Data:</b> '+data+'<br>'+
+                            '<b>Valor:</b> '+valor+'<br>'+
+                            '<b>Procedimento:</b> '+procedimento+'<br>'+
+                            '<b>Convenio:</b> '+convenio+'<br>'+
+                            '<b>Observação:</b> '+observacao+'<br>'+
+                            '<br>'+
+                            faturar+
+                            excluir+
+                            '</div>'+
+                            '<div class="modal-footer">'+
+                                '<button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>'+
+                            '</div>'+
+                        '</div>'+
+                '</div>');
+    }
+
+    function faturarinadimplencia(agenda_exames_id, procedimento_convenio_id, guia_id){
+        window.open('<?=base_url()?>/ambulatorio/guia/faturarmodelo2/'+agenda_exames_id+'/'+procedimento_convenio_id+'/'+guia_id+'', '_blank', 'width=1000,height=800');
+    }
+    function faturarinadimplencia2(paciente_inadimplencia_id, paciente_id){
+        window.open('<?=base_url()?>/ambulatorio/exametemp/faturarinadimplencia/'+paciente_inadimplencia_id+'/'+paciente_id+'', '_blank', 'width=1000,height=800');
+    }
+
+    $(document).ready(function() {
+        $('#example').DataTable( {
+            "ajax": "<?=base_url()?>datatable/listarinadimplencia/<?=$paciente_id?>",
+            "columns": [
+                { "data": "paciente" },
+                { "data": "data" },
+                { "data": "valor" },
+                { "data": "procedimento" },
+                { "data": "convenio" },
+                { "data": "observacao" },
+                { "data": "detalhe" }
+            ],
+            "filter": true,
+            "language": {
+                "url": "<?=base_url()?>bootstrap/DataTables/Portuguese-Brasil.json"
+            }   
+        } );
+    } );
 </script>
-<style>
-    #spantotal{
-
-        color: black;
-        font-weight: bolder;
-        font-size: 18px;
-    }
-    #textovalortotal{
-        text-align: right;
-    }
-    #tot td{
-        background-color: #bdc3c7;
-    }
-
-    #form_solicitacaoitens div{
-        margin: 3pt;
-    }
-</style>

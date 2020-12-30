@@ -180,4 +180,35 @@ class Datatable extends Controller {
             echo json_encode($obj);
         }
 
+        function listarinadimplencia($paciente_id){
+            $result = $this->exametemp->listarinadimplencia2($paciente_id);
+
+            foreach($result as $item){
+                $arrayresultado['paciente'] = $item->paciente;
+                $arrayresultado['data'] = date("d/m/Y", strtotime($item->data));
+                $arrayresultado['valor'] = number_format($item->valor, 2, ",", "");
+                $arrayresultado['procedimento'] = $item->procedimento;
+                $arrayresultado['convenio'] = $item->convenio;
+                $arrayresultado['observacao'] = $item->observacaoinadimplencia;
+                if($item->faturado == 't'){
+                    $faturado = 1;
+                }else{
+                    $faturado = 0;
+                }
+                $arrayresultado['detalhe'] = "<a href='#myModal' data-toggle='modal' class='btn btn-outline-success btn-round btn-sm' onclick='abrirModal($item->paciente_inadimplencia_id, $item->paciente_id, $item->agenda_exames_id, $item->procedimento_convenio_id, $item->guia_id, $faturado)'><b>Opções</b></a>";
+                
+                $arrayAjax[] = $arrayresultado;
+            }   
+
+            if(count($result) > 0){
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }else{
+                $arrayAjax = array();
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }
+            echo json_encode($obj);
+        }
+
     }
