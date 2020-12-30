@@ -202,7 +202,44 @@ class exametemp_model extends Model {
             $this->db->where('c.nome ilike', "%" . $_GET['convenio'] . "%");
         }
 
-        return $this->db;
+        return $this->db->get()->result();
+    }
+
+    function listarcreditounico($paciente_credito_id){
+            $this->db->select('pcr.paciente_credito_id,
+                    pcr.paciente_id,
+                    pcr.procedimento_convenio_id,
+                    pcr.valor,
+                    pcr.data,
+                    pcr.faturado,
+                    c.nome as convenio,
+                    p.nome as paciente,
+                    p2.nome as paciente_transferencia,
+                    pt.nome as procedimento,
+                    pcr.observacaocredito');
+            $this->db->from('tb_paciente_credito pcr');
+            $this->db->join('tb_paciente p', 'p.paciente_id = pcr.paciente_id', 'left');
+            $this->db->join('tb_paciente p2', 'p2.paciente_id = pcr.paciente_old_id', 'left');
+            $this->db->join('tb_procedimento_convenio pc', 'pc.procedimento_convenio_id = pcr.procedimento_convenio_id', 'left');
+            $this->db->join('tb_procedimento_tuss pt', 'pt.procedimento_tuss_id = pc.procedimento_tuss_id', 'left');
+            $this->db->join('tb_convenio c', 'c.convenio_id = pc.convenio_id', 'left');
+            $this->db->where('pcr.ativo', 'true');
+            $this->db->where('pcr.cancelamento', 'false');
+            $this->db->where('pcr.valor > 0');
+            $this->db->where('pcr.paciente_credito_id', $paciente_credito_id);
+            //        $this->db->where('pcr.procedimento_convenio_id IS NOT NULL');
+            $empresa_id = $this->session->userdata('empresa_id');
+            $this->db->where('pcr.empresa_id', $empresa_id);
+
+            if (@$_GET['procedimento'] != '') {
+            $this->db->where('pt.nome ilike', "%" . $_GET['procedimento'] . "%");
+            }
+
+            if (@$_GET['convenio'] != '') {
+            $this->db->where('c.nome ilike', "%" . $_GET['convenio'] . "%");
+            }
+
+            return $this->db->get()->result();
     }
 
     function listarinadimplencia($paciente_id) {
@@ -11662,7 +11699,7 @@ class exametemp_model extends Model {
         if (@$_GET['convenio'] != '') {
             $this->db->where('c.nome ilike', "%" . $_GET['convenio'] . "%");
         }
-        return $this->db;
+        return $this->db->get()->result();
     }
 
     function listarprocedimentosadt($solicitacao_sadt_procedimento_id) {
@@ -12086,20 +12123,20 @@ class exametemp_model extends Model {
         }
 
         function listartcd($paciente_id){ 
-            $this->db->select('p.nome,ptcd.valor,ptcd.data,ptcd.paciente_id,ptcd.observacao,ptcd.orcamento_id,ptcd.paciente_tcd_id,ptcd.confirmado, ptcd.guia_id_modelo2');
+            $this->db->select('ptcd.paciente_tcd_id, p.nome,ptcd.valor,ptcd.data,ptcd.paciente_id,ptcd.observacao,ptcd.orcamento_id,ptcd.paciente_tcd_id,ptcd.confirmado, ptcd.guia_id_modelo2');
             $this->db->from('tb_paciente_tcd ptcd');
             $this->db->join('tb_paciente p','p.paciente_id = ptcd.paciente_id','left');
             $this->db->where('ptcd.paciente_id',$paciente_id);
             $this->db->where('ptcd.ativo','t'); 
             $this->db->where('ptcd.valor > 0');
-            return $this->db; 
+            return $this->db->get()->result(); 
         }
 
-        function listartcd2($paciente_id){ 
+        function listartcdunico($paciente_tcd_id){ 
             $this->db->select('ptcd.paciente_tcd_id, p.nome,ptcd.valor,ptcd.data,ptcd.paciente_id,ptcd.observacao,ptcd.orcamento_id,ptcd.paciente_tcd_id,ptcd.confirmado, ptcd.guia_id_modelo2');
             $this->db->from('tb_paciente_tcd ptcd');
             $this->db->join('tb_paciente p','p.paciente_id = ptcd.paciente_id','left');
-            $this->db->where('ptcd.paciente_id',$paciente_id);
+            $this->db->where('ptcd.paciente_tcd_id',$paciente_tcd_id);
             $this->db->where('ptcd.ativo','t'); 
             $this->db->where('ptcd.valor > 0');
             return $this->db->get()->result(); 
@@ -12215,20 +12252,8 @@ class exametemp_model extends Model {
         return $return->result();
     }
     
-    
-    
-    function listartcdusados($paciente_id){ 
-        $this->db->select('p.nome,ptcd.valor,ptcd.data,ptcd.paciente_id,ptcd.observacao,ptcd.orcamento_id,ptcd.paciente_tcd_id,ptcd.data_cadastro,op.nome as operador_cadastro,ptcd.agenda_exames_id');
-        $this->db->from('tb_paciente_tcd ptcd');
-        $this->db->join('tb_paciente p','p.paciente_id = ptcd.paciente_id','left');
-        $this->db->join('tb_operador op','op.operador_id = ptcd.operador_cadastro');
-        $this->db->where('ptcd.paciente_id',$paciente_id);
-        $this->db->where('ptcd.ativo','t'); 
-        $this->db->where('ptcd.valor < 0');
-        return $this->db; 
-    }
 
-    function listartcdusados2($paciente_id){ 
+    function listartcdusados($paciente_id){ 
         $this->db->select('p.nome,ptcd.valor,ptcd.data,ptcd.paciente_id,ptcd.observacao,ptcd.orcamento_id,ptcd.paciente_tcd_id,ptcd.data_cadastro,op.nome as operador_cadastro,ptcd.agenda_exames_id');
         $this->db->from('tb_paciente_tcd ptcd');
         $this->db->join('tb_paciente p','p.paciente_id = ptcd.paciente_id','left');

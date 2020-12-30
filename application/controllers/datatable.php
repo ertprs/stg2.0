@@ -45,7 +45,7 @@ class Datatable extends Controller {
     }
 
         function listartcd($paciente_id){
-            $result = $this->exametemp->listartcd2($paciente_id);
+            $result = $this->exametemp->listartcd($paciente_id);
 
             foreach($result as $item){
                 $arrayresultado['nome'] = $item->nome;
@@ -56,19 +56,31 @@ class Datatable extends Controller {
                 $arrayresultado['orcamento_id'] = $item->orcamento_id;
                 $arrayresultado['confirmado'] = $item->confirmado;
                 $arrayresultado['guia_id_modelo2'] = $item->guia_id_modelo2;
-                $arrayresultado['detalhe'] = "<a class='btn btn-outline-success btn-round btn-sm' onclick='abrirModal($item->paciente_tcd_id)'><b>Opções</b></a>";
+                if($item->confirmado == 't'){
+                    $faturado = 1;
+                }else{
+                    $faturado = 0;
+                }
+                $arrayresultado['detalhe'] = "<a href='#myModal' data-toggle='modal' class='btn btn-outline-success btn-round btn-sm' onclick='abrirModal($item->paciente_tcd_id, $faturado, $item->paciente_id, $item->orcamento_id)'><b>Opções</b></a>";
 
 
                 $arrayAjax[] = $arrayresultado;
             }
-            $obj = new stdClass();
-            $obj->data = $arrayAjax;
+            if(count($result) > 0){
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }else{
+                $arrayAjax = array();
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }
+            
             echo json_encode($obj);
         }
 
 
         function listartcdusados($paciente_id){
-            $result = $this->exametemp->listartcdusados2($paciente_id);
+            $result = $this->exametemp->listartcdusados($paciente_id);
 
             foreach($result as $item){
                 $arrayresultado['nome'] = $item->nome;
@@ -84,8 +96,87 @@ class Datatable extends Controller {
                 $arrayAjax[] = $arrayresultado;
             }   
 
-            $obj = new stdClass();
-            $obj->data = $arrayAjax;
+            if(count($result) > 0){
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }else{
+                $arrayAjax = array();
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }
+
+            echo json_encode($obj);
+        }
+
+        function listaprocedimentosRPS($paciente_tcd_id){
+            $result = $this->guia->listaprocedimentosRPS($paciente_tcd_id);
+
+            foreach($result as $item){
+                $arrayresultado['procedimento'] = $item->procedimento;
+                $arrayresultado['imprimir'] = "<a href='#' class='btn btn-outline-success btn-round btn-sm' onclick='abrirImpressao($item->procedimento_tuss_id, $item->paciente_id, $paciente_tcd_id, $item->procedimento_convenio_id)'><b>Imprimir</b></a>";
+
+                $arrayAjax[] = $arrayresultado;
+            }   
+
+            if(count($result) > 0){
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }else{
+                $arrayAjax = array();
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }
+
+            echo json_encode($obj);
+        }
+
+        function listarcredito($paciente_id){
+            $result = $this->exametemp->listarcredito($paciente_id);
+
+            foreach($result as $item){
+                $arrayresultado['paciente'] = $item->paciente;
+                $arrayresultado['data'] = date("d/m/Y", strtotime($item->data));
+                $arrayresultado['valor'] = number_format($item->valor, 2, ",", "");
+                $arrayresultado['paciente_transferencia'] = $item->paciente_transferencia;
+                $arrayresultado['observacaocredito'] = $item->observacaocredito;
+                $arrayresultado['detalhe'] = "<a href='#myModal' data-toggle='modal' class='btn btn-outline-success btn-round btn-sm' onclick='abrirModal($item->paciente_credito_id, $item->paciente_id)'><b>Opções</b></a>";
+                
+                $arrayAjax[] = $arrayresultado;
+            }   
+
+            if(count($result) > 0){
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }else{
+                $arrayAjax = array();
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }
+            
+            echo json_encode($obj);
+        }
+
+        function listarcreditosusados($paciente_id){
+            $result = $this->exametemp->listarcreditosusados($paciente_id);
+
+            foreach($result as $item){
+                $arrayresultado['paciente'] = $item->paciente;
+                $arrayresultado['data'] = date("d/m/Y", strtotime($item->data));
+                $arrayresultado['valor'] = number_format($item->valor, 2, ",", "")*(-1);
+                $arrayresultado['procedimento'] = $item->procedimento;
+                $arrayresultado['operador_cadastro'] = $item->operador_cadastro;
+                
+                $arrayAjax[] = $arrayresultado;
+            }   
+
+            if(count($result) > 0){
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }else{
+                $arrayAjax = array();
+                $obj = new stdClass();
+                $obj->data = $arrayAjax;
+            }
             echo json_encode($obj);
         }
 

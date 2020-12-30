@@ -28000,16 +28000,16 @@ ORDER BY ae.paciente_tcd_id)";
 
 
     function listaprocedimentosRPS($paciente_tcd_id){
-        $this->db->select('pt.nome as procedimento, pt.procedimento_tuss_id, pc.procedimento_convenio_id');
+        $this->db->select('pt.nome as procedimento, pt.procedimento_tuss_id, pc.procedimento_convenio_id, p.paciente_id');
         $this->db->from('tb_procedimento_impressao_rps pir');
         $this->db->join('tb_ambulatorio_orcamento_item aoi', 'pir.procedimento_tuss_id = ambulatorio_orcamento_item_id');
+        $this->db->join('tb_paciente_tcd p', 'p.paciente_tcd_id = pir.paciente_tcd_id', 'left');
         $this->db->join('tb_procedimento_convenio pc', 'aoi.procedimento_tuss_id = pc.procedimento_convenio_id');
         $this->db->join('tb_procedimento_tuss pt', 'pt.procedimento_tuss_id = pc.procedimento_tuss_id');
         $this->db->where('pir.paciente_tcd_id', $paciente_tcd_id);
         $this->db->where('pir.ativo', 't');
 
-        // return $this->db->get()->result();
-        return $this->db;
+        return $this->db->get()->result();
     }
 
 

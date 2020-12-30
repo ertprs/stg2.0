@@ -3131,15 +3131,23 @@ class Exametemp extends BaseController {
 
     }
 
+    function infotcd(){
+        $paciente_tcd_id = $_POST['paciente_tcd_id'];
+        $tcd_info = $this->exametemp->listartcdunico($paciente_tcd_id);
+        echo json_encode($tcd_info);
+    }
+
+    function infocredito(){
+        $paciente_credito_id = $_POST['paciente_credito_id'];
+        $tcd_info = $this->exametemp->listarcreditounico($paciente_credito_id);
+        echo json_encode($tcd_info);
+    }
+
     function listarimpressoesRPS($paciente_id, $paciente_tcd_id){
         $data['paciente_id'] = $paciente_id;
         $data['paciente_tcd_id'] = $paciente_tcd_id;
 
         $this->guia->listaregravarRPSantigo($paciente_tcd_id);
-        // $data['listarrps'] = $this->guia->listaprocedimentosRPS($paciente_tcd_id);
-        // echo '<pre>';
-        // print_r($data['listarrps']);
-        // die;
         $this->loadView('ambulatorio/carregarrps-lista', $data); 
     }
     
@@ -3227,7 +3235,7 @@ class Exametemp extends BaseController {
         redirect(base_url() . "ambulatorio/exametemp/listartcd/$paciente_id");
     }
     
-    function imprimirtermotcd($paciente_id,$guia_id,$paciente_tcd_id){
+    function imprimirtermotcd($paciente_id, $guia_id, $paciente_tcd_id){
        $this->load->plugin('mpdf'); 
        $filename = "TermoTCD";
        $cabecalho = "";
@@ -3247,12 +3255,8 @@ class Exametemp extends BaseController {
        $data['pacientes'] = $this->guia->listarpaciente($paciente_id);
        $data['termotcdmanual'] = $this->exametemp->termotcdmanual();
 
-    //    echo '<pre>';
-    //    print_r($data['pacientes']);
-    //    die;
        $html = $this->load->View('ambulatorio/impressaotermotcdconfiguravel',$data,true);
-    //    $html =  $this->load->View('ambulatorio/impressaotermotcd',$data,true);
-        
+
        pdf($html, $filename, $cabecalho, $rodape, ''); 
     }
     
