@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7eedec7-0120-4f34-ae50-6afdde6a3e0e" name="Default Changelist" comment="Yan">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/controllers/ambulatorio/exame.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/ambulatorio/exame.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/controllers/autocomplete.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/autocomplete.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/ambulatorio/exame_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/ambulatorio/exame_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/ambulatorio/exametemp_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/ambulatorio/exametemp_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/calendario.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/calendario.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/calendario2.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/calendario2.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/horariotempencaixegeral-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/horariotempencaixegeral-form.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/medicoagendageral-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/medicoagendageral-form.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/ambulatorio/pacientetempencaixegeral-form.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ambulatorio/pacientetempencaixegeral-form.php" afterDir="false" />
-    </list>
+    <list default="true" id="e7eedec7-0120-4f34-ae50-6afdde6a3e0e" name="Default Changelist" comment="Yan" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -154,7 +143,8 @@
       <workItem from="1608722748380" duration="10168000" />
       <workItem from="1608811288614" duration="7769000" />
       <workItem from="1609154061131" duration="19742000" />
-      <workItem from="1609242196156" duration="15887000" />
+      <workItem from="1609242196156" duration="18039000" />
+      <workItem from="1609326856126" duration="1218000" />
     </task>
     <servers />
   </component>
