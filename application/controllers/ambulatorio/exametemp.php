@@ -529,6 +529,8 @@ class Exametemp extends BaseController {
     }
 
     function gravarcredito() {
+        print_r($_POST);
+        die;
         $paciente_id = $_POST['txtpaciente_id'];
         $credito_id = $this->exametemp->gravarcredito();
         redirect(base_url() . "ambulatorio/exametemp/faturarcreditos/$credito_id/$paciente_id");
