@@ -1,9 +1,3 @@
-
-<link rel="stylesheet" href="<?= base_url() ?>js/chosen/chosen.css">
-<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/prism.css">
-<script type="text/javascript" src="<?= base_url() ?>js/chosen/chosen.jquery.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/init.js"></script>
-
 <div class="content ficha_ceatox">
     <div class="accordion">
         <legend class="singular"><b>Novo Crédito - Dados do Paciente</b></legend>
@@ -45,7 +39,7 @@
                 <div class="row">
                     <legend class="singular"><b>Dados Crédito</b></legend>
                     <fieldset>
-                        <?if ($permissoes[0]->associa_credito_procedimento == 'f') { ?>
+                        <?if ($permissoes[0]->associa_credito_procedimento == 't') { ?>
                             <div class="col-lg-4">
                                 <div>
                                     <label>Convenio</label>
@@ -70,7 +64,7 @@
                             <div class="col-lg-4">
                                 <div>
                                     <label>Valor Unitario</label>
-                                    <input type="text" name="valor1" id="valor1" class="form-control" readonly="" required/>
+                                    <input type="text" name="valor1" id="valor" class="form-control" readonly="" required/>
                                 </div>
                             </div>
                         <?}else{?>
@@ -78,7 +72,7 @@
                         <div class="col-lg-6">
                             <div>
                                 <label>Valor Unitario</label>
-                                <input type="text" name="valor1" id="valor1" class="form-control" alt="decimal" required/>
+                                <input type="text" name="valor1" id="valor" class="form-control" alt="decimal" required/>
                             </div>
                         </div>
                         <?}?>
@@ -101,7 +95,6 @@
             </form>
     </div>
 </div>
-
 
 <script type="text/javascript">
 
@@ -142,16 +135,16 @@
                     options = "";
                     options += j[0].valortotal;
                     if (j[0].grupo == "ODONTOLOGIA") {
-                        $("#valor1").removeAttr("readonly", "false");
+                        $("#valor").removeAttr("readonly", "false");
                     } else {
-                        $("#valor1").attr("readonly", "");
+                        $("#valor").attr("readonly", "");
                     }
 
-                    document.getElementById("valor1").value = options;
+                    document.getElementById("valor").value = options;
                     $('.carregando').hide();
                 });
             } else {
-                $('#valor1').html('value=""');
+                $('#valor').html('value=""');
             }
         });
     });

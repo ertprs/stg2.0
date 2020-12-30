@@ -3252,6 +3252,7 @@ class exametemp_model extends Model {
 
     function gravarcredito() {
         try {
+
             $empresa_id = $this->session->userdata('empresa_id');
             $this->db->select('ep.associa_credito_procedimento');
             $this->db->from('tb_empresa e');
@@ -3294,7 +3295,7 @@ class exametemp_model extends Model {
                 if (isset($valorAjuste)) {
                     $this->db->set('valor', $valorAjuste);
                 } else {
-                    $this->db->set('valor', (float) str_replace(',', '.', str_replace('.', '', $_POST['valor1'])));
+                    $this->db->set('valor', (float) str_replace(',', '.', str_replace(',', '', $_POST['valor1'])));
                 }
                 $this->db->set('data', date("Y-m-d"));
                 $this->db->set('paciente_id', $_POST['txtpaciente_id']);

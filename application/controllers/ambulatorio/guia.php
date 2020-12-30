@@ -4070,7 +4070,7 @@ class Guia extends BaseController {
         $data['empresapermissoes'] = $this->guia->listarempresapermissoes();
       //  $data['creditoativo'] = $this->exametemp->creditopaciente();
         $data['valortotal'] = $this->exametemp->listarsaldocreditopaciente($paciente_id);
-        $data['tcd'] = $this->exametemp->listartcd($paciente_id)->get()->result();
+        $data['tcd'] = $this->exametemp->listartcd($paciente_id);
         
         
         if ($data['paciente'][0]->ativo == 'f') {
