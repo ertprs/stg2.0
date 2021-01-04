@@ -1,6 +1,11 @@
-<div class="content ficha_ceatox">
+<style>
+    .espacoextra{
+        margin-top: 10px;
+    }
+</style>
 
-    <div >
+<div class="content ficha_ceatox">
+    <div>
         <?
         $sala = "";
         $ordenador1 = "";
@@ -13,8 +18,7 @@
         $empresa = $this->guia->listarempresapermissoes(); 
         $odontologia_alterar = $empresa[0]->odontologia_valor_alterar; 
         $bt_autorizar = false;
-//        echo "<pre>";;
-//        print_r($exames);
+
         foreach($exames as $item){
             if($item->autorizacao_finalizada != "t"){
                $bt_autorizar = true;
@@ -22,21 +26,24 @@
             } 
         }
         ?>
-<!--        <h4 class="singular">Orçamento exames</h4>-->
         <div>
             <form name="form_guia" id="form_guia" action="<?= base_url() ?>ambulatorio/guia/gravarorcamento" method="post">
                 <fieldset>
-                    <div class="alert alert-info">Dados do paciente</div>
+                <div class="panel-body ">
+                    <div class="alert alert-info"><b>Dados do paciente</b></div>
                         <div class="row">
-                            <div class="col-lg-3">
+                            <div class="col-lg-4">
                                 <div>
                                     <label>Nome</label>
-                                    <input type="text" id="txtNome" name="nome"  class="form-control texto08" value="<?= $paciente['0']->nome; ?>" readonly/>
+                                    <input type="text" id="txtNome" name="nome"  class="form-control" value="<?= $paciente['0']->nome; ?>" readonly/>
                                     <input type="hidden" id="txtpaciente_id" name="txtpaciente_id"  value="<?= $paciente_id; ?>"/>
                                 </div>
+                            </div>
+
+                            <div class="col-lg-2">
                                 <div>
                                     <label>Sexo</label>
-                                    <select name="sexo" id="txtSexo" class="form-control texto04">
+                                    <select name="sexo" id="txtSexo" class="form-control" disabled>
                                         <option value="M" <?
                                         if ($paciente['0']->sexo == "M"):echo 'selected';
                                         endif;
@@ -52,16 +59,17 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="col-lg-2">
                                 <div>
                                     <label>Nascimento</label>
-                                    <input type="text" name="nascimento" id="txtNascimento" class="form-control texto02" alt="date" value="<?php echo substr($paciente['0']->nascimento, 8, 2) . '/' . substr($paciente['0']->nascimento, 5, 2) . '/' . substr($paciente['0']->nascimento, 0, 4); ?>" onblur="retornaIdade()" readonly/>
+                                    <input type="text" name="nascimento" id="txtNascimento" class="form-control" alt="date" value="<?php echo substr($paciente['0']->nascimento, 8, 2) . '/' . substr($paciente['0']->nascimento, 5, 2) . '/' . substr($paciente['0']->nascimento, 0, 4); ?>" onblur="retornaIdade()" readonly/>
                                 </div>
                             </div>
                             <div class="col-lg-2">
                                 <div>
                                     <label>CPF</label>
-                                    <input type="text" name="cpf" id="cpf" class="form-control texto03" value="<?= @$paciente['0']->cpf ?>" readonly/>
+                                    <input type="text" name="cpf" id="cpf" class="form-control" value="<?= @$paciente['0']->cpf ?>" readonly/>
                                 </div>
                             </div>
                             <div class="col-lg-2">
@@ -75,33 +83,18 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </fieldset>
-                <br/>
-                <div class="alert alert-info">Ficha</div>
-                <fieldset>
-                    <table id="table_justa">
-                        <thead>
-                            <tr>
-<!--                                <th class="tabela_header">Empresa*</th>-->
-<!--                                <th class="tabela_header">Convenio*</th>-->
-<!--                                <th class="tabela_header">Grupo</th>-->
-<!--                                <th class="tabela_header">Procedimento*</th>-->
-<!--                                <th class="tabela_header">Data Preferência</th>-->
-<!--                                <th class="tabela_header">Horário Preferência</th>-->
-<!--                                <th class="tabela_header">Qtde*</th>-->
-<!--                                <th class="tabela_header">V. Unit</th>-->
-<!--                                <th class="tabela_header">Forma de Pagamento</th>-->
-<!--                                <th class="tabela_header">V. Ajuste</th>-->
-<!--                                <th class="tabela_header">Observa&ccedil;&otilde;es</th>-->
-                            </tr>
-                        </thead>
-                        <form>
-                            <div class="panel-body">
-                                <div class="row">
 
-                                    <div class="form-group">
+                <div class="panel-body">
+                    <div class="alert alert-info"><b>Ficha</b></div>
+                    <fieldset>
+                        <div class="row">
+
+                                <div class="col-lg-2">
+                                    <div class="espacoextra">
                                         <label class="tabela_header">Empresa*</label>
-                                        <select  name="empresa1" id="empresa1" class="form-control texto03" required="">
+                                        <select  name="empresa1" id="empresa1" class="form-control" required="">
                                             <option value="">Selecione</option>
                                             <?
                                             $lastEmp = $exames[count($exames) - 1]->empresa_id;
@@ -110,10 +103,11 @@
                                             <? endforeach; ?>
                                         </select>
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
+                                <div class="col-lg-2">
+                                    <div class="espacoextra">
                                         <label class="tabela_header">Convenio*</label>
-                                        <? //echo "<pre>"; var_dump($exames[count($exames) - 1]);die;?>
                                         <select  name="convenio1" id="convenio1" class="form-control texto04">
                                             <option value="-1">Selecione</option>
                                             <?
@@ -126,10 +120,12 @@
                                             <? endforeach; ?>
                                         </select>
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
+                                <div class="col-lg-2">
+                                    <div class="espacoextra">
                                         <label class="tabela_header">Grupo</label>
-                                        <select  name="grupo1" id="grupo1" class="form-control texto04" >
+                                        <select  name="grupo1" id="grupo1" class="form-control" >
                                             <option value="">Selecione</option>
                                             <?
                                             $lastGrupo = $exames[count($exames) - 1]->grupo;
@@ -141,78 +137,87 @@
                                             <? endforeach; ?>
                                         </select>
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
+                                <div class="col-lg-4">
+                                    <div class="espacoextra">
                                         <label class="tabela_header">Procedimento*</label>
-                                        <select name="procedimento1" id="procedimento1" required class="form-control texto05" data-placeholder="Selecione" tabindex="1">
+                                        <select name="procedimento1" id="procedimento1" required class="form-control" data-placeholder="Selecione" tabindex="1">
                                             <option value="">Selecione</option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="tabela_header">Data Preferência &nbsp</label>
-                                        <div class="input-data">
-                                            <input type="text" name="txtdata" id="txtdata" alt="date" class="form-control texto02"/>
-                                        </div>
-                                        <!-- <div class="select-data">
-                                            <select name="txtdata" id="txtdata" class="size1" >
-                                                <option value="">Selecione</option>
-                                            </select>
-                                        </div> -->
+                                </div>
+
+                                <div class="col-lg-2">
+                                    <div class="espacoextra">
+                                        <label class="tabela_header">Data Preferência</label>
+                                        <input type="text" name="txtdata" id="txtdata" alt="date" class="form-control"/>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="tabela_header">Horário Preferência &nbsp</label>
-                                        <select name="turno_preferencia" id="turno_preferencia" class="form-control texto02" >
+                                </div>
+
+                                <div class="col-lg-2">
+                                    <div class="espacoextra">
+                                        <label class="tabela_header">Horário Preferência</label>
+                                        <select name="turno_preferencia" id="turno_preferencia" class="form-control" >
                                             <option value="">Selecione</option>
                                             <option value="manha" <?if(@$exames[count($exames)-1]->turno_prefencia == "manha") echo 'selected';?>>Manhã</option>
                                             <option value="tarde" <?if(@$exames[count($exames)-1]->turno_prefencia == "tarde") echo 'selected';?>>Tarde</option>
                                             <option value="noite" <?if(@$exames[count($exames)-1]->turno_prefencia == "noite") echo 'selected';?>>Noite</option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
+                                </div>
+
+                                <div class="col-lg-2">
+                                    <div class="espacoextra">
                                         <label class="tabela_header">Qtde*</label>
-                                        <input type="text" name="qtde1" id="qtde1" value="1" class="form-control texto01"/>
+                                        <input type="text" name="qtde1" id="qtde1" value="1" class="form-control"/>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="tabela_header">V. Unit &nbsp</label>
-                                        <input type="text" name="valor1" id="valor1" class="form-control texto01" readonly=""/>
+                                </div>
+
+                                <div class="col-lg-2">
+                                    <div class="espacoextra">
+                                        <label class="tabela_header">V. Unit</label>
+                                        <input type="text" name="valor1" id="valor1" class="form-control" readonly=""/>
                                     </div>
-                                    <div class="form-group">
+                                </div>
+
+                                <div class="col-lg-2">
+                                    <div class="espacoextra">
                                         <label class="tabela_header">Forma de Pagamento</label>
-                                        <select name="formapamento" id="formapamento" class="form-control texto04" >
+                                        <select name="formapamento" id="formapamento" class="form-control" >
                                             <option value="">Selecione</option>
                                             <? foreach ($forma_pagamento as $item) : ?>
                                                 <option value="<?= $item->forma_pagamento_id; ?>"><?= $item->nome; ?></option>
                                             <? endforeach; ?>
                                         </select>
                                     </div>
-                                    <div class="form-group">
+                                </div>
+
+                                <div class="col-lg-2">
+                                    <div class="espacoextra">
                                         <label class="tabela_header">V. Ajuste</label>
-                                        <input type="text" name="ajustevalor1" id="ajustevalor1" class="form-control texto01" readonly=""/>
+                                        <input type="text" name="ajustevalor1" id="ajustevalor1" class="form-control" readonly=""/>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
-
-                        <tfoot>
-                            <tr>
-                                <th class="tabela_footer" colspan="4">
-                                </th>
-                            </tr>
-                        </tfoot>
-                    </table> 
-                    <hr/>
+                        </div>
+                    </fieldset>
+                </div>
+                
+                <div class="panel-body">                           
                     <button class="btn btn-success btn-round btn-sm" type="submit" name="btnEnviar">Adicionar</button>
-                </fieldset>
+                </div>
             </form>
+            
+            <div class="panel-body">
             <fieldset>
-                <legend>Orçamento Atual</legend>
+                <div class="alert alert-info"><b>Orçamento Atual</b></div>
                 <?
                 $total = 0;
                 $totalCartao = 0;
                 $orcamento = 0;
                 if (count($exames) > 0) {
                     ?>
-                    <table id="table_agente_toxico" border="0">
+                    <table id="table_agente_toxico" border="0" class="example display" style="width:100%">
                         <thead>
                             <tr>
                                 <th colspan="10"><span style="font-size: 12pt; font-weight: bold;">Operador Responsável: <?= @$responsavel[0]->nome ?></span></th>
@@ -286,7 +291,7 @@
                                 <th class="tabela_footer" colspan="2" style="vertical-align: top;">
                                     Valor Total Ajustado: <?php echo number_format($totalCartao, 2, ',', '.'); ?>
                                 </th>
-                                <th colspan="2" align="center">
+                                <th colspan="3" align="center">
                                     <center>
                                         <div class="bt_linkf">
                                             <a onclick="javascript:window.open('<?= base_url() . "ambulatorio/guia/impressaoorcamento/" . $orcamento; ?> ', '_blank', 'width=600,height=600');">Imprimir Or&ccedil;amento</a>
@@ -324,8 +329,8 @@
                         </tfoot>
                     </table> 
                     </fieldset>
+                    </div>
                     <?
-                    
                     foreach($orcamentos as $value){
                         
                         $total = 0;
@@ -334,12 +339,12 @@
                         $autorizado = false;
                     
                         if($value->qtdeproc == 0) continue;?>
-            
+                        <div class="panel-body">
                         <fieldset>
-                            <table id="table_agente_toxico">
+                            <table id="table_agente_toxico" class="example display" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th colspan="10"><span style="font-size: 12pt; font-weight: bold;">Operador Responsável: <?= @$value->responsavel ?></span></th>
+                                        <th colspan="11"><span style="font-size: 12pt; font-weight: bold;">Operador Responsável: <?= @$value->responsavel ?></span></th>
                                     </tr>
                                     <tr>
                                         <th class="tabela_header">Empresa</th>
@@ -388,7 +393,7 @@
                                             break;
                                     } ?>
                                         <tr>
-                                            <td class="<?php echo $estilo_linha; ?>"><?= $item->empresa; ?></td>
+                                            <td class="<?php echo $estilo_linha; ?>"> <?= $item->empresa; ?> </td>
                                             <td class="<?php echo $estilo_linha; ?>"><?= $item->convenio; ?></td>
                                             <td class="<?php echo $estilo_linha; ?>"><?= $item->grupo; ?></td>
                                             <td class="<?php echo $estilo_linha; ?>"><?= $item->procedimento . "-" . $item->codigo; ?></td>
@@ -401,6 +406,7 @@
                                                    else echo "Não informado";?>
                                             </td>
                                             <td class="<?php echo $estilo_linha; ?>"><?= ($item->horario_preferencia != '') ? date("H:i", strtotime($item->horario_preferencia)) : 'Não-Informado' ?></td>
+                                            <td hidden><?=$value->ambulatorio_orcamento_id;?></td>
                                         </tr>
                                 <?
                                 }
@@ -414,7 +420,7 @@
                                     <th class="tabela_footer" colspan="2" style="vertical-align: top;">
                                         Valor Total: <?php echo number_format($total, 2, ',', '.'); ?>
                                     </th>
-                                    <th class="tabela_footer" colspan="" style="vertical-align: top;">
+                                    <th class="tabela_footer" colspan="2" style="vertical-align: top;">
                                         Valor Total Ajustado: <?php echo number_format($totalCartao, 2, ',', '.'); ?>
                                     </th>
                                     <th colspan="3" align="center">
@@ -454,29 +460,124 @@
                             </tfoot>
                             </table> 
                         </fieldset>
+                        </div>
                         <?
                     }
                 }
             ?> 
-          <br>
         </div> 
     </div> 
 </div> <!-- Final da DIV content -->
 
-<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.9.1.js" ></script>
-<script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
-<script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog modal-dialog-centered" role="document" id="removemodal">
+    
+  </div>
+</div>
+
 <link rel="stylesheet" href="<?= base_url() ?>js/chosen/chosen.css">
-<!--<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/style.css">-->
 <link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/prism.css">
 <script type="text/javascript" src="<?= base_url() ?>js/chosen/chosen.jquery.js"></script>
-<!--<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/prism.js"></script>-->
 <script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/init.js"></script>
 <style>
     .chosen-container{ margin-top: 5pt;}
     #procedimento1_chosen a { width: 100%; }
 </style>
 <script type="text/javascript">
+
+$(document).ready(function() {
+    var table =  $('table.display').DataTable({
+            "language": {
+                "url": "<?=base_url()?>bootstrap/DataTables/Portuguese-Brasil.json"
+            },
+            "paging":   false,
+            "ordering": false,
+            "info":     false,
+            "filter": false,
+        });
+
+        //     $('table.display tbody').on('click', 'tr', function () {
+        //     var data = table.row(this).data();
+        //     console.log(data);
+        //     alert( 'Um passo a frete' );
+        // } );
+        
+    } );
+
+
+    $("tr").on('click',function() {
+        var horario;
+         var tableData = $(this).children("td").map(function(){
+         return $(this).text();
+         }).get();
+         horario =    $.trim(tableData[0]);
+         console.log(tableData);
+         $('p.text').text(horario+' selecionado');
+        //  $('#myModal').modal('show');
+    });
+    
+    $('.btn-salvar').on('click',function(){
+      alert('Salvo');
+       $('#modal-texto').modal('hide');
+    });
+
+    function abrirModal(paciente_credito_id, paciente_id){
+        $("#removemodal").remove();
+
+        var nome = '';
+        var data = '';
+        var valor = '';
+        var observacao = '';
+
+        $.ajax({
+            type: "POST",
+            data: {
+                paciente_credito_id: paciente_credito_id
+                },
+            url: "<?= base_url() ?>ambulatorio/exametemp/infocredito/",
+            dataType: 'json',
+            async: false,
+                success: function (i) {
+                    nome = i[0].paciente;
+                    data = i[0].data;
+                    valor = i[0].valor;
+                    transferencia = i[0].paciente_transferencia;
+                    observacao = i[0].observacaocredito
+                },
+                error: function (i) {
+                    alert('Erro');
+                }    
+            });
+
+        $("#myModal").append(
+                    '<div class="modal-dialog modal-dialog-centered" role="document" id="removemodal">'+
+                        '<div class="modal-content">'+
+                            '<div class="modal-header">'+
+                                '<h5 class="modal-title" id="exampleModalLongTitle">Ações</h5>'+
+                                '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+                                '<span aria-hidden="true">&times;</span>'+
+                                '</button>'+
+                            '</div>'+
+                            '<div class="modal-body">'+
+                            '<b>Paciente:</b> '+nome+'<br>'+
+                            '<b>Data:</b> '+data+'<br>'+
+                            '<b>Valor:</b> '+valor+'<br>'+
+                            '<b>Transferencia:</b> '+transferencia+'<br>'+
+                            '<b>Observação:</b> '+observacao+'<br>'+
+                            '<br>'+
+                            '<a class="btn btn-outline-warning btn-round btn-sm" target="_black" href="<?=base_url()?>ambulatorio/exametemp/gerarecibocredito/'+paciente_credito_id+'/'+paciente_id+'">Recibo</a>'+
+                            '<a class="btn btn-outline-warning btn-round btn-sm" href="<?=base_url()?>ambulatorio/exametemp/trasnferircredito/'+paciente_credito_id+'/'+paciente_id+'"> Transferir</a>'+
+                            <?//if ($perfil_id == 1 || ($gerente_recepcao_top_saude && $perfil_id == 5)) {?>
+                            '<a class="btn btn-outline-warning btn-round btn-sm"  href="#" onclick="confirmarEstorno('+paciente_credito_id+','+paciente_id+')">Estornar</a>'+
+                            <?//}?>
+                            '</div>'+
+                            '<div class="modal-footer">'+
+                                '<button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>'+
+                            '</div>'+
+                        '</div>'+
+                '</div>');
+    }
+
 //    $(".select-data").hide();
 //    $(".input-data").hide();
 var array_datas = [];
@@ -787,6 +888,7 @@ var array_datas = [];
 
                                  $(function () {
                                     $('#procedimento1').change(function () {
+                                        console.log('teste');
                                         if ($(this).val()) {
                                             $('.carregando').show();
                                             $.getJSON('<?= base_url() ?>autocomplete/procedimentovalor', {procedimento1: $(this).val(), ajax: true}, function (j) {
@@ -852,8 +954,4 @@ var array_datas = [];
                                         }
                                     });
                                 });
-
-
-
-
 </script>

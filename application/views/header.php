@@ -957,10 +957,7 @@ function debug($object) {
     </div>
 </nav>
 </body>
-
 <script>
-
-
 
     // $('.dropdown-menu a.removefromcart').click(function(e) {
     //     e.stopPropagation();
@@ -1021,8 +1018,6 @@ function debug($object) {
     }
 
 </script>
-
-
 <!--    Aqui abaixo você encontra a função que chama a mensagem bonitinha, pessoa que estiver olhando.-->
 <!--
 PRA ALTERAR A MENSAGEM PADRÃO QUE APARECE E O ICONE A QUE É ATRIBUIDO, É SÓ ENTRAR NO UTILITARIO E PROCURAR A FUNÇÃO QUE ELE CHAMA

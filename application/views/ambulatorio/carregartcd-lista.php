@@ -4,7 +4,7 @@ $perfil_id = $this->session->userdata('perfil_id');
 
 <div class="content  " > <!-- Inicio da DIV content -->
     <div class="bt_link_new">
-        <a class="btn btn-outline-danger btn-round btn-sm" href="<?php echo base_url() ?>ambulatorio/procedimentoplano/orcamento/0/">
+        <a class="btn btn-outline-danger btn-round btn-sm" href="<?php echo base_url() ?>ambulatorio/guia/orcamento/<?=$paciente_id?>/">
             Novo TCD
         </a>
     </div>

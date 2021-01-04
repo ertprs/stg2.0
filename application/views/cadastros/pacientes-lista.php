@@ -160,7 +160,7 @@ $valores_recepcao = @$empresapermissoes[0]->valores_recepcao;
                     ?>
                     
                         <div class="table-responsive">
-                            <table width="100%" class="table table-hover">
+                            <table class="table table-hover" id="example" class="display" style="width:100%">
                                 <tr>
 
                                     <th class="tabela_header">Nome</th>
@@ -324,5 +324,10 @@ $valores_recepcao = @$empresapermissoes[0]->valores_recepcao;
     $(function () {
         $("#accordion").accordion();
     });
+
+
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
 
 </script>

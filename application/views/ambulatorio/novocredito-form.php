@@ -1,6 +1,6 @@
 <div class="content ficha_ceatox">
     <div class="accordion">
-        <legend class="singular"><b>Novo Crédito - Dados do Paciente</b></legend>
+        <div class="alert alert-info"><b>Novo Crédito - Dados do Paciente</b></div>
             <form name="form_guia" id="form_guia" action="<?= base_url() ?>ambulatorio/exametemp/gravarcredito" method="post">
                 <div class="row">
                     <fieldset>
@@ -36,8 +36,8 @@
                     </fieldset> 
                 </div>
                 <br>
+                <div class="alert alert-info"><b>Dados Crédito</b></div>
                 <div class="row">
-                    <legend class="singular"><b>Dados Crédito</b></legend>
                     <fieldset>
                         <?if ($permissoes[0]->associa_credito_procedimento == 't') { ?>
                             <div class="col-lg-4">
@@ -89,7 +89,7 @@
                 <fieldset>
                     <div>
                         <label>&nbsp;</label>
-                        <button class="btn btn-outline-success btn-sm" type="submit" name="btnEnviar">Adicionar</button>
+                        <button class="btn btn-success btn-round btn-sm" type="submit" name="btnEnviar">Adicionar</button>
                     </div>
                 </fieldset>
             </form>
